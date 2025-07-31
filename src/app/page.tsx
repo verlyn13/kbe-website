@@ -29,13 +29,13 @@ export default function LoginPage() {
               <path d="M2 17l10 5 10-5" />
               <path d="M2 12l10 5 10-5" />
             </svg>
-            <h1 className="text-3xl font-bold text-primary">KBE</h1>
+            <h1 className="text-3xl font-bold text-primary">Kachemak Bay Enrichment</h1>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-foreground mb-4">
             Welcome to the Explorer's Portal
           </h2>
           <p className="text-muted-foreground max-w-md">
-            Your gateway to session calendars, student progress, weekly challenges, and important announcements. Let the exploration begin!
+            Your gateway to session calendars, student progress, weekly challenges, and important announcements. We're glad you're here!
           </p>
         </div>
         <Card className="w-full max-w-sm md:w-1/2 shadow-2xl">

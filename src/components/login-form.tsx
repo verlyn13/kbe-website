@@ -77,21 +77,7 @@ export function LoginForm() {
 
   return (
     <div className="grid gap-6">
-      <Button variant="outline" onClick={() => handleSocialLogin('Google')}>
-        <GoogleIcon className="mr-2 h-4 w-4" />
-        Sign in with Google
-      </Button>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Form {...form}>
+       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
@@ -146,14 +132,24 @@ export function LoginForm() {
           </Button>
         </form>
       </Form>
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-card px-2 text-muted-foreground">
+            Or
+          </span>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-2">
+        <Button variant="outline" onClick={() => handleSocialLogin('Google')}>
+            <GoogleIcon className="mr-2 h-4 w-4" />
+            Sign in with Google
+        </Button>
         <Button variant="outline" onClick={() => handleSocialLogin('Magic Link')}>
           <Mail className="mr-2 h-4 w-4" />
           Use magic link
-        </Button>
-        <Button variant="outline" onClick={() => handleSocialLogin('Biometric')}>
-          <Fingerprint className="mr-2 h-4 w-4" />
-          Use Biometrics
         </Button>
       </div>
     </div>
