@@ -30,10 +30,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
+import { getErrorMessage } from "@/lib/error-utils";
+import { logger } from "@/lib/logger";
+import { emailSchema, passwordSchema } from "@/lib/validation";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string().min(1, { message: "Password is required." }).optional(),
+  email: emailSchema,
+  password: passwordSchema.optional(),
   remember: z.boolean().default(false).optional(),
 });
 
@@ -58,6 +61,14 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+/**
+ * Login form component with multiple authentication methods.
+ * Supports email/password, Google OAuth, and magic link authentication.
+ * 
+ * @component
+ * @example
+ * <LoginForm />
+ */
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
@@ -88,11 +99,12 @@ export function LoginForm() {
                 window.localStorage.removeItem('emailForSignIn');
                 router.push('/dashboard');
             }
-        } catch (error: any) {
+        } catch (error) {
+          logger.error("Magic link sign in failed", error);
           toast({
             variant: "destructive",
             title: "Magic link sign in failed",
-            description: error.message,
+            description: getErrorMessage(error),
           });
         } finally {
             setIsLoading(false);
@@ -117,11 +129,12 @@ export function LoginForm() {
       }
       await signInWithEmailAndPassword(auth, values.email, values.password);
       router.push('/dashboard');
-    } catch (error: any) {
+    } catch (error) {
+      logger.error("Email/password sign in failed", error);
       toast({
         variant: "destructive",
         title: "Sign in failed",
-        description: error.message,
+        description: getErrorMessage(error),
       });
     } finally {
       setIsLoading(false);
@@ -134,11 +147,12 @@ export function LoginForm() {
     try {
       await signInWithPopup(auth, provider);
       router.push('/dashboard');
-    } catch (error: any) {
+    } catch (error) {
+      logger.error("Google sign in failed", error);
       toast({
         variant: "destructive",
         title: "Google sign in failed",
-        description: error.message,
+        description: getErrorMessage(error),
       });
     } finally {
       setIsGoogleLoading(false);
@@ -165,11 +179,12 @@ export function LoginForm() {
         title: "Check your email",
         description: `A sign-in link has been sent to ${email}.`,
       });
-    } catch (error: any) {
+    } catch (error) {
+      logger.error("Magic link send failed", error);
       toast({
         variant: "destructive",
         title: "Magic link failed",
-        description: error.message,
+        description: getErrorMessage(error),
       });
     } finally {
       setIsMagicLinkLoading(false);
@@ -180,8 +195,8 @@ export function LoginForm() {
     <div className="grid gap-6">
        <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading}>
-            {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
+           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading} aria-label="Sign in with Google">
+            {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <GoogleIcon className="mr-2 h-4 w-4" aria-hidden="true" />}
             Sign in with Google
           </Button>
           
@@ -203,7 +218,7 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="name@example.com" {...field} />
+                  <Input placeholder="name@example.com" {...field} aria-label="Email address" aria-required="true" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -211,8 +226,8 @@ export function LoginForm() {
           />
 
           <div className="grid grid-cols-1 gap-2">
-            <Button variant="outline" onClick={handleMagicLink} disabled={isMagicLinkLoading}>
-              {isMagicLinkLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+            <Button variant="outline" onClick={handleMagicLink} disabled={isMagicLinkLoading} aria-label="Send magic link to your email">
+              {isMagicLinkLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <Mail className="mr-2 h-4 w-4" aria-hidden="true" />}
               Use magic link
             </Button>
           </div>

@@ -46,7 +46,31 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/use-auth";
 
-
+/**
+ * DashboardHeader component provides the top navigation bar for the dashboard layout.
+ * It includes a sidebar trigger for mobile devices, user avatar with dropdown menu,
+ * and quick switch functionality between different user profiles.
+ * The header is sticky positioned and provides authentication-related actions.
+ * 
+ * @component
+ * @returns {JSX.Element} A sticky header with navigation and user controls
+ * 
+ * @example
+ * ```tsx
+ * import { DashboardHeader } from "@/components/dashboard-header";
+ * 
+ * function DashboardLayout({ children }: { children: React.ReactNode }) {
+ *   return (
+ *     <div className="flex h-screen">
+ *       <DashboardHeader />
+ *       <main className="flex-1 p-4">
+ *         {children}
+ *       </main>
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
 export function DashboardHeader() {
   const { user, signOut } = useAuth();
   return (

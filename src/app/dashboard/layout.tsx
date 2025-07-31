@@ -93,33 +93,43 @@ export default function DashboardLayout({
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/dashboard" isActive tooltip="Dashboard">
-                <Home />
-                <span>Dashboard</span>
+              <SidebarMenuButton asChild isActive tooltip="Dashboard">
+                <Link href="/dashboard">
+                  <Home />
+                  <span>Dashboard</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="#" tooltip="Calendar">
-                <Calendar />
-                <span>Calendar</span>
+              <SidebarMenuButton asChild tooltip="Calendar">
+                <Link href="#">
+                  <Calendar />
+                  <span>Calendar</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/dashboard/weekly-challenges" tooltip="Weekly Challenges">
-                <Puzzle />
-                <span>Weekly Challenges</span>
+              <SidebarMenuButton asChild tooltip="Weekly Challenges">
+                <Link href="/dashboard/weekly-challenges">
+                  <Puzzle />
+                  <span>Weekly Challenges</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/dashboard/announcements" tooltip="Announcements">
-                <Bell />
-                <span>Announcements</span>
+              <SidebarMenuButton asChild tooltip="Announcements">
+                <Link href="/dashboard/announcements">
+                  <Bell />
+                  <span>Announcements</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/content-generator" tooltip="Admin">
-                <Shield />
-                <span>Admin</span>
+              <SidebarMenuButton asChild tooltip="Admin">
+                <Link href="/admin/content-generator">
+                  <Shield />
+                  <span>Admin</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -127,9 +137,11 @@ export default function DashboardLayout({
         <SidebarFooter>
           <SidebarMenu>
              <SidebarMenuItem>
-              <SidebarMenuButton href="#" tooltip="Settings">
-                <Settings />
-                <span>Settings</span>
+              <SidebarMenuButton asChild tooltip="Settings">
+                <Link href="#">
+                  <Settings />
+                  <span>Settings</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

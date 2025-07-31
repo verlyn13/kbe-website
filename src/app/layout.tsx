@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/hooks/use-auth';
+import { ErrorBoundary } from '@/components/error-boundary';
+import { SkipNavigation } from '@/components/skip-navigation';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -13,6 +15,14 @@ export const metadata: Metadata = {
   manifest: '/manifest.json'
 };
 
+/**
+ * Root layout component for the KBE Website application.
+ * Provides global providers, styles, and error handling.
+ * 
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to render
+ * @returns {JSX.Element} The root layout wrapper
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,9 +36,14 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className={`${inter.variable} font-body antialiased`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <SkipNavigation />
+        <ErrorBoundary>
+          <AuthProvider>
+            <main id="main-content">
+              {children}
+            </main>
+          </AuthProvider>
+        </ErrorBoundary>
         <Toaster />
       </body>
     </html>
