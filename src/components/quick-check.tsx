@@ -21,18 +21,7 @@ import { MOCK_DATA } from "@/lib/constants";
  * @returns {JSX.Element} A card containing three grid sections for session info, alerts, and stats
  * 
  * @example
- * ```tsx
- * import { QuickCheck } from "@/components/quick-check";
- * 
- * function DashboardHome() {
- *   return (
- *     <div className="space-y-6">
- *       <QuickCheck />
- *       {/* Other dashboard components */}
- *     </div>
- *   );
- * }
- * ```
+ * <QuickCheck />
  */
 export function QuickCheck() {
   return (
