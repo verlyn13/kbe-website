@@ -1,3 +1,6 @@
+
+"use client";
+
 import Link from "next/link";
 import {
   Bell,
@@ -23,6 +26,10 @@ import {
 } from "@/components/ui/sidebar";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 function KbeLogo() {
   const { state } = useSidebar();
@@ -56,6 +63,27 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  if (loading) {
+    return (
+        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+            <div className="w-1/4">
+                 <Skeleton className="h-screen w-full" />
+            </div>
+            <div className="flex-1">
+                <Skeleton className="h-screen w-full" />
+            </div>
+        </div>
+    );
+  }
+
+  if (!user) {
+    router.push('/');
+    return null;
+  }
+
   return (
     <SidebarProvider>
       <Sidebar variant="sidebar" collapsible="icon">

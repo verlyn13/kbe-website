@@ -1,10 +1,17 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useRouter } from 'next/navigation';
-import { Fingerprint, Mail } from 'lucide-react';
+import { Mail, Loader2 } from 'lucide-react';
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -50,6 +58,9 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,19 +71,44 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // On successful login, redirect to dashboard.
-    router.push('/dashboard');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      router.push('/dashboard');
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Sign in failed",
+        description: error.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  const handleSocialLogin = (provider: string) => {
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      router.push('/dashboard');
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Google sign in failed",
+        description: error.message,
+      });
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  const handleMagicLink = (provider: string) => {
     toast({
       title: "Feature in development",
       description: `${provider} sign-in is not yet implemented.`,
     });
-    // Mock successful login for demonstration
-    // router.push('/dashboard');
   };
 
   return (
@@ -127,7 +163,8 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign In
           </Button>
         </form>
@@ -143,11 +180,11 @@ export function LoginForm() {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-2">
-        <Button variant="outline" onClick={() => handleSocialLogin('Google')}>
-            <GoogleIcon className="mr-2 h-4 w-4" />
+        <Button variant="outline" onClick={handleGoogleSignIn} disabled={isGoogleLoading}>
+            {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
             Sign in with Google
         </Button>
-        <Button variant="outline" onClick={() => handleSocialLogin('Magic Link')}>
+        <Button variant="outline" onClick={() => handleMagicLink('Magic Link')}>
           <Mail className="mr-2 h-4 w-4" />
           Use magic link
         </Button>

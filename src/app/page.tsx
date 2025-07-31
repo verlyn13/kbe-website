@@ -1,4 +1,6 @@
-import { redirect } from 'next/navigation';
+
+"use client"
+
 import Image from 'next/image';
 import { LoginForm } from '@/components/login-form';
 import {
@@ -8,8 +10,27 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LoginPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  if (loading) {
+    return (
+         <div className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-background">
+             <Skeleton className="h-full w-full max-w-4xl" />
+        </div>
+    );
+  }
+  
+  if(user) {
+    router.push('/dashboard');
+    return null;
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-background">
       <div className="flex w-full max-w-4xl flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
@@ -32,7 +53,7 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold text-primary">Kachemak Bay Enrichment</h1>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-foreground mb-4">
-            Homer Mathcounts & Enrichment
+            Your Portal for Learning
           </h2>
           <p className="text-muted-foreground max-w-md">
             Your portal for Homer Mathcounts registration, and other enrichment activities.
