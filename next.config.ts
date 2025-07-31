@@ -18,6 +18,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: '/admin/content-generator',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default nextConfig;
