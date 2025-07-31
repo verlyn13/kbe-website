@@ -10,6 +10,9 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
@@ -26,11 +29,11 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string().min(1, { message: "Password is required." }),
+  password: z.string().min(1, { message: "Password is required." }).optional(),
   remember: z.boolean().default(false).optional(),
 });
 
@@ -60,7 +63,7 @@ export function LoginForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-
+  const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,9 +74,47 @@ export function LoginForm() {
     },
   });
 
+  useEffect(() => {
+    const completeMagicLinkSignIn = async () => {
+      if (isSignInWithEmailLink(auth, window.location.href)) {
+        setIsLoading(true);
+        let email = window.localStorage.getItem('emailForSignIn');
+        if (!email) {
+          email = window.prompt('Please provide your email for confirmation');
+        }
+        try {
+            if(email) {
+                await signInWithEmailLink(auth, email, window.location.href);
+                window.localStorage.removeItem('emailForSignIn');
+                router.push('/dashboard');
+            }
+        } catch (error: any) {
+          toast({
+            variant: "destructive",
+            title: "Magic link sign in failed",
+            description: error.message,
+          });
+        } finally {
+            setIsLoading(false);
+        }
+      }
+    };
+    completeMagicLinkSignIn();
+  }, [router, toast]);
+
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
+      if(!values.password) {
+        toast({
+          variant: "destructive",
+          title: "Sign in failed",
+          description: "Password is required for this sign-in method.",
+        });
+        setIsLoading(false);
+        return;
+      }
       await signInWithEmailAndPassword(auth, values.email, values.password);
       router.push('/dashboard');
     } catch (error: any) {
@@ -104,17 +145,57 @@ export function LoginForm() {
     }
   };
 
-  const handleMagicLink = (provider: string) => {
-    toast({
-      title: "Feature in development",
-      description: `${provider} sign-in is not yet implemented.`,
-    });
+  const handleMagicLink = async () => {
+    const email = form.getValues("email");
+    if (!email || !z.string().email().safeParse(email).success) {
+      form.setError("email", { type: "manual", message: "Please enter a valid email." });
+      return;
+    }
+    
+    setIsMagicLinkLoading(true);
+    const actionCodeSettings = {
+      url: window.location.href,
+      handleCodeInApp: true,
+    };
+
+    try {
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+      window.localStorage.setItem('emailForSignIn', email);
+      toast({
+        title: "Check your email",
+        description: `A sign-in link has been sent to ${email}.`,
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Magic link failed",
+        description: error.message,
+      });
+    } finally {
+      setIsMagicLinkLoading(false);
+    }
   };
 
   return (
     <div className="grid gap-6">
        <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading}>
+            {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
+            Sign in with Google
+          </Button>
+          
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or
+              </span>
+            </div>
+          </div>
+        
           <FormField
             control={form.control}
             name="email"
@@ -128,6 +209,25 @@ export function LoginForm() {
               </FormItem>
             )}
           />
+
+          <div className="grid grid-cols-1 gap-2">
+            <Button variant="outline" onClick={handleMagicLink} disabled={isMagicLinkLoading}>
+              {isMagicLinkLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+              Use magic link
+            </Button>
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or
+              </span>
+            </div>
+          </div>
+
           <FormField
             control={form.control}
             name="password"
@@ -165,30 +265,10 @@ export function LoginForm() {
           />
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Sign In
+            Sign In with Password
           </Button>
         </form>
       </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
-            Or
-          </span>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 gap-2">
-        <Button variant="outline" onClick={handleGoogleSignIn} disabled={isGoogleLoading}>
-            {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
-            Sign in with Google
-        </Button>
-        <Button variant="outline" onClick={() => handleMagicLink('Magic Link')}>
-          <Mail className="mr-2 h-4 w-4" />
-          Use magic link
-        </Button>
-      </div>
     </div>
   );
 }
