@@ -13,7 +13,17 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "./ui/badge";
 
-const challenges = [
+/**
+ * Challenge data structure containing all challenge information
+ */
+interface Challenge {
+  title: string;
+  status: "Completed" | "In Progress" | "Not Started";
+  grade: string | null;
+  description: string;
+}
+
+const challenges: Challenge[] = [
     {
         title: "The Great Algae Investigation",
         status: "Completed",
@@ -34,6 +44,27 @@ const challenges = [
     },
 ];
 
+/**
+ * WeeklyChallenges component displays a list of educational challenges in an accordion format.
+ * Each challenge shows its title, completion status, grade (if completed), and detailed description.
+ * The component provides an interactive way for students to view their weekly assignments and track progress.
+ * 
+ * @component
+ * @returns {JSX.Element} A card containing an accordion of challenges with status badges and grades
+ * 
+ * @example
+ * ```tsx
+ * import { WeeklyChallenges } from "@/components/weekly-challenges";
+ * 
+ * function Dashboard() {
+ *   return (
+ *     <div className="grid gap-4">
+ *       <WeeklyChallenges />
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
 export function WeeklyChallenges() {
   return (
     <Card className="shadow-lg">

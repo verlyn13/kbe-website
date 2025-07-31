@@ -9,7 +9,31 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AlertCircle, ArrowRight, BarChart, CheckCircle, Clock, XCircle, Car, CalendarDays } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { MOCK_DATA } from "@/lib/constants";
 
+/**
+ * QuickCheck component provides a comprehensive dashboard overview for students and parents.
+ * It displays three main sections: upcoming session information with attendance actions,
+ * important alerts and notifications, and quick statistics about student performance.
+ * The component serves as a central hub for immediate awareness of important information.
+ * 
+ * @component
+ * @returns {JSX.Element} A card containing three grid sections for session info, alerts, and stats
+ * 
+ * @example
+ * ```tsx
+ * import { QuickCheck } from "@/components/quick-check";
+ * 
+ * function DashboardHome() {
+ *   return (
+ *     <div className="space-y-6">
+ *       <QuickCheck />
+ *       {/* Other dashboard components */}
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
 export function QuickCheck() {
   return (
     <Card className="shadow-lg">
@@ -55,7 +79,7 @@ export function QuickCheck() {
             <div className="space-y-3">
                 <div className="flex items-start gap-3">
                     <div className="text-amber-500 mt-1"><AlertCircle size={16} /></div>
-                    <p className="text-sm">Invoice #123 is due tomorrow.</p>
+                    <p className="text-sm">Invoice {MOCK_DATA.INVOICE_ID} is due tomorrow.</p>
                 </div>
                 <div className="flex items-start gap-3">
                     <div className="text-destructive mt-1"><AlertCircle size={16} /></div>
@@ -80,7 +104,7 @@ export function QuickCheck() {
                     <p className="text-sm text-muted-foreground">Challenges Done</p>
                 </div>
                  <div>
-                    <p className="text-3xl font-bold">92%</p>
+                    <p className="text-3xl font-bold">{MOCK_DATA.SCORE_PERCENTAGE}%</p>
                     <p className="text-sm text-muted-foreground">Avg. Score</p>
                 </div>
                  <div>

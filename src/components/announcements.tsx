@@ -12,7 +12,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 
-const announcements = [
+/**
+ * Announcement data structure containing announcement information
+ */
+interface Announcement {
+  title: string;
+  date: string;
+  category: "Parents & Students" | "Parents" | "Students" | "General";
+  content: string;
+  color: string;
+}
+
+const announcements: Announcement[] = [
     {
         title: "Upcoming Field Trip to the Bay",
         date: "October 28, 2023",
@@ -43,6 +54,27 @@ const announcements = [
     },
 ];
 
+/**
+ * Announcements component displays a scrollable list of community announcements.
+ * Each announcement includes a title, date, category badge, content, and color-coded indicator.
+ * The component provides a centralized way to view important updates for parents, students, and the general KBE community.
+ * 
+ * @component
+ * @returns {JSX.Element} A card containing a scrollable list of announcements with footer action
+ * 
+ * @example
+ * ```tsx
+ * import { Announcements } from "@/components/announcements";
+ * 
+ * function CommunityPage() {
+ *   return (
+ *     <div className="grid gap-4">
+ *       <Announcements />
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
 export function Announcements() {
   return (
     <Card className="shadow-lg h-full flex flex-col">

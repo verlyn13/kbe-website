@@ -28,6 +28,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { logger } from "@/lib/logger";
 
 const programSchema = z.object({
   programDetails: z.string().min(10, {
@@ -50,6 +51,16 @@ type ContentGeneratorFormProps = {
 
 type AIResult = GenerateProgramDescriptionsOutput | GenerateWeeklyChallengeDescriptionsOutput;
 
+/**
+ * Content generator form component for creating AI-generated content.
+ * Supports generating program descriptions and weekly challenges.
+ * 
+ * @component
+ * @param {ContentGeneratorFormProps} props - Component props
+ * @param {'program' | 'challenge'} props.type - Type of content to generate
+ * @example
+ * <ContentGeneratorForm type="program" />
+ */
 export function ContentGeneratorForm({ type }: ContentGeneratorFormProps) {
   const [result, setResult] = useState<AIResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +86,7 @@ export function ContentGeneratorForm({ type }: ContentGeneratorFormProps) {
       }
       setResult(response);
     } catch (error) {
-        console.error("Error generating content:", error);
+        logger.error("Error generating content", error);
         toast({
             variant: "destructive",
             title: "An error occurred",
