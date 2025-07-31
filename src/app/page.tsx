@@ -32,10 +32,10 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold text-primary">Kachemak Bay Enrichment</h1>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-foreground mb-4">
-            Welcome to the Explorer's Portal
+            Homer Mathcounts & Enrichment
           </h2>
           <p className="text-muted-foreground max-w-md">
-            Your gateway to session calendars, student progress, weekly challenges, and important announcements. We're glad you're here!
+            Your portal for Homer Mathcounts registration, and other enrichment activities.
           </p>
         </div>
         <Card className="w-full max-w-sm md:w-1/2 shadow-2xl">
