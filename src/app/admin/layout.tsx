@@ -62,9 +62,11 @@ export default function AdminLayout({
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/content-generator" isActive tooltip="Content Generator">
-                <FileText />
-                <span>Content Generator</span>
+              <SidebarMenuButton asChild isActive tooltip="Content Generator">
+                <Link href="/admin/content-generator">
+                  <FileText />
+                  <span>Content Generator</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -72,9 +74,11 @@ export default function AdminLayout({
         <SidebarFooter>
           <SidebarMenu>
              <SidebarMenuItem>
-              <SidebarMenuButton href="/dashboard" tooltip="Back to Portal">
-                <Home />
-                <span>Back to Portal</span>
+              <SidebarMenuButton asChild tooltip="Back to Portal">
+                <Link href="/dashboard">
+                  <Home />
+                  <span>Back to Portal</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
