@@ -77,13 +77,13 @@ export default function DashboardLayout({
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="#" tooltip="Weekly Challenges">
+              <SidebarMenuButton href="/dashboard/weekly-challenges" tooltip="Weekly Challenges">
                 <Puzzle />
                 <span>Weekly Challenges</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="#" tooltip="Announcements">
+              <SidebarMenuButton href="/dashboard/announcements" tooltip="Announcements">
                 <Bell />
                 <span>Announcements</span>
               </SidebarMenuButton>
