@@ -2,18 +2,14 @@
   "name": "nextn",
   "version": "0.1.0",
   "private": true,
-  "_moduleAliases": {
-    "@": "src"
-  },
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
-    "build": "node scripts/prepare-build.js && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "node scripts/postinstall.js"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@genkit-ai/firebase": "^1.15.5",

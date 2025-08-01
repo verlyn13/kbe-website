@@ -1,8 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Next.js config is created dynamically from next.config.custom.js
-next.config.js
-
 # dependencies
 /node_modules
 /.pnp
