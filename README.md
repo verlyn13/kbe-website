@@ -1,4 +1,4 @@
-# Firebase Studio
+# KBE Website (Firebase App Hosting)
 
 This is a NextJS starter in Firebase Studio.
 
