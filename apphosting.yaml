@@ -48,6 +48,5 @@ env:
       - RUNTIME
 
 # Build settings for App Hosting
-# Using scripts instead of buildConfig to opt out of Firebase adapter
-scripts:
-  buildCommand: "node scripts/firebase-build.js"
+buildConfig:
+  buildCommand: "npm run build"
