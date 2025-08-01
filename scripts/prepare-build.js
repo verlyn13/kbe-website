@@ -27,3 +27,24 @@ if (fs.existsSync(targetConfigPath)) {
   console.error('ERROR: Failed to create next.config.js');
   process.exit(1);
 }
+
+// Check tsconfig.json
+const tsconfigPath = path.resolve(__dirname, '..', 'tsconfig.json');
+console.log('Checking tsconfig.json at:', tsconfigPath);
+if (fs.existsSync(tsconfigPath)) {
+  const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+  console.log('✓ tsconfig.json exists');
+  console.log('  baseUrl:', tsconfig.compilerOptions?.baseUrl);
+  console.log('  paths:', JSON.stringify(tsconfig.compilerOptions?.paths, null, 2));
+} else {
+  console.error('ERROR: tsconfig.json not found!');
+}
+
+// Check jsconfig.json
+const jsconfigPath = path.resolve(__dirname, '..', 'jsconfig.json');
+if (fs.existsSync(jsconfigPath)) {
+  const jsconfig = JSON.parse(fs.readFileSync(jsconfigPath, 'utf8'));
+  console.log('✓ jsconfig.json exists');
+  console.log('  baseUrl:', jsconfig.compilerOptions?.baseUrl);
+  console.log('  paths:', JSON.stringify(jsconfig.compilerOptions?.paths, null, 2));
+}
