@@ -6,4 +6,8 @@ runConfig:
   # more instances in response to increased traffic.
   maxInstances: 1
   
-# Force rebuild with updated dependencies
+env:
+  - variable: NODEJS_VERSION
+    value: "22"
+    
+# Build settings for App Hosting
