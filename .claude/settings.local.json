@@ -11,7 +11,11 @@
       "Bash(firebase --version)",
       "Bash(firebase use:*)",
       "Bash(firebase hosting:sites:*)",
-      "Bash(firebase apphosting:backends:list:*)"
+      "Bash(firebase apphosting:backends:list:*)",
+      "Bash(firebase functions:log:*)",
+      "Bash(firebase apphosting:backends:get:*)",
+      "Bash(firebase apphosting:backends:describe:*)",
+      "Bash(firebase init:*)"
     ],
     "deny": []
   }
