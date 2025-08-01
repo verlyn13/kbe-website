@@ -49,4 +49,4 @@ env:
 
 # Build settings for App Hosting
 buildConfig:
-  buildCommand: "npm run build"
+  buildCommand: "node scripts/preserve-tsconfig.js && node -r ./scripts/module-alias-setup.js ./node_modules/.bin/next build"

@@ -18,7 +18,8 @@
       "Bash(firebase init:*)",
       "Bash(gh workflow:*)",
       "Bash(firebase apphosting:secrets:grantaccess:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }
