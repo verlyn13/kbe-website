@@ -28,18 +28,9 @@ const nextConfig = {
       },
     ]
   },
-  webpack: (config, options) => {
-    // Add our path aliases
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, 'src'),
-    };
-    
-    // Add module resolution paths
-    config.resolve.modules = [
-      ...config.resolve.modules,
-      path.resolve(__dirname, 'src'),
-    ];
+  webpack: (config, { isServer }) => {
+    // This is all you need for the alias to work
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
     
     return config;
   },
