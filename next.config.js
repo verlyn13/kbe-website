@@ -1,9 +1,5 @@
-import { createRequire } from 'module';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const require = createRequire(import.meta.url);
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Next.js configuration with hardcoded webpack alias
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -32,19 +28,22 @@ const nextConfig = {
       },
     ]
   },
-  // Explicitly configure webpack to handle TypeScript path aliases
-  webpack: (config, { isServer }) => {
+  // Force webpack to resolve TypeScript paths
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Important: return the modified config
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': path.resolve(__dirname, './src'),
+      '@': path.join(__dirname, 'src'),
     };
+    
+    // Also add fallback for module resolution
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      '@': path.join(__dirname, 'src'),
+    };
+    
     return config;
   },
-  // Experimental: Override module resolution
-  experimental: {
-    // Force TypeScript paths resolution
-    externalDir: true,
-  }
 };
 
-export default nextConfig;
+module.exports = nextConfig;

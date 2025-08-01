@@ -22,7 +22,8 @@
       "Bash(find:*)",
       "Bash(gcloud builds list:*)",
       "Bash(gcloud logging read:*)",
-      "Bash(gcloud config get-value:*)"
+      "Bash(gcloud config get-value:*)",
+      "Bash(firebase apphosting:rollouts:create:*)"
     ],
     "deny": []
   }
