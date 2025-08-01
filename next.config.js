@@ -1,63 +1,57 @@
 // Merged configuration: Firebase + Custom webpack aliases
 const path = require('path');
 
-// Original Firebase configuration
-// Simulating Firebase's generated config
+const originalWebpack = null;
+
 module.exports = {
   output: 'standalone',
   distDir: '.next',
-  // Firebase-specific optimizations
-  experimental: {
-    appDocumentPreloading: true
-  }
-};
-
-// Store the original config
-const firebaseConfig = module.exports;
-
-// Create our merged configuration
-const mergedConfig = {
-  ...firebaseConfig,
+  experimental: {"appDocumentPreloading":true},
   
-  // Merge webpack configuration
+  // Merged webpack configuration
   webpack: (config, options) => {
-    // Add our path aliases
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, 'src'),
-    };
-    
-    // Add module resolution paths
-    config.resolve.modules = [
-      ...config.resolve.modules,
-      path.resolve(__dirname, 'src'),
-    ];
-    
-    // Call Firebase's webpack function if it exists
-    if (firebaseConfig.webpack && typeof firebaseConfig.webpack === 'function') {
-      config = firebaseConfig.webpack(config, options);
+    // Ensure resolve exists
+    if (!config.resolve) {
+      config.resolve = {};
+    }
+    if (!config.resolve.alias) {
+      config.resolve.alias = {};
+    }
+    if (!config.resolve.modules) {
+      config.resolve.modules = [];
     }
     
+    // Add our path aliases
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    
+    // Add module resolution paths
+    if (!config.resolve.modules.includes(path.resolve(__dirname, 'src'))) {
+      config.resolve.modules.push(path.resolve(__dirname, 'src'));
+    }
+    
+    // Call Firebase's webpack function if it exists
+    if (originalWebpack && typeof originalWebpack === 'function') {
+      config = originalWebpack(config, options);
+    }
+    
+    console.log('Webpack aliases configured:', config.resolve.alias);
     return config;
   },
   
-  // Ensure our TypeScript settings
+  // Our TypeScript settings
   typescript: {
-    ...firebaseConfig.typescript,
     ignoreBuildErrors: true,
   },
   
-  // Ensure our ESLint settings
+  // Our ESLint settings
   eslint: {
-    ...firebaseConfig.eslint,
     ignoreDuringBuilds: true,
   },
   
-  // Merge image configuration
+  // Image configuration
   images: {
-    ...firebaseConfig.images,
     remotePatterns: [
-      ...(firebaseConfig.images?.remotePatterns || []),
+      
       {
         protocol: 'https',
         hostname: 'placehold.co',
@@ -67,13 +61,13 @@ const mergedConfig = {
     ],
   },
   
-  // Merge redirects
+  // Redirects
   async redirects() {
-    const firebaseRedirects = firebaseConfig.redirects ? 
-      await firebaseConfig.redirects() : [];
+    const firebaseRedirects = () => [];
+    const baseRedirects = typeof firebaseRedirects === 'function' ? await firebaseRedirects() : [];
     
     return [
-      ...firebaseRedirects,
+      ...baseRedirects,
       {
         source: '/admin',
         destination: '/admin/content-generator',
@@ -82,6 +76,3 @@ const mergedConfig = {
     ];
   },
 };
-
-// Export the merged configuration
-module.exports = mergedConfig;

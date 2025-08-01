@@ -3,74 +3,98 @@
 // Script to merge our webpack aliases with Firebase's generated config
 const fs = require('fs');
 const path = require('path');
+const vm = require('vm');
 
 console.log('Merging webpack aliases with Firebase configuration...');
 
 const configPath = path.join(process.cwd(), 'next.config.js');
+const workspaceDir = process.cwd();
 
-// Read the Firebase-generated config as text first
-let configContent;
+// Read and evaluate the Firebase-generated config
+let firebaseConfig;
 try {
-  configContent = fs.readFileSync(configPath, 'utf8');
-  console.log('✓ Read Firebase-generated config');
+  const configContent = fs.readFileSync(configPath, 'utf8');
+  console.log('Firebase config content:', configContent.substring(0, 200) + '...');
+  
+  // Create a sandbox to safely evaluate the config
+  const sandbox = {
+    module: { exports: {} },
+    exports: {},
+    require: require,
+    __dirname: workspaceDir,
+    __filename: configPath,
+    process: process,
+    console: console,
+    path: require('path')
+  };
+  
+  // Execute the config file in the sandbox
+  vm.createContext(sandbox);
+  vm.runInContext(configContent, sandbox);
+  
+  firebaseConfig = sandbox.module.exports || sandbox.exports || {};
+  console.log('✓ Loaded Firebase config:', JSON.stringify(firebaseConfig, null, 2));
 } catch (error) {
-  console.error('Error reading Firebase config:', error);
-  process.exit(1);
+  console.error('Error loading Firebase config:', error);
+  // If we can't load it, use an empty config
+  firebaseConfig = {};
 }
 
-// Create our merged configuration
-const mergedConfigContent = `// Merged configuration: Firebase + Custom webpack aliases
+// Create our merged configuration with proper webpack handling
+const mergedConfigCode = `// Merged configuration: Firebase + Custom webpack aliases
 const path = require('path');
 
-// Original Firebase configuration
-${configContent}
+const originalWebpack = ${firebaseConfig.webpack ? firebaseConfig.webpack.toString() : 'null'};
 
-// Store the original config
-const firebaseConfig = module.exports;
-
-// Create our merged configuration
-const mergedConfig = {
-  ...firebaseConfig,
+module.exports = {
+  ${firebaseConfig.output ? `output: '${firebaseConfig.output}',` : ''}
+  ${firebaseConfig.distDir ? `distDir: '${firebaseConfig.distDir}',` : ''}
+  ${firebaseConfig.experimental ? `experimental: ${JSON.stringify(firebaseConfig.experimental)},` : ''}
   
-  // Merge webpack configuration
+  // Merged webpack configuration
   webpack: (config, options) => {
-    // Add our path aliases
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, 'src'),
-    };
-    
-    // Add module resolution paths
-    config.resolve.modules = [
-      ...config.resolve.modules,
-      path.resolve(__dirname, 'src'),
-    ];
-    
-    // Call Firebase's webpack function if it exists
-    if (firebaseConfig.webpack && typeof firebaseConfig.webpack === 'function') {
-      config = firebaseConfig.webpack(config, options);
+    // Ensure resolve exists
+    if (!config.resolve) {
+      config.resolve = {};
+    }
+    if (!config.resolve.alias) {
+      config.resolve.alias = {};
+    }
+    if (!config.resolve.modules) {
+      config.resolve.modules = [];
     }
     
+    // Add our path aliases
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    
+    // Add module resolution paths
+    if (!config.resolve.modules.includes(path.resolve(__dirname, 'src'))) {
+      config.resolve.modules.push(path.resolve(__dirname, 'src'));
+    }
+    
+    // Call Firebase's webpack function if it exists
+    if (originalWebpack && typeof originalWebpack === 'function') {
+      config = originalWebpack(config, options);
+    }
+    
+    console.log('Webpack aliases configured:', config.resolve.alias);
     return config;
   },
   
-  // Ensure our TypeScript settings
+  // Our TypeScript settings
   typescript: {
-    ...firebaseConfig.typescript,
     ignoreBuildErrors: true,
   },
   
-  // Ensure our ESLint settings
+  // Our ESLint settings
   eslint: {
-    ...firebaseConfig.eslint,
     ignoreDuringBuilds: true,
   },
   
-  // Merge image configuration
+  // Image configuration
   images: {
-    ...firebaseConfig.images,
     remotePatterns: [
-      ...(firebaseConfig.images?.remotePatterns || []),
+      ${firebaseConfig.images?.remotePatterns ? JSON.stringify(firebaseConfig.images.remotePatterns) + ',' : ''}
       {
         protocol: 'https',
         hostname: 'placehold.co',
@@ -80,13 +104,13 @@ const mergedConfig = {
     ],
   },
   
-  // Merge redirects
+  // Redirects
   async redirects() {
-    const firebaseRedirects = firebaseConfig.redirects ? 
-      await firebaseConfig.redirects() : [];
+    const firebaseRedirects = ${firebaseConfig.redirects ? firebaseConfig.redirects.toString() : '() => []'};
+    const baseRedirects = typeof firebaseRedirects === 'function' ? await firebaseRedirects() : [];
     
     return [
-      ...firebaseRedirects,
+      ...baseRedirects,
       {
         source: '/admin',
         destination: '/admin/content-generator',
@@ -95,30 +119,30 @@ const mergedConfig = {
     ];
   },
 };
-
-// Export the merged configuration
-module.exports = mergedConfig;
 `;
 
 // Write the merged configuration
-fs.writeFileSync(configPath, mergedConfigContent);
+fs.writeFileSync(configPath, mergedConfigCode);
 console.log('✓ Merged configuration written successfully');
+console.log('Written config preview:', mergedConfigCode.substring(0, 500) + '...');
 
 // Also ensure tsconfig.json has our path mappings
-const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
+const tsconfigPath = path.join(workspaceDir, 'tsconfig.json');
 try {
   const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
   
-  if (!tsconfig.compilerOptions.paths || !tsconfig.compilerOptions.paths['@/*']) {
-    tsconfig.compilerOptions.baseUrl = '.';
-    tsconfig.compilerOptions.paths = {
-      ...tsconfig.compilerOptions.paths,
-      '@/*': ['./src/*']
-    };
-    
-    fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2));
-    console.log('✓ Updated tsconfig.json with path mappings');
+  if (!tsconfig.compilerOptions) {
+    tsconfig.compilerOptions = {};
   }
+  
+  tsconfig.compilerOptions.baseUrl = '.';
+  tsconfig.compilerOptions.paths = {
+    ...tsconfig.compilerOptions.paths,
+    '@/*': ['./src/*']
+  };
+  
+  fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2));
+  console.log('✓ Updated tsconfig.json with path mappings');
 } catch (error) {
   console.warn('Could not update tsconfig.json:', error.message);
 }
