@@ -1,8 +1,7 @@
-// Next.js configuration with hardcoded webpack alias
+
 const path = require('path');
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -28,22 +27,11 @@ const nextConfig = {
       },
     ]
   },
-  // Force webpack to resolve TypeScript paths
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Important: return the modified config
+  webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.join(__dirname, 'src'),
     };
-    
-    // Also add fallback for module resolution
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      '@': path.join(__dirname, 'src'),
-    };
-    
     return config;
   },
 };
-
-module.exports = nextConfig;

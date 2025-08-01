@@ -10,7 +10,7 @@
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "prebuild": "node scripts/fix-paths.js",
-    "build": "next build",
+    "build": "node scripts/next-build-wrapper.js",
     "postbuild": "echo 'Build completed with TypeScript path resolution'",
     "start": "next start",
     "lint": "next lint",
