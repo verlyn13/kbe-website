@@ -19,7 +19,10 @@
       "Bash(gh workflow:*)",
       "Bash(firebase apphosting:secrets:grantaccess:*)",
       "Bash(ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(gcloud builds list:*)",
+      "Bash(gcloud logging read:*)",
+      "Bash(gcloud config get-value:*)"
     ],
     "deny": []
   }

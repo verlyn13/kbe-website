@@ -1,19 +1,10 @@
 // Module alias setup for Firebase builds
 // This ensures @/* imports work even if Firebase overrides config
 
-const Module = require('module');
+const moduleAlias = require('module-alias');
 const path = require('path');
 
-const originalResolveFilename = Module._resolveFilename;
+// Register the @ alias
+moduleAlias.addAlias('@', path.join(process.cwd(), 'src'));
 
-Module._resolveFilename = function (request, parent, isMain) {
-  // Handle @/* imports
-  if (request.startsWith('@/')) {
-    const actualPath = request.replace('@/', path.join(process.cwd(), 'src/'));
-    return originalResolveFilename.call(this, actualPath, parent, isMain);
-  }
-  
-  return originalResolveFilename.call(this, request, parent, isMain);
-};
-
-console.log('Module alias resolution configured for @/* imports');
+console.log('Module alias configured: @ -> ' + path.join(process.cwd(), 'src'));
