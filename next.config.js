@@ -1,7 +1,8 @@
 
 const path = require('path');
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -27,11 +28,23 @@ module.exports = {
       },
     ]
   },
-  webpack: (config) => {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Force webpack to resolve @ alias
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': path.join(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src'),
     };
+    
+    // Add module resolution paths
+    config.resolve.modules = [
+      ...config.resolve.modules,
+      path.resolve(__dirname, 'src'),
+    ];
+    
     return config;
   },
+  // Disable SWC minification if it causes issues
+  swcMinify: true,
 };
+
+module.exports = nextConfig;
