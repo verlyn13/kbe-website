@@ -15,7 +15,10 @@
       "Bash(firebase functions:log:*)",
       "Bash(firebase apphosting:backends:get:*)",
       "Bash(firebase apphosting:backends:describe:*)",
-      "Bash(firebase init:*)"
+      "Bash(firebase init:*)",
+      "Bash(gh workflow:*)",
+      "Bash(firebase apphosting:secrets:grantaccess:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
