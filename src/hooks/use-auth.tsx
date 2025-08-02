@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
@@ -34,14 +33,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (loading) return;
 
     const isAuthPage = pathname === '/';
-    
+
     if (!user && !isAuthPage) {
       router.push('/');
     } else if (user && isAuthPage) {
       router.push('/dashboard');
     }
   }, [user, loading, router, pathname]);
-
 
   const signOut = async () => {
     await firebaseSignOut(auth);
@@ -50,19 +48,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   if (loading) {
     return (
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <div className="flex-1">
-                <Skeleton className="h-screen w-full" />
-            </div>
+      <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
+        <div className="flex-1">
+          <Skeleton className="h-screen w-full" />
         </div>
+      </div>
     );
   }
 
-  return (
-    <AuthContext.Provider value={{ user, loading, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, loading, signOut }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

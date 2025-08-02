@@ -23,7 +23,7 @@ const nextConfig = {
         destination: '/admin/content-generator',
         permanent: true,
       },
-    ]
+    ];
   },
 };
 

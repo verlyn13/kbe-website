@@ -43,7 +43,7 @@ Fill in the values from Google Cloud Secret Manager or ask the team lead.
 npm run dev
 ```
 
-- Opens on http://localhost:9002
+- Opens on [http://localhost:9002](http://localhost:9002)
 - Uses Turbopack for fast refresh
 - Hot module replacement enabled
 
@@ -77,19 +77,21 @@ ESLint will auto-fix on save if VS Code is configured properly.
 ### Important Changes in v4
 
 1. **Import syntax changed**:
+
    ```css
    /* Old (v3) */
    @tailwind base;
    @tailwind components;
    @tailwind utilities;
-   
+
    /* New (v4) */
-   @import "tailwindcss/base";
-   @import "tailwindcss/components";
-   @import "tailwindcss/utilities";
+   @import 'tailwindcss/base';
+   @import 'tailwindcss/components';
+   @import 'tailwindcss/utilities';
    ```
 
 2. **PostCSS config simplified**:
+
    ```js
    // postcss.config.mjs
    {
@@ -156,7 +158,7 @@ Pushing to `main` automatically triggers Firebase deployment:
 git push origin main
 ```
 
-Monitor deployment at: https://console.firebase.google.com
+Monitor deployment at: [https://console.firebase.google.com](https://console.firebase.google.com)
 
 ## Common Issues and Solutions
 
@@ -219,7 +221,7 @@ See `docs/firebase-deployment.md` for troubleshooting.
 ## Testing Changes Before Deploy
 
 1. **Build locally**: `npm run build` - Must succeed
-2. **Test production mode**: `npm start` - Check for runtime errors  
+2. **Test production mode**: `npm start` - Check for runtime errors
 3. **Check mobile responsive**: Use Chrome DevTools device mode
 4. **Test auth flows**: Login, logout, session persistence
 5. **Verify AI features**: Test content generator if you modified AI code

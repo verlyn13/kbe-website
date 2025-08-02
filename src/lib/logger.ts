@@ -26,7 +26,7 @@ class Logger {
       level,
       message,
       timestamp: new Date().toISOString(),
-      context
+      context,
     };
 
     // In development, use console methods
@@ -68,15 +68,17 @@ class Logger {
   error(message: string, error?: Error | unknown, context?: Record<string, unknown>): void {
     const errorContext = {
       ...context,
-      ...(error instanceof Error ? {
-        errorMessage: error.message,
-        errorStack: error.stack,
-        errorName: error.name
-      } : {
-        error: String(error)
-      })
+      ...(error instanceof Error
+        ? {
+            errorMessage: error.message,
+            errorStack: error.stack,
+            errorName: error.name,
+          }
+        : {
+            error: String(error),
+          }),
     };
-    
+
     this.log('error', message, errorContext);
   }
 }

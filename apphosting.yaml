@@ -9,8 +9,8 @@ runConfig:
 env:
   # Existing config
   - variable: NODEJS_VERSION
-    value: "22"
-  
+    value: '22'
+
   # Firebase Core Secrets
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
     secret: NEXT_PUBLIC_FIREBASE_API_KEY
@@ -24,23 +24,23 @@ env:
     secret: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     secret: NEXT_PUBLIC_FIREBASE_APP_ID
-  
+
   # Google AI (if using GenKit)
   - variable: GOOGLE_GENAI_API_KEY
     secret: GOOGLE_GENAI_API_KEY
     availability:
       - BUILD
       - RUNTIME
-  
+
   # Security Secrets
   - variable: NEXTAUTH_SECRET
     secret: NEXTAUTH_SECRET
   - variable: JWT_SECRET
     secret: JWT_SECRET
-  
+
   # App Configuration
   - variable: NODE_ENV
-    value: "production"
+    value: 'production'
   - variable: NEXT_PUBLIC_APP_URL
     secret: NEXT_PUBLIC_APP_URL
     availability:
@@ -49,4 +49,4 @@ env:
 
 # Build settings for App Hosting
 buildConfig:
-  buildCommand: "npm run build"
+  buildCommand: 'npm run build'

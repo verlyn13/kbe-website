@@ -9,6 +9,7 @@ KBE Website is a parent and student portal for Kachemak Bay Enrichment (formerly
 ## Essential Commands
 
 ### Development
+
 ```bash
 npm run dev          # Start dev server on port 9002 with Turbopack
 npm run build        # Build for production
@@ -18,6 +19,7 @@ npm run typecheck    # TypeScript type checking (tsc --noEmit)
 ```
 
 ### AI Development
+
 ```bash
 npm run genkit:dev    # Start GenKit development server
 npm run genkit:watch  # GenKit with file watching for hot reload
@@ -26,6 +28,7 @@ npm run genkit:watch  # GenKit with file watching for hot reload
 ## Architecture Overview
 
 ### Tech Stack
+
 - **Frontend**: Next.js 15.4.5 with App Router, React 19.0.0, TypeScript 5.7.3
 - **Styling**: Tailwind CSS 4.0.0 with shadcn/ui components (Radix UI primitives)
 - **Backend**: Firebase Auth with multiple providers (Email, Google, Magic Link)
@@ -33,6 +36,7 @@ npm run genkit:watch  # GenKit with file watching for hot reload
 - **Forms**: React Hook Form with Zod v3 validation (IMPORTANT: Must use Zod v3 for GenKit compatibility)
 
 ### Key Directories
+
 - `/src/app/` - Next.js App Router pages
 - `/src/components/` - Reusable React components (shadcn/ui based)
 - `/src/hooks/` - Custom React hooks (auth, mobile, toast)
@@ -40,24 +44,29 @@ npm run genkit:watch  # GenKit with file watching for hot reload
 - `/src/ai/` - GenKit AI flows and development server
 
 ### Route Structure
+
 - `/` - Login/authentication page
 - `/dashboard` - Parent dashboard with widgets
 - `/admin` - Auto-redirects to `/admin/content-generator`
 - `/admin/content-generator` - AI-powered content generation tools
 
 ### Authentication Flow
+
 - `AuthProvider` wraps the app with Firebase Auth context
 - `use-auth` hook provides authentication state
 - Protected routes automatically redirect to login
 - 30-day session persistence with "Remember me" option
 
 ### AI Integration
+
 GenKit flows are defined in `/src/ai/` for:
+
 - Program description generation with creative titles
 - Weekly challenge content for different grade levels
 - Server-side processing for security
 
 ### Component Architecture
+
 - All UI components follow shadcn/ui patterns with Radix UI
 - Components use CSS variables for theming (light/dark modes)
 - Form components integrate React Hook Form + Zod validation
@@ -88,6 +97,7 @@ GenKit flows are defined in `/src/ai/` for:
 ## Firebase App Hosting Deployment
 
 ### Critical Requirements
+
 1. **Dependencies**: ALL production dependencies must be in `dependencies`, NOT `devDependencies`. Firebase runs `npm ci --omit=dev` which skips devDependencies.
 2. **Zod Version**: Must use Zod v3 (not v4) for GenKit compatibility. GenKit 1.15.5 has a peer dependency on `zod@^3.24.1`.
 3. **TypeScript Path Aliases**: Firebase's buildpack automatically handles `@/*` imports via Next.js's built-in resolution. Do NOT add custom webpack configs.
@@ -95,25 +105,31 @@ GenKit flows are defined in `/src/ai/` for:
 5. **Environment Variables**: All secrets must be configured in Google Cloud Secret Manager and referenced in `apphosting.yaml`.
 
 ### Common Build Issues and Solutions
+
 1. **"Module not found" errors**: Usually means files are missing from Git. Check both local and global .gitignore files.
 2. **Peer dependency conflicts**: Often related to Zod versions. GenKit requires v3, not v4.
 3. **PostCSS/Tailwind errors**: Move @tailwindcss/postcss and related packages to `dependencies`.
 4. **Firebase overwriting config**: This is expected behavior. Don't fight the buildpack - it needs to configure Next.js for serverless deployment.
 
 ### Build Script
+
 The project uses a simple `next build` command. Firebase App Hosting automatically:
+
 - Installs production dependencies only (`npm ci --omit=dev`)
 - Configures Next.js for serverless deployment
 - Handles TypeScript path resolution
 - Manages Node.js version (currently 22)
 
 ### Secrets Configuration
+
 All secrets are stored in Google Cloud Secret Manager and must be granted access:
+
 ```bash
 firebase apphosting:secrets:grantaccess
 ```
 
 Required secrets include:
+
 - Firebase configuration (API keys, auth domain, etc.)
 - GenKit API keys (GENKIT_API_KEY, GOOGLE_AI_API_KEY)
 - Any third-party service credentials

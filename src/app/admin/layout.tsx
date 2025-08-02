@@ -1,12 +1,7 @@
+'use client';
 
-"use client";
-
-import Link from "next/link";
-import {
-  Shield,
-  FileText,
-  Home,
-} from "lucide-react";
+import Link from 'next/link';
+import { Shield, FileText, Home } from 'lucide-react';
 import {
   SidebarProvider,
   Sidebar,
@@ -18,41 +13,35 @@ import {
   SidebarFooter,
   SidebarInset,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { DashboardHeader } from "@/components/dashboard-header";
+} from '@/components/ui/sidebar';
+import { DashboardHeader } from '@/components/dashboard-header';
 
 function KbeLogo() {
   const { state } = useSidebar();
   return (
     <Link href="/dashboard" className="flex items-center gap-2">
-       <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-8 w-8 text-sidebar-primary"
-        >
-          <path d="M12 2L2 7l10 5 10-5-10-5z" />
-          <path d="M2 17l10 5 10-5" />
-          <path d="M2 12l10 5 10-5" />
-        </svg>
-      <h1
-        className="text-lg font-bold text-white transition-all duration-200 group-data-[collapsible=icon]:-translate-x-96 group-data-[collapsible=icon]:opacity-0"
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-sidebar-primary h-8 w-8"
       >
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
+      </svg>
+      <h1 className="text-lg font-bold text-white transition-all duration-200 group-data-[collapsible=icon]:-translate-x-96 group-data-[collapsible=icon]:opacity-0">
         KBE Admin
       </h1>
     </Link>
   );
 }
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar variant="sidebar" collapsible="icon">
@@ -73,7 +62,7 @@ export default function AdminLayout({
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-             <SidebarMenuItem>
+            <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Back to Portal">
                 <Link href="/dashboard">
                   <Home />
@@ -86,9 +75,7 @@ export default function AdminLayout({
       </Sidebar>
       <SidebarInset>
         <DashboardHeader />
-        <main className="p-4 sm:p-6 lg:p-8 h-[calc(100vh-4rem)] overflow-y-auto">
-            {children}
-        </main>
+        <main className="h-[calc(100vh-4rem)] overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -19,13 +19,13 @@ interface State {
 /**
  * Error boundary component that catches JavaScript errors anywhere in the child component tree.
  * Logs error information and displays a fallback UI instead of crashing the entire app.
- * 
+ *
  * @component
  * @example
  * <ErrorBoundary>
  *   <ComponentThatMightError />
  * </ErrorBoundary>
- * 
+ *
  * @example With custom fallback
  * <ErrorBoundary fallback={<CustomErrorUI />}>
  *   <ComponentThatMightError />
@@ -34,7 +34,7 @@ interface State {
 export class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
-    error: null
+    error: null,
   };
 
   /**
@@ -54,7 +54,7 @@ export class ErrorBoundary extends Component<Props, State> {
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     logger.error('Error caught by boundary', error, {
       componentStack: errorInfo.componentStack,
-      errorBoundary: this.constructor.name
+      errorBoundary: this.constructor.name,
     });
   }
 
@@ -74,21 +74,22 @@ export class ErrorBoundary extends Component<Props, State> {
 
       // Default error UI
       return (
-        <div className="flex items-center justify-center min-h-[400px] p-4">
+        <div className="flex min-h-[400px] items-center justify-center p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-destructive" />
+                <AlertTriangle className="text-destructive h-5 w-5" />
                 <CardTitle>Something went wrong</CardTitle>
               </div>
               <CardDescription>
-                We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
+                We encountered an unexpected error. Please try refreshing the page or contact
+                support if the problem persists.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {process.env.NODE_ENV === 'development' && this.state.error && (
-                <div className="p-3 bg-muted rounded-md">
-                  <p className="text-sm font-mono text-muted-foreground">
+                <div className="bg-muted rounded-md p-3">
+                  <p className="text-muted-foreground font-mono text-sm">
                     {this.state.error.message}
                   </p>
                 </div>

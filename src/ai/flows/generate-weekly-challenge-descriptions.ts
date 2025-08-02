@@ -8,29 +8,37 @@
  * - GenerateWeeklyChallengeDescriptionsOutput - The return type for the generateWeeklyChallengeDescriptions function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 const GenerateWeeklyChallengeDescriptionsInputSchema = z.object({
   topic: z.string().describe('The topic of the weekly challenge.'),
   gradeLevel: z.string().describe('The grade level for the weekly challenge.'),
 });
-export type GenerateWeeklyChallengeDescriptionsInput = z.infer<typeof GenerateWeeklyChallengeDescriptionsInputSchema>;
+export type GenerateWeeklyChallengeDescriptionsInput = z.infer<
+  typeof GenerateWeeklyChallengeDescriptionsInputSchema
+>;
 
 const GenerateWeeklyChallengeDescriptionsOutputSchema = z.object({
   title: z.string().describe('A creative and engaging title for the weekly challenge.'),
-  description: z.string().describe('A detailed and motivating description of the weekly challenge.'),
+  description: z
+    .string()
+    .describe('A detailed and motivating description of the weekly challenge.'),
 });
-export type GenerateWeeklyChallengeDescriptionsOutput = z.infer<typeof GenerateWeeklyChallengeDescriptionsOutputSchema>;
+export type GenerateWeeklyChallengeDescriptionsOutput = z.infer<
+  typeof GenerateWeeklyChallengeDescriptionsOutputSchema
+>;
 
-export async function generateWeeklyChallengeDescriptions(input: GenerateWeeklyChallengeDescriptionsInput): Promise<GenerateWeeklyChallengeDescriptionsOutput> {
+export async function generateWeeklyChallengeDescriptions(
+  input: GenerateWeeklyChallengeDescriptionsInput
+): Promise<GenerateWeeklyChallengeDescriptionsOutput> {
   return generateWeeklyChallengeDescriptionsFlow(input);
 }
 
 const prompt = ai.definePrompt({
   name: 'generateWeeklyChallengeDescriptionsPrompt',
-  input: {schema: GenerateWeeklyChallengeDescriptionsInputSchema},
-  output: {schema: GenerateWeeklyChallengeDescriptionsOutputSchema},
+  input: { schema: GenerateWeeklyChallengeDescriptionsInputSchema },
+  output: { schema: GenerateWeeklyChallengeDescriptionsOutputSchema },
   prompt: `You are an expert educator specializing in creating engaging weekly challenges for students.
 
 You will use the topic and grade level provided to create a creative title and a detailed, motivating description for the challenge.
@@ -48,8 +56,8 @@ const generateWeeklyChallengeDescriptionsFlow = ai.defineFlow(
     inputSchema: GenerateWeeklyChallengeDescriptionsInputSchema,
     outputSchema: GenerateWeeklyChallengeDescriptionsOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async (input) => {
+    const { output } = await prompt(input);
     return output!;
   }
 );

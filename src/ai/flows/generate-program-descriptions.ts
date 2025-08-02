@@ -8,21 +8,25 @@
  * - GenerateProgramDescriptionsOutput - The return type for the generateProgramDescriptions function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 const GenerateProgramDescriptionsInputSchema = z.object({
   programDetails: z
     .string()
     .describe('Details about the program, including target audience, activities, and goals.'),
 });
-export type GenerateProgramDescriptionsInput = z.infer<typeof GenerateProgramDescriptionsInputSchema>;
+export type GenerateProgramDescriptionsInput = z.infer<
+  typeof GenerateProgramDescriptionsInputSchema
+>;
 
 const GenerateProgramDescriptionsOutputSchema = z.object({
   title: z.string().describe('A creative and engaging title for the program.'),
   description: z.string().describe('A detailed and attractive description of the program.'),
 });
-export type GenerateProgramDescriptionsOutput = z.infer<typeof GenerateProgramDescriptionsOutputSchema>;
+export type GenerateProgramDescriptionsOutput = z.infer<
+  typeof GenerateProgramDescriptionsOutputSchema
+>;
 
 export async function generateProgramDescriptions(
   input: GenerateProgramDescriptionsInput
@@ -32,8 +36,8 @@ export async function generateProgramDescriptions(
 
 const prompt = ai.definePrompt({
   name: 'generateProgramDescriptionsPrompt',
-  input: {schema: GenerateProgramDescriptionsInputSchema},
-  output: {schema: GenerateProgramDescriptionsOutputSchema},
+  input: { schema: GenerateProgramDescriptionsInputSchema },
+  output: { schema: GenerateProgramDescriptionsOutputSchema },
   prompt: `You are an expert marketing copywriter specializing in creating engaging content for educational programs.
 
 You will use the following information to generate a title and description for the program.
@@ -52,9 +56,8 @@ const generateProgramDescriptionsFlow = ai.defineFlow(
     inputSchema: GenerateProgramDescriptionsInputSchema,
     outputSchema: GenerateProgramDescriptionsOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async (input) => {
+    const { output } = await prompt(input);
     return output!;
   }
 );
-

@@ -21,10 +21,7 @@ export const passwordSchema = z
   .string()
   .min(6, 'Password must be at least 6 characters')
   .max(100, 'Password is too long')
-  .regex(
-    /^[\x20-\x7E]+$/,
-    'Password contains invalid characters'
-  );
+  .regex(/^[\x20-\x7E]+$/, 'Password contains invalid characters');
 
 /**
  * Strong password validation with additional requirements
@@ -63,10 +60,7 @@ export const displayNameSchema = z
 /**
  * Validates a URL
  */
-export const urlSchema = z
-  .string()
-  .url('Please enter a valid URL')
-  .max(2048, 'URL is too long');
+export const urlSchema = z.string().url('Please enter a valid URL').max(2048, 'URL is too long');
 
 /**
  * Validates a positive integer
@@ -87,10 +81,7 @@ export const gradePercentageSchema = z
 /**
  * Validates a text area input with reasonable limits
  */
-export const textAreaSchema = z
-  .string()
-  .max(5000, 'Text is too long')
-  .transform(sanitizeString);
+export const textAreaSchema = z.string().max(5000, 'Text is too long').transform(sanitizeString);
 
 /**
  * Creates a required field schema with custom error message
@@ -107,7 +98,10 @@ export function requiredString(fieldName: string) {
  * @param errorMessage - Custom error message
  * @returns Zod schema for non-empty array
  */
-export function nonEmptyArray<T>(schema: z.ZodType<T>, errorMessage = 'At least one item is required') {
+export function nonEmptyArray<T>(
+  schema: z.ZodType<T>,
+  errorMessage = 'At least one item is required'
+) {
   return z.array(schema).min(1, errorMessage);
 }
 

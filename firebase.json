@@ -5,10 +5,6 @@
       "region": "us-central1",
       "nodejsVersion": "22"
     },
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
 }

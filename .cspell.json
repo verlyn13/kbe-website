@@ -1,0 +1,187 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    // Framework and Libraries
+    "Turbopack",
+    "GenKit",
+    "genkit",
+    "tailwindcss",
+    "postcss",
+    "shadcn",
+    "firebase",
+    "nextjs",
+
+    // Technical Terms
+    "localhost",
+    "typecheck",
+    "linting",
+    "hotmodule",
+    "intellisense",
+    "autofetch",
+    "autofix",
+    "autocomplete",
+    "devtools",
+    "breakpoints",
+    "middleware",
+    "shellcheck",
+    "buildpack",
+    "apphosting",
+    "grantaccess",
+    "modelcontextprotocol",
+
+    // VS Code Extensions
+    "GitLens",
+    "gitlens",
+    "vscode",
+    "eslint",
+    "prettier",
+    "intellicode",
+
+    // Configuration Files
+    "eslintrc",
+    "prettierrc",
+    "tsconfig",
+    "tsbuildinfo",
+    "gitignore",
+    "dockerignore",
+
+    // Package/Build Tools
+    "npm",
+    "yarn",
+    "pnpm",
+    "webpack",
+    "vite",
+    "rollup",
+    "esbuild",
+    "swc",
+
+    // CSS/Styling
+    "flexbox",
+    "gridbox",
+    "viewport",
+    "breakpoint",
+    "responsive",
+    "theming",
+
+    // Git/Development
+    "repo",
+    "repos",
+    "github",
+    "gitlab",
+    "bitbucket",
+    "commit",
+    "commits",
+    "uncommitted",
+    "unstaged",
+    "rebasing",
+    "merging",
+    "changelog",
+    "semver",
+
+    // File Extensions
+    "tsx",
+    "jsx",
+    "mjs",
+    "cjs",
+    "scss",
+    "css",
+    "json",
+    "jsonc",
+    "yaml",
+    "yml",
+    "toml",
+    "env",
+
+    // Technical Concepts
+    "serverless",
+    "fullstack",
+    "frontend",
+    "backend",
+    "middleware",
+    "api",
+    "apis",
+    "webhook",
+    "webhooks",
+    "oauth",
+    "jwt",
+    "cors",
+    "csrf",
+    "xss",
+    "https",
+    "http",
+
+    // Development Terms
+    "refactor",
+    "refactoring",
+    "linter",
+    "linters",
+    "formatter",
+    "formatters",
+    "bundler",
+    "bundlers",
+    "transpiler",
+    "transpilers",
+    "polyfill",
+    "polyfills",
+    "shim",
+    "shims",
+
+    // Project-specific terms
+    "Kachemak",
+    "Passwordless",
+    "placehold",
+    "googleai",
+    "Mathcounts",
+    "Embla",
+    "embla",
+    "nums",
+    "firebaseapp",
+    "firebasestorage"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    "node_modules/**",
+    ".git/**",
+    ".next/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "*.min.js",
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml"
+  ],
+  "enableFiletypes": [
+    "markdown",
+    "mdx",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "jsonc",
+    "yaml",
+    "yml"
+  ],
+  "overrides": [
+    {
+      "filename": "**/*.md",
+      "words": [
+        // Additional markdown-specific terms
+        "KBE",
+        "Auth",
+        "login",
+        "logout",
+        "signin",
+        "signup",
+        "admin",
+        "dashboard"
+      ]
+    },
+    {
+      "filename": "**/README.md",
+      "words": ["quickstart", "setup", "config", "configs"]
+    }
+  ]
+}

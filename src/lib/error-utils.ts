@@ -33,7 +33,10 @@ export function isError(error: unknown): error is Error {
  * @param defaultMessage - The default message if extraction fails
  * @returns A user-friendly error message
  */
-export function getErrorMessage(error: unknown, defaultMessage = 'An unexpected error occurred'): string {
+export function getErrorMessage(
+  error: unknown,
+  defaultMessage = 'An unexpected error occurred'
+): string {
   if (isFirebaseError(error)) {
     // Handle specific Firebase error codes
     switch (error.code) {
@@ -57,15 +60,15 @@ export function getErrorMessage(error: unknown, defaultMessage = 'An unexpected 
         return error.message;
     }
   }
-  
+
   if (isError(error)) {
     return error.message;
   }
-  
+
   if (typeof error === 'string') {
     return error;
   }
-  
+
   return defaultMessage;
 }
 
@@ -78,7 +81,7 @@ export function logError(context: string, error: unknown): void {
   if (process.env.NODE_ENV === 'development') {
     console.error(`[${context}]`, error);
   }
-  
+
   // In production, you would send to a logging service
   // Example: sendToErrorTracking(context, error);
 }

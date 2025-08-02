@@ -1,9 +1,8 @@
+'use client';
 
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { Mail, Loader2 } from 'lucide-react';
 import {
@@ -13,10 +12,10 @@ import {
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
   signInWithEmailLink,
-} from "firebase/auth";
-import { auth } from "@/lib/firebase-config";
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase-config';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -24,15 +23,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
-import { useState, useEffect } from "react";
-import { getErrorMessage } from "@/lib/error-utils";
-import { logger } from "@/lib/logger";
-import { emailSchema, passwordSchema } from "@/lib/validation";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/lib/error-utils';
+import { logger } from '@/lib/logger';
+import { emailSchema, passwordSchema } from '@/lib/validation';
 
 const formSchema = z.object({
   email: emailSchema,
@@ -64,7 +63,7 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
 /**
  * Login form component with multiple authentication methods.
  * Supports email/password, Google OAuth, and magic link authentication.
- * 
+ *
  * @component
  * @example
  * <LoginForm />
@@ -79,8 +78,8 @@ export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       remember: false,
     },
   });
@@ -94,35 +93,34 @@ export function LoginForm() {
           email = window.prompt('Please provide your email for confirmation');
         }
         try {
-            if(email) {
-                await signInWithEmailLink(auth, email, window.location.href);
-                window.localStorage.removeItem('emailForSignIn');
-                router.push('/dashboard');
-            }
+          if (email) {
+            await signInWithEmailLink(auth, email, window.location.href);
+            window.localStorage.removeItem('emailForSignIn');
+            router.push('/dashboard');
+          }
         } catch (error) {
-          logger.error("Magic link sign in failed", error);
+          logger.error('Magic link sign in failed', error);
           toast({
-            variant: "destructive",
-            title: "Magic link sign in failed",
+            variant: 'destructive',
+            title: 'Magic link sign in failed',
             description: getErrorMessage(error),
           });
         } finally {
-            setIsLoading(false);
+          setIsLoading(false);
         }
       }
     };
     completeMagicLinkSignIn();
   }, [router, toast]);
 
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      if(!values.password) {
+      if (!values.password) {
         toast({
-          variant: "destructive",
-          title: "Sign in failed",
-          description: "Password is required for this sign-in method.",
+          variant: 'destructive',
+          title: 'Sign in failed',
+          description: 'Password is required for this sign-in method.',
         });
         setIsLoading(false);
         return;
@@ -130,10 +128,10 @@ export function LoginForm() {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       router.push('/dashboard');
     } catch (error) {
-      logger.error("Email/password sign in failed", error);
+      logger.error('Email/password sign in failed', error);
       toast({
-        variant: "destructive",
-        title: "Sign in failed",
+        variant: 'destructive',
+        title: 'Sign in failed',
         description: getErrorMessage(error),
       });
     } finally {
@@ -148,10 +146,10 @@ export function LoginForm() {
       await signInWithPopup(auth, provider);
       router.push('/dashboard');
     } catch (error) {
-      logger.error("Google sign in failed", error);
+      logger.error('Google sign in failed', error);
       toast({
-        variant: "destructive",
-        title: "Google sign in failed",
+        variant: 'destructive',
+        title: 'Google sign in failed',
         description: getErrorMessage(error),
       });
     } finally {
@@ -160,12 +158,12 @@ export function LoginForm() {
   };
 
   const handleMagicLink = async () => {
-    const email = form.getValues("email");
+    const email = form.getValues('email');
     if (!email || !z.string().email().safeParse(email).success) {
-      form.setError("email", { type: "manual", message: "Please enter a valid email." });
+      form.setError('email', { type: 'manual', message: 'Please enter a valid email.' });
       return;
     }
-    
+
     setIsMagicLinkLoading(true);
     const actionCodeSettings = {
       url: window.location.href,
@@ -176,14 +174,14 @@ export function LoginForm() {
       await sendSignInLinkToEmail(auth, email, actionCodeSettings);
       window.localStorage.setItem('emailForSignIn', email);
       toast({
-        title: "Check your email",
+        title: 'Check your email',
         description: `A sign-in link has been sent to ${email}.`,
       });
     } catch (error) {
-      logger.error("Magic link send failed", error);
+      logger.error('Magic link send failed', error);
       toast({
-        variant: "destructive",
-        title: "Magic link failed",
+        variant: 'destructive',
+        title: 'Magic link failed',
         description: getErrorMessage(error),
       });
     } finally {
@@ -193,24 +191,32 @@ export function LoginForm() {
 
   return (
     <div className="grid gap-6">
-       <Form {...form}>
+      <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading} aria-label="Sign in with Google">
-            {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <GoogleIcon className="mr-2 h-4 w-4" aria-hidden="true" />}
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading}
+            aria-label="Sign in with Google"
+          >
+            {isGoogleLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+            ) : (
+              <GoogleIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+            )}
             Sign in with Google
           </Button>
-          
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                Or
-              </span>
+              <span className="bg-card text-muted-foreground px-2">Or</span>
             </div>
           </div>
-        
+
           <FormField
             control={form.control}
             name="email"
@@ -218,7 +224,12 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="name@example.com" {...field} aria-label="Email address" aria-required="true" />
+                  <Input
+                    placeholder="name@example.com"
+                    {...field}
+                    aria-label="Email address"
+                    aria-required="true"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -226,8 +237,17 @@ export function LoginForm() {
           />
 
           <div className="grid grid-cols-1 gap-2">
-            <Button variant="outline" onClick={handleMagicLink} disabled={isMagicLinkLoading} aria-label="Send magic link to your email">
-              {isMagicLinkLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <Mail className="mr-2 h-4 w-4" aria-hidden="true" />}
+            <Button
+              variant="outline"
+              onClick={handleMagicLink}
+              disabled={isMagicLinkLoading}
+              aria-label="Send magic link to your email"
+            >
+              {isMagicLinkLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+              ) : (
+                <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
+              )}
               Use magic link
             </Button>
           </div>
@@ -237,9 +257,7 @@ export function LoginForm() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                Or
-              </span>
+              <span className="bg-card text-muted-foreground px-2">Or</span>
             </div>
           </div>
 
@@ -265,12 +283,9 @@ export function LoginForm() {
             control={form.control}
             name="remember"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormItem className="flex flex-row items-start space-y-0 space-x-3">
                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel className="font-normal">Remember me for 30 days</FormLabel>

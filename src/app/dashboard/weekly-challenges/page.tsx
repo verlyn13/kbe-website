@@ -1,4 +1,4 @@
-import { WeeklyChallenges } from "@/components/weekly-challenges";
+import { WeeklyChallenges } from '@/components/weekly-challenges';
 
 export default function WeeklyChallengesPage() {
   return (
