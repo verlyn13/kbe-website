@@ -24,7 +24,13 @@
       "Bash(gcloud logging read:*)",
       "Bash(gcloud config get-value:*)",
       "Bash(firebase apphosting:rollouts:create:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(firebase projects:list:*)",
+      "Bash(firebase auth:export:*)",
+      "Bash(gcloud auth:*)",
+      "Bash(true)",
+      "Bash(firebase emulators:start:*)",
+      "Bash(./scripts/check-firebase-auth.sh:*)"
     ],
     "deny": []
   }
