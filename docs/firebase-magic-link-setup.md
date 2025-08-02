@@ -1,75 +1,94 @@
 # Firebase Magic Link Authentication Setup
 
-This guide covers how to enable and configure email link (magic link) authentication in Firebase.
+This is a comprehensive checklist for configuring Email-link ("magic-link") Authentication end-to-end.
 
-## Prerequisites
+## 1. Firebase Console Configuration (One-time per project)
 
-1. Access to Firebase Console
-2. Firebase project with Authentication enabled
+| Setting | Where | Required Value |
+|---------|-------|----------------|
+| Email/Password → Enable | Auth → Sign-in method | **On** |
+| Email link (passwordless) → Enable | Auth → Sign-in method → Email/Password dialog | **On** |
+| Authorized domains | Auth → Settings → Authorized Domains | • Add production domain from your `url`/`linkDomain`<br>• Add dev domains (e.g., `localhost`)<br>• Note: localhost not auto-added for projects after Apr 28, 2025 |
+| iOS bundle ID / Android package name / SHA-1 & SHA-256 | Settings → General | Needed so Firebase can decide whether to build a mobile-optimized link |
 
-## Setup Steps
+**Tip**: Update the default email template (Auth → Templates → Email link) with your brand & support contact.
 
-### 1. Enable Email Link Sign-In Method
+## 2. Hosting / Link-Generation Domain
 
-1. Go to [Firebase Console](https://console.firebase.google.com)
-2. Select your project (`kbe-website`)
-3. Navigate to **Authentication** → **Sign-in method**
-4. Find **Email/Password** provider
-5. Click to edit
-6. Enable **Email/Password** sign-in
-7. Enable **Email link (passwordless sign-in)**
-8. Click **Save**
+- **Default**: `PROJECT_ID.firebaseapp.com` is ready immediately; nothing else required
+- **Custom domain**: Add it under Hosting → Add custom domain, verify ownership, wait for SSL cert
+- **Multiple Hosting sites**: Set `linkDomain` in ActionCodeSettings to the site you want in the email
 
-### 2. Authorize Domains
+## 3. Web (JavaScript) Project Setup
 
-1. Stay in **Authentication** → **Settings** → **Authorized domains**
-2. Add your domains:
-   - `localhost` (for local development)
-   - `kbe-website.firebaseapp.com`
-   - `kbe-website.web.app`
-   - Your custom domain (if applicable)
-3. Click **Add domain** for each one
+### SDK Requirements
+- Use `firebase@^11.x` (JS SDK ≥ 11.23.0 contains the Hosting-based link flow)
+- Current version: `firebase@12.0.0` ✅
 
-### 3. Configure Email Templates (Optional)
+### Implementation Checklist
 
-1. Go to **Authentication** → **Templates**
-2. Select **Email address verification**
-3. Customize the email template if desired
-4. Ensure the action URL is correct
+| Step | Code/Configuration |
+|------|-------------------|
+| **Init** | ```javascript<br>import { initializeApp } from 'firebase/app';<br>import { getAuth } from 'firebase/auth';<br>const app = initializeApp(firebaseConfig);<br>const auth = getAuth(app);``` |
+| **ActionCodeSettings** | ```javascript<br>const actionCodeSettings = {<br>  url: 'https://www.example.com/finishSignIn',<br>  handleCodeInApp: true, // mandatory<br>  iOS: { bundleId: 'com.example.ios' },<br>  android: {<br>    packageName: 'com.example.android',<br>    installApp: true,<br>    minimumVersion: '12'<br>  },<br>  linkDomain: 'custom-domain.com' // only if more than one Hosting site<br>};``` |
+| **Send link** | ```javascript<br>await sendSignInLinkToEmail(auth, email, actionCodeSettings);<br>localStorage.setItem('emailForSignIn', email);``` |
+| **Complete link** | ```javascript<br>if (isSignInWithEmailLink(auth, window.location.href)) {<br>  const email = localStorage.getItem('emailForSignIn') ?? prompt('Email?');<br>  await signInWithEmailLink(auth, email, window.location.href);<br>  localStorage.removeItem('emailForSignIn');<br>}``` |
+| **Security** | Always serve the page over HTTPS; don't pass email in query-string |
 
-## Local Development
+## 4. Android Configuration
 
-For local development, the magic link will redirect to `http://localhost:9002/`
+| Area | What to do |
+|------|------------|
+| Dependencies | ```gradle<br>implementation(platform("com.google.firebase:firebase-bom:34.0.0"))<br>implementation("com.google.firebase:firebase-auth")<br>implementation("com.google.android.gms:play-services-auth:21.4.0")```<br>(Firebase Auth SDK ≥ 23.2.0 required for Hosting-based links) |
+| Package & certificates | Add package name + SHA-1 and SHA-256 fingerprints in Firebase → Settings → General |
+| Intent filter | In `AndroidManifest.xml`:<br>```xml<br><intent-filter android:autoVerify="true"><br>  <action android:name="android.intent.action.VIEW"/><br>  <category android:name="android.intent.category.DEFAULT"/><br>  <category android:name="android.intent.category.BROWSABLE"/><br>  <data android:scheme="https"<br>        android:host="PROJECT_ID.firebaseapp.com"<br>        android:pathPrefix="/__/auth/links"/><br></intent-filter>```<br>Replace host with custom domain if using `linkDomain` |
 
-## Production
+## 5. Apple Platforms Configuration (iOS/macOS)
 
-For production, ensure your Firebase Hosting domain is in the authorized domains list.
+| Area | What to do |
+|------|------------|
+| Dependencies | Add Firebase via Swift Package Manager: `https://github.com/firebase/firebase-ios-sdk.git`, product `FirebaseAuth` (SDK ≥ 11.8.0) |
+| Entitlements | In Xcode → Target → Signing & Capabilities → Associated Domains:<br>`applinks:PROJECT_ID.firebaseapp.com` (or custom domain) |
+| Bundle ID | Register exact bundle ID in Firebase → Settings → General |
+| Send/verify | Use `Auth.auth().sendSignInLink(...)`, then `isSignIn(withEmailLink:)` and `signIn(withEmail:link:)` |
 
-## Common Issues
+## 6. Migration & Maintenance Notes
 
-### Error: auth/operation-not-allowed
-- **Cause**: Email link sign-in is not enabled
-- **Fix**: Follow step 1 above to enable it
+- **Firebase Dynamic Links shutdown → August 25, 2025**
+- Ensure all clients use Hosting-based flow (SDK versions above)
+- Remove any `page.link` URLs
 
-### Error: auth/invalid-continue-uri
-- **Cause**: The redirect URL is not authorized
-- **Fix**: Add your domain to authorized domains (step 2)
+## Current Implementation Status
 
-### Error: auth/unauthorized-continue-uri
-- **Cause**: Domain not whitelisted for OAuth operations
-- **Fix**: Add domain in Firebase Console under authorized domains
+✅ **Completed:**
+1. Firebase Console configuration
+2. Hosting setup (using default `kbe-website.firebaseapp.com`)
+3. Web project setup with Firebase v12.0.0
+4. Complete sign-in flow implementation
 
-## Testing
+## Common Issues & Solutions
 
-1. Enter an email address in the login form
-2. Click "Send magic link"
-3. Check your email
-4. Click the link in the email
-5. You should be redirected back and logged in
+| Error Code | Cause | Solution |
+|------------|-------|----------|
+| `auth/operation-not-allowed` | Email link sign-in not enabled | Enable in Firebase Console → Auth → Sign-in method |
+| `auth/invalid-continue-uri` | Redirect URL not authorized | Add domain to authorized domains |
+| `auth/unauthorized-continue-uri` | Domain not whitelisted for OAuth | Add domain in Firebase Console |
+| `auth/invalid-action-code` | Link expired or already used | Request a new magic link |
 
-## Security Notes
+## Security Best Practices
 
-- Magic links expire after a certain time
-- Each link can only be used once
-- Always use HTTPS in production
-- The email address is stored in localStorage temporarily
+1. Always serve pages over HTTPS
+2. Don't pass email in query strings
+3. Store email temporarily in localStorage
+4. Clear localStorage after successful sign-in
+5. Magic links expire and are single-use
+
+## Testing Checklist
+
+- [ ] Email/Password + Email link enabled in Firebase Console
+- [ ] Domain added to authorized domains
+- [ ] Enter email and click "Send magic link"
+- [ ] Check email for link
+- [ ] Click link to return to app
+- [ ] Verify automatic sign-in completes
+- [ ] Check localStorage is cleared
