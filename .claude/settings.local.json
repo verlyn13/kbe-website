@@ -23,7 +23,8 @@
       "Bash(gcloud builds list:*)",
       "Bash(gcloud logging read:*)",
       "Bash(gcloud config get-value:*)",
-      "Bash(firebase apphosting:rollouts:create:*)"
+      "Bash(firebase apphosting:rollouts:create:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": []
   }
