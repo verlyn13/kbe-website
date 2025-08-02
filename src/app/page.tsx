@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { LoginForm } from '@/components/login-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
@@ -11,6 +12,12 @@ export default function LoginPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  useEffect(() => {
+    if (user && !loading) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
+
   if (loading) {
     return (
       <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8">
@@ -20,8 +27,11 @@ export default function LoginPage() {
   }
 
   if (user) {
-    router.push('/dashboard');
-    return null;
+    return (
+      <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8">
+        <Skeleton className="h-full w-full max-w-4xl" />
+      </div>
+    );
   }
 
   return (

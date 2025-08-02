@@ -138,8 +138,10 @@ export function LoginForm() {
         }
       }
     };
+    
+    // Only run once on mount
     completeMagicLinkSignIn();
-  }, [router, toast]);
+  }, []); // Remove dependencies to prevent multiple calls
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
