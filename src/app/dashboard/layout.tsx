@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { Bell, Calendar, Home, Puzzle, Settings, Shield, BookOpen } from 'lucide-react';
 import {
   SidebarProvider,
@@ -50,21 +51,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  useEffect(() => {
+    if (!user && !loading) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
   if (loading) {
     return (
-      <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
-        <div className="w-1/4">
-          <Skeleton className="h-screen w-full" />
+      <div className="flex h-screen">
+        <div className="w-64">
+          <Skeleton className="h-full w-full" />
         </div>
         <div className="flex-1">
-          <Skeleton className="h-screen w-full" />
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-full w-full" />
         </div>
       </div>
     );
   }
 
   if (!user) {
-    router.push('/');
     return null;
   }
 
@@ -131,9 +138,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>
+      <SidebarInset className="overflow-hidden">
         <DashboardHeader />
-        <main className="h-[calc(100vh-4rem)] overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="h-[calc(100vh-4rem)] overflow-y-auto bg-background p-4 sm:p-6 lg:p-8">
+          {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );
