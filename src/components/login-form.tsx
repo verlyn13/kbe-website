@@ -166,10 +166,21 @@ export function LoginForm() {
 
     setIsMagicLinkLoading(true);
     const actionCodeSettings = {
-      // Must be a whitelisted URL in Firebase Console
+      // URL where the user will complete sign-in (must be authorized in Firebase Console)
       url: `${window.location.origin}/`,
       // This must be true for email link sign-in
       handleCodeInApp: true,
+      // Optional: iOS and Android settings for future mobile apps
+      // iOS: {
+      //   bundleId: 'com.kbe.website'
+      // },
+      // android: {
+      //   packageName: 'com.kbe.website',
+      //   installApp: false,
+      //   minimumVersion: '12'
+      // },
+      // Optional: Use custom domain for links (if configured)
+      // dynamicLinkDomain: 'kbewebsite.page.link' // Deprecated - don't use
     };
 
     try {
