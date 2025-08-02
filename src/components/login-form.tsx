@@ -86,9 +86,20 @@ export function LoginForm() {
 
   useEffect(() => {
     const completeMagicLinkSignIn = async () => {
+      // Log current URL for debugging
+      logger.info('Checking if URL is magic link', { 
+        url: window.location.href,
+        isMagicLink: isSignInWithEmailLink(auth, window.location.href)
+      });
+      
       if (isSignInWithEmailLink(auth, window.location.href)) {
         setIsLoading(true);
         let email = window.localStorage.getItem('emailForSignIn');
+        
+        logger.info('Magic link detected, attempting sign in', { 
+          emailFromStorage: email ? 'found' : 'not found'
+        });
+        
         if (!email) {
           email = window.prompt('Please provide your email for confirmation');
         }
@@ -96,14 +107,31 @@ export function LoginForm() {
           if (email) {
             await signInWithEmailLink(auth, email, window.location.href);
             window.localStorage.removeItem('emailForSignIn');
+            logger.info('Magic link sign in successful');
             router.push('/dashboard');
           }
-        } catch (error) {
-          logger.error('Magic link sign in failed', error);
+        } catch (error: any) {
+          logger.error('Magic link sign in failed', {
+            error,
+            code: error?.code,
+            message: error?.message,
+            email,
+            url: window.location.href
+          });
+          
+          let errorMessage = getErrorMessage(error);
+          
+          // Provide more specific error messages for sign-in
+          if (error?.code === 'auth/invalid-action-code') {
+            errorMessage = 'This sign-in link is invalid, expired, or has already been used.';
+          } else if (error?.code === 'auth/user-disabled') {
+            errorMessage = 'This account has been disabled.';
+          }
+          
           toast({
             variant: 'destructive',
             title: 'Magic link sign in failed',
-            description: getErrorMessage(error),
+            description: errorMessage,
           });
         } finally {
           setIsLoading(false);
