@@ -166,7 +166,9 @@ export function LoginForm() {
 
     setIsMagicLinkLoading(true);
     const actionCodeSettings = {
-      url: window.location.href,
+      // Must be a whitelisted URL in Firebase Console
+      url: `${window.location.origin}/`,
+      // This must be true for email link sign-in
       handleCodeInApp: true,
     };
 
@@ -177,12 +179,29 @@ export function LoginForm() {
         title: 'Check your email',
         description: `A sign-in link has been sent to ${email}.`,
       });
-    } catch (error) {
-      logger.error('Magic link send failed', error);
+    } catch (error: any) {
+      logger.error('Magic link send failed', {
+        error,
+        code: error?.code,
+        message: error?.message,
+        url: actionCodeSettings.url,
+      });
+      
+      let errorMessage = getErrorMessage(error);
+      
+      // Provide more specific error messages
+      if (error?.code === 'auth/invalid-continue-uri') {
+        errorMessage = 'The redirect URL is not authorized. Please contact support.';
+      } else if (error?.code === 'auth/unauthorized-continue-uri') {
+        errorMessage = 'The domain is not authorized for OAuth operations.';
+      } else if (error?.code === 'auth/operation-not-allowed') {
+        errorMessage = 'Email link sign-in is not enabled. Please contact support.';
+      }
+      
       toast({
         variant: 'destructive',
         title: 'Magic link failed',
-        description: getErrorMessage(error),
+        description: errorMessage,
       });
     } finally {
       setIsMagicLinkLoading(false);
