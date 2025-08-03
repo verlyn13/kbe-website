@@ -316,21 +316,19 @@ SidebarRail.displayName = 'SidebarRail';
 
 const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<'main'>>(
   ({ className, ...props }, ref) => {
-    const { state } = useSidebar();
+    const { state, isMobile } = useSidebar();
     
     return (
       <main
         ref={ref}
         className={cn(
           'bg-background relative flex min-h-svh flex-1 flex-col',
-          // Add left margin based on sidebar state
-          {
-            'md:ml-[--sidebar-width]': state === 'expanded',
-            'md:ml-[--sidebar-width-icon]': state === 'collapsed',
+          // Only apply margin on desktop when sidebar is not mobile
+          !isMobile && {
+            'ml-[--sidebar-width]': state === 'expanded',
+            'ml-[--sidebar-width-icon]': state === 'collapsed',
           },
           'transition-[margin] duration-200 ease-linear',
-          // Handle variant-specific styles
-          'peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2',
           className
         )}
         {...props}
