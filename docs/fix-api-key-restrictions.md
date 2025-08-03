@@ -12,7 +12,8 @@ Go to: <https://console.cloud.google.com/apis/credentials?project=kbe-website>
 
 ### 2. Find Your Web API Key
 
-Look for the API key that matches: `AIzaSyDfdjr_iinFWAMwoM2co4gHzlGmSoGkZIM`
+Look for the API key that matches: `AIzaSyCQfj7TpHnoB2TdaBmM06wG8L2-hwHmikc`
+(This is your NEXT_PUBLIC_FIREBASE_API_KEY)
 
 ### 3. Check Current Restrictions
 
