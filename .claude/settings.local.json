@@ -31,7 +31,8 @@
       "Bash(true)",
       "Bash(firebase emulators:start:*)",
       "Bash(./scripts/check-firebase-auth.sh:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": []
   }
