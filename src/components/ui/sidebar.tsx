@@ -107,15 +107,15 @@ const SidebarProvider = React.forwardRef<
     const state = open ? 'expanded' : 'collapsed';
 
     // Update CSS variable based on state
-    // Temporarily disabled to check performance
-    // React.useEffect(() => {
-    //   const root = document.documentElement;
-    //   if (state === 'collapsed') {
-    //     root.style.setProperty('--sidebar-width', SIDEBAR_WIDTH_ICON);
-    //   } else {
-    //     root.style.setProperty('--sidebar-width', SIDEBAR_WIDTH);
-    //   }
-    // }, [state]);
+    // Update CSS variable based on sidebar state
+    React.useEffect(() => {
+      const root = document.documentElement;
+      if (state === 'collapsed') {
+        root.style.setProperty('--sidebar-width', SIDEBAR_WIDTH_ICON);
+      } else {
+        root.style.setProperty('--sidebar-width', SIDEBAR_WIDTH);
+      }
+    }, [state]);
 
     const contextValue = React.useMemo<SidebarContext>(
       () => ({
@@ -182,7 +182,7 @@ const Sidebar = React.forwardRef<
       return (
         <div
           className={cn(
-            'bg-sidebar text-sidebar-foreground flex h-full w-[--sidebar-width] flex-col',
+            'bg-sidebar text-sidebar-foreground flex h-full w-[var(--sidebar-width)] flex-col',
             className
           )}
           ref={ref}
@@ -199,7 +199,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="bg-sidebar text-sidebar-foreground w-[--sidebar-width] p-0 [&>button]:hidden"
+            className="bg-sidebar text-sidebar-foreground w-[var(--sidebar-width)] p-0 [&>button]:hidden"
             style={
               {
                 '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
@@ -225,24 +225,24 @@ const Sidebar = React.forwardRef<
         {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(
-            'relative h-svh w-64 bg-transparent transition-[width] duration-200 ease-linear',
+            'relative h-svh w-[var(--sidebar-width)] bg-transparent transition-[width] duration-200 ease-linear',
             'group-data-[collapsible=offcanvas]:w-0',
             'group-data-[side=right]:rotate-180',
             variant === 'floating' || variant === 'inset'
-              ? 'group-data-[collapsible=icon]:w-[calc(3rem_+_theme(spacing.4))]'
-              : 'group-data-[collapsible=icon]:w-12'
+              ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]'
+              : 'group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)]'
           )}
         />
         <div
           className={cn(
-            'fixed inset-y-0 z-10 hidden h-svh w-64 transition-[left,right,width] duration-200 ease-linear md:flex',
+            'fixed inset-y-0 z-10 hidden h-svh w-[var(--sidebar-width)] transition-[left,right,width] duration-200 ease-linear md:flex',
             side === 'left'
-              ? 'left-0 group-data-[collapsible=offcanvas]:-left-64'
-              : 'right-0 group-data-[collapsible=offcanvas]:-right-64',
+              ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
+              : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
             // Adjust the padding for floating and inset variants.
             variant === 'floating' || variant === 'inset'
-              ? 'p-2 group-data-[collapsible=icon]:w-[calc(3rem_+_theme(spacing.4)_+2px)]'
-              : 'group-data-[collapsible=icon]:w-12 group-data-[side=left]:border-r group-data-[side=right]:border-l',
+              ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
+              : 'group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)] group-data-[side=left]:border-r group-data-[side=right]:border-l',
             className
           )}
           {...props}
@@ -321,6 +321,8 @@ const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<'main
         ref={ref}
         className={cn(
           'bg-background relative flex min-h-svh flex-1 flex-col',
+          // For variant=inset, we might need specific margin handling
+          'peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow',
           className
         )}
         {...props}
