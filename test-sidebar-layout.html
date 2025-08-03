@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { margin: 0; font-family: Arial; }
+        
+        /* CSS Variables */
+        :root {
+            --sidebar-width: 16rem;
+            --sidebar-width-icon: 3rem;
+        }
+        
+        /* Wrapper */
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            background: #f0f0f0;
+        }
+        
+        /* Sidebar Container */
+        .sidebar-container {
+            display: flex;
+        }
+        
+        /* Space Reservation Div */
+        .space-reservation {
+            position: relative;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: rgba(255, 0, 0, 0.1); /* Red tint to see it */
+            transition: width 200ms ease;
+        }
+        
+        /* When collapsed */
+        .sidebar-container[data-state="collapsed"] .space-reservation {
+            width: var(--sidebar-width-icon);
+        }
+        
+        /* Fixed Sidebar */
+        .fixed-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: #333;
+            color: white;
+            transition: width 200ms ease;
+            z-index: 10;
+            padding: 1rem;
+        }
+        
+        /* When collapsed */
+        .sidebar-container[data-state="collapsed"] .fixed-sidebar {
+            width: var(--sidebar-width-icon);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: white;
+            padding: 2rem;
+        }
+        
+        button {
+            margin: 1rem 0;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar-container" data-state="expanded" id="sidebar">
+            <!-- Space Reservation -->
+            <div class="space-reservation"></div>
+            
+            <!-- Fixed Sidebar -->
+            <div class="fixed-sidebar">
+                <h3>Sidebar</h3>
+                <button onclick="toggleSidebar()">Toggle</button>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1>Dashboard Content</h1>
+            <p>This content should not be covered by the sidebar.</p>
+            <p>The red-tinted area shows the space reservation div.</p>
+            <p>Current state: <span id="state">expanded</span></p>
+        </main>
+    </div>
+    
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const currentState = sidebar.getAttribute('data-state');
+            const newState = currentState === 'expanded' ? 'collapsed' : 'expanded';
+            sidebar.setAttribute('data-state', newState);
+            document.getElementById('state').textContent = newState;
+        }
+    </script>
+</body>
+</html>

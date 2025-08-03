@@ -225,24 +225,24 @@ const Sidebar = React.forwardRef<
         {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(
-            'relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-200 ease-linear',
+            'relative h-svh w-64 bg-transparent transition-[width] duration-200 ease-linear',
             'group-data-[collapsible=offcanvas]:w-0',
             'group-data-[side=right]:rotate-180',
             variant === 'floating' || variant === 'inset'
-              ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]'
-              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon]'
+              ? 'group-data-[collapsible=icon]:w-[calc(3rem_+_theme(spacing.4))]'
+              : 'group-data-[collapsible=icon]:w-12'
           )}
         />
         <div
           className={cn(
-            'fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex',
+            'fixed inset-y-0 z-10 hidden h-svh w-64 transition-[left,right,width] duration-200 ease-linear md:flex',
             side === 'left'
-              ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
-              : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
+              ? 'left-0 group-data-[collapsible=offcanvas]:-left-64'
+              : 'right-0 group-data-[collapsible=offcanvas]:-right-64',
             // Adjust the padding for floating and inset variants.
             variant === 'floating' || variant === 'inset'
-              ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
-              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l',
+              ? 'p-2 group-data-[collapsible=icon]:w-[calc(3rem_+_theme(spacing.4)_+2px)]'
+              : 'group-data-[collapsible=icon]:w-12 group-data-[side=left]:border-r group-data-[side=right]:border-l',
             className
           )}
           {...props}
@@ -316,19 +316,11 @@ SidebarRail.displayName = 'SidebarRail';
 
 const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<'main'>>(
   ({ className, ...props }, ref) => {
-    const { state, isMobile } = useSidebar();
-    
     return (
       <main
         ref={ref}
         className={cn(
           'bg-background relative flex min-h-svh flex-1 flex-col',
-          // Only apply margin on desktop when sidebar is not mobile
-          !isMobile && {
-            'ml-[--sidebar-width]': state === 'expanded',
-            'ml-[--sidebar-width-icon]': state === 'collapsed',
-          },
-          'transition-[margin] duration-200 ease-linear',
           className
         )}
         {...props}
