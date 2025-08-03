@@ -1,21 +1,22 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  GoogleAuthProvider,
+  isSignInWithEmailLink,
+  sendSignInLinkToEmail,
+  signInWithEmailAndPassword,
+  signInWithEmailLink,
+  signInWithPopup,
+} from 'firebase/auth';
+import { Loader2, Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { useRouter } from 'next/navigation';
-import { Mail, Loader2 } from 'lucide-react';
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
-} from 'firebase/auth';
-import { auth } from '@/lib/firebase-config';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -25,11 +26,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { useState, useEffect } from 'react';
 import { getErrorMessage } from '@/lib/error-utils';
+import { auth } from '@/lib/firebase-config';
 import { logger } from '@/lib/logger';
 import { emailSchema, passwordSchema } from '@/lib/validation';
 
@@ -53,6 +52,7 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
+      <title>Google logo</title>
       <circle cx="12" cy="12" r="10" />
       <path d="M12 2a10 10 0 0 0-4.5 18.5" />
       <path d="M22 12a10 10 0 0 0-18.5-4.5" />
@@ -87,19 +87,19 @@ export function LoginForm() {
   useEffect(() => {
     const completeMagicLinkSignIn = async () => {
       // Log current URL for debugging
-      logger.info('Checking if URL is magic link', { 
+      logger.info('Checking if URL is magic link', {
         url: window.location.href,
-        isMagicLink: isSignInWithEmailLink(auth, window.location.href)
+        isMagicLink: isSignInWithEmailLink(auth, window.location.href),
       });
-      
+
       if (isSignInWithEmailLink(auth, window.location.href)) {
         setIsLoading(true);
         let email = window.localStorage.getItem('emailForSignIn');
-        
-        logger.info('Magic link detected, attempting sign in', { 
-          emailFromStorage: email ? 'found' : 'not found'
+
+        logger.info('Magic link detected, attempting sign in', {
+          emailFromStorage: email ? 'found' : 'not found',
         });
-        
+
         if (!email) {
           email = window.prompt('Please provide your email for confirmation');
         }
@@ -110,24 +110,24 @@ export function LoginForm() {
             logger.info('Magic link sign in successful');
             router.push('/dashboard');
           }
-        } catch (error: any) {
+        } catch (error) {
           logger.error('Magic link sign in failed', {
             error,
-            code: error?.code,
-            message: error?.message,
+            code: (error as { code?: string })?.code,
+            message: (error as { message?: string })?.message,
             email,
-            url: window.location.href
+            url: window.location.href,
           });
-          
+
           let errorMessage = getErrorMessage(error);
-          
+
           // Provide more specific error messages for sign-in
-          if (error?.code === 'auth/invalid-action-code') {
+          if ((error as { code?: string })?.code === 'auth/invalid-action-code') {
             errorMessage = 'This sign-in link is invalid, expired, or has already been used.';
-          } else if (error?.code === 'auth/user-disabled') {
+          } else if ((error as { code?: string })?.code === 'auth/user-disabled') {
             errorMessage = 'This account has been disabled.';
           }
-          
+
           toast({
             variant: 'destructive',
             title: 'Magic link sign in failed',
@@ -138,10 +138,11 @@ export function LoginForm() {
         }
       }
     };
-    
+
     // Only run once on mount
     completeMagicLinkSignIn();
-  }, []); // Remove dependencies to prevent multiple calls
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, toast]); // Add router and toast to dependencies
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -220,25 +221,25 @@ export function LoginForm() {
         title: 'Check your email',
         description: `A sign-in link has been sent to ${email}.`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Magic link send failed', {
         error,
-        code: error?.code,
-        message: error?.message,
+        code: (error as { code?: string })?.code,
+        message: (error as { message?: string })?.message,
         url: actionCodeSettings.url,
       });
-      
+
       let errorMessage = getErrorMessage(error);
-      
+
       // Provide more specific error messages
-      if (error?.code === 'auth/invalid-continue-uri') {
+      if ((error as { code?: string })?.code === 'auth/invalid-continue-uri') {
         errorMessage = 'The redirect URL is not authorized. Please contact support.';
-      } else if (error?.code === 'auth/unauthorized-continue-uri') {
+      } else if ((error as { code?: string })?.code === 'auth/unauthorized-continue-uri') {
         errorMessage = 'The domain is not authorized for OAuth operations.';
-      } else if (error?.code === 'auth/operation-not-allowed') {
+      } else if ((error as { code?: string })?.code === 'auth/operation-not-allowed') {
         errorMessage = 'Email link sign-in is not enabled. Please contact support.';
       }
-      
+
       toast({
         variant: 'destructive',
         title: 'Magic link failed',
@@ -329,7 +330,7 @@ export function LoginForm() {
                 <div className="flex items-center">
                   <FormLabel>Password</FormLabel>
                   <Button variant="link" asChild className="ml-auto text-xs font-normal">
-                    <a href="#">Forgot password?</a>
+                    <a href="/forgot-password">Forgot password?</a>
                   </Button>
                 </div>
                 <FormControl>

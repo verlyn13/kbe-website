@@ -5,6 +5,7 @@ This project uses a **two-key architecture** for better security and separation 
 ## Current Setup
 
 ### 1. Firebase API Key
+
 - **Purpose**: Firebase Authentication (magic links, Google sign-in, etc.)
 - **Key Name in GCP**: "Firebase API Key"
 - **Environment Variable**: `NEXT_PUBLIC_FIREBASE_API_KEY`
@@ -16,13 +17,14 @@ This project uses a **two-key architecture** for better security and separation 
   - ✓ Firebase Management API
 
 ### 2. GenKit/AI API Key
+
 - **Purpose**: AI content generation with GenKit
 - **Key Name in GCP**: "Generative Language API Key"
 - **Environment Variable**: `GOOGLE_GENAI_API_KEY`
 - **APIs Enabled**:
   - ✓ Generative Language API
 
-## Why Two Keys?
+## Why Two Keys
 
 1. **Security**: If one key is compromised, the other service remains secure
 2. **Quota Management**: Each service has its own usage limits
@@ -33,6 +35,7 @@ This project uses a **two-key architecture** for better security and separation 
 ## Local Development Setup
 
 Your `.env.local` should have:
+
 ```bash
 # Firebase Authentication
 NEXT_PUBLIC_FIREBASE_API_KEY=your-firebase-api-key
@@ -46,45 +49,47 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=kbe-website
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=kbe-website.firebasestorage.app
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=886214990861
 NEXT_PUBLIC_FIREBASE_APP_ID=1:886214990861:web:69d21293a494f323e94944
-```
-
+```bash
 ## Production Setup
 
 Update secrets in Google Cloud:
+
 ```bash
 # Update Firebase API key
 firebase apphosting:secrets:set NEXT_PUBLIC_FIREBASE_API_KEY
 
 # GenKit key remains unchanged
 # firebase apphosting:secrets:set GOOGLE_GENAI_API_KEY
-```
-
+```bash
 ## Adding Application Restrictions (Production)
 
 Once everything works, add HTTP referrer restrictions:
 
 ### Firebase API Key
-```
+
+```text
 http://localhost:9002/*
 https://localhost:9002/*
 https://kbe-website.firebaseapp.com/*
 https://kbe-website.web.app/*
 https://homerconnect.com/*
 https://www.homerconnect.com/*
-```
-
+```bash
 ### GenKit API Key
+
 - Can remain unrestricted since it's server-side only
 - Or restrict to your Cloud Run service URL
 
 ## Troubleshooting
 
 ### Magic Links Not Working
+
 - Check Firebase API Key has Identity Toolkit API enabled
 - Verify using correct key in `NEXT_PUBLIC_FIREBASE_API_KEY`
 - Run `npm run debug:magic-link` to test
 
 ### AI Generation Not Working
+
 - Check GenKit API Key has Generative Language API enabled
 - Verify using correct key in `GOOGLE_GENAI_API_KEY`
 - Check GenKit logs with `npm run genkit:dev`
@@ -102,5 +107,6 @@ Best practice is to rotate keys periodically:
 ## Monitoring
 
 Monitor key usage in Google Cloud Console:
+
 - APIs & Services → Credentials → Click on key → View metrics
 - Set up alerts for unusual usage patterns

@@ -3,19 +3,19 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { Bell, Calendar, Home, Puzzle, Settings, Shield, BookOpen } from 'lucide-react';
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarInset,
-  SidebarTrigger,
-  useSidebar,
-} from '@/components/ui/sidebar';
+// Temporarily commented out to test performance
+// import {
+//   SidebarProvider,
+//   Sidebar,
+//   SidebarHeader,
+//   SidebarContent,
+//   SidebarMenu,
+//   SidebarMenuItem,
+//   SidebarMenuButton,
+//   SidebarFooter,
+//   SidebarRail,
+//   useSidebar,
+// } from '@/components/ui/sidebar';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
@@ -23,9 +23,9 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 
 function KbeLogo() {
-  const { state } = useSidebar();
+  // const { state } = useSidebar();
   return (
-    <Link href="/dashboard" className="flex items-center gap-2">
+    <Link href="/dashboard" className="flex items-center gap-2 px-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -34,13 +34,13 @@ function KbeLogo() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-sidebar-primary h-8 w-8"
+        className="text-sidebar-primary h-8 w-8 shrink-0"
       >
         <path d="M12 2L2 7l10 5 10-5-10-5z" />
         <path d="M2 17l10 5 10-5" />
         <path d="M2 12l10 5 10-5" />
       </svg>
-      <h1 className="text-lg font-bold text-white transition-all duration-200 group-data-[collapsible=icon]:-translate-x-96 group-data-[collapsible=icon]:opacity-0">
+      <h1 className="text-sidebar-foreground text-lg font-bold">
         KBE Portal
       </h1>
     </Link>
@@ -48,11 +48,14 @@ function KbeLogo() {
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  console.log('[DashboardLayout] Component rendering');
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    console.log('[DashboardLayout] Auth check:', { user: !!user, loading });
     if (!user && !loading) {
+      console.log('[DashboardLayout] No user, redirecting to login');
       router.push('/');
     }
   }, [user, loading, router]);
@@ -72,78 +75,48 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   if (!user) {
+    console.log('[DashboardLayout] No user found, redirecting to login');
+    router.push('/');
     return null;
   }
 
   return (
-    <SidebarProvider>
-      <Sidebar variant="sidebar" collapsible="icon">
-        <SidebarHeader>
+    <div className="flex h-screen overflow-hidden">
+      {/* Temporarily replaced with simple sidebar to test performance */}
+      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-sidebar text-sidebar-foreground border-r">
+        <div className="p-4">
           <KbeLogo />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive tooltip="Dashboard">
-                <Link href="/dashboard">
-                  <Home />
-                  <span>Dashboard</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Calendar">
-                <Link href="#">
-                  <Calendar />
-                  <span>Calendar</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Weekly Challenges">
-                <Link href="/dashboard/weekly-challenges">
-                  <Puzzle />
-                  <span>Weekly Challenges</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Announcements">
-                <Link href="/dashboard/announcements">
-                  <Bell />
-                  <span>Announcements</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Admin">
-                <Link href="/admin/content-generator">
-                  <Shield />
-                  <span>Admin</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Settings">
-                <Link href="#">
-                  <Settings />
-                  <span>Settings</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset className="overflow-hidden">
+        </div>
+        <nav className="space-y-2 p-4">
+          <Link href="/dashboard" className="flex items-center gap-2 p-2 rounded hover:bg-sidebar-accent">
+            <Home className="h-4 w-4" />
+            <span>Dashboard</span>
+          </Link>
+          <Link href="#" className="flex items-center gap-2 p-2 rounded hover:bg-sidebar-accent">
+            <Calendar className="h-4 w-4" />
+            <span>Calendar</span>
+          </Link>
+          <Link href="/dashboard/weekly-challenges" className="flex items-center gap-2 p-2 rounded hover:bg-sidebar-accent">
+            <Puzzle className="h-4 w-4" />
+            <span>Weekly Challenges</span>
+          </Link>
+          <Link href="/dashboard/announcements" className="flex items-center gap-2 p-2 rounded hover:bg-sidebar-accent">
+            <Bell className="h-4 w-4" />
+            <span>Announcements</span>
+          </Link>
+          <Link href="/admin/content-generator" className="flex items-center gap-2 p-2 rounded hover:bg-sidebar-accent">
+            <Shield className="h-4 w-4" />
+            <span>Admin</span>
+          </Link>
+        </nav>
+      </div>
+      <main 
+        className="flex-1 overflow-y-auto bg-background"
+        style={{ marginLeft: '16rem' }}
+      >
         <DashboardHeader />
-        <main className="h-[calc(100vh-4rem)] overflow-y-auto bg-background p-4 sm:p-6 lg:p-8">
-          {children}
-        </main>
-      </SidebarInset>
-    </SidebarProvider>
+        <div className="p-4 sm:p-6 lg:p-8">{children}</div>
+      </main>
+    </div>
   );
 }

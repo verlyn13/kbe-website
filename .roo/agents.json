@@ -1,0 +1,149 @@
+{
+  "orchestrator": {
+    "name": "KBE Orchestrator",
+    "description": "Master coordination agent for KBE Portal development",
+    "role": "Project intelligence hub that analyzes tasks, coordinates agents, and manages workflows",
+    "capabilities": [
+      "Task decomposition and analysis",
+      "Multi-agent coordination",
+      "Project context awareness",
+      "Workflow optimization",
+      "Knowledge base queries"
+    ],
+    "handoffProtocol": {
+      "incoming": "Receives high-level user requests and complex tasks",
+      "outgoing": "Delegates specific subtasks to specialized agents with full context"
+    }
+  },
+  "agents": {
+    "kbe-ui": {
+      "name": "KBE UI Designer",
+      "icon": "🎨",
+      "expertise": ["Frontend", "Components", "Styling", "Responsive Design"],
+      "tools": ["edit", "read", "browser"],
+      "filePatterns": ["\\.(tsx?|jsx?|css|scss)$"],
+      "orchestratorAware": true,
+      "handoffProtocol": {
+        "accepts": ["UI implementation", "Component updates", "Styling fixes"],
+        "provides": ["Updated components", "Style changes", "Responsive layouts"],
+        "collaboratesWith": ["kbe-test", "webdesign_agent"]
+      }
+    },
+    "kbe-api": {
+      "name": "KBE API Developer",
+      "icon": "🔌",
+      "expertise": ["Backend", "API Routes", "Server Components", "Firebase"],
+      "tools": ["edit", "read", "command"],
+      "filePatterns": ["^(app/api/.*|.*route)\\.(ts|js)$"],
+      "orchestratorAware": true,
+      "handoffProtocol": {
+        "accepts": ["API creation", "Database operations", "Auth flows"],
+        "provides": ["API endpoints", "Server logic", "Data models"],
+        "collaboratesWith": ["kbe-test", "kbe-ui"]
+      }
+    },
+    "kbe-test": {
+      "name": "KBE Test Engineer",
+      "icon": "🧪",
+      "expertise": ["Testing", "Quality Assurance", "Coverage"],
+      "tools": ["edit", "read", "command"],
+      "filePatterns": ["\\.(test|spec)\\.(tsx?|jsx?|ts|js)$"],
+      "orchestratorAware": true,
+      "handoffProtocol": {
+        "accepts": ["Test creation", "Bug validation", "Coverage improvement"],
+        "provides": ["Test suites", "Coverage reports", "Bug reproduction"],
+        "collaboratesWith": ["all"]
+      }
+    },
+    "kbe-debug": {
+      "name": "KBE Debugger",
+      "icon": "🐛",
+      "expertise": ["Troubleshooting", "Performance", "Diagnostics"],
+      "tools": ["read", "edit", "command", "browser"],
+      "filePatterns": ["\\.(tsx?|jsx?|css|ts|js)$"],
+      "orchestratorAware": true,
+      "handoffProtocol": {
+        "accepts": ["Bug reports", "Performance issues", "Error investigation"],
+        "provides": ["Root cause analysis", "Fixes", "Performance improvements"],
+        "collaboratesWith": ["kbe-performance", "kbe-test"]
+      }
+    },
+    "kbe-performance": {
+      "name": "KBE Performance Engineer",
+      "icon": "⚡",
+      "expertise": ["Optimization", "Core Web Vitals", "Bundle Size"],
+      "tools": ["read", "edit", "command", "browser"],
+      "filePatterns": ["\\.(tsx?|jsx?|css|js|ts)$"],
+      "orchestratorAware": true,
+      "handoffProtocol": {
+        "accepts": ["Performance audits", "Optimization requests", "Bundle analysis"],
+        "provides": ["Optimized code", "Performance metrics", "Recommendations"],
+        "collaboratesWith": ["kbe-ui", "kbe-debug"]
+      }
+    },
+    "webdesign_agent": {
+      "name": "Web Design System Expert",
+      "icon": "🎨",
+      "expertise": ["Design Systems", "UX Patterns", "Layout Architecture"],
+      "tools": ["read", "edit"],
+      "filePatterns": ["\\.(md|tsx?|css)$"],
+      "orchestratorAware": true,
+      "handoffProtocol": {
+        "accepts": ["Design system updates", "UX improvements", "Layout decisions"],
+        "provides": ["Design specifications", "Component patterns", "UX guidelines"],
+        "collaboratesWith": ["kbe-ui", "kbe-performance"]
+      }
+    }
+  },
+  "workflows": {
+    "feature_implementation": {
+      "description": "Standard workflow for implementing new features",
+      "steps": [
+        { "agent": "orchestrator", "action": "Analyze requirements and create plan" },
+        { "agent": "webdesign_agent", "action": "Design UI/UX patterns" },
+        { "agent": "kbe-ui", "action": "Implement frontend components" },
+        { "agent": "kbe-api", "action": "Create backend logic (if needed)" },
+        { "agent": "kbe-test", "action": "Write comprehensive tests" },
+        { "agent": "kbe-performance", "action": "Optimize and validate metrics" }
+      ]
+    },
+    "bug_fix": {
+      "description": "Workflow for fixing reported bugs",
+      "steps": [
+        { "agent": "orchestrator", "action": "Triage and assign priority" },
+        { "agent": "kbe-debug", "action": "Investigate and diagnose" },
+        { "agent": "kbe-test", "action": "Create reproduction test" },
+        { "agent": "appropriate_agent", "action": "Implement fix" },
+        { "agent": "kbe-test", "action": "Validate fix with tests" }
+      ]
+    },
+    "performance_optimization": {
+      "description": "Workflow for performance improvements",
+      "steps": [
+        { "agent": "orchestrator", "action": "Identify optimization targets" },
+        { "agent": "kbe-performance", "action": "Audit current metrics" },
+        { "agent": "kbe-debug", "action": "Profile and identify bottlenecks" },
+        { "agent": "appropriate_agent", "action": "Implement optimizations" },
+        { "agent": "kbe-performance", "action": "Validate improvements" }
+      ]
+    }
+  },
+  "communication": {
+    "handoffFormat": {
+      "from": "agent_id",
+      "to": "agent_id",
+      "task": "description",
+      "context": {
+        "completedWork": ["list of completed items"],
+        "remainingTasks": ["list of remaining items"],
+        "artifacts": ["file paths"],
+        "notes": "additional context"
+      }
+    },
+    "statusUpdates": {
+      "frequency": "On significant progress or handoffs",
+      "format": "Clear, concise progress reports",
+      "userVisibility": "Always keep user informed"
+    }
+  }
+}

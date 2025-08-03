@@ -30,7 +30,8 @@
       "Bash(gcloud auth:*)",
       "Bash(true)",
       "Bash(firebase emulators:start:*)",
-      "Bash(./scripts/check-firebase-auth.sh:*)"
+      "Bash(./scripts/check-firebase-auth.sh:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": []
   }

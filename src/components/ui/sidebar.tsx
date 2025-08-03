@@ -106,6 +106,17 @@ const SidebarProvider = React.forwardRef<
     // This makes it easier to style the sidebar with Tailwind classes.
     const state = open ? 'expanded' : 'collapsed';
 
+    // Update CSS variable based on state
+    // Temporarily disabled to check performance
+    // React.useEffect(() => {
+    //   const root = document.documentElement;
+    //   if (state === 'collapsed') {
+    //     root.style.setProperty('--sidebar-width', SIDEBAR_WIDTH_ICON);
+    //   } else {
+    //     root.style.setProperty('--sidebar-width', SIDEBAR_WIDTH);
+    //   }
+    // }, [state]);
+
     const contextValue = React.useMemo<SidebarContext>(
       () => ({
         state,
@@ -205,7 +216,7 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer text-sidebar-foreground hidden md:block"
+        className="group peer text-sidebar-foreground hidden md:flex"
         data-state={state}
         data-collapsible={state === 'collapsed' ? collapsible : ''}
         data-variant={variant}
@@ -238,7 +249,7 @@ const Sidebar = React.forwardRef<
         >
           <div
             data-sidebar="sidebar"
-            className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow"
+            className="bg-sidebar text-sidebar-foreground group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow"
           >
             {children}
           </div>

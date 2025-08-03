@@ -1,10 +1,10 @@
+import { ErrorBoundary } from '@/components/error-boundary';
+import { SkipNavigation } from '@/components/skip-navigation';
+import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/hooks/use-auth';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
-import { AuthProvider } from '@/hooks/use-auth';
-import { ErrorBoundary } from '@/components/error-boundary';
-import { SkipNavigation } from '@/components/skip-navigation';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -29,20 +29,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={`${inter.variable} font-body antialiased`}>
+      <head />
+      <body className={`${inter.variable} font-body min-h-screen antialiased`}>
         <SkipNavigation />
         <ErrorBoundary>
-          <AuthProvider>
-            <main id="main-content">{children}</main>
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </ErrorBoundary>
         <Toaster />
       </body>

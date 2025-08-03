@@ -39,15 +39,13 @@ npm run genkit:watch # GenKit AI development
 npm run typecheck    # Check types
 npm run lint         # Lint code
 npm run build        # Build production
-```
-
+```bash
 #### Option 3: Use Setup Script
 
 ```bash
 source ./setup-dev-env.sh  # One-time setup per terminal
 npm run dev                # Then run commands normally
-```
-
+```bash
 ### 🎯 VS Code Features Ready
 
 1. **Debugging**: Press `F5` to start debugging (server, client, or full-stack)

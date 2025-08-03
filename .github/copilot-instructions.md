@@ -2,7 +2,7 @@
 
 ## Critical Firebase App Hosting Requirements
 
-### ⚠️ NEVER move these packages to devDependencies:
+### ⚠️ NEVER move these packages to devDependencies
 
 - `typescript` - Required for build process
 - `@tailwindcss/postcss` - Required for CSS processing

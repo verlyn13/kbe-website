@@ -67,9 +67,12 @@ import { useAuth } from '@/hooks/use-auth';
 export function DashboardHeader() {
   const { user, signOut } = useAuth();
   return (
-    <header className="bg-card sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-4 lg:px-6">
-      <SidebarTrigger className="md:hidden" />
-      <div className="w-full flex-1">{/* Can add breadcrumbs or search here */}</div>
+    <header className="bg-card sticky top-0 z-20 flex h-16 shrink-0 items-center gap-4 border-b px-4 lg:px-6">
+      {/* <SidebarTrigger className="-ml-1" /> */}
+      <div className="flex w-full flex-1 items-center gap-4">
+        <h2 className="text-lg font-semibold">Dashboard</h2>
+        <div className="ml-auto flex items-center gap-2">{/* Notification bell can go here */}</div>
+      </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">

@@ -17,16 +17,14 @@ This guide covers the development setup and workflow for the KBE Website project
 git clone <repository-url>
 cd kbe-website
 npm install
-```
-
+```bash
 ### 2. Environment Variables
 
 Create `.env.local` file (use `generate-env-local.sh` for template):
 
 ```bash
 ./generate-env-local.sh
-```
-
+```text
 Fill in the values from Google Cloud Secret Manager or ask the team lead.
 
 ### 3. VS Code Setup
@@ -41,8 +39,7 @@ Fill in the values from Google Cloud Secret Manager or ask the team lead.
 
 ```bash
 npm run dev
-```
-
+```text
 - Opens on [http://localhost:9002](http://localhost:9002)
 - Uses Turbopack for fast refresh
 - Hot module replacement enabled
@@ -51,8 +48,7 @@ npm run dev
 
 ```bash
 npm run genkit:watch
-```
-
+```text
 - Opens GenKit UI for testing AI flows
 - Hot reloads on file changes
 
@@ -60,16 +56,14 @@ npm run genkit:watch
 
 ```bash
 npm run typecheck
-```
-
+```text
 Run this before committing to catch type errors.
 
 ### Linting
 
 ```bash
 npm run lint
-```
-
+```text
 ESLint will auto-fix on save if VS Code is configured properly.
 
 ## CSS Development with Tailwind CSS 4
@@ -148,16 +142,14 @@ git commit -m "fix: resolve Tailwind CSS import issue"
 
 # Chore
 git commit -m "chore: update VS Code settings"
-```
-
+```bash
 ### Deployment
 
 Pushing to `main` automatically triggers Firebase deployment:
 
 ```bash
 git push origin main
-```
-
+```text
 Monitor deployment at: [https://console.firebase.google.com](https://console.firebase.google.com)
 
 ## Common Issues and Solutions

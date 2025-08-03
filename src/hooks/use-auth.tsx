@@ -21,22 +21,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
+    console.log('[AuthProvider] Setting up auth listener');
+    console.time('[AuthProvider] First auth state change');
+    
+    // Add a timeout to detect if auth is hanging
+    const timeoutId = setTimeout(() => {
+      console.error('[AuthProvider] WARNING: Auth state change is taking too long (>5s)');
+      console.log('[AuthProvider] Current auth instance:', auth);
+    }, 5000);
+    
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      clearTimeout(timeoutId);
+      console.timeEnd('[AuthProvider] First auth state change');
+      console.log('[AuthProvider] Auth state changed:', { user: !!user });
       setUser(user);
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      clearTimeout(timeoutId);
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
+    console.log('[AuthProvider] Routing check:', { loading, user: !!user, pathname });
     if (loading) return;
 
     const isAuthPage = pathname === '/';
 
     if (!user && !isAuthPage) {
+      console.log('[AuthProvider] No user, not on auth page, redirecting to /');
       router.push('/');
     } else if (user && isAuthPage) {
+      console.log('[AuthProvider] User exists, on auth page, redirecting to /dashboard');
       router.push('/dashboard');
     }
   }, [user, loading, router, pathname]);

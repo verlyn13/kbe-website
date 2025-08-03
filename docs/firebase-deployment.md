@@ -114,8 +114,7 @@ env:
   - variable: GENKIT_API_KEY
     secret: GENKIT_API_KEY
   # ... etc
-```
-
+```bash
 ## Working Build Configuration
 
 ### package.json
@@ -132,8 +131,7 @@ env:
     "zod": "^3.23.8" // NOT v4!
   }
 }
-```
-
+```bash
 ### apphosting.yaml
 
 ```yaml
@@ -147,8 +145,7 @@ env:
 
 buildConfig:
   buildCommand: 'npm run build'
-```
-
+```bash
 ### tsconfig.json
 
 ```json
@@ -160,8 +157,7 @@ buildConfig:
     }
   }
 }
-```
-
+```bash
 ## What NOT to Do
 
 1. Don't create custom webpack configs for path aliases

@@ -11,15 +11,30 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:886214990861:web:69d21293a494f323e94944',
 };
 
+console.log('[Firebase] Config:', {
+  apiKey: firebaseConfig.apiKey.substring(0, 10) + '...',
+  authDomain: firebaseConfig.authDomain,
+  projectId: firebaseConfig.projectId,
+});
+
 // Initialize Firebase
+console.time('[Firebase] Initialization');
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
+console.timeEnd('[Firebase] Initialization');
 
 // Only set persistence on client side
-if (typeof window !== 'undefined') {
-  setPersistence(auth, browserLocalPersistence).catch((error) => {
-    console.error('Error setting persistence:', error);
-  });
-}
+// TEMPORARILY DISABLED to test if this is causing the delay
+// if (typeof window !== 'undefined') {
+//   console.time('[Firebase] Set persistence');
+//   setPersistence(auth, browserLocalPersistence)
+//     .then(() => {
+//       console.timeEnd('[Firebase] Set persistence');
+//     })
+//     .catch((error) => {
+//       console.timeEnd('[Firebase] Set persistence');
+//       console.error('Error setting persistence:', error);
+//     });
+// }
 
 export { app, auth };

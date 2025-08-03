@@ -37,10 +37,10 @@ const auth = getAuth(app);
 
 async function testMagicLink() {
   const testEmail = 'test@example.com'; // Change this to your test email
-  
+
   console.log('\n📧 Testing Magic Link Authentication...');
   console.log('   Email:', testEmail);
-  
+
   // Test different action code settings
   const configurations = [
     {
@@ -48,28 +48,28 @@ async function testMagicLink() {
       settings: {
         url: 'http://localhost:9002/',
         handleCodeInApp: true,
-      }
+      },
     },
     {
       name: 'Firebase Hosting',
       settings: {
         url: 'https://kbe-website.firebaseapp.com/',
         handleCodeInApp: true,
-      }
+      },
     },
     {
       name: 'Custom Domain from .env',
       settings: {
         url: process.env.NEXT_PUBLIC_APP_URL || 'https://homerconnect.com/',
         handleCodeInApp: true,
-      }
-    }
+      },
+    },
   ];
 
   for (const config of configurations) {
     console.log(`\n🧪 Testing with ${config.name}:`);
     console.log('   URL:', config.settings.url);
-    
+
     try {
       await sendSignInLinkToEmail(auth, testEmail, config.settings);
       console.log('   ✅ Success! Magic link sent.');
@@ -78,16 +78,23 @@ async function testMagicLink() {
     } catch (error) {
       console.error('   ❌ Failed:', error.code);
       console.error('   Message:', error.message);
-      
+
       // Provide specific guidance based on error
       if (error.code === 'auth/operation-not-allowed') {
         console.log('\n   💡 Fix: Enable Email Link sign-in in Firebase Console:');
-        console.log('      1. Go to https://console.firebase.google.com/project/kbe-website/authentication/providers');
+        console.log(
+          '      1. Go to https://console.firebase.google.com/project/kbe-website/authentication/providers'
+        );
         console.log('      2. Click on Email/Password');
         console.log('      3. Enable "Email link (passwordless sign-in)"');
-      } else if (error.code === 'auth/invalid-continue-uri' || error.code === 'auth/unauthorized-continue-uri') {
+      } else if (
+        error.code === 'auth/invalid-continue-uri' ||
+        error.code === 'auth/unauthorized-continue-uri'
+      ) {
         console.log('\n   💡 Fix: Add this domain to authorized domains:');
-        console.log('      1. Go to https://console.firebase.google.com/project/kbe-website/authentication/settings');
+        console.log(
+          '      1. Go to https://console.firebase.google.com/project/kbe-website/authentication/settings'
+        );
         console.log('      2. Add domain:', new URL(config.settings.url).hostname);
       }
     }

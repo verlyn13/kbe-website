@@ -1,0 +1,30 @@
+{
+  "extends": "markdownlint/style/prettier",
+  "MD040": {
+    "allowed_languages": [
+      "text",
+      "json",
+      "yaml",
+      "javascript",
+      "js",
+      "typescript",
+      "ts",
+      "html",
+      "css",
+      "bash",
+      "shell",
+      "sh",
+      "plaintext",
+      "jsx",
+      "tsx"
+    ]
+  },
+  "MD033": {
+    "allowed_elements": ["details", "summary", "img", "br", "kbd", "sup", "sub"]
+  },
+  "MD026": {
+    "punctuation": ".,;!?"
+  },
+  "MD047": true,
+  "MD041": false
+}

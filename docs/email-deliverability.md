@@ -12,7 +12,9 @@ Magic link emails going to spam is a common issue. Here's how to fix it:
 ## Solutions
 
 ### 1. Immediate Fix (User Action)
+
 Tell users to:
+
 - Check spam/junk folder
 - Mark email as "Not Spam"
 - Add `noreply@kbe-website.firebaseapp.com` to contacts
@@ -24,9 +26,9 @@ Use your domain for sending emails:
 1. **Set up Firebase Email with Custom Domain**:
    - Go to Firebase Console → Authentication → Templates
    - Configure "Reply-to email" to use your domain
-   
 2. **Configure SPF Records** in Cloudflare:
-   ```
+
+   ```text
    Type: TXT
    Name: @
    Value: v=spf1 include:_spf.google.com ~all
@@ -41,14 +43,15 @@ Use your domain for sending emails:
 For best deliverability, integrate with:
 
 1. **SendGrid** (recommended):
+
    ```javascript
    // Using Firebase Functions
    const sgMail = require('@sendgrid/mail');
    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-   
+
    // Generate magic link with Admin SDK
    const link = await admin.auth().generateSignInWithEmailLink(email, actionCodeSettings);
-   
+
    // Send with SendGrid
    const msg = {
      to: email,
@@ -85,6 +88,7 @@ Improve the default Firebase email:
 ### 5. Warmup Strategy
 
 For new domains:
+
 1. Start with small volume
 2. Gradually increase sends
 3. Monitor bounce rates
@@ -93,6 +97,7 @@ For new domains:
 ## Testing Deliverability
 
 Use these tools:
+
 - [Mail Tester](https://www.mail-tester.com/)
 - [GlockApps](https://glockapps.com/)
 - [Litmus](https://litmus.com/)
@@ -100,24 +105,25 @@ Use these tools:
 ## Quick Wins
 
 1. **Update Email Template** in Firebase Console:
-   ```
+
+   ```text
    Subject: Your KBE Website access link
-   
+
    Body:
    Hi,
-   
+
    You requested a sign-in link for KBE Website.
    Click the link below to sign in:
-   
+
    [Sign In Button]
-   
+
    This link will expire in 1 hour.
-   
+
    If you didn't request this, please ignore this email.
-   
+
    Thanks,
    The KBE Team
-   
+
    ---
    KBE Website | Homer, Alaska
    This email was sent to {{ email }}
@@ -134,6 +140,7 @@ Use these tools:
 ## For Production with homerconnect.com
 
 When you set up the custom domain:
+
 1. Use `no-reply@homerconnect.com` as sender
 2. Set up proper SPF/DKIM/DMARC records
 3. Consider professional email service

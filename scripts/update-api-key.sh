@@ -4,9 +4,9 @@ echo "🔧 Updating API Keys in .env.local"
 echo "=================================="
 
 # Check if .env.local exists
-if [ ! -f .env.local ]; then
-    echo "❌ .env.local not found!"
-    exit 1
+if [[ ! -f .env.local ]]; then
+	echo "❌ .env.local not found!"
+	exit 1
 fi
 
 # Backup current .env.local
@@ -20,12 +20,12 @@ read -r NEW_FIREBASE_KEY
 
 # Update the Firebase API key in .env.local
 if grep -q "NEXT_PUBLIC_FIREBASE_API_KEY=" .env.local; then
-    # On macOS, sed requires an empty string after -i
-    sed -i '' "s/NEXT_PUBLIC_FIREBASE_API_KEY=.*/NEXT_PUBLIC_FIREBASE_API_KEY=$NEW_FIREBASE_KEY/" .env.local
-    echo "✅ Updated NEXT_PUBLIC_FIREBASE_API_KEY"
+	# On macOS, sed requires an empty string after -i
+	sed -i '' "s/NEXT_PUBLIC_FIREBASE_API_KEY=.*/NEXT_PUBLIC_FIREBASE_API_KEY=${NEW_FIREBASE_KEY}/" .env.local
+	echo "✅ Updated NEXT_PUBLIC_FIREBASE_API_KEY"
 else
-    echo "NEXT_PUBLIC_FIREBASE_API_KEY=$NEW_FIREBASE_KEY" >> .env.local
-    echo "✅ Added NEXT_PUBLIC_FIREBASE_API_KEY"
+	echo "NEXT_PUBLIC_FIREBASE_API_KEY=${NEW_FIREBASE_KEY}" >>.env.local
+	echo "✅ Added NEXT_PUBLIC_FIREBASE_API_KEY"
 fi
 
 # Ensure the GenKit key remains unchanged
@@ -34,7 +34,11 @@ echo -e "\n✅ Keeping GOOGLE_GENAI_API_KEY unchanged for GenKit"
 # Display the updated keys
 echo -e "\n📋 Current API Key Configuration:"
 echo "=================================="
-grep "FIREBASE_API_KEY\|GENAI_API_KEY" .env.local | sed 's/=.*$/=<hidden>/'
+if grep "FIREBASE_API_KEY\|GENAI_API_KEY" .env.local >/dev/null; then
+	grep "FIREBASE_API_KEY\|GENAI_API_KEY" .env.local | sed 's/=.*$/=<hidden>/' || true
+else
+	echo "No API keys found in .env.local"
+fi
 
 echo -e "\n🚀 Next Steps:"
 echo "1. Restart your dev server: npm run dev"

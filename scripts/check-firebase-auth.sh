@@ -14,7 +14,7 @@ firebase hosting:sites:list
 
 # Check deployed hosting
 echo -e "\n🚀 Recent Deployments:"
-firebase hosting:releases:list --site=kbe-website | head -10
+firebase hosting:releases:list --site=kbe-website | head -10 || true
 
 # Get project info
 echo -e "\n📊 Project Information:"
@@ -34,7 +34,7 @@ echo "   https://console.firebase.google.com/project/kbe-website/authentication/
 echo "   Required domains:"
 echo "   - localhost"
 echo "   - kbe-website.firebaseapp.com"
-echo "   - kbe-website.web.app" 
+echo "   - kbe-website.web.app"
 echo "   - homerconnect.com (if using custom domain)"
 echo ""
 echo "3. 📧 Check Email Templates:"
@@ -50,12 +50,12 @@ echo ""
 # Show current environment
 echo -e "\n🔧 Current Environment Variables:"
 echo "=================================================="
-if [ -f .env.local ]; then
-    echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$(grep NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN .env.local | cut -d '=' -f2)"
-    echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=$(grep NEXT_PUBLIC_FIREBASE_PROJECT_ID .env.local | cut -d '=' -f2)"
-    echo "NEXT_PUBLIC_APP_URL=$(grep NEXT_PUBLIC_APP_URL .env.local | cut -d '=' -f2)"
+if [[ -f .env.local ]]; then
+	echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$(grep NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN .env.local | cut -d '=' -f2 || true)"
+	echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=$(grep NEXT_PUBLIC_FIREBASE_PROJECT_ID .env.local | cut -d '=' -f2 || true)"
+	echo "NEXT_PUBLIC_APP_URL=$(grep NEXT_PUBLIC_APP_URL .env.local | cut -d '=' -f2 || true)"
 else
-    echo "❌ .env.local not found!"
+	echo "❌ .env.local not found!"
 fi
 
 echo -e "\n💡 To debug magic link issues, run:"

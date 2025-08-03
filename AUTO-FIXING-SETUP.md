@@ -54,8 +54,7 @@ npm run lint -- --fix
 
 # Just Prettier formatting
 npx prettier --write .
-```
-
+```bash
 ### 🎯 VS Code Auto-Fixing Features
 
 #### On Every Save
@@ -112,8 +111,7 @@ For the ultimate 2025 development experience, consider adding these MCP (Model C
     }
   }
 }
-```
-
+```text
 **Benefits:**
 
 - Direct GitHub integration in your AI assistant
@@ -134,8 +132,7 @@ For the ultimate 2025 development experience, consider adding these MCP (Model C
     }
   }
 }
-```
-
+```text
 **Benefits:**
 
 - Real-time documentation lookup
@@ -157,8 +154,7 @@ For the ultimate 2025 development experience, consider adding these MCP (Model C
     }
   }
 }
-```
-
+```text
 **Benefits:**
 
 - Latest package information

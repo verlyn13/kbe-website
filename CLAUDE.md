@@ -16,15 +16,13 @@ npm run build        # Build for production
 npm run start        # Start production server
 npm run lint         # Run ESLint
 npm run typecheck    # TypeScript type checking (tsc --noEmit)
-```
-
+```bash
 ### AI Development
 
 ```bash
 npm run genkit:dev    # Start GenKit development server
 npm run genkit:watch  # GenKit with file watching for hot reload
-```
-
+```bash
 ## Architecture Overview
 
 ### Tech Stack
@@ -126,8 +124,7 @@ All secrets are stored in Google Cloud Secret Manager and must be granted access
 
 ```bash
 firebase apphosting:secrets:grantaccess
-```
-
+```text
 Required secrets include:
 
 - Firebase configuration (API keys, auth domain, etc.)
@@ -136,15 +133,15 @@ Required secrets include:
 
 ## AI Assistant Guidelines (Copilot, Cursor, etc.)
 
-### CRITICAL: Never move these to devDependencies:
-- `typescript` 
+### CRITICAL: Never move these to devDependencies
+- `typescript`
 - `@tailwindcss/postcss`
 - `postcss`
 - `tailwindcss`
 
 These MUST remain in `dependencies` because Firebase App Hosting only installs production dependencies (`npm ci --omit=dev`). Moving them will break deployment.
 
-### Other Important Rules:
+### Other Important Rules
 - Keep Zod at v3 (not v4) for GenKit compatibility
 - Use Tailwind CSS v4 import syntax: `@import 'tailwindcss/base'`
 - Don't add custom webpack configs to next.config.js
