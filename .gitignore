@@ -51,3 +51,4 @@ firestore-debug.log
 # Force include firebase files despite global gitignore patterns
 !src/lib/firebase-admin.ts
 !src/lib/firebase.ts
+!src/lib/email-templates.ts
