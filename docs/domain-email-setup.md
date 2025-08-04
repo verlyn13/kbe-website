@@ -120,3 +120,25 @@ NEXT_PUBLIC_APP_URL=https://homerconnect.com
 ```
 
 Update Firebase authentication settings to use custom domain for redirect URLs.
+
+## 7. Fix API Key Restrictions (IMPORTANT)
+
+When you get the error: `auth/requests-to-this-api-identitytoolkit-method-are-blocked`
+
+### Quick Fix:
+1. Go to: https://console.cloud.google.com/apis/credentials?project=kbe-website
+2. Find your Browser API key (starts with AIzaSy...)
+3. Click to edit
+4. Under "Application restrictions", temporarily select **"None"**
+5. Click "Save"
+6. Wait 2-5 minutes for changes to propagate
+7. Try logging in again
+
+### Secure Fix (After Testing):
+1. Change "Application restrictions" back to "HTTP referrers"
+2. Add these referrers:
+   - `https://homerconnect.com/*`
+   - `https://www.homerconnect.com/*`
+   - `https://*.homerconnect.com/*`
+   - `http://localhost:*`
+3. Save and test again
