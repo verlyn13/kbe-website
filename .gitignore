@@ -48,5 +48,6 @@ firestore-debug.log
 # claude
 .claude/
 
-# Force include firebase-admin.ts despite global gitignore patterns
+# Force include firebase files despite global gitignore patterns
 !src/lib/firebase-admin.ts
+!src/lib/firebase.ts
