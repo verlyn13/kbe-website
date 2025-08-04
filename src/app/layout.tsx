@@ -2,6 +2,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { SkipNavigation } from '@/components/skip-navigation';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
+import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -9,13 +10,13 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'KBE Website',
-  description: 'Parent and student portal for Kachemak Bay Explorers.',
+  title: 'Homer Enrichment Hub',
+  description: 'Your Gateway to MathCounts & Enrichment Programs in Homer.',
   manifest: '/manifest.json',
 };
 
 /**
- * Root layout component for the KBE Website application.
+ * Root layout component for the Homer Enrichment Hub application.
  * Provides global providers, styles, and error handling.
  *
  * @param {Object} props - Component props
@@ -33,7 +34,9 @@ export default function RootLayout({
       <body className={`${inter.variable} font-body min-h-screen antialiased`}>
         <SkipNavigation />
         <ErrorBoundary>
-          <AuthProvider>{children}</AuthProvider>
+          <ThemeProvider defaultTheme="default" defaultMode="system">
+            <AuthProvider>{children}</AuthProvider>
+          </ThemeProvider>
         </ErrorBoundary>
         <Toaster />
       </body>

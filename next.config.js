@@ -20,8 +20,8 @@ const nextConfig = {
     return [
       {
         source: '/admin',
-        destination: '/admin/content-generator',
-        permanent: true,
+        destination: '/admin/dashboard',
+        permanent: false,
       },
     ];
   },

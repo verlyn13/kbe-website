@@ -1,0 +1,80 @@
+/* Fireweed Path Theme - Wildflower & Coastal Inspired */
+
+/* Light Mode */
+.fireweed-path {
+  /* Fireweed & Nature Colors */
+  --fireweed-magenta: 325 64% 56%; /* #d9469d */
+  --soft-salmon: 340 61% 72%; /* #e97cae */
+  --sunrise-coral: 0 81% 80%; /* #f5a3a3 */
+  --meadow-green: 103 28% 57%; /* #7fb069 */
+  --morning-mist: 207 47% 93%; /* #e8f0f7 */
+  --glacier-blue: 201 48% 76%; /* #a6cde3 */
+  
+  /* Theme Variables */
+  --background: 210 33% 98%; /* glacier-white #fafbfc */
+  --foreground: 210 29% 24%; /* text-primary #2c3e50 */
+  --card: 0 0% 100%;
+  --card-foreground: 210 29% 24%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 29% 24%;
+  --primary: 325 64% 56%; /* fireweed-magenta */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 207 47% 93%; /* morning-mist */
+  --secondary-foreground: 210 29% 24%;
+  --muted: 207 47% 87%; /* morning-mist-dense */
+  --muted-foreground: 200 19% 54%; /* text-muted #78909c */
+  --accent: 103 28% 57%; /* meadow-green */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 213 32% 88%; /* subtle borders */
+  --input: 213 32% 92%;
+  --ring: 325 64% 56%;
+  --radius: 0.75rem; /* More organic curves */
+  
+  /* Special Fireweed Properties */
+  --shadow-color: 325 64% 56%;
+  --shadow-opacity: 0.1;
+  
+  /* Sidebar light mode - earthy tones */
+  --sidebar-background: 30 14% 25%; /* driftwood dark */
+  --sidebar-foreground: 207 47% 93%; /* morning-mist */
+  --sidebar-primary: 325 64% 56%; /* fireweed-magenta */
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 30 14% 35%;
+  --sidebar-accent-foreground: 207 47% 93%;
+  --sidebar-border: 30 14% 35%;
+}
+
+/* Dark Mode */
+.dark .fireweed-path {
+  /* Evening wildflower colors */
+  --background: 220 26% 8%; /* #0f1419 glacier-white dark */
+  --foreground: 210 17% 91%; /* #e8eaed text-primary dark */
+  --card: 217 28% 11%; /* #1a202c glacier-mist dark */
+  --card-foreground: 210 17% 91%;
+  --popover: 217 28% 11%;
+  --popover-foreground: 210 17% 91%;
+  --primary: 325 59% 63%; /* #e85bac brighter fireweed */
+  --primary-foreground: 220 26% 8%;
+  --secondary: 217 21% 16%; /* #1e2832 morning-mist dark */
+  --secondary-foreground: 210 17% 91%;
+  --muted: 217 21% 21%; /* #2a3542 morning-mist-dense dark */
+  --muted-foreground: 211 11% 59%; /* #8b919a text-muted dark */
+  --accent: 103 30% 48%; /* #6b9a58 darker meadow */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 62% 45%;
+  --destructive-foreground: 210 17% 91%;
+  --border: 213 20% 18%;
+  --input: 213 20% 18%;
+  --ring: 325 59% 63%;
+  
+  /* Sidebar dark mode */
+  --sidebar-background: 220 26% 8%;
+  --sidebar-foreground: 210 17% 91%;
+  --sidebar-primary: 325 59% 63%;
+  --sidebar-primary-foreground: 220 26% 8%;
+  --sidebar-accent: 217 21% 16%;
+  --sidebar-accent-foreground: 210 17% 91%;
+  --sidebar-border: 213 20% 18%;
+}

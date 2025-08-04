@@ -1,0 +1,79 @@
+/* Compass Peak Theme - Mountain & Glacier Inspired */
+
+/* Light Mode */
+.compass-peak {
+  /* Glacier & Mountain Colors */
+  --glacier-blue: 201 48% 76%; /* #A6CDE3 */
+  --mountain-slate: 215 16% 34%; /* #4A5568 */
+  --driftwood-white: 214 32% 97%; /* #F7FAFC */
+  --fireweed-magenta: 325 64% 56%; /* #D9469D */
+  --sunlit-gold: 28 90% 64%; /* #F6AD55 */
+  
+  /* Extended Palette */
+  --mist-gray: 214 32% 91%; /* #E2E8F0 */
+  --morning-sky: 205 79% 85%; /* #BEE3F8 */
+  
+  /* Theme Variables */
+  --background: 214 32% 97%; /* driftwood-white */
+  --foreground: 215 16% 20%; /* darker mountain-slate */
+  --card: 0 0% 100%;
+  --card-foreground: 215 16% 20%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 16% 20%;
+  --primary: 201 48% 76%; /* glacier-blue */
+  --primary-foreground: 215 16% 20%;
+  --secondary: 214 32% 91%; /* mist-gray */
+  --secondary-foreground: 215 16% 34%;
+  --muted: 214 32% 91%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 28 90% 64%; /* sunlit-gold */
+  --accent-foreground: 215 16% 20%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 214 32% 85%;
+  --input: 214 32% 91%;
+  --ring: 201 48% 76%;
+  --radius: 0.375rem;
+  
+  /* Sidebar light mode - darker for contrast */
+  --sidebar-background: 215 19% 19%; /* deep-water */
+  --sidebar-foreground: 214 32% 91%; /* mist-gray */
+  --sidebar-primary: 201 48% 76%; /* glacier-blue */
+  --sidebar-primary-foreground: 215 16% 20%;
+  --sidebar-accent: 215 19% 28%;
+  --sidebar-accent-foreground: 214 32% 91%;
+  --sidebar-border: 215 19% 28%;
+}
+
+/* Dark Mode */
+.dark .compass-peak {
+  /* Adjusted for night mountain views */
+  --background: 220 26% 14%; /* #1A202C storm-cloud */
+  --foreground: 214 32% 91%; /* #E2E8F0 mist-gray */
+  --card: 215 19% 19%; /* #2D3748 deep-water */
+  --card-foreground: 214 32% 91%;
+  --popover: 215 19% 19%;
+  --popover-foreground: 214 32% 91%;
+  --primary: 201 48% 66%; /* darker glacier-blue */
+  --primary-foreground: 220 26% 14%;
+  --secondary: 215 19% 35%; /* #4A5568 mountain-slate */
+  --secondary-foreground: 214 32% 91%;
+  --muted: 215 19% 35%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 28 90% 54%; /* darker sunlit-gold */
+  --accent-foreground: 220 26% 14%;
+  --destructive: 0 62% 40%;
+  --destructive-foreground: 214 32% 91%;
+  --border: 215 19% 28%;
+  --input: 215 19% 28%;
+  --ring: 201 48% 66%;
+  
+  /* Sidebar dark mode */
+  --sidebar-background: 220 26% 14%;
+  --sidebar-foreground: 214 32% 91%;
+  --sidebar-primary: 201 48% 66%;
+  --sidebar-primary-foreground: 220 26% 14%;
+  --sidebar-accent: 215 19% 28%;
+  --sidebar-accent-foreground: 214 32% 91%;
+  --sidebar-border: 215 19% 28%;
+}

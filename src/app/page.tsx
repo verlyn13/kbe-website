@@ -53,19 +53,30 @@ export default function LoginPage() {
               <path d="M2 17l10 5 10-5" />
               <path d="M2 12l10 5 10-5" />
             </svg>
-            <h1 className="text-primary text-3xl font-bold">Kachemak Bay Enrichment</h1>
+            <h1 className="text-primary text-3xl font-bold">Homer Enrichment Hub</h1>
           </div>
           <h2 className="text-foreground mb-4 text-4xl font-bold tracking-tighter md:text-5xl">
-            Your Portal for Learning
+            MathCounts & Enrichment Programs
           </h2>
-          <p className="text-muted-foreground max-w-md">
-            Your portal for Homer Mathcounts registration, and other enrichment activities.
+          <p className="text-muted-foreground max-w-md mb-6">
+            Simple registration. Clear schedules. One place for everything.
           </p>
+          <div className="flex flex-wrap gap-3">
+            <a href="/programs" className="text-primary hover:underline text-sm font-medium">
+              View Programs →
+            </a>
+            <a href="/schedule" className="text-primary hover:underline text-sm font-medium">
+              Schedule →
+            </a>
+            <a href="/resources" className="text-primary hover:underline text-sm font-medium">
+              Resources →
+            </a>
+          </div>
         </div>
         <Card className="w-full max-w-sm shadow-2xl md:w-1/2">
           <CardHeader>
             <CardTitle className="text-2xl">Sign In</CardTitle>
-            <CardDescription>Enter your credentials to access your portal.</CardDescription>
+            <CardDescription>Enter your credentials to access the guardian portal.</CardDescription>
           </CardHeader>
           <CardContent>
             <LoginForm />

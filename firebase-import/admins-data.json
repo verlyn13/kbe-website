@@ -1,0 +1,13 @@
+[
+  {
+    "email": "jeffreyverlynjohnson@gmail.com",
+    "name": "Jeffrey Johnson",
+    "role": "superAdmin",
+    "permissions": ["all"],
+    "active": true,
+    "createdAt": {
+      "_seconds": 1738541654,
+      "_nanoseconds": 0
+    }
+  }
+]

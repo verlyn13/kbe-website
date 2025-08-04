@@ -1,33 +1,45 @@
-import { QuickCheck } from '@/components/quick-check';
+import { StudentRoster } from '@/components/portal/student-roster';
+import { MathCountsSchedule } from '@/components/portal/mathcounts-schedule';
+import { UpcomingCompetitions } from '@/components/portal/upcoming-competitions';
+import { QuickLinks } from '@/components/portal/quick-links';
 import { Announcements } from '@/components/announcements';
-import { SessionCalendar } from '@/components/session-calendar';
-import { WeeklyChallenges } from '@/components/weekly-challenges';
 import { Skeleton } from '@/components/ui/skeleton';
 import React, { Suspense } from 'react';
 
 export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold tracking-tight">Parent Dashboard</h1>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-3">
-          <Suspense fallback={<Skeleton className="h-[220px] w-full" />}>
-            <QuickCheck />
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Guardian Portal</h1>
+        <p className="text-muted-foreground">Welcome back! Here's your family's enrichment program information.</p>
+      </div>
+      
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+            <StudentRoster />
           </Suspense>
         </div>
+        
+        <div className="space-y-6">
+          <Suspense fallback={<Skeleton className="h-[200px] w-full" />}>
+            <MathCountsSchedule />
+          </Suspense>
+        </div>
+        
         <div className="lg:col-span-2">
           <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
             <Announcements />
           </Suspense>
         </div>
-        <div className="lg:col-span-1">
-          <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
-            <SessionCalendar />
-          </Suspense>
-        </div>
-        <div className="lg:col-span-3">
+        
+        <div className="space-y-6">
           <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
-            <WeeklyChallenges />
+            <UpcomingCompetitions />
+          </Suspense>
+          
+          <Suspense fallback={<Skeleton className="h-[250px] w-full" />}>
+            <QuickLinks />
           </Suspense>
         </div>
       </div>

@@ -1,0 +1,739 @@
+/**
+ * Fireweed Path Design System
+ * Version: 1.0.0
+ * Inspired by Homer, Alaska - Where Mountains Meet the Sea
+ * 
+ * A comprehensive style guide that captures the organic flow of 
+ * coastal wildflowers and tidal rhythms
+ */
+
+/* ============================================
+   ROOT VARIABLES & THEME CONFIGURATION
+   ============================================ */
+
+:root {
+  /* Color Mode Detection */
+  color-scheme: light dark;
+
+  /* ========== LIGHT MODE (Default) ========== */
+
+  /* Primary Palette - Fireweed Gradient */
+  --fireweed-magenta: #d9469d;
+  --soft-salmon: #e97cae;
+  --sunrise-coral: #f5a3a3;
+
+  /* Supporting Nature Tones */
+  --meadow-green: #7fb069;
+  --meadow-green-soft: #a4c897;
+  --morning-mist: #e8f0f7;
+  --morning-mist-dense: #d1e2ee;
+  --tidal-sand: #d4c5b9;
+  --driftwood-brown: #8b7968;
+
+  /* Glacier Blues (Background System) */
+  --glacier-white: #fafbfc;
+  --glacier-mist: #f3f6f9;
+  --glacier-blue-pale: #e6eef4;
+  --glacier-blue-soft: #c8dde9;
+  --glacier-blue: #a6cde3;
+  --bay-blue: #7aacc9;
+  --deep-bay: #4e7da0;
+
+  /* Functional Colors */
+  --text-primary: #2c3e50;
+  --text-secondary: #546e7a;
+  --text-muted: #78909c;
+  --text-inverse: #ffffff;
+
+  --background-primary: var(--glacier-white);
+  --background-secondary: var(--glacier-mist);
+  --background-elevated: #ffffff;
+  --background-overlay: rgba(255, 255, 255, 0.95);
+
+  --border-subtle: rgba(52, 73, 94, 0.08);
+  --border-default: rgba(52, 73, 94, 0.12);
+  --border-strong: rgba(52, 73, 94, 0.2);
+
+  /* Shadows - Soft as Morning Fog */
+  --shadow-xs: 0 1px 2px rgba(52, 73, 94, 0.04);
+  --shadow-sm: 0 2px 4px rgba(52, 73, 94, 0.06);
+  --shadow-md: 0 4px 8px rgba(52, 73, 94, 0.08), 0 2px 4px rgba(52, 73, 94, 0.04);
+  --shadow-lg: 0 8px 16px rgba(52, 73, 94, 0.1), 0 4px 8px rgba(52, 73, 94, 0.05);
+  --shadow-xl: 0 16px 32px rgba(52, 73, 94, 0.12), 0 8px 16px rgba(52, 73, 94, 0.06);
+
+  /* Focus States */
+  --focus-ring: 0 0 0 3px rgba(217, 70, 157, 0.25);
+  --focus-ring-error: 0 0 0 3px rgba(220, 38, 38, 0.25);
+  --focus-ring-success: 0 0 0 3px rgba(127, 176, 105, 0.25);
+}
+
+/* ========== DARK MODE ========== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Shift to evening colors - like Homer at twilight */
+    --fireweed-magenta: #e85bac;
+    --soft-salmon: #f090be;
+    --sunrise-coral: #f7b5b5;
+
+    --meadow-green: #8fc67a;
+    --meadow-green-soft: #6b9a58;
+    --morning-mist: #1e2832;
+    --morning-mist-dense: #2a3542;
+    --tidal-sand: #3e3a35;
+    --driftwood-brown: #5c5449;
+
+    --glacier-white: #0f1419;
+    --glacier-mist: #1a202c;
+    --glacier-blue-pale: #243242;
+    --glacier-blue-soft: #2d4356;
+    --glacier-blue: #3a546b;
+    --bay-blue: #4a6885;
+    --deep-bay: #5e80a3;
+
+    --text-primary: #e8eaed;
+    --text-secondary: #b8bcc3;
+    --text-muted: #8b919a;
+    --text-inverse: #0f1419;
+
+    --background-primary: var(--glacier-white);
+    --background-secondary: var(--glacier-mist);
+    --background-elevated: #1e2832;
+    --background-overlay: rgba(15, 20, 25, 0.95);
+
+    --border-subtle: rgba(226, 232, 240, 0.06);
+    --border-default: rgba(226, 232, 240, 0.1);
+    --border-strong: rgba(226, 232, 240, 0.16);
+
+    /* Softer shadows for dark mode */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* ============================================
+   TYPOGRAPHY SYSTEM
+   ============================================ */
+
+/* Font Family Classes */
+.font-primary {
+  font-family: 'Fredoka One', cursive;
+}
+.font-body {
+  font-family:
+    'Source Sans Pro',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+.font-accent {
+  font-family: 'Amatic SC', cursive;
+}
+
+/* Base Typography */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family:
+    'Source Sans Pro',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Heading System - Like Mountain Peaks */
+h1,
+.h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+h2,
+.h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+
+h3,
+.h3 {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+h4,
+.h4 {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.875rem;
+}
+
+h5,
+.h5 {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+h6,
+.h6 {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+/* Body Text Variants */
+.text-large {
+  font-size: 1.25rem;
+  line-height: 1.7;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.text-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.text-tiny {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Special Text Styles */
+.text-accent {
+  font-family: 'Amatic SC', cursive;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+.text-quote {
+  font-style: italic;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--fireweed-magenta);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* ============================================
+   SPACING SYSTEM - Tidal Rhythm
+   ============================================ */
+
+:root {
+  /* Based on 8px grid - like the tide's consistent rhythm */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.5rem; /* 24px */
+  --space-6: 2rem; /* 32px */
+  --space-7: 2.5rem; /* 40px */
+  --space-8: 3rem; /* 48px */
+  --space-9: 4rem; /* 64px */
+  --space-10: 5rem; /* 80px */
+  --space-11: 6rem; /* 96px */
+  --space-12: 8rem; /* 128px */
+}
+
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+/* Flowing Grid System */
+.grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* ============================================
+   COMPONENT STYLES
+   ============================================ */
+
+/* Cards - Like Smooth Beach Stones */
+.card {
+  background: var(--background-elevated);
+  border-radius: 16px;
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Buttons - Inspired by Tide Pools */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-5);
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Primary Button - Fireweed Bloom */
+.btn-primary {
+  background: linear-gradient(135deg, var(--fireweed-magenta), var(--soft-salmon));
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Secondary Button - Morning Mist */
+.btn-secondary {
+  background: var(--morning-mist);
+  color: var(--text-primary);
+  border: 2px solid var(--border-default);
+}
+
+.btn-secondary:hover {
+  background: var(--morning-mist-dense);
+  border-color: var(--border-strong);
+}
+
+/* Ghost Button - Transparent as Glacier Ice */
+.btn-ghost {
+  background: transparent;
+  color: var(--fireweed-magenta);
+  border: 2px solid var(--fireweed-magenta);
+}
+
+.btn-ghost:hover {
+  background: var(--fireweed-magenta);
+  color: var(--text-inverse);
+}
+
+/* Form Elements - Organic and Approachable */
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--background-elevated);
+  border: 2px solid var(--border-default);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--fireweed-magenta);
+  box-shadow: var(--focus-ring);
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Labels with Gentle Guidance */
+.label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+/* ============================================
+   FIREWEED PATH COMPONENTS
+   ============================================ */
+
+/* The Flowing Path SVG Pattern */
+.fireweed-path {
+  stroke: var(--fireweed-magenta);
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 50;
+  animation: pathFlow 3s linear infinite;
+}
+
+@keyframes pathFlow {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -50;
+  }
+}
+
+/* Fireweed Bloom Component */
+.fireweed-bloom {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fireweed-bloom:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.fireweed-bloom-large {
+  width: 48px;
+  height: 48px;
+}
+.fireweed-bloom-medium {
+  width: 24px;
+  height: 24px;
+}
+.fireweed-bloom-small {
+  width: 12px;
+  height: 12px;
+}
+
+/* Pattern Background Classes */
+.bg-scattered-seeds {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(217, 70, 157, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(233, 124, 174, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 45% 90%, rgba(245, 163, 163, 0.08) 0%, transparent 50%);
+  background-size:
+    300px 300px,
+    400px 400px,
+    250px 250px;
+  background-position:
+    0 0,
+    100px 100px,
+    -50px 50px;
+}
+
+/* ============================================
+   ANIMATIONS & INTERACTIONS
+   ============================================ */
+
+/* Gentle Breathing Effect */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+/* Tidal Movement */
+@keyframes tide {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+.animate-tide {
+  animation: tide 6s ease-in-out infinite;
+}
+
+/* Bloom Growth on Hover */
+@keyframes bloomGrow {
+  0% {
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Text Utilities */
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-fireweed {
+  color: var(--fireweed-magenta);
+}
+.text-meadow {
+  color: var(--meadow-green);
+}
+
+/* Background Utilities */
+.bg-primary {
+  background-color: var(--background-primary);
+}
+.bg-secondary {
+  background-color: var(--background-secondary);
+}
+.bg-elevated {
+  background-color: var(--background-elevated);
+}
+.bg-mist {
+  background-color: var(--morning-mist);
+}
+
+/* Border Utilities */
+.border {
+  border: 1px solid var(--border-default);
+}
+.border-2 {
+  border: 2px solid var(--border-default);
+}
+.border-subtle {
+  border-color: var(--border-subtle);
+}
+.border-strong {
+  border-color: var(--border-strong);
+}
+
+/* Shadow Utilities */
+.shadow-xs {
+  box-shadow: var(--shadow-xs);
+}
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Border Radius - Organic Curves */
+.rounded-sm {
+  border-radius: 8px;
+}
+.rounded {
+  border-radius: 12px;
+}
+.rounded-lg {
+  border-radius: 16px;
+}
+.rounded-xl {
+  border-radius: 24px;
+}
+.rounded-full {
+  border-radius: 9999px;
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+
+/* Hide/Show Based on Screen Size */
+@media (max-width: 639px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .hide-desktop {
+    display: none;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Focus Visible for Keyboard Navigation */
+:focus-visible {
+  outline: 3px solid var(--fireweed-magenta);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-subtle: var(--border-strong);
+    --shadow-sm: 0 0 0 1px var(--text-primary);
+    --shadow-md: 0 0 0 2px var(--text-primary);
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+}
+
+/* ============================================
+   SPECIAL EFFECTS & POLISH
+   ============================================ */
+
+/* Gradient Text Effect */
+.text-gradient {
+  background: linear-gradient(135deg, var(--fireweed-magenta), var(--sunrise-coral));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Soft Glow Effect */
+.glow-soft {
+  box-shadow:
+    0 0 20px rgba(217, 70, 157, 0.3),
+    0 0 40px rgba(217, 70, 157, 0.1);
+}
+
+/* Nature-Inspired Transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   CSS CUSTOM PROPERTIES FOR JS INTEGRATION
+   ============================================ */
+
+[data-theme='celebration'] {
+  --fireweed-magenta: #f6ad55; /* Sunlit Gold */
+  --soft-salmon: #f9c874;
+  --sunrise-coral: #fde3a7;
+}
+
+[data-season='winter'] .fireweed-path {
+  stroke-dasharray: 10 15; /* More angular, crystalline */
+}
+
+[data-season='spring'] {
+  --meadow-green: #95d475; /* Fresh spring green */
+}
+
+/* End of Fireweed Path Design System */

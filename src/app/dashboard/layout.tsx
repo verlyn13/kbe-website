@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Bell, Calendar, Home, Puzzle, Settings, Shield } from 'lucide-react';
 import {
   SidebarProvider,
@@ -20,8 +20,10 @@ import { DashboardHeader } from '@/components/dashboard-header';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
-function KbeLogo() {
+function HehLogo() {
   const { state } = useSidebar();
   return (
     <Link href="/dashboard" className="flex items-center gap-2 px-2">
@@ -40,7 +42,7 @@ function KbeLogo() {
         <path d="M2 12l10 5 10-5" />
       </svg>
       <h1 className="text-sidebar-foreground text-lg font-bold transition-opacity duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:w-0">
-        KBE Portal
+        Guardian Portal
       </h1>
     </Link>
   );
@@ -49,12 +51,28 @@ function KbeLogo() {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!user && !loading) {
       router.push('/');
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    async function checkAdmin() {
+      if (user) {
+        try {
+          const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+          setIsAdmin(adminDoc.exists());
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          setIsAdmin(false);
+        }
+      }
+    }
+    checkAdmin();
+  }, [user]);
 
   if (loading) {
     return (
@@ -79,7 +97,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <SidebarProvider defaultOpen={true}>
       <Sidebar collapsible="icon">
         <SidebarHeader>
-          <KbeLogo />
+          <HehLogo />
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
@@ -87,49 +105,43 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <SidebarMenuButton asChild isActive tooltip="Dashboard">
                 <Link href="/dashboard">
                   <Home />
-                  <span>Dashboard</span>
+                  <span>Home</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Calendar">
-                <Link href="#">
+                <Link href="/calendar">
                   <Calendar />
                   <span>Calendar</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Weekly Challenges">
-                <Link href="/dashboard/weekly-challenges">
-                  <Puzzle />
-                  <span>Weekly Challenges</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Announcements">
-                <Link href="/dashboard/announcements">
+                <Link href="/announcements">
                   <Bell />
                   <span>Announcements</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Admin">
-                <Link href="/admin/content-generator">
-                  <Shield />
-                  <span>Admin</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {isAdmin && (
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Admin">
+                  <Link href="/admin/dashboard">
+                    <Shield />
+                    <span>Admin</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )}
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Settings">
-                <Link href="#">
+                <Link href="/settings">
                   <Settings />
                   <span>Settings</span>
                 </Link>

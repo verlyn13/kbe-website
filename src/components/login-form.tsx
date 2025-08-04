@@ -28,7 +28,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { getErrorMessage } from '@/lib/error-utils';
-import { auth } from '@/lib/firebase-config';
+import { auth } from '@/lib/firebase';
 import { logger } from '@/lib/logger';
 import { emailSchema, passwordSchema } from '@/lib/validation';
 

@@ -1,7 +1,7 @@
 {
-  "name": "KBE Website",
-  "short_name": "KBE",
-  "description": "Parent and student portal for Kachemak Bay Explorers.",
+  "name": "Homer Enrichment Hub",
+  "short_name": "HEH",
+  "description": "Your Gateway to MathCounts & Enrichment Programs in Homer.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#E0EEEE",
