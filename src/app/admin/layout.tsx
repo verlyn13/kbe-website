@@ -129,6 +129,12 @@ function AdminSidebar() {
           permission: 'view_reports',
         },
         {
+          href: '/admin/users',
+          label: 'Users',
+          icon: Users,
+          permission: 'manage_settings',
+        },
+        {
           href: '/admin/settings',
           label: 'Settings',
           icon: Settings,

@@ -358,6 +358,13 @@ export function LoginForm() {
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign In with Password
           </Button>
+          
+          <div className="mt-4 text-center text-sm">
+            Don't have an account?{' '}
+            <Button variant="link" asChild className="p-0 h-auto font-normal">
+              <a href="/signup">Sign up</a>
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
