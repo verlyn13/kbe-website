@@ -5,7 +5,7 @@ import { getFirestore } from 'firebase/firestore';
 // Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBhTEs3Uxq_KBLBzbzIL2VB4Ao_DBw9faM',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'kbe-website.firebaseapp.com',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'homerconnect.com',
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'kbe-website',
   storageBucket:
     process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'kbe-website.firebasestorage.app',
