@@ -135,6 +135,12 @@ function AdminSidebar() {
           permission: 'manage_settings',
         },
         {
+          href: '/admin/email-settings',
+          label: 'Email Settings',
+          icon: Mail,
+          permission: 'manage_settings',
+        },
+        {
           href: '/admin/settings',
           label: 'Settings',
           icon: Settings,
