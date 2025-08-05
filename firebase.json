@@ -1,13 +1,4 @@
 {
-  "hosting": {
-    "site": "homerconnect",
-    "source": ".",
-    "frameworksBackend": {
-      "region": "us-central1",
-      "nodejsVersion": "22"
-    },
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
-  },
   "firestore": {
     "rules": "firestore.rules"
   }
