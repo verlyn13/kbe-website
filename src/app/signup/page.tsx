@@ -13,7 +13,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
 import { formatPhoneNumber } from '@/lib/utils';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { sendWelcomeEmail } from '@/lib/sendgrid-email-service';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -25,6 +28,11 @@ export default function SignUpPage() {
     confirmPassword: '',
     displayName: '',
     phone: '',
+    emailPreferences: {
+      announcements: true,
+      programUpdates: true,
+      newsletters: true,
+    },
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -81,21 +89,34 @@ export default function SignUpPage() {
         displayName: formData.displayName,
       });
 
-      // Create user profile
+      // Create user profile with email preferences
       await profileService.createOrUpdate(userCredential.user.uid, {
         displayName: formData.displayName,
         email: formData.email,
         phone: formData.phone.replace(/\D/g, ''),
         role: 'guardian',
+        emailPreferences: formData.emailPreferences,
       });
+
+      // Send welcome email if they opted in for any emails
+      if (formData.emailPreferences.announcements || 
+          formData.emailPreferences.programUpdates || 
+          formData.emailPreferences.newsletters) {
+        try {
+          await sendWelcomeEmail(formData.email, formData.displayName);
+        } catch (emailError) {
+          console.error('Failed to send welcome email:', emailError);
+          // Don't block the sign-up process if email fails
+        }
+      }
 
       toast({
         title: 'Account created successfully',
-        description: 'Welcome to Homer Enrichment Hub!',
+        description: 'Welcome to Homer Enrichment Hub! Check your email for next steps.',
       });
 
-      // Redirect to dashboard
-      router.push('/dashboard');
+      // Redirect to welcome page for profile completion
+      router.push('/welcome');
     } catch (error: any) {
       console.error('Sign up error:', error);
       
@@ -134,10 +155,10 @@ export default function SignUpPage() {
                 <ArrowLeft className="h-4 w-4" />
               </Link>
             </Button>
-            <CardTitle className="text-2xl">Create an account</CardTitle>
+            <CardTitle className="text-2xl">Welcome to Homer Enrichment Hub!</CardTitle>
           </div>
           <CardDescription>
-            Enter your information below to create your Homer Enrichment Hub account
+            Let's get you set up so you can register your children for MathCounts and other programs
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -219,6 +240,109 @@ export default function SignUpPage() {
               {errors.confirmPassword && (
                 <p className="text-sm text-destructive">{errors.confirmPassword}</p>
               )}
+            </div>
+
+            <div className="space-y-4 pt-4 border-t">
+              <div className="space-y-2">
+                <Label className="text-base font-semibold">Email Preferences</Label>
+                <p className="text-sm text-muted-foreground">
+                  Stay connected with updates about programs and activities
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="announcements"
+                    checked={formData.emailPreferences.announcements}
+                    onCheckedChange={(checked) =>
+                      setFormData(prev => ({
+                        ...prev,
+                        emailPreferences: {
+                          ...prev.emailPreferences,
+                          announcements: checked as boolean,
+                        },
+                      }))
+                    }
+                    disabled={loading}
+                  />
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="announcements"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Important Announcements
+                    </label>
+                    <p className="text-xs text-muted-foreground">
+                      Receive updates about schedule changes, deadlines, and urgent information
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="programUpdates"
+                    checked={formData.emailPreferences.programUpdates}
+                    onCheckedChange={(checked) =>
+                      setFormData(prev => ({
+                        ...prev,
+                        emailPreferences: {
+                          ...prev.emailPreferences,
+                          programUpdates: checked as boolean,
+                        },
+                      }))
+                    }
+                    disabled={loading}
+                  />
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="programUpdates"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Program Updates
+                    </label>
+                    <p className="text-xs text-muted-foreground">
+                      Information about MathCounts, new programs, and registration openings
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="newsletters"
+                    checked={formData.emailPreferences.newsletters}
+                    onCheckedChange={(checked) =>
+                      setFormData(prev => ({
+                        ...prev,
+                        emailPreferences: {
+                          ...prev.emailPreferences,
+                          newsletters: checked as boolean,
+                        },
+                      }))
+                    }
+                    disabled={loading}
+                  />
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="newsletters"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Community Newsletter
+                    </label>
+                    <p className="text-xs text-muted-foreground">
+                      Monthly updates about student achievements and upcoming events
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertDescription>
+                  We recommend keeping announcements enabled to stay informed about important program updates.
+                  You can change these preferences anytime in your profile settings.
+                </AlertDescription>
+              </Alert>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">

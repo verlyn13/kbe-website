@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { ProfileCompletionCheck } from '@/components/profile-completion-check';
 
 function HehLogo() {
   const { state } = useSidebar();
@@ -153,7 +154,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </Sidebar>
       <SidebarInset>
         <DashboardHeader />
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</div>
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <ProfileCompletionCheck>
+            {children}
+          </ProfileCompletionCheck>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

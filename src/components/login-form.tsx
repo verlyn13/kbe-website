@@ -105,10 +105,18 @@ export function LoginForm() {
         }
         try {
           if (email) {
-            await signInWithEmailLink(auth, email, window.location.href);
+            const userCredential = await signInWithEmailLink(auth, email, window.location.href);
             window.localStorage.removeItem('emailForSignIn');
             logger.info('Magic link sign in successful');
-            router.push('/dashboard');
+            
+            // Check if this is a new user (first time sign in)
+            const isNewUser = userCredential.user.metadata.creationTime === userCredential.user.metadata.lastSignInTime;
+            
+            if (isNewUser) {
+              router.push('/welcome');
+            } else {
+              router.push('/dashboard');
+            }
           }
         } catch (error) {
           logger.error('Magic link sign in failed', {
@@ -254,20 +262,25 @@ export function LoginForm() {
     <div className="grid gap-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleSignIn}
-            disabled={isGoogleLoading}
-            aria-label="Sign in with Google"
-          >
-            {isGoogleLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-            ) : (
-              <GoogleIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-            )}
-            Sign in with Google
-          </Button>
+          <div className="space-y-2">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleSignIn}
+              disabled={isGoogleLoading}
+              aria-label="Sign in with Google"
+            >
+              {isGoogleLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+              ) : (
+                <GoogleIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+              )}
+              Sign in with Google
+            </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              Quick sign-in if you have a Google account
+            </p>
+          </div>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -297,9 +310,10 @@ export function LoginForm() {
             )}
           />
 
-          <div className="grid grid-cols-1 gap-2">
+          <div className="space-y-2">
             <Button
               variant="outline"
+              className="w-full"
               onClick={handleMagicLink}
               disabled={isMagicLinkLoading}
               aria-label="Send magic link to your email"
@@ -309,8 +323,11 @@ export function LoginForm() {
               ) : (
                 <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
               )}
-              Use magic link
+              Send sign-in link to email
             </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              We'll email you a secure link - no password needed!
+            </p>
           </div>
 
           <div className="relative">
@@ -359,11 +376,23 @@ export function LoginForm() {
             Sign In with Password
           </Button>
           
-          <div className="mt-4 text-center text-sm">
-            Don't have an account?{' '}
-            <Button variant="link" asChild className="p-0 h-auto font-normal">
-              <a href="/signup">Sign up</a>
+          <div className="mt-6 space-y-4">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card text-muted-foreground px-2">New to Homer Enrichment Hub?</span>
+              </div>
+            </div>
+            
+            <Button variant="default" asChild className="w-full">
+              <a href="/signup">Create Your Guardian Account</a>
             </Button>
+            
+            <p className="text-xs text-muted-foreground text-center">
+              Sign up to register your children for MathCounts and future programs
+            </p>
           </div>
         </form>
       </Form>

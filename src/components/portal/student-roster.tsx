@@ -27,6 +27,10 @@ const mockStudents: Student[] = [
 ];
 
 export function StudentRoster() {
+  // For now, using mock data. In production, this would check actual registrations
+  const students = mockStudents;
+  const hasStudents = students.length > 0;
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -37,7 +41,22 @@ export function StudentRoster() {
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
-        {mockStudents.map((student) => (
+        {!hasStudents ? (
+          <div className="text-center py-8">
+            <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+              <User className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <h3 className="font-medium text-lg mb-1">No students registered yet</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Add your children to get started with program registration
+            </p>
+            <Button size="sm">
+              <Plus className="mr-1 h-4 w-4" />
+              Add Your First Student
+            </Button>
+          </div>
+        ) : (
+          students.map((student) => (
           <div key={student.id} className="flex items-center justify-between rounded-lg border p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -56,7 +75,8 @@ export function StudentRoster() {
               ))}
             </div>
           </div>
-        ))}
+          ))
+        )}
       </CardContent>
     </Card>
   );

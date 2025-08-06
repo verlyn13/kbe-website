@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ThemeBackgroundImage } from '@/components/theme-image';
 
 export default function LoginPage() {
   const { user, loading } = useAuth();
@@ -35,31 +36,26 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8">
-      <div className="flex w-full max-w-4xl flex-col items-center justify-center gap-8 md:flex-row md:gap-16">
+    <main className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden">
+      <ThemeBackgroundImage />
+      <div className="flex w-full max-w-4xl flex-col items-center justify-center gap-8 md:flex-row md:gap-16 relative z-10">
         <div className="flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
-          <div className="mb-4 flex items-center gap-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-primary h-10 w-10"
-            >
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-              <path d="M2 12l10 5 10-5" />
-            </svg>
-            <h1 className="text-primary text-3xl font-bold">Homer Enrichment Hub</h1>
+          <div className="mb-6 relative">
+            <Image
+              src="/images/themes/compass-peak.svg"
+              alt="Homer Spit - Compass Peak"
+              width={120}
+              height={120}
+              className="rounded-lg shadow-lg"
+              priority
+            />
           </div>
-          <h2 className="text-foreground mb-4 text-4xl font-bold tracking-tighter md:text-5xl">
-            MathCounts & Enrichment Programs
+          <h1 className="text-primary text-3xl font-bold mb-4">Homer Enrichment Hub</h1>
+          <h2 className="text-foreground mb-4 text-2xl font-semibold md:text-3xl">
+            Sign up here for MathCounts registration and other enrichment activities (coming soon)
           </h2>
           <p className="text-muted-foreground max-w-md mb-6">
-            Simple registration. Clear schedules. One place for everything.
+            Join our community of young learners in Homer, Alaska. Registration is quick and easy!
           </p>
           <div className="flex flex-wrap gap-3">
             <a href="/programs" className="text-primary hover:underline text-sm font-medium">
@@ -75,8 +71,11 @@ export default function LoginPage() {
         </div>
         <Card className="w-full max-w-sm shadow-2xl md:w-1/2">
           <CardHeader>
-            <CardTitle className="text-2xl">Sign In</CardTitle>
-            <CardDescription>Enter your credentials to access the guardian portal.</CardDescription>
+            <CardTitle className="text-2xl">Welcome!</CardTitle>
+            <CardDescription>
+              New here? Click "Sign up" below to create your guardian account. 
+              Returning users can sign in with their email.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <LoginForm />

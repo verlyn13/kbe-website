@@ -83,7 +83,7 @@ export function ThemeProvider({
     <ThemeContext.Provider value={value}>
       <NextThemesProvider
         attribute="class"
-        defaultTheme="system"
+        defaultTheme="light"
         enableSystem
         disableTransitionOnChange
       >

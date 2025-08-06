@@ -1,0 +1,42 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
+export function ProfileCompletionCheck({ children }: { children: React.ReactNode }) {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    async function checkProfileCompletion() {
+      if (!user || authLoading) return;
+
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userData = userDoc.data();
+        
+        // If profile is not completed and email is verified, redirect to welcome
+        if (!userData?.profileCompleted && user.emailVerified) {
+          router.push('/welcome');
+          return;
+        }
+      } catch (error) {
+        console.error('Error checking profile completion:', error);
+      } finally {
+        setChecking(false);
+      }
+    }
+
+    checkProfileCompletion();
+  }, [user, authLoading, router]);
+
+  if (authLoading || checking) {
+    return null; // Or a loading spinner
+  }
+
+  return <>{children}</>;
+}

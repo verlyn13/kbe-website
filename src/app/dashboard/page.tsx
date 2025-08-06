@@ -3,6 +3,7 @@ import { MathCountsSchedule } from '@/components/portal/mathcounts-schedule';
 import { UpcomingCompetitions } from '@/components/portal/upcoming-competitions';
 import { QuickLinks } from '@/components/portal/quick-links';
 import { Announcements } from '@/components/announcements';
+import { WelcomeGuide } from '@/components/portal/welcome-guide';
 import { Skeleton } from '@/components/ui/skeleton';
 import React, { Suspense } from 'react';
 
@@ -13,6 +14,10 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight">Guardian Portal</h1>
         <p className="text-muted-foreground">Welcome back! Here's your family's enrichment program information.</p>
       </div>
+
+      <Suspense fallback={<Skeleton className="h-[200px] w-full" />}>
+        <WelcomeGuide />
+      </Suspense>
       
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">

@@ -52,3 +52,26 @@ firestore-debug.log
 !src/lib/firebase-admin.ts
 !src/lib/firebase.ts
 !src/lib/email-templates.ts
+
+# Raw assets (large files)
+/assets/raw/**/*.psd
+/assets/raw/**/*.ai
+/assets/raw/**/*.sketch
+/assets/raw/**/*.fig
+/assets/raw/**/*.indd
+/assets/raw/**/*.afphoto
+/assets/raw/**/*.afdesign
+/assets/raw/**/*.xcf
+
+# Large media files
+/assets/raw/**/*.mov
+/assets/raw/**/*.mp4
+/assets/raw/**/*.avi
+/assets/raw/**/*.mkv
+/assets/raw/**/*.wav
+/assets/raw/**/*.aiff
+/assets/raw/**/*.flac
+
+# Keep directory structure and documentation
+!/assets/raw/README.md
+!/assets/raw/**/.gitkeep

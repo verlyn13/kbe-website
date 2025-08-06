@@ -47,6 +47,34 @@ env:
       - BUILD
       - RUNTIME
 
+  # SendGrid Configuration
+  - variable: SENDGRID_API_KEY
+    secret: SENDGRID_API_KEY
+    availability:
+      - RUNTIME
+  
+  # SendGrid Template IDs
+  - variable: SENDGRID_TEMPLATE_MAGIC_LINK
+    secret: SENDGRID_TEMPLATE_MAGIC_LINK
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_WELCOME
+    secret: SENDGRID_TEMPLATE_WELCOME
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_PASSWORD_RESET
+    secret: SENDGRID_TEMPLATE_PASSWORD_RESET
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_ANNOUNCEMENT
+    secret: SENDGRID_TEMPLATE_ANNOUNCEMENT
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_REGISTRATION_CONFIRMATION
+    secret: SENDGRID_TEMPLATE_REGISTRATION_CONFIRMATION
+    availability:
+      - RUNTIME
+
 # Build settings for App Hosting
 buildConfig:
   buildCommand: 'npm run build'
