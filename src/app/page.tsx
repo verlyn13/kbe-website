@@ -1,15 +1,16 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect } from 'react';
-import { LoginForm } from '@/components/login-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeBackgroundImage } from '@/components/theme-image';
+import { ArrowRight, GraduationCap, Users, Heart, Calendar } from 'lucide-react';
 
-export default function LoginPage() {
+export default function LandingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -19,65 +20,159 @@ export default function LoginPage() {
     }
   }, [user, loading, router]);
 
-  if (loading) {
-    return (
-      <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8">
-        <Skeleton className="h-full w-full max-w-4xl" />
-      </div>
-    );
-  }
-
-  if (user) {
-    return (
-      <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8">
-        <Skeleton className="h-full w-full max-w-4xl" />
-      </div>
-    );
-  }
-
   return (
-    <main className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden">
+    <main className="min-h-screen bg-background relative overflow-hidden">
       <ThemeBackgroundImage />
-      <div className="flex w-full max-w-4xl flex-col items-center justify-center gap-8 md:flex-row md:gap-16 relative z-10">
-        <div className="flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
-          <div className="mb-8 flex items-center gap-2">
-            <div className="h-1 w-12 bg-gradient-to-r from-primary to-accent rounded-full" />
-            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Welcome to</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Homer Enrichment Hub
-          </h1>
-          <h2 className="text-foreground mb-4 text-xl md:text-2xl font-medium leading-relaxed">
-            Sign up here for MathCounts registration and other enrichment activities (coming soon)
-          </h2>
-          <p className="text-muted-foreground max-w-md mb-8 text-lg">
-            Join our community of young learners in Homer, Alaska. Registration is quick and easy!
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <a href="/programs" className="text-foreground hover:text-primary hover:underline text-sm font-semibold transition-colors">
-              View Programs →
-            </a>
-            <a href="/calendar" className="text-foreground hover:text-primary hover:underline text-sm font-semibold transition-colors">
-              Schedule →
-            </a>
-            <a href="/resources" className="text-foreground hover:text-primary hover:underline text-sm font-semibold transition-colors">
-              Resources →
-            </a>
+      
+      {/* Navigation Header */}
+      <nav className="relative z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-1 w-12 bg-gradient-to-r from-primary to-accent rounded-full" />
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Homer Enrichment Hub
+              </h1>
+            </div>
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" asChild>
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/signup">Get Started</Link>
+              </Button>
+            </div>
           </div>
         </div>
-        <Card className="w-full max-w-sm shadow-2xl md:w-1/2">
-          <CardHeader>
-            <CardTitle className="text-2xl">Welcome!</CardTitle>
-            <CardDescription>
-              New here? Click "Sign up" below to create your guardian account. 
-              Returning users can sign in with their email.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <LoginForm />
-          </CardContent>
-        </Card>
-      </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative z-10 container mx-auto px-4 py-16 md:py-24">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Welcome to Homer Enrichment Hub
+            </h2>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
+              Sign up here for MathCounts registration and other enrichment activities
+            </p>
+          </div>
+
+          {/* Feature Cards */}
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
+            <Card className="border-primary/20 bg-card/50 backdrop-blur">
+              <CardHeader>
+                <GraduationCap className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>MathCounts 2025</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Join Alaska's premier mathematics competition for middle school students. 
+                  Build problem-solving skills through fun, challenging math problems.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/20 bg-card/50 backdrop-blur">
+              <CardHeader>
+                <Calendar className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Weekly Meetings</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Every Tuesday at 4:00 PM during the school year. 
+                  Practice sessions, team building, and preparation for competitions.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/20 bg-card/50 backdrop-blur">
+              <CardHeader>
+                <Users className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Community Driven</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Run by dedicated volunteers and educators passionate about 
+                  enriching our students' educational experiences.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Why Another Site Section */}
+          <Card className="max-w-4xl mx-auto mb-16 border-accent/20 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <Heart className="h-8 w-8 text-accent mb-2" />
+              <CardTitle className="text-2xl">Why yet another site to sign into?</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground leading-relaxed">
+                Recent funding cuts have left our school district without adequate resources 
+                for enrichment programs like MathCounts. This has created a need for managing 
+                these opportunities outside the traditional school system.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                The Homer Enrichment Hub was created to fill this gap, providing a centralized 
+                place for families to discover and register for educational opportunities that 
+                our community values but can no longer be fully supported through school funding.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                By creating this independent platform, we can continue offering these vital 
+                programs while reducing the administrative burden on our already stretched 
+                school resources.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* About Section */}
+          <Card className="max-w-4xl mx-auto border-primary/20 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-2xl">About Homer Enrichment Hub</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground leading-relaxed">
+                This site is managed by Professor Jeffrey Johnson and Lia Calhoun. 
+                Jeffrey is a Professor of Mathematics at Kenai Peninsula College (KPC), 
+                and Lia is a Professor of English and Literature at the same institution.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                Together, we're committed to ensuring Homer's students continue to have 
+                access to enriching educational experiences despite budget constraints.
+              </p>
+              <div className="pt-4 border-t">
+                <p className="text-sm text-muted-foreground">
+                  <strong>Contact us:</strong><br />
+                  Jeffrey Johnson: <a href="mailto:jjohnson47@alaska.edu" className="text-primary hover:underline">jjohnson47@alaska.edu</a><br />
+                  Lia Calhoun: <a href="mailto:eicalhoun@alaska.edu" className="text-primary hover:underline">eicalhoun@alaska.edu</a>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* CTA Section */}
+          <div className="text-center mt-16">
+            <h3 className="text-2xl font-semibold mb-4">Ready to get started?</h3>
+            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Create your guardian account to register your children for MathCounts 
+              and stay informed about future enrichment opportunities.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" asChild>
+                <Link href="/signup">
+                  Create Account
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/login">
+                  Sign In
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

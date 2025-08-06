@@ -376,24 +376,6 @@ export function LoginForm() {
             Sign In with Password
           </Button>
           
-          <div className="mt-6 space-y-4">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card text-muted-foreground px-2">New to Homer Enrichment Hub?</span>
-              </div>
-            </div>
-            
-            <Button variant="default" asChild className="w-full">
-              <a href="/signup">Create Your Guardian Account</a>
-            </Button>
-            
-            <p className="text-xs text-muted-foreground text-center">
-              Sign up to register your children for MathCounts and future programs
-            </p>
-          </div>
         </form>
       </Form>
     </div>
