@@ -16,7 +16,7 @@ import { formatPhoneNumber } from '@/lib/utils';
 import { ArrowLeft, Info } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { sendWelcomeEmail } from '@/lib/sendgrid-email-service';
+import { sendWelcomeEmailAction } from '@/app/actions/send-welcome-email';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -103,7 +103,7 @@ export default function SignUpPage() {
           formData.emailPreferences.programUpdates || 
           formData.emailPreferences.newsletters) {
         try {
-          await sendWelcomeEmail(formData.email, formData.displayName);
+          await sendWelcomeEmailAction(formData.email, formData.displayName);
         } catch (emailError) {
           console.error('Failed to send welcome email:', emailError);
           // Don't block the sign-up process if email fails
