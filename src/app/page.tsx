@@ -40,21 +40,17 @@ export default function LoginPage() {
       <ThemeBackgroundImage />
       <div className="flex w-full max-w-4xl flex-col items-center justify-center gap-8 md:flex-row md:gap-16 relative z-10">
         <div className="flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
-          <div className="mb-6 relative">
-            <Image
-              src="/images/themes/compass-peak.svg"
-              alt="Homer Spit - Compass Peak"
-              width={120}
-              height={120}
-              className="rounded-lg shadow-lg"
-              priority
-            />
+          <div className="mb-8 flex items-center gap-2">
+            <div className="h-1 w-12 bg-gradient-to-r from-primary to-accent rounded-full" />
+            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Welcome to</span>
           </div>
-          <h1 className="text-primary text-3xl font-bold mb-4">Homer Enrichment Hub</h1>
-          <h2 className="text-foreground mb-4 text-2xl font-semibold md:text-3xl">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Homer Enrichment Hub
+          </h1>
+          <h2 className="text-foreground mb-4 text-xl md:text-2xl font-medium leading-relaxed">
             Sign up here for MathCounts registration and other enrichment activities (coming soon)
           </h2>
-          <p className="text-muted-foreground max-w-md mb-6">
+          <p className="text-muted-foreground max-w-md mb-8 text-lg">
             Join our community of young learners in Homer, Alaska. Registration is quick and easy!
           </p>
           <div className="flex flex-wrap gap-3">

@@ -92,9 +92,10 @@ export function ThemeBackgroundImage({ className = '' }: { className?: string })
         backgroundImage: `url(${imageSrc})`,
         backgroundPosition: 'bottom right',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: '30%',
-        opacity: 0.05,
-        zIndex: 0
+        backgroundSize: 'clamp(300px, 25vw, 400px)',
+        opacity: 0.03,
+        zIndex: 0,
+        transform: 'translate(10%, 10%)'
       }}
       aria-hidden="true"
     />
