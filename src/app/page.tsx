@@ -8,11 +8,13 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeBackgroundImage } from '@/components/theme-image';
-import { ArrowRight, GraduationCap, Users, Heart, Calendar } from 'lucide-react';
+import { ArrowRight, GraduationCap, Users, Heart, Calendar, Menu } from 'lucide-react';
+import { useState } from 'react';
 
 export default function LandingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (user && !loading) {
@@ -29,12 +31,13 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-1 w-12 bg-gradient-to-r from-primary to-accent rounded-full" />
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <div className="h-1 w-8 sm:w-12 bg-gradient-to-r from-primary to-accent rounded-full" />
+              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Homer Enrichment Hub
               </h1>
             </div>
-            <div className="flex items-center gap-4">
+            {/* Desktop Navigation */}
+            <div className="hidden sm:flex items-center gap-4">
               <Button variant="ghost" asChild>
                 <Link href="/login">Sign In</Link>
               </Button>
@@ -42,7 +45,27 @@ export default function LandingPage() {
                 <Link href="/signup">Get Started</Link>
               </Button>
             </div>
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="sm:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
           </div>
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="sm:hidden pt-4 pb-2 space-y-2 border-t mt-4">
+              <Button variant="ghost" asChild className="w-full justify-start">
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button asChild className="w-full">
+                <Link href="/signup">Get Started</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </nav>
 

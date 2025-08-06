@@ -9,7 +9,7 @@ import React, { Suspense } from 'react';
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 px-4 sm:px-0">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Guardian Portal</h1>
         <p className="text-muted-foreground">Welcome back! Here's your family's enrichment program information.</p>
