@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function AddStudentPage() {
   return (
-    <div className="container max-w-2xl mx-auto py-8">
+    <div className="container max-w-2xl mx-auto px-4 py-8">
       <div className="mb-6">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/dashboard">

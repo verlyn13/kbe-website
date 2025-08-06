@@ -31,6 +31,7 @@ import { AdminProvider } from '@/hooks/use-admin';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAdmin } from '@/hooks/use-admin';
 import { usePathname } from 'next/navigation';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 function HehLogo() {
   const { state } = useSidebar();
@@ -54,6 +55,25 @@ function HehLogo() {
         HEH Admin
       </h1>
     </Link>
+  );
+}
+
+function MobileAwareSidebarMenuButton({ href, children, isActive, tooltip }: { href: string; children: React.ReactNode; isActive?: boolean; tooltip?: string }) {
+  const { setOpenMobile } = useSidebar();
+  const isMobile = useIsMobile();
+  
+  const handleClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+  
+  return (
+    <SidebarMenuButton asChild isActive={isActive} tooltip={tooltip}>
+      <Link href={href} onClick={handleClick}>
+        {children}
+      </Link>
+    </SidebarMenuButton>
   );
 }
 
@@ -165,16 +185,14 @@ function AdminSidebar() {
                 
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton 
-                      asChild 
+                    <MobileAwareSidebarMenuButton 
+                      href={item.href}
                       isActive={pathname === item.href}
                       tooltip={item.label}
                     >
-                      <Link href={item.href}>
-                        <item.icon />
-                        <span>{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </MobileAwareSidebarMenuButton>
                   </SidebarMenuItem>
                 );
               })}
@@ -185,12 +203,10 @@ function AdminSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Back to Portal">
-              <Link href="/dashboard">
-                <Home />
-                <span>Back to Portal</span>
-              </Link>
-            </SidebarMenuButton>
+            <MobileAwareSidebarMenuButton href="/dashboard" tooltip="Back to Portal">
+              <Home />
+              <span>Back to Portal</span>
+            </MobileAwareSidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
@@ -200,6 +216,7 @@ function AdminSidebar() {
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const { loading, isAdmin } = useAdmin();
+  const isMobile = useIsMobile();
 
   if (loading) {
     return (
@@ -220,7 +237,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={!isMobile}>
       <AdminSidebar />
       <SidebarInset>
         <DashboardHeader />

@@ -50,6 +50,25 @@ function HehLogo() {
   );
 }
 
+function MobileAwareSidebarMenuButton({ href, children, ...props }: { href: string; children: React.ReactNode; isActive?: boolean; tooltip?: string }) {
+  const { setOpenMobile } = useSidebar();
+  const isMobile = useIsMobile();
+  
+  const handleClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+  
+  return (
+    <SidebarMenuButton asChild {...props}>
+      <Link href={href} onClick={handleClick}>
+        {children}
+      </Link>
+    </SidebarMenuButton>
+  );
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -105,37 +124,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive tooltip="Dashboard">
-                <Link href="/dashboard">
-                  <Home />
-                  <span>Home</span>
-                </Link>
-              </SidebarMenuButton>
+              <MobileAwareSidebarMenuButton href="/dashboard" isActive tooltip="Dashboard">
+                <Home />
+                <span>Home</span>
+              </MobileAwareSidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Calendar">
-                <Link href="/calendar">
-                  <Calendar />
-                  <span>Calendar</span>
-                </Link>
-              </SidebarMenuButton>
+              <MobileAwareSidebarMenuButton href="/calendar" tooltip="Calendar">
+                <Calendar />
+                <span>Calendar</span>
+              </MobileAwareSidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Announcements">
-                <Link href="/announcements">
-                  <Bell />
-                  <span>Announcements</span>
-                </Link>
-              </SidebarMenuButton>
+              <MobileAwareSidebarMenuButton href="/announcements" tooltip="Announcements">
+                <Bell />
+                <span>Announcements</span>
+              </MobileAwareSidebarMenuButton>
             </SidebarMenuItem>
             {isAdmin && (
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Admin">
-                  <Link href="/admin/dashboard">
-                    <Shield />
-                    <span>Admin</span>
-                  </Link>
-                </SidebarMenuButton>
+                <MobileAwareSidebarMenuButton href="/admin/dashboard" tooltip="Admin">
+                  <Shield />
+                  <span>Admin</span>
+                </MobileAwareSidebarMenuButton>
               </SidebarMenuItem>
             )}
           </SidebarMenu>
@@ -143,12 +154,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Settings">
-                <Link href="/settings">
-                  <Settings />
-                  <span>Settings</span>
-                </Link>
-              </SidebarMenuButton>
+              <MobileAwareSidebarMenuButton href="/settings" tooltip="Settings">
+                <Settings />
+                <span>Settings</span>
+              </MobileAwareSidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
