@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus, User } from 'lucide-react';
+import Link from 'next/link';
 
 interface Student {
   id: string;
@@ -35,9 +36,11 @@ export function StudentRoster() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Your Students</CardTitle>
-        <Button size="sm" variant="outline">
-          <Plus className="mr-1 h-4 w-4" />
-          Add Student
+        <Button size="sm" variant="outline" asChild>
+          <Link href="/students/add">
+            <Plus className="mr-1 h-4 w-4" />
+            Add Student
+          </Link>
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -50,9 +53,11 @@ export function StudentRoster() {
             <p className="text-sm text-muted-foreground mb-4">
               Add your children to get started with program registration
             </p>
-            <Button size="sm">
-              <Plus className="mr-1 h-4 w-4" />
-              Add Your First Student
+            <Button size="sm" asChild>
+              <Link href="/students/add">
+                <Plus className="mr-1 h-4 w-4" />
+                Add Your First Student
+              </Link>
             </Button>
           </div>
         ) : (

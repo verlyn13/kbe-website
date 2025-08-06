@@ -78,10 +78,10 @@ export function DashboardHeader() {
       <div className="flex w-full flex-1 items-center gap-4">
         <h2 className="text-lg font-semibold">Dashboard</h2>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" className="hidden sm:flex" asChild>
             <Link href="/announcements">
               <Bell className="h-4 w-4 mr-2" />
-              Announcements
+              <span className="hidden lg:inline">Announcements</span>
             </Link>
           </Button>
           <ThemeSwitcher />
