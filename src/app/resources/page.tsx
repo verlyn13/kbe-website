@@ -96,7 +96,7 @@ export default function ResourcesPage() {
     <>
       <PublicHeader />
       <main className="min-h-screen bg-background">
-        <div className="container py-8">
+        <div className="container px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight">Resources</h1>
           <p className="text-muted-foreground mt-2 text-lg">

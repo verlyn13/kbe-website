@@ -23,6 +23,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { ProfileCompletionCheck } from '@/components/profile-completion-check';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 function HehLogo() {
   const { state } = useSidebar();
@@ -53,6 +54,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user, loading } = useAuth();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!user && !loading) {
@@ -95,7 +97,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={!isMobile}>
       <Sidebar collapsible="icon">
         <SidebarHeader>
           <HehLogo />

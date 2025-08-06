@@ -53,14 +53,14 @@ export default function LoginPage() {
           <p className="text-muted-foreground max-w-md mb-8 text-lg">
             Join our community of young learners in Homer, Alaska. Registration is quick and easy!
           </p>
-          <div className="flex flex-wrap gap-3">
-            <a href="/programs" className="text-primary hover:underline text-sm font-medium">
+          <div className="flex flex-wrap gap-4">
+            <a href="/programs" className="text-foreground hover:text-primary hover:underline text-sm font-semibold transition-colors">
               View Programs →
             </a>
-            <a href="/schedule" className="text-primary hover:underline text-sm font-medium">
+            <a href="/calendar" className="text-foreground hover:text-primary hover:underline text-sm font-semibold transition-colors">
               Schedule →
             </a>
-            <a href="/resources" className="text-primary hover:underline text-sm font-medium">
+            <a href="/resources" className="text-foreground hover:text-primary hover:underline text-sm font-semibold transition-colors">
               Resources →
             </a>
           </div>

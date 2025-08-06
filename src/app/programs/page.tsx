@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function ProgramsPage() {
   return (
-    <div className="container max-w-4xl mx-auto py-8">
+    <div className="container max-w-4xl mx-auto px-4 py-8">
       <div className="mb-6">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/dashboard">

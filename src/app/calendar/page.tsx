@@ -156,7 +156,7 @@ function CalendarPageContent() {
 
   if (loading) {
     return (
-      <div className="container max-w-7xl mx-auto p-6 space-y-6">
+      <div className="container max-w-7xl mx-auto px-4 py-6 space-y-6">
         <Skeleton className="h-10 w-64" />
         <Skeleton className="h-[600px]" />
       </div>
