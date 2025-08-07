@@ -19,7 +19,9 @@ import {
   Mail,
   Phone,
   Calendar,
-  AlertCircle
+  AlertCircle,
+  FileCheck,
+  Users
 } from 'lucide-react';
 import {
   Table,

@@ -49,12 +49,13 @@ export function GuardianInfoForm() {
           return;
         }
 
-        // Pre-fill form with existing data
+        // Only pre-fill with auth provider data, not database data
+        // This ensures new users get a clean form
         setFormData({
-          displayName: userData?.displayName || user.displayName || '',
-          email: userData?.email || user.email || '',
-          phone: userData?.phone || '',
-          emailPreferences: userData?.emailPreferences || {
+          displayName: user.displayName || '',
+          email: user.email || '',
+          phone: '',
+          emailPreferences: {
             announcements: true,
             programUpdates: true,
             newsletters: true,

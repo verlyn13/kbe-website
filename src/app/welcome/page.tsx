@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { GuardianInfoForm } from '@/components/guardian-info-form';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SimpleHeader } from '@/components/simple-header';
 
 export default function WelcomePage() {
   const { user, loading } = useAuth();
@@ -30,14 +31,17 @@ export default function WelcomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 py-8">
-      <div className="container max-w-4xl mx-auto">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-primary mb-2">Homer Enrichment Hub</h1>
-          <p className="text-muted-foreground">Empowering Young Minds in Homer, Alaska</p>
+    <div className="min-h-screen bg-background flex flex-col">
+      <SimpleHeader />
+      <div className="flex-1 p-4 py-8">
+        <div className="container max-w-4xl mx-auto">
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl font-bold text-primary mb-2">Welcome to Homer Enrichment Hub</h1>
+            <p className="text-muted-foreground">Let's complete your guardian profile to get started</p>
+          </div>
+          
+          <GuardianInfoForm />
         </div>
-        
-        <GuardianInfoForm />
       </div>
     </div>
   );

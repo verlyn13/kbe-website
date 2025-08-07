@@ -10,7 +10,8 @@ import {
   Calendar, 
   FileSpreadsheet, 
   Settings,
-  LayoutDashboard 
+  LayoutDashboard,
+  FileCheck 
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -107,6 +108,12 @@ function AdminSidebar() {
           label: 'Registrations',
           icon: Users,
           permission: 'manage_registrations',
+        },
+        {
+          href: '/admin/waivers',
+          label: 'Waivers',
+          icon: FileCheck,
+          permission: 'manage_users',
         },
         {
           href: '/admin/communications',
