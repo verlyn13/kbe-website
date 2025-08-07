@@ -1,151 +1,79 @@
+'use client';
+
 import Link from 'next/link';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import { Info } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export function LegalFooter() {
+  const pathname = usePathname();
+  const hasSidebar = pathname.startsWith('/dashboard') || pathname.startsWith('/admin');
+  
   return (
-    <footer className="mt-auto border-t bg-muted/30">
-      <div className="container mx-auto max-w-7xl px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {/* Program Information */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
-              About Homer Enrichment Hub
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              An <strong>independent organization</strong> providing supplemental educational enrichment 
-              programs including MATHCOUNTS for students in Homer, Alaska.
-            </p>
-            <div className="text-sm">
-              <p className="font-medium">Organized by:</p>
-              <p>Jeffrey Johnson<br />Lia Calhoun</p>
-              <p className="text-xs italic text-muted-foreground mt-1">
-                (acting as private individuals)
-              </p>
-            </div>
-            <p className="text-xs italic text-muted-foreground">
-              * Organizers happen to be employed at KPC but this is NOT a KPC program
-            </p>
-          </div>
+    <footer className={`mt-auto border-t bg-muted/30 ${hasSidebar ? 'lg:ml-[240px]' : ''}`}>
+      <div className="container mx-auto max-w-7xl px-4 py-3 sm:py-4 lg:py-6">
+        {/* Compact disclaimer bar */}
+        <Alert className="mb-4 border-primary/20 bg-primary/5 py-2">
+          <Info className="h-4 w-4 text-primary" />
+          <AlertDescription className="text-xs sm:text-sm">
+            <strong>Homer Enrichment Hub</strong> is an independent educational initiative.
+            {' '}
+            <Link href="/about" className="text-primary hover:underline">
+              Learn more
+            </Link>
+          </AlertDescription>
+        </Alert>
 
-          {/* Important Disclaimer */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
-              CRITICAL NOTICE
-            </h3>
-            <Alert className="border-destructive/50 bg-destructive/10">
-              <AlertCircle className="h-4 w-4 text-destructive" />
-              <AlertDescription className="text-sm">
-                <p className="font-bold mb-2">THIS IS AN INDEPENDENT PROGRAM</p>
-                <p className="mb-2">The Homer Enrichment Hub is <strong>NOT</strong> affiliated with, sponsored by, endorsed by, or organized by:</p>
-                <ul className="space-y-1 text-xs">
-                  <li>• Kenai Peninsula College</li>
-                  <li>• University of Alaska</li>
-                  <li>• Kenai Peninsula Borough School District</li>
-                  <li>• City of Homer</li>
-                  <li>• Any school or facility used</li>
-                </ul>
-                <p className="mt-2 font-semibold">This is a private, independent educational initiative.</p>
-              </AlertDescription>
-            </Alert>
-          </div>
-
-          {/* Legal & Safety */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
-              Legal & Safety
-            </h3>
-            <ul className="space-y-2 text-sm">
+        <div className="grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-4">
+          {/* Quick Links */}
+          <div>
+            <ul className="space-y-1">
               <li>
-                <Link href="/terms" className="hover:text-primary transition-colors">
-                  Terms of Service
+                <Link href="/about" className="text-muted-foreground hover:text-primary">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-primary transition-colors">
-                  Privacy Policy
+                <Link href="/programs" className="text-muted-foreground hover:text-primary">
+                  Programs
                 </Link>
               </li>
               <li>
-                <Link href="/waiver" className="hover:text-primary transition-colors">
-                  Liability Waiver Form (Required)
-                </Link>
-              </li>
-              <li>
-                <Link href="/safety" className="hover:text-primary transition-colors">
-                  Safety Guidelines
+                <Link href="/terms" className="text-muted-foreground hover:text-primary">
+                  Terms & Privacy
                 </Link>
               </li>
             </ul>
-            <div className="mt-4 space-y-2 text-xs text-muted-foreground">
-              <p>
-                <strong>Participation requires signed waiver</strong><br />
-                Alaska Statutes 09.65.290 & 09.65.292
-              </p>
-              <p className="text-destructive font-semibold">
-                No institutional liability or coverage
-              </p>
-            </div>
           </div>
 
-          {/* Contact Information */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
-              Contact Us
-            </h3>
-            <div className="space-y-3 text-sm">
-              <div>
-                <p className="font-medium">Jeffrey Johnson</p>
-                <p className="text-muted-foreground">Independent Program Coordinator</p>
-                <a href="mailto:jjohnson47@alaska.edu" className="hover:text-primary transition-colors">
-                  jjohnson47@alaska.edu
-                </a>
-                <p className="text-xs italic text-muted-foreground">Email for identification only</p>
-              </div>
-              
-              <div>
-                <p className="font-medium">Lia Calhoun</p>
-                <p className="text-muted-foreground">Independent Program Coordinator</p>
-                <a href="mailto:eicalhoun@alaska.edu" className="hover:text-primary transition-colors">
-                  eicalhoun@alaska.edu
-                </a>
-                <p className="text-xs italic text-muted-foreground">Email for identification only</p>
-              </div>
-              
-              <div>
-                <p className="font-medium">Location: Homer, Alaska</p>
-                <p className="text-xs italic text-muted-foreground">Various venues - no permanent facility</p>
-              </div>
-            </div>
+          {/* Legal Notice */}
+          <div>
+            <ul className="space-y-1">
+              <li>
+                <Link href="/waiver" className="text-muted-foreground hover:text-primary">
+                  Liability Waiver
+                </Link>
+              </li>
+              <li className="text-muted-foreground">No institutional affiliation</li>
+              <li className="text-muted-foreground">Volunteer-run program</li>
+            </ul>
           </div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-8 border-t pt-8 text-center text-xs text-muted-foreground space-y-2">
-          <p className="font-semibold text-sm">© 2025 Homer Enrichment Hub - An Independent Organization</p>
-          <p>
-            All rights reserved. | {' '}
-            <Link href="/accessibility" className="hover:text-primary transition-colors">
-              Accessibility
-            </Link> | {' '}
-            <Link href="/sitemap" className="hover:text-primary transition-colors">
-              Sitemap
-            </Link>
-          </p>
-          <p>
-            Programs currently offered at no cost through personal funding by individual coordinators. 
-            No institutional funding or support. No guarantee of program continuation.
-          </p>
-          <p>
-            By using this website, you agree to our {' '}
-            <Link href="/terms" className="text-primary hover:underline">
-              Terms of Service
-            </Link> {' '}
-            and acknowledge that participation requires a signed liability waiver.
-          </p>
-          <p className="mt-4 text-destructive font-semibold text-sm">
-            This is not a Kenai Peninsula College or University of Alaska program.
-          </p>
+          {/* Contact */}
+          <div className="text-muted-foreground">
+            <p>
+              Contact:<br />
+              <a href="mailto:info@homerconnect.com" className="hover:text-primary">
+                info@homerconnect.com
+              </a>
+            </p>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-muted-foreground sm:text-right">
+            <p>© 2025 Homer Enrichment Hub</p>
+            <p>Independent Organization</p>
+          </div>
         </div>
       </div>
     </footer>
