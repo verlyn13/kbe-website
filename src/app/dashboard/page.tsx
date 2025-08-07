@@ -4,6 +4,7 @@ import { UpcomingCompetitions } from '@/components/portal/upcoming-competitions'
 import { QuickLinks } from '@/components/portal/quick-links';
 import { Announcements } from '@/components/announcements';
 import { WelcomeGuide } from '@/components/portal/welcome-guide';
+import { WaiverStatusWidget } from '@/components/waiver-status-widget';
 import { Skeleton } from '@/components/ui/skeleton';
 import React, { Suspense } from 'react';
 
@@ -17,6 +18,11 @@ export default function DashboardPage() {
 
       <Suspense fallback={<Skeleton className="h-[200px] w-full" />}>
         <WelcomeGuide />
+      </Suspense>
+
+      {/* Waiver Status Widget - Prominent placement */}
+      <Suspense fallback={<Skeleton className="h-[200px] w-full" />}>
+        <WaiverStatusWidget />
       </Suspense>
       
       <div className="grid gap-6 lg:grid-cols-3">

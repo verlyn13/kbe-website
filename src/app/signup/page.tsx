@@ -20,12 +20,15 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { sendWelcomeEmailAction } from '@/app/actions/send-welcome-email';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { EULADialog } from '@/components/eula-dialog';
 
 export default function SignUpPage() {
   const router = useRouter();
   const { toast } = useToast();
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [showEULA, setShowEULA] = useState(false);
+  const [eulaAccepted, setEulaAccepted] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -67,6 +70,12 @@ export default function SignUpPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErrors({});
+
+    // Show EULA if not accepted yet
+    if (!eulaAccepted) {
+      setShowEULA(true);
+      return;
+    }
 
     // Validate form
     const newErrors: Record<string, string> = {};
@@ -124,6 +133,8 @@ export default function SignUpPage() {
         phone: formData.phone.replace(/\D/g, ''),
         role: 'guardian',
         emailPreferences: formData.emailPreferences,
+        eulaAccepted: true,
+        eulaAcceptedDate: new Date(),
       });
 
       // Send welcome email if they opted in for any emails
@@ -173,6 +184,25 @@ export default function SignUpPage() {
     setFormData(prev => ({ ...prev, phone: formatted }));
   }
 
+  const handleEULAAccept = () => {
+    setEulaAccepted(true);
+    setShowEULA(false);
+    // Resubmit the form after EULA acceptance
+    const form = document.getElementById('signup-form') as HTMLFormElement;
+    if (form) {
+      form.requestSubmit();
+    }
+  };
+
+  const handleEULADecline = () => {
+    setShowEULA(false);
+    toast({
+      title: 'Terms not accepted',
+      description: 'You must accept the terms of service to create an account.',
+      variant: 'destructive',
+    });
+  };
+
   // Show loading while checking auth status
   if (authLoading) {
     return (
@@ -198,7 +228,7 @@ export default function SignUpPage() {
             Let's get you set up so you can register your children for MathCounts and other programs
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form id="signup-form" onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="displayName">Full Name</Label>
@@ -400,6 +430,12 @@ export default function SignUpPage() {
           </CardFooter>
         </form>
       </Card>
+      
+      <EULADialog
+        open={showEULA}
+        onAccept={handleEULAAccept}
+        onDecline={handleEULADecline}
+      />
     </div>
   );
 }

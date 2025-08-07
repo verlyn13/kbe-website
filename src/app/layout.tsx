@@ -3,6 +3,7 @@ import { SkipNavigation } from '@/components/skip-navigation';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { LayoutWithFooter } from '@/components/layout-with-footer';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -47,7 +48,9 @@ export default function RootLayout({
         <SkipNavigation />
         <ErrorBoundary>
           <ThemeProvider defaultTheme="compass-peak">
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              <LayoutWithFooter>{children}</LayoutWithFooter>
+            </AuthProvider>
           </ThemeProvider>
         </ErrorBoundary>
         <Toaster />

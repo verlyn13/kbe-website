@@ -122,3 +122,35 @@ body {
   }
 
 }
+
+/* Print styles for waiver form */
+@media print {
+  body {
+    font-size: 12pt;
+  }
+  
+  .print\\:hidden {
+    display: none !important;
+  }
+  
+  /* Hide UI elements when printing */
+  nav, footer, header, aside {
+    display: none !important;
+  }
+  
+  /* Ensure waiver form fills the page properly */
+  @page {
+    margin: 0.5in;
+    size: letter;
+  }
+  
+  /* Prevent page breaks inside sections */
+  section {
+    page-break-inside: avoid;
+  }
+  
+  /* Ensure signature lines are visible */
+  .border-b {
+    border-bottom: 1px solid #000 !important;
+  }
+}
