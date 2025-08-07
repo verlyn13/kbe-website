@@ -21,3 +21,14 @@ export function formatPhoneNumber(value: string): string {
     return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
   }
 }
+
+export function getAppUrl() {
+  // In development, use the actual port
+  if (process.env.NODE_ENV === 'development') {
+    return typeof window !== 'undefined' 
+      ? window.location.origin 
+      : 'http://localhost:9002';
+  }
+  // In production, use the configured URL
+  return process.env.NEXT_PUBLIC_APP_URL || 'https://homerconnect.com';
+}
