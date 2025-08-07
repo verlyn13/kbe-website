@@ -1,35 +1,87 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus, User } from 'lucide-react';
 import Link from 'next/link';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '@/hooks/use-auth';
 
 interface Student {
   id: string;
-  name: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
   grade: number;
-  enrolledPrograms: string[];
+  school: string;
+  waiverStatus: string;
+  enrolledPrograms: { id: string; name: string }[];
 }
 
-// Mock data - in production this would come from Firebase
-const mockStudents: Student[] = [
-  {
-    id: '1',
-    name: 'John Smith',
-    grade: 6,
-    enrolledPrograms: ['MathCounts 2025'],
-  },
-  {
-    id: '2',
-    name: 'Emma Smith',
-    grade: 4,
-    enrolledPrograms: ['MathCounts 2025'],
-  },
-];
-
 export function StudentRoster() {
-  // For now, using mock data. In production, this would check actual registrations
-  const students = mockStudents;
+  const { user } = useAuth();
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStudents() {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Fetch students for this guardian
+        const studentsQuery = query(
+          collection(db, 'students'),
+          where('guardianId', '==', user.uid)
+        );
+        const studentsSnapshot = await getDocs(studentsQuery);
+        
+        const studentsData: Student[] = [];
+        
+        for (const doc of studentsSnapshot.docs) {
+          const studentData = doc.data();
+          
+          // Fetch registrations for this student
+          const registrationsQuery = query(
+            collection(db, 'registrations'),
+            where('studentId', '==', doc.id),
+            where('status', '==', 'registered')
+          );
+          const registrationsSnapshot = await getDocs(registrationsQuery);
+          
+          const enrolledPrograms = registrationsSnapshot.docs.map(regDoc => ({
+            id: regDoc.data().programId,
+            name: regDoc.data().programName
+          }));
+          
+          studentsData.push({
+            id: doc.id,
+            displayName: studentData.displayName,
+            firstName: studentData.firstName,
+            lastName: studentData.lastName,
+            grade: studentData.grade,
+            school: studentData.school,
+            waiverStatus: studentData.waiverStatus || 'pending',
+            enrolledPrograms
+          });
+        }
+        
+        setStudents(studentsData);
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchStudents();
+  }, [user]);
+
   const hasStudents = students.length > 0;
 
   return (
@@ -44,7 +96,11 @@ export function StudentRoster() {
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
-        {!hasStudents ? (
+        {loading ? (
+          <div className="text-center py-8">
+            <p className="text-sm text-muted-foreground">Loading students...</p>
+          </div>
+        ) : !hasStudents ? (
           <div className="text-center py-8">
             <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-muted flex items-center justify-center">
               <User className="h-6 w-6 text-muted-foreground" />
@@ -68,16 +124,29 @@ export function StudentRoster() {
                 <User className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="font-medium">{student.name}</p>
-                <p className="text-sm text-muted-foreground">Grade {student.grade}</p>
+                <p className="font-medium">{student.displayName}</p>
+                <p className="text-sm text-muted-foreground">
+                  Grade {student.grade} • {student.school}
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {student.enrolledPrograms.map((program) => (
-                <Badge key={program} variant="secondary">
-                  {program}
+            <div className="flex flex-col items-end gap-1">
+              {student.enrolledPrograms.length > 0 ? (
+                <div className="flex items-center gap-2">
+                  {student.enrolledPrograms.map((program) => (
+                    <Badge key={program.id} variant="secondary">
+                      {program.name}
+                    </Badge>
+                  ))}
+                </div>
+              ) : (
+                <span className="text-sm text-muted-foreground">No programs</span>
+              )}
+              {student.waiverStatus === 'pending' && (
+                <Badge variant="outline" className="text-xs">
+                  Waiver Pending
                 </Badge>
-              ))}
+              )}
             </div>
           </div>
           ))

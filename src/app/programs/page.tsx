@@ -59,8 +59,10 @@ export default function ProgramsPage() {
               </div>
             </div>
 
-            <Button className="w-full sm:w-auto">
-              Register Your Student
+            <Button className="w-full sm:w-auto" asChild>
+              <Link href="/students/add">
+                Register Your Student
+              </Link>
             </Button>
           </CardContent>
         </Card>
