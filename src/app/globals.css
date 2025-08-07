@@ -129,7 +129,8 @@ body {
     font-size: 12pt;
   }
   
-  .print\\:hidden {
+  /* Hide elements with print:hidden class when printing */
+  .print-hidden {
     display: none !important;
   }
   

@@ -16,7 +16,7 @@ export default function WaiverPage() {
   return (
     <div className="container mx-auto max-w-4xl py-8 px-4">
       {/* Screen Instructions */}
-      <div className="mb-8 print:hidden">
+      <div className="mb-8 print-hidden">
         <Card>
           <CardHeader>
             <CardTitle>Liability Waiver Form</CardTitle>
