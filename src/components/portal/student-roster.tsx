@@ -41,6 +41,8 @@ export function StudentRoster() {
         );
         const studentsSnapshot = await getDocs(studentsQuery);
         
+        console.log('Found students:', studentsSnapshot.size);
+        
         const studentsData: Student[] = [];
         
         for (const doc of studentsSnapshot.docs) {
@@ -118,29 +120,29 @@ export function StudentRoster() {
           </div>
         ) : (
           students.map((student) => (
-          <div key={student.id} className="flex items-center justify-between rounded-lg border p-4">
+          <div key={student.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg border p-3 sm:p-4 gap-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 shrink-0">
                 <User className="h-5 w-5 text-primary" />
               </div>
-              <div>
-                <p className="font-medium">{student.displayName}</p>
-                <p className="text-sm text-muted-foreground">
+              <div className="min-w-0">
+                <p className="font-medium truncate">{student.displayName}</p>
+                <p className="text-sm text-muted-foreground truncate">
                   Grade {student.grade} • {student.school}
                 </p>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-1">
+            <div className="flex flex-wrap sm:flex-col sm:items-end gap-1 ml-13 sm:ml-0">
               {student.enrolledPrograms.length > 0 ? (
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                   {student.enrolledPrograms.map((program) => (
-                    <Badge key={program.id} variant="secondary">
+                    <Badge key={program.id} variant="secondary" className="text-xs sm:text-sm">
                       {program.name}
                     </Badge>
                   ))}
                 </div>
               ) : (
-                <span className="text-sm text-muted-foreground">No programs</span>
+                <span className="text-xs sm:text-sm text-muted-foreground">No programs</span>
               )}
               {student.waiverStatus === 'pending' && (
                 <Badge variant="outline" className="text-xs">

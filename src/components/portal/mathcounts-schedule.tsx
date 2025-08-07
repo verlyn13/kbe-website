@@ -34,9 +34,9 @@ export function MathCountsSchedule() {
             <Calendar className="mr-1 h-4 w-4" />
             Add to Calendar
           </Button>
-          <Button size="sm" variant="outline" className="flex-1">
+          <Button size="sm" variant="outline" className="flex-1" disabled>
             <MapPin className="mr-1 h-4 w-4" />
-            Get Directions
+            Directions (Coming Soon)
           </Button>
         </div>
       </CardContent>

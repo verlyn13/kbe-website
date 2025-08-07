@@ -101,7 +101,6 @@ export default function ProfilePage() {
     email: '',
     phone: '',
     bio: '',
-    mathPersonalityType: '',
     children: [] as { name: string; preferredName?: string; grade: string }[],
   });
 
@@ -124,7 +123,6 @@ export default function ProfilePage() {
           email: data.email || user.email || '',
           phone: data.phone || '',
           bio: data.bio || '',
-          mathPersonalityType: data.mathPersonality?.type || '',
           children: data.children || [],
         });
       } else {
@@ -183,13 +181,6 @@ export default function ProfilePage() {
         children: formData.children,
       };
       
-      // Only add mathPersonality if it has a value
-      if (formData.mathPersonalityType) {
-        profileData.mathPersonality = {
-          type: formData.mathPersonalityType,
-          description: mathPersonalities.find(p => p.type === formData.mathPersonalityType)?.description,
-        };
-      }
 
       if (profile) {
         await profileService.update(user.uid, profileData);
@@ -325,10 +316,9 @@ export default function ProfilePage() {
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
           <TabsTrigger value="children">Children</TabsTrigger>
-          <TabsTrigger value="personality">Math Personality</TabsTrigger>
         </TabsList>
 
         <TabsContent value="basic" className="space-y-4">
@@ -503,81 +493,7 @@ export default function ProfilePage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="personality" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                Math Personality
-                <HoverCard>
-                  <HoverCardTrigger>
-                    <Info className="h-4 w-4 text-muted-foreground cursor-help" />
-                  </HoverCardTrigger>
-                  <HoverCardContent className="w-80">
-                    <div className="space-y-2">
-                      <h4 className="font-semibold">What is a Math Personality?</h4>
-                      <p className="text-sm">
-                        Understanding your child's math personality helps instructors tailor their 
-                        teaching approach and create more engaging learning experiences.
-                      </p>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </CardTitle>
-              <CardDescription>
-                Select the learning style that best describes your approach to mathematics
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Select
-                value={formData.mathPersonalityType}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, mathPersonalityType: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a math personality" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mathPersonalities.map((personality) => (
-                    <SelectItem key={personality.type} value={personality.type}>
-                      <span className="flex items-center gap-2">
-                        <span>{personality.icon}</span>
-                        <span>{personality.type}</span>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {formData.mathPersonalityType && (
-                <div className="bg-muted p-4 rounded-lg space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Brain className="h-5 w-5 text-primary" />
-                    <h4 className="font-semibold">
-                      {mathPersonalities.find(p => p.type === formData.mathPersonalityType)?.type}
-                    </h4>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {mathPersonalities.find(p => p.type === formData.mathPersonalityType)?.description}
-                  </p>
-                </div>
-              )}
-
-              <div className="border-t pt-4">
-                <h4 className="font-medium mb-3">All Math Personalities:</h4>
-                <div className="space-y-3">
-                  {mathPersonalities.map((personality) => (
-                    <div key={personality.type} className="flex gap-3">
-                      <span className="text-2xl">{personality.icon}</span>
-                      <div>
-                        <h5 className="font-medium">{personality.type}</h5>
-                        <p className="text-sm text-muted-foreground">{personality.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        {/* Math Personality tab removed - will be added to individual student profiles */}
       </Tabs>
     </div>
   );
