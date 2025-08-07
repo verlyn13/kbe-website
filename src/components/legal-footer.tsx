@@ -11,68 +11,76 @@ export function LegalFooter() {
   
   return (
     <footer className={`mt-auto border-t bg-muted/30 ${hasSidebar ? 'lg:ml-[240px]' : ''}`}>
-      <div className="container mx-auto max-w-7xl px-4 py-3 sm:py-4 lg:py-6">
-        {/* Compact disclaimer bar */}
-        <Alert className="mb-4 border-primary/20 bg-primary/5 py-2">
-          <Info className="h-4 w-4 text-primary" />
-          <AlertDescription className="text-xs sm:text-sm">
-            <strong>Homer Enrichment Hub</strong> is an independent educational initiative.
-            {' '}
-            <Link href="/about" className="text-primary hover:underline">
-              Learn more
-            </Link>
-          </AlertDescription>
-        </Alert>
+      <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Compact disclaimer bar */}
+          <Alert className="mb-6 border-primary/20 bg-primary/5 py-2">
+            <Info className="h-4 w-4 text-primary" />
+            <AlertDescription className="text-xs sm:text-sm">
+              <strong>Homer Enrichment Hub</strong> is an independent educational initiative.
+              {' '}
+              <Link href="/about" className="text-primary hover:underline">
+                Learn more
+              </Link>
+            </AlertDescription>
+          </Alert>
 
-        <div className="grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-4">
-          {/* Quick Links */}
-          <div>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/about" className="text-muted-foreground hover:text-primary">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/programs" className="text-muted-foreground hover:text-primary">
-                  Programs
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-primary">
-                  Terms & Privacy
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Mobile-first stacked layout, then grid on larger screens */}
+          <div className="space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 text-xs">
+            {/* Quick Links */}
+            <div className="space-y-1">
+              <h3 className="font-medium text-sm mb-2">Quick Links</h3>
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/programs" className="text-muted-foreground hover:text-primary transition-colors">
+                    Programs
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
+                    Terms & Privacy
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-          {/* Legal Notice */}
-          <div>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/waiver" className="text-muted-foreground hover:text-primary">
-                  Liability Waiver
-                </Link>
-              </li>
-              <li className="text-muted-foreground">No institutional affiliation</li>
-              <li className="text-muted-foreground">Volunteer-run program</li>
-            </ul>
-          </div>
+            {/* Legal Notice */}
+            <div className="space-y-1">
+              <h3 className="font-medium text-sm mb-2">Important Info</h3>
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/waiver" className="text-muted-foreground hover:text-primary transition-colors">
+                    Liability Waiver Required
+                  </Link>
+                </li>
+                <li className="text-muted-foreground">No institutional affiliation</li>
+                <li className="text-muted-foreground">Volunteer-run program</li>
+              </ul>
+            </div>
 
-          {/* Contact */}
-          <div className="text-muted-foreground">
-            <p>
-              Contact:<br />
-              <a href="mailto:info@homerconnect.com" className="hover:text-primary">
-                info@homerconnect.com
-              </a>
-            </p>
-          </div>
+            {/* Contact */}
+            <div className="space-y-1">
+              <h3 className="font-medium text-sm mb-2">Contact</h3>
+              <div className="text-muted-foreground">
+                <p>
+                  Email us at<br />
+                  <a href="mailto:info@homerconnect.com" className="hover:text-primary transition-colors">
+                    info@homerconnect.com
+                  </a>
+                </p>
+              </div>
+            </div>
 
-          {/* Copyright */}
-          <div className="text-muted-foreground sm:text-right">
-            <p>© 2025 Homer Enrichment Hub</p>
-            <p>Independent Organization</p>
+            {/* Copyright - centered on mobile, right-aligned on desktop */}
+            <div className="text-center sm:text-left lg:text-right pt-4 sm:pt-0 border-t sm:border-0 border-border/50">
+              <p className="text-muted-foreground">© 2025 Homer Enrichment Hub</p>
+              <p className="text-muted-foreground">Independent Organization</p>
+            </div>
           </div>
         </div>
       </div>
