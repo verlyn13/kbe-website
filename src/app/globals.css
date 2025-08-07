@@ -154,3 +154,25 @@ body {
     border-bottom: 1px solid #000 !important;
   }
 }
+
+/* Fix primary text contrast for readability */
+@layer utilities {
+  /* In light mode, make primary text darker for better readability */
+  .text-primary {
+    color: hsl(201 48% 35%); /* Much darker glacier blue */
+  }
+  
+  /* In dark mode, use the regular primary color */
+  .dark .text-primary {
+    color: hsl(var(--primary));
+  }
+  
+  /* Ensure hover states have good contrast too */
+  .hover\:text-primary:hover {
+    color: hsl(201 48% 25%); /* Even darker on hover in light mode */
+  }
+  
+  .dark .hover\:text-primary:hover {
+    color: hsl(201 48% 76%); /* Lighter on hover in dark mode */
+  }
+}

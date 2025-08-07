@@ -22,6 +22,7 @@
   --popover-foreground: 215 16% 20%;
   --primary: 201 48% 76%; /* glacier-blue */
   --primary-foreground: 215 16% 20%;
+  --primary-text: 201 48% 35%; /* darker glacier-blue for text */
   --secondary: 214 32% 91%; /* mist-gray */
   --secondary-foreground: 215 16% 34%;
   --muted: 214 32% 91%;
