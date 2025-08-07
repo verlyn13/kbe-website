@@ -44,20 +44,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log('[AuthProvider] Routing check:', { loading, user: !!user, pathname });
-    if (loading) return;
-
-    const isAuthPage = pathname === '/';
-
-    if (!user && !isAuthPage) {
-      console.log('[AuthProvider] No user, not on auth page, redirecting to /');
-      router.push('/');
-    } else if (user && isAuthPage) {
-      console.log('[AuthProvider] User exists, on auth page, redirecting to /dashboard');
-      router.push('/dashboard');
-    }
-  }, [user, loading, router, pathname]);
+  // Remove automatic redirects - let individual pages handle their own routing
+  // This prevents conflicts with the signup flow
 
   const signOut = async () => {
     await firebaseSignOut(auth);

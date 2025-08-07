@@ -17,9 +17,31 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (user && !loading) {
-      router.push('/dashboard');
-    }
+    // Don't redirect if user is loading or not authenticated
+    if (!user || loading) return;
+    
+    // Check if user has completed their profile
+    const checkProfileAndRedirect = async () => {
+      try {
+        const { doc, getDoc } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase');
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        
+        if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
+          // Profile not complete, redirect to welcome
+          router.push('/welcome');
+        } else {
+          // Profile complete, redirect to dashboard
+          router.push('/dashboard');
+        }
+      } catch (error) {
+        console.error('Error checking profile:', error);
+        // On error, default to dashboard
+        router.push('/dashboard');
+      }
+    };
+    
+    checkProfileAndRedirect();
   }, [user, loading, router]);
 
   return (

@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { profileService } from '@/lib/firebase-admin';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,10 +18,13 @@ import { ArrowLeft, Info } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { sendWelcomeEmailAction } from '@/app/actions/send-welcome-email';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function SignUpPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -35,6 +39,30 @@ export default function SignUpPage() {
     },
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    // If user is already authenticated, check their profile status
+    if (user && !authLoading) {
+      const checkProfileStatus = async () => {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          
+          if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
+            // Profile not complete, redirect to welcome
+            router.push('/welcome');
+          } else {
+            // Profile complete, redirect to dashboard
+            router.push('/dashboard');
+          }
+        } catch (error) {
+          console.error('Error checking profile:', error);
+          router.push('/dashboard');
+        }
+      };
+      
+      checkProfileStatus();
+    }
+  }, [user, authLoading, router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -143,6 +171,15 @@ export default function SignUpPage() {
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
     const formatted = formatPhoneNumber(e.target.value);
     setFormData(prev => ({ ...prev, phone: formatted }));
+  }
+
+  // Show loading while checking auth status
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Icons.spinner className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   return (
