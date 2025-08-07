@@ -78,5 +78,17 @@ service cloud.firestore {
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
+    
+    // Students collection - guardians can manage their own students
+    match /students/{studentId} {
+      allow read: if isSignedIn() && 
+        (resource.data.guardianId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && 
+        request.resource.data.guardianId == request.auth.uid;
+      allow update: if isSignedIn() && 
+        (resource.data.guardianId == request.auth.uid || isAdmin());
+      allow delete: if isSignedIn() && 
+        (resource.data.guardianId == request.auth.uid || isAdmin());
+    }
   }
 }
