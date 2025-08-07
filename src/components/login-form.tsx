@@ -182,8 +182,25 @@ export function LoginForm() {
     setIsGoogleLoading(true);
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
-      router.push('/dashboard');
+      const result = await signInWithPopup(auth, provider);
+      
+      // Check if this is a new user (first time sign in)
+      const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
+      
+      if (isNewUser) {
+        // Check if user profile exists
+        const { doc, getDoc } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase');
+        const userDoc = await getDoc(doc(db, 'users', result.user.uid));
+        
+        if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
+          router.push('/welcome');
+        } else {
+          router.push('/dashboard');
+        }
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error) {
       logger.error('Google sign in failed', error);
       toast({
