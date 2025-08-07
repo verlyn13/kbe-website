@@ -31,6 +31,7 @@ import { getErrorMessage } from '@/lib/error-utils';
 import { auth } from '@/lib/firebase';
 import { logger } from '@/lib/logger';
 import { emailSchema, passwordSchema } from '@/lib/validation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const formSchema = z.object({
   email: emailSchema,
@@ -74,6 +75,7 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
+  const [authMethod, setAuthMethod] = useState<'password' | 'magic'>('password');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -153,28 +155,32 @@ export function LoginForm() {
   }, [router, toast]); // Add router and toast to dependencies
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    try {
-      if (!values.password) {
+    if (authMethod === 'password') {
+      setIsLoading(true);
+      try {
+        if (!values.password) {
+          toast({
+            variant: 'destructive',
+            title: 'Sign in failed',
+            description: 'Password is required for this sign-in method.',
+          });
+          setIsLoading(false);
+          return;
+        }
+        await signInWithEmailAndPassword(auth, values.email, values.password);
+        router.push('/dashboard');
+      } catch (error) {
+        logger.error('Email/password sign in failed', error);
         toast({
           variant: 'destructive',
           title: 'Sign in failed',
-          description: 'Password is required for this sign-in method.',
+          description: getErrorMessage(error),
         });
+      } finally {
         setIsLoading(false);
-        return;
       }
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      router.push('/dashboard');
-    } catch (error) {
-      logger.error('Email/password sign in failed', error);
-      toast({
-        variant: 'destructive',
-        title: 'Sign in failed',
-        description: getErrorMessage(error),
-      });
-    } finally {
-      setIsLoading(false);
+    } else {
+      handleMagicLink();
     }
   }
 
@@ -226,17 +232,6 @@ export function LoginForm() {
       url: `${window.location.origin}/`,
       // This must be true for email link sign-in
       handleCodeInApp: true,
-      // Optional: iOS and Android settings for future mobile apps
-      // iOS: {
-      //   bundleId: 'com.kbe.website'
-      // },
-      // android: {
-      //   packageName: 'com.kbe.website',
-      //   installApp: false,
-      //   minimumVersion: '12'
-      // },
-      // Optional: Use custom domain for links (if configured)
-      // dynamicLinkDomain: 'kbewebsite.page.link' // Deprecated - don't use
     };
 
     try {
@@ -276,38 +271,35 @@ export function LoginForm() {
   };
 
   return (
-    <div className="grid gap-6">
+    <div className="space-y-6">
+      {/* Google Sign-in - Most prominent */}
+      <Button
+        variant="outline"
+        className="w-full h-12 text-base"
+        onClick={handleGoogleSignIn}
+        disabled={isGoogleLoading}
+        aria-label="Sign in with Google"
+      >
+        {isGoogleLoading ? (
+          <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+        ) : (
+          <GoogleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
+        )}
+        Continue with Google
+      </Button>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-card text-muted-foreground px-2">Or use email</span>
+        </div>
+      </div>
+
+      {/* Email-based authentication */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogleSignIn}
-              disabled={isGoogleLoading}
-              aria-label="Sign in with Google"
-            >
-              {isGoogleLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-              ) : (
-                <GoogleIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-              )}
-              Sign in with Google
-            </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              Quick sign-in if you have a Google account
-            </p>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card text-muted-foreground px-2">Or</span>
-            </div>
-          </div>
-
           <FormField
             control={form.control}
             name="email"
@@ -317,6 +309,7 @@ export function LoginForm() {
                 <FormControl>
                   <Input
                     placeholder="name@example.com"
+                    type="email"
                     {...field}
                     aria-label="Email address"
                     aria-required="true"
@@ -327,72 +320,63 @@ export function LoginForm() {
             )}
           />
 
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleMagicLink}
-              disabled={isMagicLinkLoading}
-              aria-label="Send magic link to your email"
-            >
-              {isMagicLinkLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-              ) : (
-                <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
-              )}
-              Send sign-in link to email
-            </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              We'll email you a secure link - no password needed!
-            </p>
-          </div>
+          <Tabs value={authMethod} onValueChange={(value) => setAuthMethod(value as 'password' | 'magic')} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="password">Password</TabsTrigger>
+              <TabsTrigger value="magic">Magic Link</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="password" className="space-y-4 mt-4">
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password</FormLabel>
+                      <Button variant="link" asChild className="px-0 text-xs font-normal">
+                        <a href="/forgot-password">Forgot password?</a>
+                      </Button>
+                    </div>
+                    <FormControl>
+                      <Input type="password" placeholder="••••••••" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="remember"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="text-sm font-normal">Remember me for 30 days</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            
+            <TabsContent value="magic" className="mt-4">
+              <p className="text-sm text-muted-foreground">
+                We'll email you a secure link to sign in instantly - no password needed!
+              </p>
+            </TabsContent>
+          </Tabs>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card text-muted-foreground px-2">Or</span>
-            </div>
-          </div>
-
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center">
-                  <FormLabel>Password</FormLabel>
-                  <Button variant="link" asChild className="ml-auto text-xs font-normal">
-                    <a href="/forgot-password">Forgot password?</a>
-                  </Button>
-                </div>
-                <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="remember"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-y-0 space-x-3">
-                <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="font-normal">Remember me for 30 days</FormLabel>
-                </div>
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Sign In with Password
+          <Button 
+            type="submit" 
+            className="w-full h-11" 
+            disabled={isLoading || isMagicLinkLoading}
+          >
+            {(isLoading || isMagicLinkLoading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {authMethod === 'password' ? 'Sign In' : 'Send Magic Link'}
           </Button>
-          
         </form>
       </Form>
     </div>
