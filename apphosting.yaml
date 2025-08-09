@@ -25,12 +25,12 @@ env:
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     secret: NEXT_PUBLIC_FIREBASE_APP_ID
 
-  # Google AI (if using GenKit)
-  - variable: GOOGLE_GENAI_API_KEY
-    secret: GOOGLE_GENAI_API_KEY
-    availability:
-      - BUILD
-      - RUNTIME
+  # Google AI (disabled - unexpected Gemini API usage detected)
+  # - variable: GOOGLE_GENAI_API_KEY
+  #   secret: GOOGLE_GENAI_API_KEY
+  #   availability:
+  #     - BUILD
+  #     - RUNTIME
 
   # Security Secrets
   - variable: NEXTAUTH_SECRET
