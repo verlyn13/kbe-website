@@ -1,0 +1,12 @@
+# Cloudflare project configuration for kbe-website
+PROJECT_NAME=kbe-website
+ZONE=homerenrichment.com
+
+# This project will manage:
+# - kbe.homerenrichment.com (main site)
+# - api.kbe.homerenrichment.com (API endpoint)
+# - Any other kbe-related subdomains
+
+# Credentials stored in gopass at:
+# cloudflare/kbe-website/api-token (if project-specific token needed)
+# Falls back to: cloudflare/homerenrichment/*

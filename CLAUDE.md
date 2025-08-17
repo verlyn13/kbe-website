@@ -6,6 +6,51 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Homer Enrichment Hub (HEH) is a registration and information gateway for enrichment programs in Homer, Alaska. Built with Next.js 15, TypeScript, and Firebase Auth.
 
+**IMPORTANT MIGRATION**: This project is migrating from homerconnect.com to homerenrichment.com. See CLOUDFLARE_MIGRATION.md for details.
+
+## Infrastructure Management
+
+### Cloudflare DNS Management
+This project uses the integrated Cloudflare management system:
+
+```bash
+# Quick DNS operations (context-aware)
+cf dns list                          # List all DNS records
+cf dns add A kbe 35.219.200.11      # Add subdomain
+cf dns update kbe 35.219.200.12     # Update record
+cf dns delete kbe                    # Remove record
+
+# Direct cf-go CLI for advanced operations
+cf-go dns list
+cf-go diag token                    # Verify token access
+cf-go api GET zones                 # Direct API calls
+```
+
+### Secret Management (gopass)
+All tokens and credentials stored securely:
+```bash
+# Project tokens
+gopass show -o cloudflare/tokens/projects/homerenrichment/dns
+gopass show -o cloudflare/tokens/projects/homerenrichment/terraform
+
+# General tokens  
+gopass show -o cloudflare/tokens/human/readonly  # Safe read-only
+gopass show -o cloudflare/tokens/human/full      # Management access
+```
+
+### Repository Navigation (ds CLI)
+```bash
+cd $(ds cd kbe-website)              # Jump to this project
+cd $(ds cd cloudflare-management)    # Jump to Cloudflare IaC
+ds status                            # Check all repo statuses
+```
+
+### Zone Information
+- **Domain**: homerenrichment.com (migrating from homerconnect.com)
+- **Zone ID**: 7a95b1a3db5d14d1292fd04b9007ba32
+- **Account ID**: 13eb584192d9cefb730fde0cfd271328
+- **Subdomains**: kbe.homerenrichment.com (main site)
+
 ## Essential Commands
 
 ### Development
@@ -132,6 +177,35 @@ These MUST remain in `dependencies` because Firebase App Hosting only installs p
 - Use Tailwind CSS v4 import syntax: `@import 'tailwindcss/base'`
 - Don't add custom webpack configs to next.config.js
 - Development server runs on port 9002
+
+## Domain Migration: homerconnect.com → homerenrichment.com
+
+### Current Status
+- 56 files reference homerconnect.com
+- Migration script available: `./migrate-domain.sh`
+- Full guide: `CLOUDFLARE_MIGRATION.md`
+
+### Quick Migration Commands
+```bash
+# 1. Update DNS records (using Cloudflare API)
+export CLOUDFLARE_API_TOKEN=$(gopass show -o cloudflare/tokens/projects/homerenrichment/dns)
+cf-go dns add A kbe 35.219.200.11
+
+# 2. Run domain migration in code
+./migrate-domain.sh
+
+# 3. Update Firebase authorized domains
+echo "Add homerenrichment.com and kbe.homerenrichment.com to:"
+echo "https://console.firebase.google.com/project/homerenrichmenthub/authentication/settings"
+
+# 4. Test the migration
+npm run dev  # Check locally on port 9002
+```
+
+### DNS Records Needed
+- A record: kbe → Firebase App Hosting IP
+- CNAME records: SendGrid email authentication
+- TXT records: SPF, DMARC for email
 
 ## Project Philosophy
 
