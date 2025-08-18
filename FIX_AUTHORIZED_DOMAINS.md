@@ -1,7 +1,7 @@
 # CRITICAL: Add Missing Authorized Domains in Firebase
 
 ## The Root Cause
-Magic links work on localhost but fail on production because the redirect URL (`https://homerconnect.com/`) is not in Firebase's authorized domains list.
+Magic links work on localhost but fail on production because the redirect URL (`https://homerenrichment.com/`) is not in Firebase's authorized domains list.
 
 ## Immediate Fix Required
 
@@ -9,8 +9,8 @@ Magic links work on localhost but fail on production because the redirect URL (`
 https://console.firebase.google.com/project/kbe-website/authentication/settings
 
 ### 2. In the "Authorized domains" section, ADD:
-- `homerconnect.com` (if not already there)
-- `www.homerconnect.com`
+- `homerenrichment.com` (if not already there)
+- `www.homerenrichment.com`
 - `kbe-website--kbe-website.us-central1.hosted.app`
 
 ### 3. Save the changes
@@ -29,7 +29,7 @@ This dynamically uses whatever domain the user is on. If that domain isn't autho
 
 ## Test After Adding Domains
 1. Clear browser cache
-2. Try magic link from https://homerconnect.com
+2. Try magic link from https://homerenrichment.com
 3. Try Google sign-in
 
 ## Alternative Quick Fix (Code Change)

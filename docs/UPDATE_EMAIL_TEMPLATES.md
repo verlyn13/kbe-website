@@ -27,7 +27,7 @@ While we set up custom domain email, let's improve the current emails immediatel
 
 3. **Update Action URL** (if needed)
    - Change from: `https://kbe-website.firebaseapp.com/__/auth/action`
-   - To: `https://homerconnect.com/__/auth/action`
+   - To: `https://homerenrichment.com/__/auth/action`
 
 4. **Customize Message Content**
    

@@ -72,8 +72,8 @@ http://localhost:9002/*
 https://localhost:9002/*
 https://kbe-website.firebaseapp.com/*
 https://kbe-website.web.app/*
-https://homerconnect.com/*
-https://www.homerconnect.com/*
+https://homerenrichment.com/*
+https://www.homerenrichment.com/*
 ```bash
 ### GenKit API Key
 

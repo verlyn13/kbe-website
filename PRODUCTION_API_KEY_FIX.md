@@ -20,14 +20,14 @@ Production was using the WRONG API key from Google Cloud secrets:
 - Secret updated: Just now
 - Rollout started: In progress
 - Expected completion: 5-10 minutes
-- Test at: https://homerconnect.com
+- Test at: https://homerenrichment.com
 
 ## Why This Happened:
 Your `apphosting.yaml` pulls Firebase config from Google Cloud secrets. The secret contained the wrong API key (Generative Language API instead of Browser API).
 
 ## To Verify Once Deployed:
 1. Clear browser cache
-2. Visit https://homerconnect.com
+2. Visit https://homerenrichment.com
 3. Try Google Sign-in - it should work!
 4. Try Magic Link - it should also work!
 

@@ -55,7 +55,7 @@ For best deliverability, integrate with:
    // Send with SendGrid
    const msg = {
      to: email,
-     from: 'no-reply@homerconnect.com',
+     from: 'no-reply@homerenrichment.com',
      subject: 'Sign in to KBE Website',
      html: `<p>Click <a href="${link}">here</a> to sign in.</p>`,
    };
@@ -137,11 +137,11 @@ Use these tools:
    - Traditional password with 2FA
    - Passkeys (WebAuthn)
 
-## For Production with homerconnect.com
+## For Production with homerenrichment.com
 
 When you set up the custom domain:
 
-1. Use `no-reply@homerconnect.com` as sender
+1. Use `no-reply@homerenrichment.com` as sender
 2. Set up proper SPF/DKIM/DMARC records
 3. Consider professional email service
 4. Monitor sender reputation

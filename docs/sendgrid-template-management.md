@@ -175,7 +175,7 @@ import { sendMagicLinkEmail } from '@/lib/sendgrid-email-service';
 
 // In your auth flow
 const actionCodeSettings = {
-  url: 'https://homerconnect.com/auth/verify',
+  url: 'https://homerenrichment.com/auth/verify',
   handleCodeInApp: true,
 };
 

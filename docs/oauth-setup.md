@@ -25,7 +25,7 @@ firebase emulators:start --only auth
 - localhost (default)
 - kbe-website.firebaseapp.com (default)
 - kbe-website.web.app (default)
-- homerconnect.com (custom)
-- www.homerconnect.com (custom)
+- homerenrichment.com (custom)
+- www.homerenrichment.com (custom)
 
 Note: Firebase automatically handles OAuth redirects for these domains, but specific ports need to be configured in Google Cloud Console.

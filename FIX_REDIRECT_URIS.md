@@ -6,15 +6,15 @@ You found the issue! The OAuth client only has a redirect URI for `kbe-website.f
 
 In the same OAuth 2.0 Web Client configuration, under **Authorized redirect URIs**, add:
 
-1. `https://homerconnect.com/__/auth/handler`
+1. `https://homerenrichment.com/__/auth/handler`
 2. `https://kbe-website--kbe-website.us-central1.hosted.app/__/auth/handler`
 
 ## Why This Is Critical
 
-When you sign in with Google from `homerconnect.com`, the flow is:
+When you sign in with Google from `homerenrichment.com`, the flow is:
 1. User clicks "Sign in with Google"
 2. Goes to Google's auth page
-3. Google needs to redirect back to `https://homerconnect.com/__/auth/handler`
+3. Google needs to redirect back to `https://homerenrichment.com/__/auth/handler`
 4. But this URL isn't authorized, so Google blocks the entire flow
 
 ## Complete OAuth Client Configuration Should Be:
@@ -24,12 +24,12 @@ When you sign in with Google from `homerconnect.com`, the flow is:
 - `http://localhost:5000`
 - `http://localhost:9002`
 - `https://kbe-website.firebaseapp.com`
-- `https://homerconnect.com`
+- `https://homerenrichment.com`
 - `https://kbe-website--kbe-website.us-central1.hosted.app`
 
 **Authorized redirect URIs:**
 - `https://kbe-website.firebaseapp.com/__/auth/handler`
-- `https://homerconnect.com/__/auth/handler`
+- `https://homerenrichment.com/__/auth/handler`
 - `https://kbe-website--kbe-website.us-central1.hosted.app/__/auth/handler`
 
 ## After Adding:

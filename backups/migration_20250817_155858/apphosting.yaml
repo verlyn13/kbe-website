@@ -1,0 +1,80 @@
+# Settings to manage and configure a Firebase App Hosting backend.
+# https://firebase.google.com/docs/app-hosting/configure
+
+runConfig:
+  # Increase this value if you'd like to automatically spin up
+  # more instances in response to increased traffic.
+  maxInstances: 1
+
+env:
+  # Existing config
+  - variable: NODEJS_VERSION
+    value: '22'
+
+  # Firebase Core Secrets
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    secret: NEXT_PUBLIC_FIREBASE_API_KEY
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    secret: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    secret: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    secret: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    secret: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    secret: NEXT_PUBLIC_FIREBASE_APP_ID
+
+  # Google AI (disabled - unexpected Gemini API usage detected)
+  # - variable: GOOGLE_GENAI_API_KEY
+  #   secret: GOOGLE_GENAI_API_KEY
+  #   availability:
+  #     - BUILD
+  #     - RUNTIME
+
+  # Security Secrets
+  - variable: NEXTAUTH_SECRET
+    secret: NEXTAUTH_SECRET
+  - variable: JWT_SECRET
+    secret: JWT_SECRET
+
+  # App Configuration
+  - variable: NODE_ENV
+    value: 'production'
+  - variable: NEXT_PUBLIC_APP_URL
+    secret: NEXT_PUBLIC_APP_URL
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # SendGrid Configuration
+  - variable: SENDGRID_API_KEY
+    secret: SENDGRID_API_KEY
+    availability:
+      - RUNTIME
+  
+  # SendGrid Template IDs
+  - variable: SENDGRID_TEMPLATE_MAGIC_LINK
+    secret: SENDGRID_TEMPLATE_MAGIC_LINK
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_WELCOME
+    secret: SENDGRID_TEMPLATE_WELCOME
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_PASSWORD_RESET
+    secret: SENDGRID_TEMPLATE_PASSWORD_RESET
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_ANNOUNCEMENT
+    secret: SENDGRID_TEMPLATE_ANNOUNCEMENT
+    availability:
+      - RUNTIME
+  - variable: SENDGRID_TEMPLATE_REGISTRATION_CONFIRMATION
+    secret: SENDGRID_TEMPLATE_REGISTRATION_CONFIRMATION
+    availability:
+      - RUNTIME
+
+# Build settings for App Hosting
+buildConfig:
+  buildCommand: 'npm run build'

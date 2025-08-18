@@ -16,7 +16,7 @@ console.log('📧 Sending test email to: jeffreyverlynjohnson@gmail.com');
 // Test email
 const msg = {
   to: 'jeffreyverlynjohnson@gmail.com',
-  from: 'noreply@homerconnect.com', // This needs to be verified
+  from: 'noreply@homerenrichment.com', // This needs to be verified
   subject: 'Homer Enrichment Hub - SendGrid Test',
   text: 'This is a test email from Homer Enrichment Hub to verify SendGrid integration.',
   html: `
@@ -48,8 +48,8 @@ sgMail
           if (err.message.includes('from')) {
             console.log('\n⚠️  Sender verification needed:');
             console.log('   1. Go to SendGrid → Settings → Sender Authentication');
-            console.log('   2. Add "noreply@homerconnect.com" as a verified sender');
-            console.log('   3. Or complete domain authentication for homerconnect.com');
+            console.log('   2. Add "noreply@homerenrichment.com" as a verified sender');
+            console.log('   3. Or complete domain authentication for homerenrichment.com');
           }
         });
       }

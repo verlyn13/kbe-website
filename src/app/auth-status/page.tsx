@@ -16,7 +16,7 @@ export default function AuthStatusPage() {
         name: 'Current Domain',
         status: 'success',
         value: window.location.hostname,
-        expected: ['homerconnect.com', 'kbe-website--kbe-website.us-central1.hosted.app', 'localhost']
+        expected: ['homerenrichment.com', 'kbe-website--kbe-website.us-central1.hosted.app', 'localhost']
       });
 
       // Check Firebase config

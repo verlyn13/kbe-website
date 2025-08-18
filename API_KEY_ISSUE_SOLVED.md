@@ -3,7 +3,7 @@
 ## The Problem
 Your `.env.local` file was using:
 - Wrong API key: `AIzaSyCQfj7TpHnoB2TdaBmM06wG8L2-hwHmikc` (Firebase API Key)
-- Wrong authDomain: `homerconnect.com`
+- Wrong authDomain: `homerenrichment.com`
 
 ## The Solution
 Updated `.env.local` to use:

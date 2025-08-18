@@ -25,13 +25,13 @@ sgMail.setApiKey(API_KEY);
 const msg = {
   to: 'jeffreyverlynjohnson@gmail.com',
   from: {
-    email: 'noreply@homerconnect.com',
+    email: 'noreply@homerenrichment.com',
     name: 'Homer Enrichment Hub'
   },
   templateId: TEMPLATE_ID,
   dynamicTemplateData: {
     firstName: 'Jeffrey',
-    dashboardUrl: 'https://homerconnect.com/dashboard',
+    dashboardUrl: 'https://homerenrichment.com/dashboard',
     currentYear: new Date().getFullYear()
   },
 };

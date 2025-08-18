@@ -30,7 +30,7 @@ echo "---------------------------------"
 echo "Testing sign up endpoint..."
 SIGNUP_RESPONSE=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$API_KEY" \
   -H "Content-Type: application/json" \
-  -H "Referer: https://homerconnect.com" \
+  -H "Referer: https://homerenrichment.com" \
   -d '{"returnSecureToken":true}' 2>&1)
 echo "Response: $(echo $SIGNUP_RESPONSE | jq -r '.error.message // "Success"' 2>/dev/null || echo $SIGNUP_RESPONSE | head -100)"
 echo ""
@@ -58,11 +58,11 @@ echo "To manually verify OAuth client configuration:"
 echo "1. Go to: https://console.cloud.google.com/apis/credentials?project=$PROJECT_ID"
 echo "2. Click on the OAuth 2.0 Web client"
 echo "3. Verify ALL these domains are in Authorized JavaScript origins:"
-echo "   - https://homerconnect.com"
+echo "   - https://homerenrichment.com"
 echo "   - https://kbe-website--kbe-website.us-central1.hosted.app"
 echo "   - https://kbe-website.firebaseapp.com"
 echo "4. Verify ALL these are in Authorized redirect URIs:"
-echo "   - https://homerconnect.com/__/auth/handler"
+echo "   - https://homerenrichment.com/__/auth/handler"
 echo "   - https://kbe-website--kbe-website.us-central1.hosted.app/__/auth/handler"
 echo "   - https://kbe-website.firebaseapp.com/__/auth/handler"
 echo ""
@@ -72,7 +72,7 @@ echo "-------------------------------"
 echo "Testing email/password auth (which should work)..."
 EMAIL_TEST=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$API_KEY" \
   -H "Content-Type: application/json" \
-  -H "Referer: https://homerconnect.com" \
+  -H "Referer: https://homerenrichment.com" \
   -d '{"requestType":"PASSWORD_RESET","email":"test@example.com"}' 2>&1)
 echo "Response: $(echo $EMAIL_TEST | jq -r '.error.message // "Would send email if account exists"' 2>/dev/null || echo $EMAIL_TEST | head -100)"
 echo ""

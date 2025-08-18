@@ -1,0 +1,42 @@
+{
+  "name": "kbe-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for KBE Portal with educational content generation",
+  "servers": {
+    "kbe-orchestrator": {
+      "command": "node",
+      "args": ["./scripts/kbe-orchestrator-server.js"],
+      "env": {
+        "NODE_ENV": "development",
+        "PROJECT_ROOT": "${workspaceFolder}"
+      },
+      "capabilities": [
+        "analyze_task",
+        "coordinate_agents",
+        "get_project_status",
+        "query_knowledge_base"
+      ],
+      "description": "Master orchestrator for KBE Portal development"
+    },
+    "kbe-content": {
+      "command": "node",
+      "args": ["./scripts/content-generator.js"],
+      "env": {
+        "GOOGLE_AI_API_KEY": "${env:GOOGLE_AI_API_KEY}",
+        "NODE_ENV": "development"
+      },
+      "capabilities": [
+        "generate_lesson_plan",
+        "create_activity",
+        "generate_weekly_challenge",
+        "create_announcement"
+      ],
+      "description": "AI-powered educational content generation"
+    }
+  },
+  "globalSettings": {
+    "timeout": 30000,
+    "retryAttempts": 3,
+    "logLevel": "info"
+  }
+}

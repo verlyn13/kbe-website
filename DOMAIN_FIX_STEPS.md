@@ -1,8 +1,8 @@
-# Quick Fix for homerconnect.com
+# Quick Fix for homerenrichment.com
 
 ## The Issue
 - Your Next.js app is deployed to **Firebase App Hosting** at: https://kbe-website--kbe-website.us-central1.hosted.app
-- Your domain (homerconnect.com) is connected to **Firebase Hosting** which has no content
+- Your domain (homerenrichment.com) is connected to **Firebase Hosting** which has no content
 - These are two different services!
 
 ## Immediate Actions
@@ -24,7 +24,7 @@ Once auth works on the App Hosting URL:
 2. Click on **"kbe-website"** backend
 3. Look for "Domains" or "Settings" tab
 4. Click **"Add custom domain"**
-5. Enter: `homerconnect.com`
+5. Enter: `homerenrichment.com`
 6. Follow the DNS instructions Firebase provides
 
 ### 3. Update DNS Records (5 mins + wait time)

@@ -3,7 +3,7 @@
 ## Current State
 - Emails are sent from: `noreply@kbe-website.firebaseapp.com`
 - This looks unprofessional and may trigger spam filters
-- Goal: Send from `noreply@homerconnect.com`
+- Goal: Send from `noreply@homerenrichment.com`
 
 ## Option 1: Firebase SMTP Configuration (Simplest)
 **Best for**: Quick setup without third-party services
@@ -13,8 +13,8 @@
 2. Click on each template (Password reset, Email verification, etc.)
 3. Click "Customize action URL and email"
 4. Update:
-   - **From**: `Homer Enrichment Hub <noreply@homerconnect.com>`
-   - **Reply-to**: `info@homerconnect.com`
+   - **From**: `Homer Enrichment Hub <noreply@homerenrichment.com>`
+   - **Reply-to**: `info@homerenrichment.com`
 
 ### Limitations:
 - Firebase still sends the email, just changes the "From" header
@@ -69,7 +69,7 @@ export const sendEmail = functions.https.onCall(async (data, context) => {
   const { to, subject, html } = data;
   
   await transporter.sendMail({
-    from: 'Homer Enrichment Hub <noreply@homerconnect.com>',
+    from: 'Homer Enrichment Hub <noreply@homerenrichment.com>',
     to,
     subject,
     html

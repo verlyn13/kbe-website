@@ -40,7 +40,7 @@ Make sure these are ENABLED (not just added):
 ## Quick Test
 After enabling, test immediately at:
 - https://kbe-website--kbe-website.us-central1.hosted.app
-- https://homerconnect.com
+- https://homerenrichment.com
 
 The error specifically mentioning `projectconfigservice.getprojectconfig` suggests Firebase can't retrieve the project's auth configuration, which often happens when:
 1. Google provider is disabled in Firebase

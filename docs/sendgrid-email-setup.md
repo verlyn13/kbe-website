@@ -1,7 +1,7 @@
 # SendGrid Email Setup for Homer Enrichment Hub
 
 ## Overview
-Set up professional email sending from `noreply@homerconnect.com` using SendGrid with Firebase Extensions.
+Set up professional email sending from `noreply@homerenrichment.com` using SendGrid with Firebase Extensions.
 
 ## Step 1: Create SendGrid Account
 
@@ -14,7 +14,7 @@ Set up professional email sending from `noreply@homerconnect.com` using SendGrid
 1. In SendGrid Dashboard, go to **Settings → Sender Authentication**
 2. Click **Authenticate Your Domain**
 3. Select your DNS provider (Cloudflare)
-4. Enter domain: `homerconnect.com`
+4. Enter domain: `homerenrichment.com`
 5. SendGrid will provide DNS records to add
 
 ### DNS Records to Add (via Cloudflare):
@@ -22,7 +22,7 @@ Set up professional email sending from `noreply@homerconnect.com` using SendGrid
 ```
 Type    Name                    Value
 ----    ----                    -----
-CNAME   em1234.homerconnect.com sendgrid.net
+CNAME   em1234.homerenrichment.com sendgrid.net
 CNAME   s1._domainkey           s1.domainkey.u1234.wl.sendgrid.net
 CNAME   s2._domainkey           s2.domainkey.u1234.wl.sendgrid.net
 ```
@@ -46,10 +46,10 @@ firebase ext:install firebase/firestore-send-email --project=kbe-website
 During installation, configure:
 - **SMTP connection URI**: Leave empty (we'll use API key)
 - **SendGrid API Key**: Paste your SendGrid API key
-- **Default FROM address**: `noreply@homerconnect.com`
+- **Default FROM address**: `noreply@homerenrichment.com`
 - **Default FROM name**: `Homer Enrichment Hub`
 - **Email documents collection**: `mail`
-- **Default reply-to address**: `info@homerconnect.com` (or your preferred)
+- **Default reply-to address**: `info@homerenrichment.com` (or your preferred)
 
 ## Step 5: Update Email Templates
 
@@ -92,7 +92,7 @@ export async function sendMagicLinkEmail(email: string, link: string, userName?:
 1. Go to Firebase Console → Authentication → Templates
 2. For each template:
    - Update **Sender name**: `Homer Enrichment Hub`
-   - Update **From**: `noreply@homerconnect.com`
+   - Update **From**: `noreply@homerenrichment.com`
    - Keep the action URL as is
 
 ## Step 7: Test Email Delivery
@@ -101,7 +101,7 @@ export async function sendMagicLinkEmail(email: string, link: string, userName?:
 2. Check email headers for:
    - SPF: `pass`
    - DKIM: `pass`
-   - From domain: `homerconnect.com`
+   - From domain: `homerenrichment.com`
 
 ## Step 8: Monitor Email Performance
 

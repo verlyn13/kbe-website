@@ -35,7 +35,7 @@ The domain `kbe-website--kbe-website.us-central1.hosted.app` is missing from you
 ## Quick Test
 After checking these settings, test authentication from:
 1. https://kbe-website--kbe-website.us-central1.hosted.app (App Hosting URL)
-2. https://homerconnect.com (Custom domain)
+2. https://homerenrichment.com (Custom domain)
 
 ## Most Common Culprits:
 1. **Sign-up quota exceeded** - Check and increase limit

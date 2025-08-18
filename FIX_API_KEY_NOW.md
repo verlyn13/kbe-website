@@ -28,7 +28,7 @@ If you want to use "Selected APIs" later, you MUST include these:
 
 ## Test Authentication
 1. https://kbe-website--kbe-website.us-central1.hosted.app
-2. https://homerconnect.com (once DNS propagates)
+2. https://homerenrichment.com (once DNS propagates)
 
 ## Important Notes
 - "Application restrictions: None" is fine temporarily

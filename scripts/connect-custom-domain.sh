@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🌐 Connecting homerconnect.com to Firebase App Hosting"
+echo "🌐 Connecting homerenrichment.com to Firebase App Hosting"
 echo "===================================================="
 echo ""
 
@@ -16,7 +16,7 @@ echo "==========================================="
 echo "1. Go to: https://console.firebase.google.com/project/kbe-website/apphosting"
 echo "2. Click on 'kbe-website' backend"
 echo "3. Click 'Add custom domain'"
-echo "4. Enter: homerconnect.com"
+echo "4. Enter: homerenrichment.com"
 echo "5. Follow the DNS verification steps"
 echo ""
 
@@ -24,7 +24,7 @@ echo "Option 2: Via Command Line"
 echo "========================="
 echo "Run this command:"
 echo ""
-echo "firebase apphosting:domains:create homerconnect.com --backend kbe-website"
+echo "firebase apphosting:domains:create homerenrichment.com --backend kbe-website"
 echo ""
 
 echo "DNS Records You'll Need:"
@@ -36,7 +36,7 @@ echo ""
 
 echo "Current DNS Status:"
 echo "=================="
-dig homerconnect.com A +short
+dig homerenrichment.com A +short
 
 echo ""
 echo "Note: Since you already have DNS pointing to Firebase Hosting IPs,"

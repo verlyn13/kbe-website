@@ -1,6 +1,6 @@
-# Add homerconnect.com to Firebase Auth Authorized Domains
+# Add homerenrichment.com to Firebase Auth Authorized Domains
 
-Since homerconnect.com is connected in Firebase Hosting, you just need to authorize it for Authentication.
+Since homerenrichment.com is connected in Firebase Hosting, you just need to authorize it for Authentication.
 
 ## Steps to Fix Magic Link Error:
 
@@ -13,7 +13,7 @@ Since homerconnect.com is connected in Firebase Hosting, you just need to author
    - kbe-website.web.app
 
 3. **Click "Add domain" and add**:
-   - `homerconnect.com`
+   - `homerenrichment.com`
 
 4. **That's it!** Magic links should now work immediately.
 
@@ -28,12 +28,12 @@ Even though the domain is connected for hosting, Auth is a separate service that
 
 ## Test Magic Link:
 
-After adding the domain, test at: https://homerconnect.com
+After adding the domain, test at: https://homerenrichment.com
 
 The magic link should now:
 1. Send successfully
-2. Redirect back to homerconnect.com
+2. Redirect back to homerenrichment.com
 3. Sign you in properly
 
 ## Note:
-The auth domain in your Firebase config (NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN) should remain as `homerconnect.com` as you have it set in .env.local.
+The auth domain in your Firebase config (NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN) should remain as `homerenrichment.com` as you have it set in .env.local.

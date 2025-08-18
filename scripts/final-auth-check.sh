@@ -42,7 +42,7 @@ TEST_EMAIL="test-$(date +%s)@example.com"
 echo "Creating test account with magic link..."
 RESPONSE=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$API_KEY" \
   -H "Content-Type: application/json" \
-  -H "Referer: https://homerconnect.com" \
+  -H "Referer: https://homerenrichment.com" \
   -d "{\"email\":\"$TEST_EMAIL\",\"password\":\"$(openssl rand -base64 12)\",\"returnSecureToken\":true}" 2>&1)
 
 if echo "$RESPONSE" | grep -q "idToken"; then

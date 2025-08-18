@@ -69,8 +69,8 @@ export function LegalFooter() {
               <div className="text-muted-foreground">
                 <p>
                   Email us at<br />
-                  <a href="mailto:info@homerconnect.com" className="hover:text-primary transition-colors">
-                    info@homerconnect.com
+                  <a href="mailto:info@homerenrichment.com" className="hover:text-primary transition-colors">
+                    info@homerenrichment.com
                   </a>
                 </p>
               </div>

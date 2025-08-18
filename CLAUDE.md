@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Homer Enrichment Hub (HEH) is a registration and information gateway for enrichment programs in Homer, Alaska. Built with Next.js 15, TypeScript, and Firebase Auth.
 
-**IMPORTANT MIGRATION**: This project is migrating from homerconnect.com to homerenrichment.com. See CLOUDFLARE_MIGRATION.md for details.
+**IMPORTANT MIGRATION**: This project is migrating from homerenrichment.com to homerenrichment.com. See CLOUDFLARE_MIGRATION.md for details.
 
 ## Infrastructure Management
 
@@ -46,7 +46,7 @@ ds status                            # Check all repo statuses
 ```
 
 ### Zone Information
-- **Domain**: homerenrichment.com (migrating from homerconnect.com)
+- **Domain**: homerenrichment.com (migrating from homerenrichment.com)
 - **Zone ID**: 7a95b1a3db5d14d1292fd04b9007ba32
 - **Account ID**: 13eb584192d9cefb730fde0cfd271328
 - **Subdomains**: kbe.homerenrichment.com (main site)
@@ -178,10 +178,10 @@ These MUST remain in `dependencies` because Firebase App Hosting only installs p
 - Don't add custom webpack configs to next.config.js
 - Development server runs on port 9002
 
-## Domain Migration: homerconnect.com → homerenrichment.com
+## Domain Migration: homerenrichment.com → homerenrichment.com
 
 ### Current Status
-- 56 files reference homerconnect.com
+- 56 files reference homerenrichment.com
 - Migration script available: `./migrate-domain.sh`
 - Full guide: `CLOUDFLARE_MIGRATION.md`
 

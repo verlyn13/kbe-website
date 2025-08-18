@@ -166,8 +166,8 @@ export const emailTemplates = {
         Enriching young minds in Homer, Alaska
       </p>
       <p style="margin-top: 15px;">
-        <a href="https://homerconnect.com">Visit our website</a> • 
-        <a href="mailto:support@homerconnect.com">Contact Support</a>
+        <a href="https://homerenrichment.com">Visit our website</a> • 
+        <a href="mailto:support@homerenrichment.com">Contact Support</a>
       </p>
       <p style="margin-top: 15px; font-size: 12px; color: #999;">
         This email was sent by Homer Enrichment Hub. 
@@ -194,8 +194,8 @@ Security Note: This is a secure, one-time sign-in link. If you didn't request th
 © ${new Date().getFullYear()} Homer Enrichment Hub
 Enriching young minds in Homer, Alaska
 
-Visit our website: https://homerconnect.com
-Contact Support: support@homerconnect.com
+Visit our website: https://homerenrichment.com
+Contact Support: support@homerenrichment.com
 
 This email was sent by Homer Enrichment Hub. Please do not reply to this email as this mailbox is not monitored.
     `
@@ -300,7 +300,7 @@ This email was sent by Homer Enrichment Hub. Please do not reply to this email a
       </div>
       
       <div style="text-align: center; margin-top: 40px;">
-        <a href="https://homerconnect.com/dashboard" style="display: inline-block; padding: 16px 32px; background-color: #008080; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600;">
+        <a href="https://homerenrichment.com/dashboard" style="display: inline-block; padding: 16px 32px; background-color: #008080; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600;">
           Go to Your Dashboard
         </a>
       </div>
@@ -335,7 +335,7 @@ We're excited to have you join the Homer Enrichment Hub community! Here's what y
 👥 Manage Your Profile
    Keep your contact information current and manage your preferences
 
-Visit your dashboard: https://homerconnect.com/dashboard
+Visit your dashboard: https://homerenrichment.com/dashboard
 
 ---
 © ${new Date().getFullYear()} Homer Enrichment Hub

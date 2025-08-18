@@ -1,10 +1,10 @@
-# Setting Up homerconnect.com with Firebase
+# Setting Up homerenrichment.com with Firebase
 
 This guide walks through configuring your custom domain for Firebase Hosting and Authentication.
 
 ## Benefits of Using Custom Domain
 
-1. **Professional magic links**: `https://homerconnect.com/__/auth/action` instead of `kbe-website.firebaseapp.com`
+1. **Professional magic links**: `https://homerenrichment.com/__/auth/action` instead of `kbe-website.firebaseapp.com`
 2. **Better branding**: Users see your domain in emails and browser
 3. **Trust**: Users more likely to click links from recognized domain
 4. **SEO**: Better for search engine optimization
@@ -23,18 +23,18 @@ Or via Console:
 
 1. Go to [Firebase Console → Hosting](https://console.firebase.google.com/project/kbe-website/hosting/sites)
 2. Click "Add custom domain"
-3. Enter `homerconnect.com`
+3. Enter `homerenrichment.com`
 4. Follow verification steps
 
 ### 2. DNS Configuration with Cloudflare
 
 Since you're using Cloudflare, here's the specific setup:
 
-**For root domain (homerconnect.com):**
+**For root domain (homerenrichment.com):**
 
 ```text
 Type: A
-Name: @ (or homerconnect.com)
+Name: @ (or homerenrichment.com)
 Value: [Firebase will provide IP, typically 151.101.1.195 and 151.101.65.195]
 Proxy status: DNS only (gray cloud) - IMPORTANT!
 ```text
@@ -43,7 +43,7 @@ Proxy status: DNS only (gray cloud) - IMPORTANT!
 ```text
 Type: CNAME
 Name: www
-Value: homerconnect.com
+Value: homerenrichment.com
 Proxy status: DNS only (gray cloud)
 ```text
 **⚠️ IMPORTANT Cloudflare Settings:**
@@ -58,7 +58,7 @@ Proxy status: DNS only (gray cloud)
    - Do NOT use "Flexible" - it will cause redirect loops
 
 3. **Page Rules** (if needed):
-   - Disable "Always Use HTTPS" for `homerconnect.com/__/auth/*`
+   - Disable "Always Use HTTPS" for `homerenrichment.com/__/auth/*`
    - Firebase handles HTTPS redirects
 
 ### 3. SSL Certificate
@@ -73,22 +73,22 @@ Once domain is connected, update your configuration:
 
 #### A. Update .env.local
 ```bash
-NEXT_PUBLIC_APP_URL=https://homerconnect.com
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=homerconnect.com
+NEXT_PUBLIC_APP_URL=https://homerenrichment.com
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=homerenrichment.com
 ```bash
 #### B. Update ActionCodeSettings in login-form.tsx
 ```javascript
 const actionCodeSettings = {
-  url: 'https://homerconnect.com/',
+  url: 'https://homerenrichment.com/',
   handleCodeInApp: true,
   // Optional: specify if you want to use custom domain for links
-  dynamicLinkDomain: 'homerconnect.com',
+  dynamicLinkDomain: 'homerenrichment.com',
 };
 ```bash
 #### C. Add to Authorized Domains
 1. Go to [Firebase Console → Authentication → Settings](https://console.firebase.google.com/project/kbe-website/authentication/settings)
-2. Add `homerconnect.com` to Authorized domains
-3. Add `www.homerconnect.com` if using www subdomain
+2. Add `homerenrichment.com` to Authorized domains
+3. Add `www.homerenrichment.com` if using www subdomain
 
 ### 5. Update firebase.json (Optional)
 
@@ -108,23 +108,23 @@ If you want to specify the custom domain in config:
 ### 1. Verify Domain Connection
 ```bash
 firebase hosting:sites:list
-# Should show homerconnect.com as connected
+# Should show homerenrichment.com as connected
 ```bash
 ### 2. Test Magic Links
 ```bash
 npm run debug:magic-link
-# Update the script to use homerconnect.com
+# Update the script to use homerenrichment.com
 ```bash
 ### 3. Check DNS Propagation
 ```bash
 # Check A records
-dig homerconnect.com
+dig homerenrichment.com
 
 # Check CNAME
-dig www.homerconnect.com
+dig www.homerenrichment.com
 
 # Test HTTPS
-curl -I https://homerconnect.com
+curl -I https://homerenrichment.com
 ```bash
 ## Timeline
 
@@ -139,7 +139,7 @@ curl -I https://homerconnect.com
 
 - Ensure proxy is OFF (gray cloud) in Cloudflare DNS
 - Firebase can't verify domain through Cloudflare proxy
-- Check: `dig homerconnect.com` should show Firebase IPs, not Cloudflare IPs
+- Check: `dig homerenrichment.com` should show Firebase IPs, not Cloudflare IPs
 
 **SSL Certificate errors:**
 
@@ -169,7 +169,7 @@ curl -I https://homerconnect.com
 
 ```bash
 # Check if pointing to Firebase (not Cloudflare)
-dig homerconnect.com
+dig homerenrichment.com
 # Should show 151.101.x.x IPs, not 104.x.x.x (Cloudflare)
 
 # Force DNS refresh
@@ -177,9 +177,9 @@ sudo dscacheutil -flushcache  # macOS
 ```bash
 ## Current Setup vs. Custom Domain
 
-| Feature          | Current (firebaseapp.com)                    | With homerconnect.com             |
+| Feature          | Current (firebaseapp.com)                    | With homerenrichment.com             |
 | ---------------- | -------------------------------------------- | --------------------------------- |
-| Magic link URL   | `kbe-website.firebaseapp.com/__/auth/action` | `homerconnect.com/__/auth/action` |
+| Magic link URL   | `kbe-website.firebaseapp.com/__/auth/action` | `homerenrichment.com/__/auth/action` |
 | User trust       | Lower (generic domain)                       | Higher (your domain)              |
 | Branding         | Firebase branded                             | Your brand                        |
 | Setup complexity | None (works out of box)                      | Requires DNS setup                |
@@ -187,7 +187,7 @@ sudo dscacheutil -flushcache  # macOS
 
 ## Next Steps
 
-1. **Decision**: Use homerconnect.com for production, keep firebaseapp.com for development
+1. **Decision**: Use homerenrichment.com for production, keep firebaseapp.com for development
 2. **Staging**: Test thoroughly on firebaseapp.com first
 3. **Migration**: Update all configurations when ready
 4. **Monitor**: Check Firebase Console for domain status

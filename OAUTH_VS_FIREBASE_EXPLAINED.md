@@ -19,7 +19,7 @@ You found it! In the OAuth Branding page, you only have:
 - `kbe-website.firebaseapp.com`
 
 But you NEED to add:
-- `homerconnect.com`
+- `homerenrichment.com`
 - `kbe-website--kbe-website.us-central1.hosted.app`
 
 ## How to Add Authorized Domains
@@ -28,12 +28,12 @@ But you NEED to add:
 2. In the "Authorized domains" section
 3. Click "ADD DOMAIN"
 4. Add these domains:
-   - `homerconnect.com`
+   - `homerenrichment.com`
    - `kbe-website--kbe-website.us-central1.hosted.app`
 
 ## Why This Matters
 
-When someone tries to sign in with Google from `homerconnect.com`, Google checks:
+When someone tries to sign in with Google from `homerenrichment.com`, Google checks:
 1. Is this domain authorized in OAuth settings? (Currently NO)
 2. Is the developer contact email set? (Currently NO)
 

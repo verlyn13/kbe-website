@@ -40,7 +40,7 @@ While you're in IAM, make sure these service accounts exist:
 ## TEST IMMEDIATELY
 Once you're added as owner, test at:
 - https://kbe-website--kbe-website.us-central1.hosted.app
-- https://homerconnect.com
+- https://homerenrichment.com
 
 The auth should start working right away!
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🔧 Fixing homerconnect.com Domain Connection"
+echo "🔧 Fixing homerenrichment.com Domain Connection"
 echo "=========================================="
 echo ""
 
@@ -39,7 +39,7 @@ echo "1. Go to: https://console.firebase.google.com/project/kbe-website/apphosti
 echo "2. Click on 'kbe-website' backend"
 echo "3. Click 'Settings' or 'Domains' tab"
 echo "4. Click 'Add custom domain'"
-echo "5. Enter: homerconnect.com"
+echo "5. Enter: homerenrichment.com"
 echo "6. Follow the DNS instructions provided"
 echo ""
 
@@ -66,14 +66,14 @@ echo "2. Edit the Browser API key (AIzaSyBhTEs3Uxq_KBLBzbzIL2VB4Ao_DBw9faM)"
 echo "3. Under 'Application restrictions', temporarily set to 'None'"
 echo "4. Save and wait 5 minutes"
 echo "5. After testing works, add HTTP referrers:"
-echo "   - https://homerconnect.com/*"
-echo "   - https://www.homerconnect.com/*"
+echo "   - https://homerenrichment.com/*"
+echo "   - https://www.homerenrichment.com/*"
 echo "   - https://kbe-website--kbe-website.us-central1.hosted.app/*"
 echo ""
 
 echo "Current DNS Status:"
 echo "------------------"
-dig homerconnect.com A +short
+dig homerenrichment.com A +short
 
 echo ""
 echo "App Hosting URL (working):"

@@ -4,7 +4,7 @@
 
 ### 1. Log into Cloudflare
 - Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
-- Select your domain: `homerconnect.com`
+- Select your domain: `homerenrichment.com`
 - Click on "DNS" in the left sidebar
 
 ### 2. Add Each CNAME Record
@@ -13,7 +13,7 @@ For each CNAME record below, click "Add record" and enter:
 
 #### Record 1 - Link Tracking
 - **Type**: CNAME
-- **Name**: `url3778` (Cloudflare will append .homerconnect.com)
+- **Name**: `url3778` (Cloudflare will append .homerenrichment.com)
 - **Target**: `sendgrid.net`
 - **Proxy status**: DNS only (gray cloud)
 - **TTL**: Auto

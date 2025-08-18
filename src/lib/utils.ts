@@ -30,5 +30,5 @@ export function getAppUrl() {
       : 'http://localhost:9002';
   }
   // In production, use the configured URL
-  return process.env.NEXT_PUBLIC_APP_URL || 'https://homerconnect.com';
+  return process.env.NEXT_PUBLIC_APP_URL || 'https://homerenrichment.com';
 }

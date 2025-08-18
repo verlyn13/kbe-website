@@ -1,0 +1,56 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+export default function DebugAnnouncementsPage() {
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadAllAnnouncements();
+  }, []);
+
+  async function loadAllAnnouncements() {
+    try {
+      // Get ALL announcements without any filters
+      const snapshot = await getDocs(collection(db, 'announcements'));
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        _raw: JSON.stringify(doc.data(), null, 2)
+      }));
+      setAnnouncements(data);
+      console.log('All announcements:', data);
+    } catch (error) {
+      console.error('Error loading announcements:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Debug: All Announcements ({announcements.length})</h1>
+      
+      <div className="space-y-4">
+        {announcements.map((announcement) => (
+          <Card key={announcement.id}>
+            <CardHeader>
+              <CardTitle>ID: {announcement.id}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre className="bg-gray-100 p-4 rounded overflow-auto text-xs">
+                {announcement._raw}
+              </pre>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}

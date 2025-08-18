@@ -27,7 +27,7 @@ function getTemplateId(key: string): string | undefined {
 
 // Default from address
 const DEFAULT_FROM = {
-  email: 'noreply@homerconnect.com',
+  email: 'noreply@homerenrichment.com',
   name: 'Homer Enrichment Hub',
 };
 
@@ -117,7 +117,7 @@ export async function sendWelcomeEmail(
     templateKey: 'welcome',
     dynamicData: {
       firstName,
-      dashboardUrl: 'https://homerconnect.com/dashboard',
+      dashboardUrl: 'https://homerenrichment.com/dashboard',
     },
     categories: ['onboarding', 'welcome'],
   });
@@ -158,7 +158,7 @@ export async function sendAnnouncementEmail(
       firstName,
       announcementTitle: title,
       announcementContent: content,
-      announcementUrl: 'https://homerconnect.com/announcements',
+      announcementUrl: 'https://homerenrichment.com/announcements',
     },
     categories: ['announcement'],
     customArgs: {
@@ -187,7 +187,7 @@ export async function sendRegistrationConfirmationEmail(
     templateKey: 'registrationConfirmation',
     dynamicData: {
       ...data,
-      dashboardUrl: 'https://homerconnect.com/dashboard',
+      dashboardUrl: 'https://homerenrichment.com/dashboard',
     },
     categories: ['registration', 'confirmation'],
     customArgs: {

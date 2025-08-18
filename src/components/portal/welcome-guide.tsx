@@ -148,8 +148,8 @@ export function WelcomeGuide() {
         <div className="flex items-center justify-between pt-2">
           <p className="text-sm text-muted-foreground">
             Need help? Contact us at{' '}
-            <a href="mailto:info@homerconnect.com" className="text-primary hover:underline">
-              info@homerconnect.com
+            <a href="mailto:info@homerenrichment.com" className="text-primary hover:underline">
+              info@homerenrichment.com
             </a>
           </p>
           <Button variant="outline" size="sm" onClick={dismissGuide}>

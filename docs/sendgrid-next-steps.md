@@ -51,7 +51,7 @@
 async function sendTemplatedEmail(to: string, templateId: string, dynamicData: any) {
   const msg = {
     to,
-    from: 'noreply@homerconnect.com',
+    from: 'noreply@homerenrichment.com',
     templateId,
     dynamicTemplateData: dynamicData,
   };
@@ -91,7 +91,7 @@ Since you're just starting, keep it simple. Implement this after you have regula
 // Future implementation
 const msg = {
   to: userEmail,
-  from: 'noreply@homerconnect.com',
+  from: 'noreply@homerenrichment.com',
   templateId: 'announcement-template',
   asm: {
     groupId: 12345, // Announcements group
@@ -111,7 +111,7 @@ const msg = {
 
 ### Quick Setup:
 1. **Go to**: Settings → Mail Settings → Event Webhook
-2. **Set webhook URL**: `https://homerconnect.com/api/webhooks/sendgrid`
+2. **Set webhook URL**: `https://homerenrichment.com/api/webhooks/sendgrid`
 3. **Select events to track**:
    - ✅ Delivered
    - ✅ Opened

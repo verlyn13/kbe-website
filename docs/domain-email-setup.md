@@ -1,6 +1,6 @@
 # Custom Domain and Email Setup Guide
 
-## 1. Custom Domain Setup (homerconnect.com)
+## 1. Custom Domain Setup (homerenrichment.com)
 
 ### DNS Records Required
 
@@ -18,7 +18,7 @@ TXT     @       google-site-verification=...    3600
 
 1. Go to Firebase Console → Hosting
 2. Click "Add custom domain"
-3. Enter `homerconnect.com`
+3. Enter `homerenrichment.com`
 4. Add the DNS records shown
 5. Verify ownership (usually via TXT record)
 6. Wait for SSL certificate provisioning (can take up to 24 hours)
@@ -27,10 +27,10 @@ TXT     @       google-site-verification=...    3600
 
 ```bash
 # Check A records
-dig homerconnect.com A
+dig homerenrichment.com A
 
 # Check if site is accessible
-curl -I https://homerconnect.com
+curl -I https://homerenrichment.com
 ```
 
 ## 2. Custom Email Domain Setup
@@ -73,20 +73,20 @@ TXT     _dmarc            v=DMARC1; p=none;                      -
 1. Go to Firebase Console → Authentication → Templates
 2. Customize the email template
 3. Update sender name: "Homer Enrichment Hub"
-4. Update sender email: "noreply@homerconnect.com"
+4. Update sender email: "noreply@homerenrichment.com"
 
 ### Custom Action URL
 
 Update the action URL in Firebase:
 ```
-https://homerconnect.com/__/auth/action
+https://homerenrichment.com/__/auth/action
 ```
 
 ## 4. Testing
 
 1. **Test domain access**:
    ```bash
-   curl https://homerconnect.com
+   curl https://homerenrichment.com
    ```
 
 2. **Test email delivery**:
@@ -116,7 +116,7 @@ https://homerconnect.com/__/auth/action
 
 Update `.env.local`:
 ```
-NEXT_PUBLIC_APP_URL=https://homerconnect.com
+NEXT_PUBLIC_APP_URL=https://homerenrichment.com
 ```
 
 Update Firebase authentication settings to use custom domain for redirect URLs.
@@ -137,8 +137,8 @@ When you get the error: `auth/requests-to-this-api-identitytoolkit-method-are-bl
 ### Secure Fix (After Testing):
 1. Change "Application restrictions" back to "HTTP referrers"
 2. Add these referrers:
-   - `https://homerconnect.com/*`
-   - `https://www.homerconnect.com/*`
-   - `https://*.homerconnect.com/*`
+   - `https://homerenrichment.com/*`
+   - `https://www.homerenrichment.com/*`
+   - `https://*.homerenrichment.com/*`
    - `http://localhost:*`
 3. Save and test again

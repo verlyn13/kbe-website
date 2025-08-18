@@ -122,8 +122,8 @@ const footerHtml = `
       Homer, Alaska
     </p>
     <p style="margin: 10px 0;">
-      <a href="https://homerconnect.com" style="color: #006666; text-decoration: underline;">Visit our website</a> |
-      <a href="https://homerconnect.com/contact" style="color: #006666; text-decoration: underline;">Contact us</a>
+      <a href="https://homerenrichment.com" style="color: #006666; text-decoration: underline;">Visit our website</a> |
+      <a href="https://homerenrichment.com/contact" style="color: #006666; text-decoration: underline;">Contact us</a>
     </p>
     <p style="margin: 10px 0 0 0; font-size: 12px; color: #999;">
       © {{currentYear}} Homer Enrichment Hub. All rights reserved.<br>
@@ -249,7 +249,7 @@ Homer, Alaska
         <li>Technical issues with your account</li>
         <li>General inquiries about our offerings</li>
       </ul>
-      <p>Feel free to reach out at <a href="mailto:info@homerconnect.com" style="color: #008080;">info@homerconnect.com</a></p>
+      <p>Feel free to reach out at <a href="mailto:info@homerenrichment.com" style="color: #008080;">info@homerenrichment.com</a></p>
       
       <div class="divider"></div>
       
@@ -283,7 +283,7 @@ CURRENT PROGRAMS INCLUDE:
 • And much more!
 
 NEED HELP?
-We're here to support you! If you have any questions, feel free to reach out at info@homerconnect.com
+We're here to support you! If you have any questions, feel free to reach out at info@homerenrichment.com
 
 "Empowering young minds to explore, discover, and grow in the beautiful setting of Homer, Alaska."
 
@@ -454,7 +454,7 @@ Homer, Alaska
       
       <p>We're looking forward to having {{studentName}} join us!</p>
       
-      <p>If you have any questions about the program, please don't hesitate to reach out to us at <a href="mailto:info@homerconnect.com" style="color: #008080;">info@homerconnect.com</a>.</p>
+      <p>If you have any questions about the program, please don't hesitate to reach out to us at <a href="mailto:info@homerenrichment.com" style="color: #008080;">info@homerenrichment.com</a>.</p>
     </div>
     ${footerHtml}
   </div>
@@ -483,7 +483,7 @@ View registration details: {{dashboardUrl}}
 
 We're looking forward to having {{studentName}} join us!
 
-If you have any questions about the program, please don't hesitate to reach out to us at info@homerconnect.com.
+If you have any questions about the program, please don't hesitate to reach out to us at info@homerenrichment.com.
 
 Homer Enrichment Hub
 Formerly Kachemak Bay Explorers
@@ -497,24 +497,24 @@ Homer, Alaska
 export const templateTestData: Record<string, any> = {
   magicLink: {
     firstName: 'Sarah',
-    magicLinkUrl: 'https://homerconnect.com/__/auth/action?mode=signIn&oobCode=abc123',
+    magicLinkUrl: 'https://homerenrichment.com/__/auth/action?mode=signIn&oobCode=abc123',
     currentYear: new Date().getFullYear()
   },
   welcome: {
     firstName: 'Sarah',
-    dashboardUrl: 'https://homerconnect.com/dashboard',
+    dashboardUrl: 'https://homerenrichment.com/dashboard',
     currentYear: new Date().getFullYear()
   },
   passwordReset: {
     firstName: 'Sarah',
-    resetUrl: 'https://homerconnect.com/__/auth/action?mode=resetPassword&oobCode=abc123',
+    resetUrl: 'https://homerenrichment.com/__/auth/action?mode=resetPassword&oobCode=abc123',
     currentYear: new Date().getFullYear()
   },
   announcement: {
     firstName: 'Sarah',
     announcementTitle: 'Spring Registration Now Open',
     announcementContent: '<p>We\'re excited to announce that registration for our Spring 2025 programs is now open!</p><p>Visit your dashboard to see all available programs and register your students.</p>',
-    announcementUrl: 'https://homerconnect.com/announcements',
+    announcementUrl: 'https://homerenrichment.com/announcements',
     currentYear: new Date().getFullYear()
   },
   registrationConfirmation: {
@@ -525,7 +525,7 @@ export const templateTestData: Record<string, any> = {
     programName: 'MathCounts Competition Team',
     startDate: 'January 15, 2025',
     schedule: 'Tuesdays and Thursdays, 4:00-5:30 PM',
-    dashboardUrl: 'https://homerconnect.com/dashboard',
+    dashboardUrl: 'https://homerenrichment.com/dashboard',
     currentYear: new Date().getFullYear()
   }
 };

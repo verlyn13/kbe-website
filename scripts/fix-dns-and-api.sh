@@ -30,8 +30,8 @@ echo "Under 'Application restrictions':"
 echo "- Keep it as 'HTTP referrers'"
 echo "- Add these referrers:"
 echo "  • https://kbe-website--kbe-website.us-central1.hosted.app/*"
-echo "  • https://homerconnect.com/*"
-echo "  • https://www.homerconnect.com/*"
+echo "  • https://homerenrichment.com/*"
+echo "  • https://www.homerenrichment.com/*"
 echo "  • http://localhost:*"
 echo "  • http://localhost:9002/*"
 echo ""
@@ -40,14 +40,14 @@ echo ""
 
 echo "3. CURRENT DNS STATUS"
 echo "--------------------"
-dig homerconnect.com A +short
+dig homerenrichment.com A +short
 
 echo ""
 echo "4. TEST AUTHENTICATION"
 echo "---------------------"
 echo "After fixing DNS and API key, test at:"
 echo "1. https://kbe-website--kbe-website.us-central1.hosted.app (should work immediately)"
-echo "2. https://homerconnect.com (after DNS propagates)"
+echo "2. https://homerenrichment.com (after DNS propagates)"
 echo ""
 
 echo "5. CHECK API KEY STATUS"

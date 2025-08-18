@@ -60,7 +60,7 @@ async function testMagicLink() {
     {
       name: 'Custom Domain from .env',
       settings: {
-        url: process.env.NEXT_PUBLIC_APP_URL || 'https://homerconnect.com/',
+        url: process.env.NEXT_PUBLIC_APP_URL || 'https://homerenrichment.com/',
         handleCodeInApp: true,
       },
     },

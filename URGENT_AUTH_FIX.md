@@ -20,7 +20,7 @@ Under "Authorized domains", you MUST have:
 - `localhost`
 - `kbe-website.firebaseapp.com`
 - `kbe-website--kbe-website.us-central1.hosted.app`
-- `homerconnect.com`
+- `homerenrichment.com`
 
 Click "Add domain" if any are missing.
 

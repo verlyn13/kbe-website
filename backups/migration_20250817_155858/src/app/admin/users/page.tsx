@@ -1,0 +1,464 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useAdmin } from '@/hooks/use-admin';
+import { useToast } from '@/hooks/use-toast';
+import { profileService, adminService, Profile, AdminUser } from '@/lib/firebase-admin';
+import { 
+  Search, 
+  Shield, 
+  ShieldOff,
+  Trash2,
+  MoreVertical,
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  AlertCircle,
+  FileCheck,
+  Users
+} from 'lucide-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { formatPhoneNumber } from '@/lib/utils';
+
+interface UserWithProfile extends Profile {
+  isAdmin?: boolean;
+  adminRole?: 'admin' | 'superAdmin';
+}
+
+export default function UserManagementPage() {
+  const { hasPermission, admin: currentAdmin } = useAdmin();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<UserWithProfile[]>([]);
+  const [admins, setAdmins] = useState<AdminUser[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
+  const [deleteUserName, setDeleteUserName] = useState<string>('');
+
+  useEffect(() => {
+    if (hasPermission('manage_settings')) {
+      loadUsers();
+    }
+  }, [hasPermission]);
+
+  async function loadUsers() {
+    try {
+      setLoading(true);
+      
+      // Load all user profiles
+      const [profiles, adminList] = await Promise.all([
+        profileService.getAll(),
+        adminService.getAll()
+      ]);
+      
+      // Merge admin status with user profiles
+      const adminIds = new Set(adminList.map(a => a.id));
+      const adminRoles = Object.fromEntries(adminList.map(a => [a.id, a.role]));
+      
+      const usersWithAdminStatus = profiles.map(profile => ({
+        ...profile,
+        isAdmin: adminIds.has(profile.userId),
+        adminRole: adminRoles[profile.userId] as 'admin' | 'superAdmin' | undefined
+      }));
+      
+      setUsers(usersWithAdminStatus);
+      setAdmins(adminList);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load users',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDeleteUser(userId: string) {
+    try {
+      // Delete user profile
+      await profileService.delete(userId);
+      
+      // If user is admin, remove admin access
+      if (admins.some(a => a.id === userId)) {
+        await adminService.delete(userId);
+      }
+      
+      toast({
+        title: 'User deleted',
+        description: 'The user has been removed from the system',
+      });
+      
+      // Reload users
+      loadUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete user',
+        variant: 'destructive',
+      });
+    } finally {
+      setDeleteUserId(null);
+    }
+  }
+
+  async function handleToggleAdmin(user: UserWithProfile) {
+    try {
+      if (user.isAdmin) {
+        // Remove admin access
+        await adminService.delete(user.userId);
+        toast({
+          title: 'Admin access removed',
+          description: `${user.displayName} is no longer an admin`,
+        });
+      } else {
+        // Grant admin access
+        const newAdmin: Omit<AdminUser, 'id' | 'createdAt'> = {
+          email: user.email,
+          name: user.displayName || user.email,
+          role: 'admin',
+          permissions: [
+            'view_dashboard',
+            'manage_registrations',
+            'send_announcements',
+            'manage_programs',
+            'view_reports'
+          ],
+        };
+        
+        await adminService.create(user.userId, newAdmin);
+        toast({
+          title: 'Admin access granted',
+          description: `${user.displayName} is now an admin`,
+        });
+      }
+      
+      // Reload users
+      loadUsers();
+    } catch (error) {
+      console.error('Error toggling admin status:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update admin status',
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function handleToggleSuperAdmin(user: UserWithProfile) {
+    try {
+      if (user.adminRole === 'superAdmin') {
+        // Demote to regular admin
+        await adminService.update(user.userId, { role: 'admin' });
+        toast({
+          title: 'Super admin access removed',
+          description: `${user.displayName} is now a regular admin`,
+        });
+      } else {
+        // Promote to super admin
+        await adminService.update(user.userId, { 
+          role: 'superAdmin',
+          permissions: ['all']
+        });
+        toast({
+          title: 'Super admin access granted',
+          description: `${user.displayName} is now a super admin`,
+        });
+      }
+      
+      // Reload users
+      loadUsers();
+    } catch (error) {
+      console.error('Error toggling super admin status:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update super admin status',
+        variant: 'destructive',
+      });
+    }
+  }
+
+  const filteredUsers = users.filter(user => 
+    user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.phone?.includes(searchQuery.replace(/\D/g, ''))
+  );
+
+  if (!hasPermission('manage_settings')) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-muted-foreground">You don't have permission to manage users.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-64" />
+        <Skeleton className="h-64" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">User Management</h1>
+        <p className="text-muted-foreground">
+          Manage user accounts and admin access
+        </p>
+      </div>
+
+      {/* Stats */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <User className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{users.length}</div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Admins</CardTitle>
+            <Shield className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{admins.length}</div>
+            <p className="text-xs text-muted-foreground">
+              {admins.filter(a => a.role === 'superAdmin').length} super admins
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Guardians</CardTitle>
+            <User className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{users.filter(u => !u.isAdmin).length}</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Search */}
+      <Card>
+        <CardHeader>
+          <CardTitle>All Users</CardTitle>
+          <CardDescription>Search and manage user accounts</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search by name, email, or phone..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+          </div>
+
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>User</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Joined</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredUsers.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-muted-foreground">
+                      No users found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredUsers.map((user) => (
+                    <TableRow key={user.userId}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-8 w-8">
+                            <AvatarImage src={user.avatarUrl} />
+                            <AvatarFallback>
+                              {user.displayName?.charAt(0) || user.email.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium">{user.displayName || 'No name'}</p>
+                            <p className="text-sm text-muted-foreground">{user.email}</p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1 text-sm">
+                            <Mail className="h-3 w-3" />
+                            {user.email}
+                          </div>
+                          {user.phone && (
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                              <Phone className="h-3 w-3" />
+                              {formatPhoneNumber(user.phone)}
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {user.isAdmin ? (
+                          <Badge variant={user.adminRole === 'superAdmin' ? 'default' : 'secondary'}>
+                            <Shield className="mr-1 h-3 w-3" />
+                            {user.adminRole === 'superAdmin' ? 'Super Admin' : 'Admin'}
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline">Guardian</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <Calendar className="h-3 w-3" />
+                          {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            
+                            {/* Don't allow users to modify their own admin status */}
+                            {user.userId !== currentAdmin?.id && (
+                              <>
+                                {user.isAdmin ? (
+                                  <>
+                                    <DropdownMenuItem onClick={() => handleToggleAdmin(user)}>
+                                      <ShieldOff className="mr-2 h-4 w-4" />
+                                      Remove Admin Access
+                                    </DropdownMenuItem>
+                                    {user.adminRole === 'admin' && (
+                                      <DropdownMenuItem onClick={() => handleToggleSuperAdmin(user)}>
+                                        <Shield className="mr-2 h-4 w-4" />
+                                        Promote to Super Admin
+                                      </DropdownMenuItem>
+                                    )}
+                                    {user.adminRole === 'superAdmin' && currentAdmin?.role === 'superAdmin' && (
+                                      <DropdownMenuItem onClick={() => handleToggleSuperAdmin(user)}>
+                                        <ShieldOff className="mr-2 h-4 w-4" />
+                                        Demote to Admin
+                                      </DropdownMenuItem>
+                                    )}
+                                  </>
+                                ) : (
+                                  <DropdownMenuItem onClick={() => handleToggleAdmin(user)}>
+                                    <Shield className="mr-2 h-4 w-4" />
+                                    Grant Admin Access
+                                  </DropdownMenuItem>
+                                )}
+                                <DropdownMenuSeparator />
+                              </>
+                            )}
+                            
+                            <DropdownMenuItem 
+                              className="text-destructive"
+                              onClick={() => {
+                                setDeleteUserId(user.userId);
+                                setDeleteUserName(user.displayName || user.email);
+                              }}
+                              disabled={user.userId === currentAdmin?.id}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete User
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteUserId} onOpenChange={(open) => !open && setDeleteUserId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete User</AlertDialogTitle>
+            <AlertDialogDescription>
+              <div className="space-y-3">
+                <p>Are you sure you want to delete <strong>{deleteUserName}</strong>?</p>
+                <div className="flex items-center gap-2 text-amber-600">
+                  <AlertCircle className="h-4 w-4" />
+                  <span className="text-sm">This action cannot be undone.</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  The user's profile and all associated data will be permanently removed.
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteUserId && handleDeleteUser(deleteUserId)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete User
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}

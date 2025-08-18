@@ -7,11 +7,11 @@ authDomain: "kbe-website.firebaseapp.com"
 ```
 
 But you're trying to authenticate from:
-- `homerconnect.com`
+- `homerenrichment.com`
 - `kbe-website--kbe-website.us-central1.hosted.app`
 
 ## This Causes Issues Because:
-When Firebase initiates Google Sign-in, it uses the `authDomain` to handle the OAuth flow. If you're on `homerconnect.com` but the authDomain is `kbe-website.firebaseapp.com`, there's a domain mismatch.
+When Firebase initiates Google Sign-in, it uses the `authDomain` to handle the OAuth flow. If you're on `homerenrichment.com` but the authDomain is `kbe-website.firebaseapp.com`, there's a domain mismatch.
 
 ## Solution Options:
 
@@ -22,7 +22,7 @@ Change your Firebase configuration to use your custom domain:
 // In /src/lib/firebase.ts
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBhTEs3Uxq_KBLBzbzIL2VB4Ao_DBw9faM',
-  authDomain: 'homerconnect.com', // Changed from kbe-website.firebaseapp.com
+  authDomain: 'homerenrichment.com', // Changed from kbe-website.firebaseapp.com
   // ... rest of config
 };
 ```
@@ -41,7 +41,7 @@ await signInWithRedirect(auth, googleProvider);
 1. Go to Firebase Console → Authentication → Settings
 2. Under "Authorized domains", ensure ALL are listed:
    - `kbe-website.firebaseapp.com`
-   - `homerconnect.com`
+   - `homerenrichment.com`
    - `kbe-website--kbe-website.us-central1.hosted.app`
 
 ### Option 4: Use Magic Links (Working Alternative)

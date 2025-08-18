@@ -12,7 +12,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Your verified sender email
-const FROM_EMAIL = 'noreply@homerconnect.com'; // Update this if not verified yet
+const FROM_EMAIL = 'noreply@homerenrichment.com'; // Update this if not verified yet
 
 // Test email
 const msg = {

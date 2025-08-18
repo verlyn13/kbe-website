@@ -33,7 +33,7 @@ The Homer Enrichment Hub Team
 ---
 Homer Enrichment Hub
 Empowering Young Minds in Homer, Alaska
-https://homerconnect.com
+https://homerenrichment.com
 ```
 
 ## 2. Password Reset
@@ -55,7 +55,7 @@ This password reset link will expire in 1 hour for security reasons.
 
 If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
 
-For additional support, please contact us at info@homerconnect.com
+For additional support, please contact us at info@homerenrichment.com
 
 Best regards,
 The Homer Enrichment Hub Team
@@ -63,7 +63,7 @@ The Homer Enrichment Hub Team
 ---
 Homer Enrichment Hub
 Empowering Young Minds in Homer, Alaska
-https://homerconnect.com
+https://homerenrichment.com
 ```
 
 ## 3. Email Address Change
@@ -81,7 +81,7 @@ This is a confirmation that the email address for your Homer Enrichment Hub acco
 
 If you made this change, no further action is needed.
 
-If you didn't authorize this change, please contact us immediately at info@homerconnect.com or reset your password using the link below:
+If you didn't authorize this change, please contact us immediately at info@homerenrichment.com or reset your password using the link below:
 
 %LINK%
 
@@ -96,7 +96,7 @@ The Homer Enrichment Hub Team
 ---
 Homer Enrichment Hub
 Empowering Young Minds in Homer, Alaska
-https://homerconnect.com
+https://homerenrichment.com
 ```
 
 ## 4. SMS Multi-Factor Authentication
@@ -111,8 +111,8 @@ Your Homer Enrichment Hub verification code is %CODE%. Do not share this code wi
 For each template:
 
 1. **Sender Name:** Homer Enrichment Hub
-2. **Reply-to Address:** info@homerconnect.com (if possible)
-3. **Action URL:** https://homerconnect.com/__/auth/action
+2. **Reply-to Address:** info@homerenrichment.com (if possible)
+3. **Action URL:** https://homerenrichment.com/__/auth/action
 4. **Language:** English (United States)
 
 ## Additional Notes

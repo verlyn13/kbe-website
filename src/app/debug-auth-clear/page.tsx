@@ -81,7 +81,7 @@ export default function DebugAuthClearPage() {
             <ol className="list-decimal list-inside space-y-1 text-sm">
               <li>Close this tab</li>
               <li>Open a new incognito/private window</li>
-              <li>Navigate to https://homerconnect.com</li>
+              <li>Navigate to https://homerenrichment.com</li>
               <li>Try logging in again</li>
             </ol>
           </div>

@@ -12,7 +12,7 @@ echo "Look for OAuth 2.0 Client IDs section. You should see:"
 echo "- A Web application client"
 echo "- Check the Authorized JavaScript origins includes:"
 echo "  • https://kbe-website.firebaseapp.com"
-echo "  • https://homerconnect.com"
+echo "  • https://homerenrichment.com"
 echo "  • https://kbe-website--kbe-website.us-central1.hosted.app"
 echo ""
 
@@ -21,7 +21,7 @@ echo "---------------------------------"
 echo "Testing anonymous auth (should work if auth is enabled):"
 curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBhTEs3Uxq_KBLBzbzIL2VB4Ao_DBw9faM" \
   -H "Content-Type: application/json" \
-  -H "Referer: https://homerconnect.com" \
+  -H "Referer: https://homerenrichment.com" \
   -d '{"returnSecureToken":true}' 2>&1 | grep -E "(idToken|error)" | head -5
 
 echo ""

@@ -47,8 +47,8 @@ Click on the API key to see its configuration. You'll likely see:
   https://localhost:9002/*
   https://kbe-website.firebaseapp.com/*
   https://kbe-website.web.app/*
-  https://homerconnect.com/*
-  https://www.homerconnect.com/*
+  https://homerenrichment.com/*
+  https://www.homerenrichment.com/*
   ```text
 
 **API Restrictions:**

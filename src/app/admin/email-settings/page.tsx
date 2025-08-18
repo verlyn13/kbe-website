@@ -64,7 +64,7 @@ export default function EmailSettingsPage() {
         <CardHeader>
           <CardTitle>Custom Domain Email Setup</CardTitle>
           <CardDescription>
-            Send emails from your own domain (noreply@homerconnect.com)
+            Send emails from your own domain (noreply@homerenrichment.com)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -114,7 +114,7 @@ export default function EmailSettingsPage() {
             <AlertTitle>Benefits of Custom Domain</AlertTitle>
             <AlertDescription>
               <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>Professional appearance (noreply@homerconnect.com)</li>
+                <li>Professional appearance (noreply@homerenrichment.com)</li>
                 <li>Better email deliverability</li>
                 <li>Reduced spam filtering</li>
                 <li>Email analytics and tracking</li>

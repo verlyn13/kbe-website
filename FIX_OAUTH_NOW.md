@@ -16,7 +16,7 @@ This is why Google thinks there are "no reachable owners/editors".
 1. Wait 2-5 minutes for changes to propagate
 2. Try signing in with Google at:
    - https://kbe-website--kbe-website.us-central1.hosted.app
-   - https://homerconnect.com
+   - https://homerenrichment.com
 
 ## This Should Fix Everything Because:
 - ✅ User support email is set correctly
@@ -25,7 +25,7 @@ This is why Google thinks there are "no reachable owners/editors".
 - ❌ Developer contact was missing (now fixed)
 
 ## While You're There, Consider Adding:
-- **Application home page**: https://homerconnect.com
+- **Application home page**: https://homerenrichment.com
 - **App name**: Change from "project-886214990861" to "Homer Enrichment Hub"
 
 But the critical fix is adding your email to Developer contact information!

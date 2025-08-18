@@ -2,12 +2,12 @@
 
 ## Recommended Settings for Homer Enrichment Hub
 
-### 1. **Domain**: `homerconnect.com` ✅
+### 1. **Domain**: `homerenrichment.com` ✅
 - Use your primary domain for best recognition
 - Ensures emails appear to come directly from your organization
 
 ### 2. **Brand the link for this domain**: **YES** ✅
-- **Why**: Links will show as `links.homerconnect.com` instead of `sendgrid.net`
+- **Why**: Links will show as `links.homerenrichment.com` instead of `sendgrid.net`
 - **Benefits**: 
   - Increased trust (users see your domain)
   - Better click-through rates
@@ -25,9 +25,9 @@
 - **Unless**: You have specific compliance requirements
 
 #### **Use a custom link subdomain**: **NO** ❌ (use default)
-- **Default**: `links.homerconnect.com`
+- **Default**: `links.homerenrichment.com`
 - **Why**: Standard and recognizable
-- **Alternative**: Could use `click.homerconnect.com` if preferred
+- **Alternative**: Could use `click.homerenrichment.com` if preferred
 
 #### **Use a custom DKIM selector**: **NO** ❌ (unless conflict)
 - **Default**: Uses "s1" and "s2"
@@ -39,13 +39,13 @@ After configuring, SendGrid will provide records like:
 
 ```
 # Domain Authentication
-CNAME   em1234.homerconnect.com     → u1234567.wl123.sendgrid.net
+CNAME   em1234.homerenrichment.com     → u1234567.wl123.sendgrid.net
 CNAME   s1._domainkey               → s1.domainkey.u1234567.wl123.sendgrid.net
 CNAME   s2._domainkey               → s2.domainkey.u1234567.wl123.sendgrid.net
 
 # Link Branding
-CNAME   links.homerconnect.com      → sendgrid.net
-CNAME   1234567.homerconnect.com    → sendgrid.net
+CNAME   links.homerenrichment.com      → sendgrid.net
+CNAME   1234567.homerenrichment.com    → sendgrid.net
 
 # Optional SPF (if not already set)
 TXT     @                           → v=spf1 include:sendgrid.net ~all
@@ -55,7 +55,7 @@ TXT     @                           → v=spf1 include:sendgrid.net ~all
 
 | Setting | Choice | Reason |
 |---------|--------|---------|
-| Domain | homerconnect.com | Primary domain for recognition |
+| Domain | homerenrichment.com | Primary domain for recognition |
 | Link Branding | Yes | Professional appearance, better deliverability |
 | Automated Security | Yes | Automatic DKIM rotation |
 | Custom Return Path | No | Default works well |

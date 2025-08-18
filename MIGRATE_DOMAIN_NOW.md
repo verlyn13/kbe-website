@@ -1,8 +1,8 @@
-# Migrate homerconnect.com to App Hosting (Your Actual App)
+# Migrate homerenrichment.com to App Hosting (Your Actual App)
 
 ## Current Situation
 - ✅ Your app works at: https://kbe-website--kbe-website.us-central1.hosted.app
-- ❌ homerconnect.com shows empty Firebase Hosting page
+- ❌ homerenrichment.com shows empty Firebase Hosting page
 - ❌ Domain is connected to wrong service
 
 ## Step-by-Step Fix
@@ -13,7 +13,7 @@
    - Go to: https://console.firebase.google.com/project/kbe-website/hosting/sites
    - Click on "homerconnect" site
    - Find "Custom domains" section
-   - Click the 3 dots next to homerconnect.com
+   - Click the 3 dots next to homerenrichment.com
    - Select "Remove domain"
    - Confirm removal
 
@@ -22,7 +22,7 @@
    - Click on "kbe-website" backend
    - Look for "Settings" tab or "Domains" section
    - Click "Add custom domain"
-   - Enter: homerconnect.com
+   - Enter: homerenrichment.com
    - Follow the DNS instructions
 
 ### Option B: Via CLI (If Console doesn't work)
