@@ -17,10 +17,10 @@ export default function DebugAnnouncementsPage() {
     try {
       // Get ALL announcements without any filters
       const snapshot = await getDocs(collection(db, 'announcements'));
-      const data = snapshot.docs.map(doc => ({
+      const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        _raw: JSON.stringify(doc.data(), null, 2)
+        _raw: JSON.stringify(doc.data(), null, 2),
       }));
       setAnnouncements(data);
       console.log('All announcements:', data);
@@ -35,8 +35,8 @@ export default function DebugAnnouncementsPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Debug: All Announcements ({announcements.length})</h1>
-      
+      <h1 className="mb-4 text-2xl font-bold">Debug: All Announcements ({announcements.length})</h1>
+
       <div className="space-y-4">
         {announcements.map((announcement) => (
           <Card key={announcement.id}>
@@ -44,7 +44,7 @@ export default function DebugAnnouncementsPage() {
               <CardTitle>ID: {announcement.id}</CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="bg-gray-100 p-4 rounded overflow-auto text-xs">
+              <pre className="overflow-auto rounded bg-gray-100 p-4 text-xs">
                 {announcement._raw}
               </pre>
             </CardContent>

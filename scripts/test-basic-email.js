@@ -42,9 +42,9 @@ sgMail
     console.error('❌ Error sending email:', error.toString());
     if (error.response) {
       console.error('\nError details:', JSON.stringify(error.response.body, null, 2));
-      
+
       if (error.response.body.errors) {
-        error.response.body.errors.forEach(err => {
+        error.response.body.errors.forEach((err) => {
           if (err.message.includes('from')) {
             console.log('\n⚠️  Sender verification needed:');
             console.log('   1. Go to SendGrid → Settings → Sender Authentication');

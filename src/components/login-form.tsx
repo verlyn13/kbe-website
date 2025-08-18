@@ -110,10 +110,12 @@ export function LoginForm() {
             const userCredential = await signInWithEmailLink(auth, email, window.location.href);
             window.localStorage.removeItem('emailForSignIn');
             logger.info('Magic link sign in successful');
-            
+
             // Check if this is a new user (first time sign in)
-            const isNewUser = userCredential.user.metadata.creationTime === userCredential.user.metadata.lastSignInTime;
-            
+            const isNewUser =
+              userCredential.user.metadata.creationTime ===
+              userCredential.user.metadata.lastSignInTime;
+
             if (isNewUser) {
               router.push('/welcome');
             } else {
@@ -189,16 +191,16 @@ export function LoginForm() {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      
+
       // Check if this is a new user (first time sign in)
       const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-      
+
       if (isNewUser) {
         // Check if user profile exists
         const { doc, getDoc } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
         const userDoc = await getDoc(doc(db, 'users', result.user.uid));
-        
+
         if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
           router.push('/welcome');
         } else {
@@ -275,7 +277,7 @@ export function LoginForm() {
       {/* Google Sign-in - Most prominent */}
       <Button
         variant="outline"
-        className="w-full h-12 text-base"
+        className="h-12 w-full text-base"
         onClick={handleGoogleSignIn}
         disabled={isGoogleLoading}
         aria-label="Sign in with Google"
@@ -320,13 +322,17 @@ export function LoginForm() {
             )}
           />
 
-          <Tabs value={authMethod} onValueChange={(value) => setAuthMethod(value as 'password' | 'magic')} className="w-full">
+          <Tabs
+            value={authMethod}
+            onValueChange={(value) => setAuthMethod(value as 'password' | 'magic')}
+            className="w-full"
+          >
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="password">Password</TabsTrigger>
               <TabsTrigger value="magic">Magic Link</TabsTrigger>
             </TabsList>
-            
-            <TabsContent value="password" className="space-y-4 mt-4">
+
+            <TabsContent value="password" className="mt-4 space-y-4">
               <FormField
                 control={form.control}
                 name="password"
@@ -345,7 +351,7 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="remember"
@@ -361,19 +367,15 @@ export function LoginForm() {
                 )}
               />
             </TabsContent>
-            
+
             <TabsContent value="magic" className="mt-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 We'll email you a secure link to sign in instantly - no password needed!
               </p>
             </TabsContent>
           </Tabs>
 
-          <Button 
-            type="submit" 
-            className="w-full h-11" 
-            disabled={isLoading || isMagicLinkLoading}
-          >
+          <Button type="submit" className="h-11 w-full" disabled={isLoading || isMagicLinkLoading}>
             {(isLoading || isMagicLinkLoading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {authMethod === 'password' ? 'Sign In' : 'Send Magic Link'}
           </Button>

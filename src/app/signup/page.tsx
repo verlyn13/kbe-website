@@ -11,7 +11,14 @@ import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
 import { Icons } from '@/components/icons';
 import { formatPhoneNumber } from '@/lib/utils';
 import { ArrowLeft, Info } from 'lucide-react';
@@ -49,7 +56,7 @@ export default function SignUpPage() {
       const checkProfileStatus = async () => {
         try {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
-          
+
           if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
             // Profile not complete, redirect to welcome
             router.push('/welcome');
@@ -62,7 +69,7 @@ export default function SignUpPage() {
           router.push('/dashboard');
         }
       };
-      
+
       checkProfileStatus();
     }
   }, [user, authLoading, router]);
@@ -79,7 +86,7 @@ export default function SignUpPage() {
 
     // Validate form
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -138,9 +145,11 @@ export default function SignUpPage() {
       });
 
       // Send welcome email if they opted in for any emails
-      if (formData.emailPreferences.announcements || 
-          formData.emailPreferences.programUpdates || 
-          formData.emailPreferences.newsletters) {
+      if (
+        formData.emailPreferences.announcements ||
+        formData.emailPreferences.programUpdates ||
+        formData.emailPreferences.newsletters
+      ) {
         try {
           await sendWelcomeEmailAction(formData.email, formData.displayName);
         } catch (emailError) {
@@ -158,9 +167,9 @@ export default function SignUpPage() {
       router.push('/welcome');
     } catch (error: any) {
       console.error('Sign up error:', error);
-      
+
       let errorMessage = 'Failed to create account. Please try again.';
-      
+
       if (error.code === 'auth/email-already-in-use') {
         errorMessage = 'This email is already registered. Please sign in instead.';
       } else if (error.code === 'auth/weak-password') {
@@ -181,7 +190,7 @@ export default function SignUpPage() {
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
     const formatted = formatPhoneNumber(e.target.value);
-    setFormData(prev => ({ ...prev, phone: formatted }));
+    setFormData((prev) => ({ ...prev, phone: formatted }));
   }
 
   const handleEULAAccept = () => {
@@ -206,17 +215,17 @@ export default function SignUpPage() {
   // Show loading while checking auth status
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <Icons.spinner className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="bg-background flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="mb-2 flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
               <Link href="/">
                 <ArrowLeft className="h-4 w-4" />
@@ -236,12 +245,12 @@ export default function SignUpPage() {
                 id="displayName"
                 placeholder="John Doe"
                 value={formData.displayName}
-                onChange={(e) => setFormData(prev => ({ ...prev, displayName: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, displayName: e.target.value }))}
                 disabled={loading}
                 className={errors.displayName ? 'border-destructive' : ''}
               />
               {errors.displayName && (
-                <p className="text-sm text-destructive">{errors.displayName}</p>
+                <p className="text-destructive text-sm">{errors.displayName}</p>
               )}
             </div>
 
@@ -252,13 +261,11 @@ export default function SignUpPage() {
                 type="email"
                 placeholder="name@example.com"
                 value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                 disabled={loading}
                 className={errors.email ? 'border-destructive' : ''}
               />
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email}</p>
-              )}
+              {errors.email && <p className="text-destructive text-sm">{errors.email}</p>}
             </div>
 
             <div className="space-y-2">
@@ -272,9 +279,7 @@ export default function SignUpPage() {
                 disabled={loading}
                 className={errors.phone ? 'border-destructive' : ''}
               />
-              {errors.phone && (
-                <p className="text-sm text-destructive">{errors.phone}</p>
-              )}
+              {errors.phone && <p className="text-destructive text-sm">{errors.phone}</p>}
             </div>
 
             <div className="space-y-2">
@@ -284,13 +289,11 @@ export default function SignUpPage() {
                 type="password"
                 placeholder="••••••••"
                 value={formData.password}
-                onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
                 disabled={loading}
                 className={errors.password ? 'border-destructive' : ''}
               />
-              {errors.password && (
-                <p className="text-sm text-destructive">{errors.password}</p>
-              )}
+              {errors.password && <p className="text-destructive text-sm">{errors.password}</p>}
             </div>
 
             <div className="space-y-2">
@@ -300,19 +303,21 @@ export default function SignUpPage() {
                 type="password"
                 placeholder="••••••••"
                 value={formData.confirmPassword}
-                onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, confirmPassword: e.target.value }))
+                }
                 disabled={loading}
                 className={errors.confirmPassword ? 'border-destructive' : ''}
               />
               {errors.confirmPassword && (
-                <p className="text-sm text-destructive">{errors.confirmPassword}</p>
+                <p className="text-destructive text-sm">{errors.confirmPassword}</p>
               )}
             </div>
 
-            <div className="space-y-4 pt-4 border-t">
+            <div className="space-y-4 border-t pt-4">
               <div className="space-y-2">
                 <Label className="text-base font-semibold">Email Preferences</Label>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Stay connected with updates about programs and activities
                 </p>
               </div>
@@ -323,7 +328,7 @@ export default function SignUpPage() {
                     id="announcements"
                     checked={formData.emailPreferences.announcements}
                     onCheckedChange={(checked) =>
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
                         emailPreferences: {
                           ...prev.emailPreferences,
@@ -336,11 +341,11 @@ export default function SignUpPage() {
                   <div className="space-y-1">
                     <label
                       htmlFor="announcements"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Important Announcements
                     </label>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Receive updates about schedule changes, deadlines, and urgent information
                     </p>
                   </div>
@@ -351,7 +356,7 @@ export default function SignUpPage() {
                     id="programUpdates"
                     checked={formData.emailPreferences.programUpdates}
                     onCheckedChange={(checked) =>
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
                         emailPreferences: {
                           ...prev.emailPreferences,
@@ -364,11 +369,11 @@ export default function SignUpPage() {
                   <div className="space-y-1">
                     <label
                       htmlFor="programUpdates"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Program Updates
                     </label>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Information about MathCounts, new programs, and registration openings
                     </p>
                   </div>
@@ -379,7 +384,7 @@ export default function SignUpPage() {
                     id="newsletters"
                     checked={formData.emailPreferences.newsletters}
                     onCheckedChange={(checked) =>
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
                         emailPreferences: {
                           ...prev.emailPreferences,
@@ -392,11 +397,11 @@ export default function SignUpPage() {
                   <div className="space-y-1">
                     <label
                       htmlFor="newsletters"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Community Newsletter
                     </label>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Monthly updates about student achievements and upcoming events
                     </p>
                   </div>
@@ -406,22 +411,19 @@ export default function SignUpPage() {
               <Alert>
                 <Info className="h-4 w-4" />
                 <AlertDescription>
-                  We recommend keeping announcements enabled to stay informed about important program updates.
-                  You can change these preferences anytime in your profile settings.
+                  We recommend keeping announcements enabled to stay informed about important
+                  program updates. You can change these preferences anytime in your profile
+                  settings.
                 </AlertDescription>
               </Alert>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Create Account
             </Button>
-            <p className="text-sm text-center text-muted-foreground">
+            <p className="text-muted-foreground text-center text-sm">
               Already have an account?{' '}
               <Link href="/" className="text-primary hover:underline">
                 Sign in
@@ -430,12 +432,8 @@ export default function SignUpPage() {
           </CardFooter>
         </form>
       </Card>
-      
-      <EULADialog
-        open={showEULA}
-        onAccept={handleEULAAccept}
-        onDecline={handleEULADecline}
-      />
+
+      <EULADialog open={showEULA} onAccept={handleEULAAccept} onDecline={handleEULADecline} />
     </div>
   );
 }

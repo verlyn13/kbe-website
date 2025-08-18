@@ -1,13 +1,17 @@
-import { RegistrationFlow } from '@/components/registration/registration-flow';
+import { Suspense } from 'react';
+import { LazyRegistrationFlow } from '@/components/lazy';
 import { PublicHeader } from '@/components/public-header';
+import { FormSkeleton } from '@/components/loading/form-skeleton';
 
 export default function RegisterPage() {
   return (
     <>
       <PublicHeader />
-      <main className="min-h-screen bg-background">
+      <main className="bg-background min-h-screen">
         <div className="container py-8">
-          <RegistrationFlow />
+          <Suspense fallback={<FormSkeleton fields={6} />}>
+            <LazyRegistrationFlow />
+          </Suspense>
         </div>
       </main>
     </>

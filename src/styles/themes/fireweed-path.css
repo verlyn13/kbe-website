@@ -9,7 +9,7 @@
   --meadow-green: 103 28% 57%; /* #7fb069 */
   --morning-mist: 207 47% 93%; /* #e8f0f7 */
   --glacier-blue: 201 48% 76%; /* #a6cde3 */
-  
+
   /* Theme Variables */
   --background: 210 33% 98%; /* glacier-white #fafbfc */
   --foreground: 210 29% 24%; /* text-primary #2c3e50 */
@@ -31,11 +31,11 @@
   --input: 213 32% 92%;
   --ring: 325 64% 56%;
   --radius: 0.75rem; /* More organic curves */
-  
+
   /* Special Fireweed Properties */
   --shadow-color: 325 64% 56%;
   --shadow-opacity: 0.1;
-  
+
   /* Sidebar light mode - earthy tones */
   --sidebar-background: 30 14% 25%; /* driftwood dark */
   --sidebar-foreground: 207 47% 93%; /* morning-mist */
@@ -68,7 +68,7 @@
   --border: 213 20% 18%;
   --input: 213 20% 18%;
   --ring: 325 59% 63%;
-  
+
   /* Sidebar dark mode */
   --sidebar-background: 220 26% 8%;
   --sidebar-foreground: 210 17% 91%;

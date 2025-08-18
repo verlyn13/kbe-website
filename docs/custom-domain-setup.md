@@ -15,7 +15,7 @@ This guide walks through configuring your custom domain for Firebase Hosting and
 
 Using Firebase CLI:
 
-```bash
+````bash
 firebase hosting:site:create homerconnect
 firebase hosting:channel:deploy --site homerconnect
 ```text
@@ -205,3 +205,4 @@ firebase hosting:site:open homerconnect
 # Deployment happens automatically when pushing to main branch
 # Do NOT manually deploy - see DEPLOYMENT_METHOD.md
 ```text
+````

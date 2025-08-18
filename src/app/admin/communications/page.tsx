@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { DataTable } from '@/components/admin/data-table';
+import { LazyDataTable } from '@/components/lazy';
 import { Announcement, announcementService } from '@/lib/firebase-admin';
 import { ColumnDef } from '@tanstack/react-table';
 import { Plus, Send, Clock, Check, Pin, Eye, Trash2, Edit } from 'lucide-react';
@@ -61,7 +61,11 @@ export default function AdminCommunicationsPage() {
         const pinned = row.original.pinned;
         return (
           <div className="flex items-center gap-2">
-            {pinned && <Badge variant="secondary" className="text-xs">Pinned</Badge>}
+            {pinned && (
+              <Badge variant="secondary" className="text-xs">
+                Pinned
+              </Badge>
+            )}
             <span>{row.getValue('title')}</span>
           </div>
         );
@@ -93,16 +97,18 @@ export default function AdminCommunicationsPage() {
       header: 'Status',
       cell: ({ row }) => {
         const status = row.getValue('status') as Announcement['status'];
-        const icon = 
-          status === 'published' ? <Check className="h-3 w-3" /> :
-          status === 'archived' ? <Clock className="h-3 w-3" /> :
-          <Send className="h-3 w-3" />;
-        
-        const variant = 
-          status === 'published' ? 'default' :
-          status === 'archived' ? 'secondary' :
-          'outline';
-        
+        const icon =
+          status === 'published' ? (
+            <Check className="h-3 w-3" />
+          ) : status === 'archived' ? (
+            <Clock className="h-3 w-3" />
+          ) : (
+            <Send className="h-3 w-3" />
+          );
+
+        const variant =
+          status === 'published' ? 'default' : status === 'archived' ? 'secondary' : 'outline';
+
         return (
           <Badge variant={variant} className="gap-1">
             {icon}
@@ -118,11 +124,7 @@ export default function AdminCommunicationsPage() {
         const announcement = row.original;
         return (
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setSelectedAnnouncement(announcement)}
-            >
+            <Button variant="ghost" size="sm" onClick={() => setSelectedAnnouncement(announcement)}>
               <Eye className="h-4 w-4" />
             </Button>
             <Button
@@ -133,7 +135,7 @@ export default function AdminCommunicationsPage() {
                 setDeleteDialogOpen(true);
               }}
             >
-              <Trash2 className="h-4 w-4 text-destructive" />
+              <Trash2 className="text-destructive h-4 w-4" />
             </Button>
           </div>
         );
@@ -143,7 +145,7 @@ export default function AdminCommunicationsPage() {
 
   async function handleDelete() {
     if (!announcementToDelete) return;
-    
+
     try {
       await announcementService.delete(announcementToDelete.id);
       toast({
@@ -196,7 +198,7 @@ export default function AdminCommunicationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {announcements.filter(a => a.status === 'published').length}
+              {announcements.filter((a) => a.status === 'published').length}
             </div>
             <p className="text-muted-foreground text-xs">This month</p>
           </CardContent>
@@ -207,7 +209,7 @@ export default function AdminCommunicationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {announcements.filter(a => a.status === 'archived').length}
+              {announcements.filter((a) => a.status === 'archived').length}
             </div>
             <p className="text-muted-foreground text-xs">Upcoming</p>
           </CardContent>
@@ -218,7 +220,7 @@ export default function AdminCommunicationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {announcements.filter(a => a.status === 'draft').length}
+              {announcements.filter((a) => a.status === 'draft').length}
             </div>
             <p className="text-muted-foreground text-xs">Saved</p>
           </CardContent>
@@ -228,16 +230,10 @@ export default function AdminCommunicationsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Announcement History</CardTitle>
-          <CardDescription>
-            View all sent and scheduled announcements
-          </CardDescription>
+          <CardDescription>View all sent and scheduled announcements</CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable
-            columns={columns}
-            data={announcements}
-            searchKey="title"
-          />
+          <LazyDataTable columns={columns} data={announcements} searchKey="title" />
         </CardContent>
       </Card>
 
@@ -247,25 +243,28 @@ export default function AdminCommunicationsPage() {
           <DialogHeader>
             <DialogTitle>{selectedAnnouncement?.title}</DialogTitle>
             <DialogDescription>
-              {selectedAnnouncement?.publishedAt && 
-                format(new Date(selectedAnnouncement.publishedAt), 'MMMM d, yyyy at h:mm a')
-              }
+              {selectedAnnouncement?.publishedAt &&
+                format(new Date(selectedAnnouncement.publishedAt), 'MMMM d, yyyy at h:mm a')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex gap-2">
-              <Badge variant={selectedAnnouncement?.priority === 'high' ? 'destructive' : 'default'}>
+              <Badge
+                variant={selectedAnnouncement?.priority === 'high' ? 'destructive' : 'default'}
+              >
                 {selectedAnnouncement?.priority} priority
               </Badge>
               <Badge variant="outline">
-                {selectedAnnouncement?.recipients === 'all' ? 'All Families' : selectedAnnouncement?.recipients}
+                {selectedAnnouncement?.recipients === 'all'
+                  ? 'All Families'
+                  : selectedAnnouncement?.recipients}
               </Badge>
               {selectedAnnouncement?.pinned && <Badge variant="secondary">Pinned</Badge>}
             </div>
-            <div className="bg-muted p-4 rounded-lg">
+            <div className="bg-muted rounded-lg p-4">
               <p className="whitespace-pre-wrap">{selectedAnnouncement?.content}</p>
             </div>
-            <div className="text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-sm">
               <p>Created by: {selectedAnnouncement?.createdByName}</p>
               <p>Views: {selectedAnnouncement?.viewCount || 0}</p>
             </div>
@@ -279,12 +278,16 @@ export default function AdminCommunicationsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Announcement</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{announcementToDelete?.title}"? This action cannot be undone.
+              Are you sure you want to delete "{announcementToDelete?.title}"? This action cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

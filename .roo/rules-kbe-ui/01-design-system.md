@@ -3,10 +3,12 @@
 ## Color Palette
 
 ### Primary Colors
+
 - **Teal**: `#008080` - Primary brand color for headers, buttons, links
 - **Gold**: `#B8860B` - Secondary accent color for highlights, success states
 
 ### Usage Guidelines
+
 - Use teal for primary actions and navigation elements
 - Use gold sparingly for emphasis and call-to-action elements
 - Maintain sufficient contrast ratios (minimum 4.5:1 for text)
@@ -15,11 +17,15 @@
 ## Typography
 
 ### Font Stack
+
 ```css
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+font-family:
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+  sans-serif;
 ```
 
 ### Scale (Tailwind CSS)
+
 - `text-xs`: 12px - Small labels, captions
 - `text-sm`: 14px - Body text, form labels
 - `text-base`: 16px - Default body text
@@ -32,6 +38,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 ## Spacing
 
 ### Consistent Scale (Tailwind)
+
 - `gap-2`: 8px - Tight spacing
 - `gap-4`: 16px - Standard spacing
 - `gap-6`: 24px - Loose spacing
@@ -39,6 +46,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 - `gap-12`: 48px - Large section spacing
 
 ### Component Padding
+
 - Buttons: `px-4 py-2` (standard), `px-6 py-3` (large)
 - Cards: `p-6` (standard), `p-8` (large)
 - Forms: `p-4` (inputs), `gap-4` (between fields)
@@ -46,11 +54,12 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 ## Component Patterns
 
 ### Buttons
+
 ```tsx
 // Primary button
 <Button className="bg-teal-600 hover:bg-teal-700 text-white">
 
-// Secondary button  
+// Secondary button
 <Button variant="outline" className="border-teal-600 text-teal-600 hover:bg-teal-50">
 
 // Accent button
@@ -58,6 +67,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 ```
 
 ### Cards
+
 ```tsx
 <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
   <CardHeader className="border-b border-slate-100">
@@ -67,6 +77,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 ```
 
 ### Forms
+
 ```tsx
 <div className="space-y-4">
   <div className="space-y-2">
@@ -79,12 +90,14 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 ## Responsive Design
 
 ### Breakpoints (Tailwind)
+
 - `sm`: 640px - Small devices
-- `md`: 768px - Medium devices  
+- `md`: 768px - Medium devices
 - `lg`: 1024px - Large devices
 - `xl`: 1280px - Extra large devices
 
 ### Mobile-First Approach
+
 - Design for mobile first (320px+)
 - Progressive enhancement for larger screens
 - Touch-friendly targets (minimum 44px)
@@ -93,6 +106,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 ## Accessibility Guidelines
 
 ### WCAG 2.1 AA Compliance
+
 - Color contrast minimum 4.5:1 for normal text
 - Color contrast minimum 3:1 for large text
 - All interactive elements keyboard accessible
@@ -101,6 +115,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
 - Proper form labels and error messages
 
 ### Focus Management
+
 ```tsx
 // Visible focus indicators
 className="focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
@@ -114,19 +129,18 @@ className="focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal
 ## Animation & Motion
 
 ### Subtle Transitions
+
 ```css
 /* Standard transitions */
 transition: all 150ms ease-in-out;
 
 /* Hover states */
-hover:scale-105 transition-transform
-
-/* Loading states */
-animate-pulse
-animate-spin (for loading spinners)
+hover: scale-105 transition-transform /* Loading states */ animate-pulse animate-spin
+  (for loading spinners);
 ```
 
 ### Motion Preferences
+
 - Respect `prefers-reduced-motion`
 - Keep animations under 500ms
 - Use easing functions (`ease-in-out`)
@@ -135,18 +149,21 @@ animate-spin (for loading spinners)
 ## Educational Context
 
 ### Content Hierarchy
+
 - Clear visual hierarchy for learning materials
 - Consistent spacing between content sections
 - Readable line heights (`leading-relaxed`)
 - Sufficient white space for cognitive rest
 
 ### Student-Friendly Design
+
 - Large, clear interactive elements
 - High contrast for readability
 - Consistent navigation patterns
 - Progress indicators for multi-step processes
 
 ### Parent Dashboard
+
 - Clean, professional aesthetic
 - Data visualization with clear labels
 - Easy-to-scan progress summaries

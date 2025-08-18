@@ -16,15 +16,17 @@ This directory contains raw, unprocessed assets that are used to create the opti
 ## Processing Guidelines
 
 ### Images
+
 - **Source formats**: PSD, AI, PNG, JPG, TIFF
 - **Target formats**: WebP, optimized PNG/JPG
 - **Target location**: `/public/images/`
-- **Optimization**: 
+- **Optimization**:
   - Resize to required dimensions
   - Compress without visible quality loss
   - Convert to WebP for better performance
 
 ### Icons
+
 - **Source formats**: SVG, AI, Sketch
 - **Target formats**: SVG (optimized), PNG (for fallback)
 - **Target location**: `/public/icons/`

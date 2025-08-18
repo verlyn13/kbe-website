@@ -8,15 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { registrationService, Registration } from '@/lib/firebase-admin';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Download, 
-  Users, 
-  UserCheck,
-  Clock,
-  AlertCircle,
-  Calendar,
-  Filter
-} from 'lucide-react';
+import { Download, Users, UserCheck, Clock, AlertCircle, Calendar, Filter } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -60,22 +52,22 @@ export default function AdminReportsPage() {
     try {
       setLoading(true);
       const [regs, statsData] = await Promise.all([
-        registrationService.getByProgram(selectedProgram),
-        registrationService.getStats(selectedProgram)
+        registrationService.getAll({ programId: selectedProgram }),
+        registrationService.getStats(selectedProgram),
       ]);
 
       setRegistrations(regs);
-      
+
       // Calculate additional stats
       const byGrade: Record<string, number> = {};
       const bySchool: Record<string, number> = {};
-      
-      regs.forEach(reg => {
-        reg.students.forEach(student => {
+
+      regs.forEach((reg) => {
+        reg.students.forEach((student) => {
           // Count by grade
           const grade = student.grade.toString();
           byGrade[grade] = (byGrade[grade] || 0) + 1;
-          
+
           // Count by school
           const school = student.school || 'Unknown';
           bySchool[school] = (bySchool[school] || 0) + 1;
@@ -88,7 +80,7 @@ export default function AdminReportsPage() {
         active: statsData.active,
         waitlist: statsData.waitlist,
         byGrade,
-        bySchool
+        bySchool,
       });
     } catch (error) {
       console.error('Error loading registration data:', error);
@@ -112,25 +104,25 @@ export default function AdminReportsPage() {
         'Student Grade',
         'Student School',
         'Status',
-        'Registration Date'
+        'Registration Date',
       ];
 
-      const csvRows = registrations.flatMap(reg => 
-        reg.students.map(student => [
-          reg.guardianName,
-          reg.guardianEmail,
-          reg.guardianPhone,
-          student.name,
+      const csvRows = registrations.flatMap((reg) =>
+        reg.students.map((student) => [
+          reg.parentName,
+          reg.parentEmail,
+          reg.parentPhone,
+          `${student.firstName} ${student.lastName}`.trim(),
           student.grade,
           student.school || '',
           reg.status,
-          new Date(reg.createdAt).toLocaleDateString()
+          new Date(reg.registrationDate).toLocaleDateString(),
         ])
       );
 
       const csvContent = [
         csvHeaders.join(','),
-        ...csvRows.map(row => row.map(cell => `"${cell}"`).join(','))
+        ...csvRows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
       ].join('\n');
 
       const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -157,7 +149,7 @@ export default function AdminReportsPage() {
 
   if (!hasPermission('view_reports')) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex h-full items-center justify-center">
         <p className="text-muted-foreground">You don't have permission to view reports.</p>
       </div>
     );
@@ -179,12 +171,10 @@ export default function AdminReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Registration Report</h1>
-          <p className="text-muted-foreground">
-            View and export registration data
-          </p>
+          <p className="text-muted-foreground">View and export registration data</p>
         </div>
         <div className="flex items-center gap-4">
           <Select value={selectedProgram} onValueChange={setSelectedProgram}>
@@ -207,52 +197,44 @@ export default function AdminReportsPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Students</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.total || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Across {registrations.length} families
-            </p>
+            <p className="text-muted-foreground text-xs">Across {registrations.length} families</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active</CardTitle>
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
+            <UserCheck className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.active || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Confirmed registrations
-            </p>
+            <p className="text-muted-foreground text-xs">Confirmed registrations</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <Clock className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.pending || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Awaiting approval
-            </p>
+            <p className="text-muted-foreground text-xs">Awaiting approval</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Waitlist</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
+            <AlertCircle className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.waitlist || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Waiting for space
-            </p>
+            <p className="text-muted-foreground text-xs">Waiting for space</p>
           </CardContent>
         </Card>
       </div>
@@ -266,22 +248,23 @@ export default function AdminReportsPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {stats && Object.entries(stats.byGrade)
-                .sort(([a], [b]) => Number(a) - Number(b))
-                .map(([grade, count]) => (
-                  <div key={grade} className="flex items-center justify-between">
-                    <span className="text-sm">Grade {grade}</span>
-                    <div className="flex items-center gap-2">
-                      <div className="w-32 bg-muted rounded-full h-2">
-                        <div
-                          className="bg-primary h-2 rounded-full"
-                          style={{ width: `${(count / stats.total) * 100}%` }}
-                        />
+              {stats &&
+                Object.entries(stats.byGrade)
+                  .sort(([a], [b]) => Number(a) - Number(b))
+                  .map(([grade, count]) => (
+                    <div key={grade} className="flex items-center justify-between">
+                      <span className="text-sm">Grade {grade}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="bg-muted h-2 w-32 rounded-full">
+                          <div
+                            className="bg-primary h-2 rounded-full"
+                            style={{ width: `${(count / stats.total) * 100}%` }}
+                          />
+                        </div>
+                        <span className="w-8 text-right text-sm font-medium">{count}</span>
                       </div>
-                      <span className="text-sm font-medium w-8 text-right">{count}</span>
                     </div>
-                  </div>
-                ))}
+                  ))}
             </div>
           </CardContent>
         </Card>
@@ -294,23 +277,24 @@ export default function AdminReportsPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {stats && Object.entries(stats.bySchool)
-                .sort(([, a], [, b]) => b - a)
-                .slice(0, 5)
-                .map(([school, count]) => (
-                  <div key={school} className="flex items-center justify-between">
-                    <span className="text-sm truncate max-w-[200px]">{school}</span>
-                    <div className="flex items-center gap-2">
-                      <div className="w-32 bg-muted rounded-full h-2">
-                        <div
-                          className="bg-primary h-2 rounded-full"
-                          style={{ width: `${(count / stats.total) * 100}%` }}
-                        />
+              {stats &&
+                Object.entries(stats.bySchool)
+                  .sort(([, a], [, b]) => b - a)
+                  .slice(0, 5)
+                  .map(([school, count]) => (
+                    <div key={school} className="flex items-center justify-between">
+                      <span className="max-w-[200px] truncate text-sm">{school}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="bg-muted h-2 w-32 rounded-full">
+                          <div
+                            className="bg-primary h-2 rounded-full"
+                            style={{ width: `${(count / stats.total) * 100}%` }}
+                          />
+                        </div>
+                        <span className="w-8 text-right text-sm font-medium">{count}</span>
                       </div>
-                      <span className="text-sm font-medium w-8 text-right">{count}</span>
                     </div>
-                  </div>
-                ))}
+                  ))}
             </div>
           </CardContent>
         </Card>
@@ -337,26 +321,28 @@ export default function AdminReportsPage() {
                 <TableRow key={reg.id}>
                   <TableCell>
                     <div>
-                      <p className="font-medium">{reg.guardianName}</p>
-                      <p className="text-sm text-muted-foreground">{reg.guardianEmail}</p>
+                      <p className="font-medium">{reg.parentName}</p>
+                      <p className="text-muted-foreground text-sm">{reg.parentEmail}</p>
                     </div>
                   </TableCell>
                   <TableCell>
                     {reg.students.map((student, i) => (
                       <div key={i} className="text-sm">
-                        {student.name} (Grade {student.grade})
+                        {`${student.firstName} ${student.lastName}`.trim()} (Grade {student.grade})
                       </div>
                     ))}
                   </TableCell>
                   <TableCell className="text-sm">
-                    {new Date(reg.createdAt).toLocaleDateString()}
+                    {new Date(reg.registrationDate).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
                     <Badge
                       variant={
-                        reg.status === 'active' ? 'default' :
-                        reg.status === 'pending' ? 'secondary' :
-                        'outline'
+                        reg.status === 'active'
+                          ? 'default'
+                          : reg.status === 'pending'
+                            ? 'secondary'
+                            : 'outline'
                       }
                     >
                       {reg.status}

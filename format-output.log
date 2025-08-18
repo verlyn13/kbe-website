@@ -1,0 +1,472 @@
+npm warn Unknown cli config "--check". This will stop working in the next major version of npm.
+
+> nextn@0.1.0 format
+> prettier --write "**/*.{js,jsx,ts,tsx,json,css,md,mdx,yaml,yml}"
+
+.cspell.json 22ms (unchanged)
+.eslintrc.json 1ms (unchanged)
+.github/copilot-instructions.md 40ms (unchanged)
+.markdownlint.json 3ms (unchanged)
+.prettierrc.json 2ms (unchanged)
+.roo/agents.json 6ms
+.roo/custom_modes.yaml 19ms (unchanged)
+.roo/FIREBASE_QUICK_REFERENCE.md 41ms
+.roo/mcp-server-config.json 2ms
+.roo/mcp.json 2ms
+.roo/README.md 23ms (unchanged)
+.roo/rules-kbe-ui/01-design-system.md 25ms
+.roo/rules-kbe-ui/02-accessibility.md 43ms
+.roo/rules/01-project-context.md 4ms (unchanged)
+.roo/rules/02-coding-standards.md 8ms (unchanged)
+ADMIN_EMAILS.md 3ms
+API_KEY_ISSUE_SOLVED.md 3ms
+apphosting.yaml 6ms
+assets/raw/README.md 3ms
+audit-08172025-stage2-addition.md 14ms
+audit-08172025.md 19ms
+audit-stage1-report.md 7ms
+AUTO-FIXING-SETUP.md 6ms
+backups/migration_20250817_155858/.cspell.json 3ms (unchanged)
+backups/migration_20250817_155858/.eslintrc.json 1ms (unchanged)
+backups/migration_20250817_155858/.github/copilot-instructions.md 11ms (unchanged)
+backups/migration_20250817_155858/.markdownlint.json 1ms (unchanged)
+backups/migration_20250817_155858/.prettierrc.json 1ms (unchanged)
+backups/migration_20250817_155858/.roo/agents.json 4ms
+backups/migration_20250817_155858/.roo/custom_modes.yaml 5ms (unchanged)
+backups/migration_20250817_155858/.roo/FIREBASE_QUICK_REFERENCE.md 11ms
+backups/migration_20250817_155858/.roo/mcp-server-config.json 1ms
+backups/migration_20250817_155858/.roo/mcp.json 1ms
+backups/migration_20250817_155858/.roo/README.md 15ms (unchanged)
+backups/migration_20250817_155858/.roo/rules-kbe-ui/01-design-system.md 14ms
+backups/migration_20250817_155858/.roo/rules-kbe-ui/02-accessibility.md 23ms
+backups/migration_20250817_155858/.roo/rules/01-project-context.md 3ms (unchanged)
+backups/migration_20250817_155858/.roo/rules/02-coding-standards.md 5ms (unchanged)
+backups/migration_20250817_155858/ADMIN_EMAILS.md 2ms
+backups/migration_20250817_155858/API_KEY_ISSUE_SOLVED.md 2ms
+backups/migration_20250817_155858/apphosting.yaml 3ms
+backups/migration_20250817_155858/assets/raw/README.md 3ms
+backups/migration_20250817_155858/AUTO-FIXING-SETUP.md 3ms
+backups/migration_20250817_155858/CF_QUICK_REFERENCE.md 3ms
+backups/migration_20250817_155858/CHECK_BRANDING_TAB.md 3ms
+backups/migration_20250817_155858/CHECK_FIREBASE_SECURITY_SETTINGS.md 4ms
+backups/migration_20250817_155858/CHECK_GOOGLE_PROVIDER.md 3ms
+backups/migration_20250817_155858/CLAUDE.md 10ms
+backups/migration_20250817_155858/CLOUDFLARE_MIGRATION.md 5ms
+backups/migration_20250817_155858/components.json 1ms (unchanged)
+backups/migration_20250817_155858/CRITICAL_AUTH_DOMAIN_ISSUE.md 6ms
+backups/migration_20250817_155858/docs/ADMIN_QUICK_START.md 7ms
+backups/migration_20250817_155858/docs/api-key-architecture.md 3ms
+backups/migration_20250817_155858/docs/blueprint.md 4ms
+backups/migration_20250817_155858/docs/cloudflare-sendgrid-dns.md 7ms
+backups/migration_20250817_155858/docs/custom-domain-setup.md 2ms
+backups/migration_20250817_155858/docs/development-workflow.md 7ms
+backups/migration_20250817_155858/docs/domain-email-setup.md 6ms
+backups/migration_20250817_155858/docs/email-deliverability.md 17ms (unchanged)
+backups/migration_20250817_155858/docs/email-setup-options.md 8ms
+backups/migration_20250817_155858/docs/EULA.md 13ms (unchanged)
+backups/migration_20250817_155858/docs/FIREBASE_ADMIN_SETUP.md 25ms
+backups/migration_20250817_155858/docs/FIREBASE_SETUP.md 15ms
+backups/migration_20250817_155858/docs/firebase-deployment.md 7ms
+backups/migration_20250817_155858/docs/firebase-email-template-text.md 3ms
+backups/migration_20250817_155858/docs/firebase-magic-link-setup.md 13ms (unchanged)
+backups/migration_20250817_155858/docs/FIRESTORE_COLLECTIONS.md 11ms
+backups/migration_20250817_155858/docs/FIRESTORE_SETUP.md 9ms
+backups/migration_20250817_155858/docs/firestore-rules.md 2ms
+backups/migration_20250817_155858/docs/fix-api-key-restrictions.md 5ms
+backups/migration_20250817_155858/docs/image-processing.md 5ms
+backups/migration_20250817_155858/docs/oauth-setup.md 2ms
+backups/migration_20250817_155858/docs/sendgrid-domain-decisions.md 4ms
+backups/migration_20250817_155858/docs/sendgrid-email-setup.md 9ms
+backups/migration_20250817_155858/docs/sendgrid-next-steps.md 24ms
+backups/migration_20250817_155858/docs/sendgrid-setup-complete.md 7ms
+backups/migration_20250817_155858/docs/sendgrid-template-management.md 13ms
+backups/migration_20250817_155858/docs/theme-images.md 4ms
+backups/migration_20250817_155858/docs/UPDATE_EMAIL_TEMPLATES.md 3ms
+backups/migration_20250817_155858/docs/waiver.md 13ms
+backups/migration_20250817_155858/DOMAIN_FIX_STEPS.md 3ms
+backups/migration_20250817_155858/FIREBASE_LESSONS_LEARNED.md 17ms
+backups/migration_20250817_155858/firebase-import/admins-data.json 1ms
+backups/migration_20250817_155858/firebase-import/announcements-data.json 1ms
+backups/migration_20250817_155858/firebase-import/firestore.indexes.json 1ms
+backups/migration_20250817_155858/firebase-import/import-all.js 8ms
+backups/migration_20250817_155858/firebase-import/package.json 1ms (unchanged)
+backups/migration_20250817_155858/firebase-import/programs-data.json 1ms
+backups/migration_20250817_155858/firebase-import/README.md 3ms
+backups/migration_20250817_155858/firebase.json 1ms (unchanged)
+backups/migration_20250817_155858/FIX_API_KEY_NOW.md 3ms
+backups/migration_20250817_155858/FIX_AUTHORIZED_DOMAINS.md 5ms
+backups/migration_20250817_155858/FIX_OAUTH_NOW.md 3ms
+backups/migration_20250817_155858/FIX_PROJECT_OWNERS.md 3ms
+backups/migration_20250817_155858/FIX_REDIRECT_URIS.md 2ms
+backups/migration_20250817_155858/KBE_ORCHESTRATOR.md 15ms
+backups/migration_20250817_155858/MCP_INTEGRATION_GUIDE.md 7ms
+backups/migration_20250817_155858/MIGRATE_DOMAIN_NOW.md 4ms
+backups/migration_20250817_155858/NAVIGATE_TO_OAUTH_CONFIG.md 4ms
+backups/migration_20250817_155858/next.config.js 2ms (unchanged)
+backups/migration_20250817_155858/OAUTH_CONSENT_FIX.md 4ms
+backups/migration_20250817_155858/OAUTH_VS_FIREBASE_EXPLAINED.md 3ms
+backups/migration_20250817_155858/package.json 1ms (unchanged)
+backups/migration_20250817_155858/PRODUCTION_API_KEY_FIX.md 3ms
+backups/migration_20250817_155858/README.md 1ms
+backups/migration_20250817_155858/roo-example.md 4ms
+backups/migration_20250817_155858/roo-setup.md 2ms (unchanged)
+backups/migration_20250817_155858/scripts/add-auth-domain.md 2ms
+backups/migration_20250817_155858/scripts/debug-magic-link.js 6ms (unchanged)
+backups/migration_20250817_155858/scripts/fix-markdown.js 0ms (unchanged)
+backups/migration_20250817_155858/scripts/kbe-orchestrator-server.js 13ms
+backups/migration_20250817_155858/scripts/sendgrid-verify.js 2ms
+backups/migration_20250817_155858/scripts/setup-admin.js 3ms
+backups/migration_20250817_155858/scripts/sync-sendgrid-templates.ts 11ms
+backups/migration_20250817_155858/scripts/test-basic-email.js 3ms
+backups/migration_20250817_155858/scripts/test-email.ts 7ms
+backups/migration_20250817_155858/scripts/test-mcp-connection.js 7ms
+backups/migration_20250817_155858/scripts/test-template-direct.js 3ms
+backups/migration_20250817_155858/SIDEBAR_DEBUG_SESSION.md 7ms
+backups/migration_20250817_155858/src/app/actions/send-welcome-email.ts 3ms
+backups/migration_20250817_155858/src/app/admin/activity/page.tsx 12ms
+backups/migration_20250817_155858/src/app/admin/calendar/page.tsx 3ms
+backups/migration_20250817_155858/src/app/admin/communications/compose/page.tsx 12ms
+backups/migration_20250817_155858/src/app/admin/communications/page.tsx 22ms
+backups/migration_20250817_155858/src/app/admin/dashboard/page.tsx 24ms
+backups/migration_20250817_155858/src/app/admin/email-settings/page.tsx 9ms
+backups/migration_20250817_155858/src/app/admin/layout.tsx 10ms
+backups/migration_20250817_155858/src/app/admin/page.tsx 3ms
+backups/migration_20250817_155858/src/app/admin/programs/page.tsx 3ms
+backups/migration_20250817_155858/src/app/admin/registrations/page.tsx 16ms
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx 17ms
+backups/migration_20250817_155858/src/app/admin/settings/page.tsx 3ms
+backups/migration_20250817_155858/src/app/admin/users/page.tsx 20ms
+backups/migration_20250817_155858/src/app/admin/waivers/page.tsx 20ms
+backups/migration_20250817_155858/src/app/announcements/page.tsx 30ms
+backups/migration_20250817_155858/src/app/api-debug/page.tsx 5ms
+backups/migration_20250817_155858/src/app/api/webhooks/sendgrid/route.ts 7ms
+backups/migration_20250817_155858/src/app/auth-diagnostics/page.tsx 8ms
+backups/migration_20250817_155858/src/app/auth-status/page.tsx 6ms
+backups/migration_20250817_155858/src/app/calendar/page.tsx 23ms
+backups/migration_20250817_155858/src/app/dashboard/announcements/page.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/app/dashboard/layout.tsx 8ms
+backups/migration_20250817_155858/src/app/dashboard/page.tsx 4ms
+backups/migration_20250817_155858/src/app/debug-announcements/page.tsx 4ms
+backups/migration_20250817_155858/src/app/debug-auth-clear/page.tsx 5ms
+backups/migration_20250817_155858/src/app/debug-auth/page.tsx 6ms
+backups/migration_20250817_155858/src/app/layout.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/app/login/page.tsx 5ms
+backups/migration_20250817_155858/src/app/page.tsx 10ms
+backups/migration_20250817_155858/src/app/profile/page.tsx 23ms
+backups/migration_20250817_155858/src/app/programs/mathcounts/page.tsx 13ms
+backups/migration_20250817_155858/src/app/programs/page.tsx 6ms
+backups/migration_20250817_155858/src/app/register/page.tsx 2ms
+backups/migration_20250817_155858/src/app/resources/page.tsx 7ms
+backups/migration_20250817_155858/src/app/schedule/page.tsx 8ms
+backups/migration_20250817_155858/src/app/settings/page.tsx 8ms
+backups/migration_20250817_155858/src/app/signout/page.tsx 3ms
+backups/migration_20250817_155858/src/app/signup/page.tsx 18ms
+backups/migration_20250817_155858/src/app/students/add/page.tsx 12ms
+backups/migration_20250817_155858/src/app/system-status/page.tsx 9ms
+backups/migration_20250817_155858/src/app/test-admin/page.tsx 2ms
+backups/migration_20250817_155858/src/app/test-announcements/page.tsx 6ms
+backups/migration_20250817_155858/src/app/test-auth/page.tsx 6ms
+backups/migration_20250817_155858/src/app/theme-showcase/page.tsx 4ms
+backups/migration_20250817_155858/src/app/waiver/page.tsx 18ms
+backups/migration_20250817_155858/src/app/welcome/page.tsx 4ms
+backups/migration_20250817_155858/src/components/admin/data-table.tsx 12ms
+backups/migration_20250817_155858/src/components/announcements.tsx 7ms
+backups/migration_20250817_155858/src/components/calendar/event-dialog.tsx 19ms
+backups/migration_20250817_155858/src/components/dashboard-header.tsx 6ms
+backups/migration_20250817_155858/src/components/error-boundary.tsx 8ms (unchanged)
+backups/migration_20250817_155858/src/components/eula-dialog.tsx 15ms
+backups/migration_20250817_155858/src/components/guardian-info-form.tsx 14ms
+backups/migration_20250817_155858/src/components/icons.tsx 2ms
+backups/migration_20250817_155858/src/components/layout-with-footer.tsx 2ms
+backups/migration_20250817_155858/src/components/legal-footer.tsx 5ms
+backups/migration_20250817_155858/src/components/login-form.tsx 16ms
+backups/migration_20250817_155858/src/components/portal/mathcounts-schedule.tsx 3ms
+backups/migration_20250817_155858/src/components/portal/quick-links.tsx 3ms
+backups/migration_20250817_155858/src/components/portal/student-roster.tsx 10ms
+backups/migration_20250817_155858/src/components/portal/upcoming-competitions.tsx 4ms
+backups/migration_20250817_155858/src/components/portal/welcome-guide.tsx 6ms
+backups/migration_20250817_155858/src/components/profile-completion-check.tsx 5ms
+backups/migration_20250817_155858/src/components/public-header.tsx 5ms
+backups/migration_20250817_155858/src/components/registration/add-students.tsx 12ms
+backups/migration_20250817_155858/src/components/registration/parent-account.tsx 7ms
+backups/migration_20250817_155858/src/components/registration/registration-flow.tsx 8ms
+backups/migration_20250817_155858/src/components/registration/select-program.tsx 7ms
+backups/migration_20250817_155858/src/components/session-calendar.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/simple-header.tsx 5ms
+backups/migration_20250817_155858/src/components/skip-navigation.tsx 2ms (unchanged)
+backups/migration_20250817_155858/src/components/theme-image.tsx 5ms
+backups/migration_20250817_155858/src/components/theme-switcher.tsx 7ms
+backups/migration_20250817_155858/src/components/ui/accordion.tsx 5ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/alert-dialog.tsx 6ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/alert.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/avatar.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/badge.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/button.tsx 5ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/calendar.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/card.tsx 5ms
+backups/migration_20250817_155858/src/components/ui/carousel.tsx 10ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/chart.tsx 15ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/checkbox.tsx 6ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/collapsible.tsx 2ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/dialog.tsx 6ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/dropdown-menu.tsx 9ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/form.tsx 8ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/hover-card.tsx 3ms
+backups/migration_20250817_155858/src/components/ui/input.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/label.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/menubar.tsx 11ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/popover.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/progress.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/radio-group.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/scroll-area.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/select.tsx 8ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/separator.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/sheet.tsx 8ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/sidebar.tsx 52ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/skeleton.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/slider.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/switch.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/table.tsx 12ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/tabs.tsx 4ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/textarea.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/toast.tsx 8ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/toaster.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/ui/tooltip.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/components/waiver-status-widget.tsx 7ms
+backups/migration_20250817_155858/src/hooks/use-admin.tsx 5ms
+backups/migration_20250817_155858/src/hooks/use-auth.tsx 5ms
+backups/migration_20250817_155858/src/hooks/use-mobile.tsx 3ms (unchanged)
+backups/migration_20250817_155858/src/hooks/use-toast.ts 6ms (unchanged)
+backups/migration_20250817_155858/src/lib/constants.ts 3ms (unchanged)
+backups/migration_20250817_155858/src/lib/email-templates.ts 4ms
+backups/migration_20250817_155858/src/lib/error-utils.ts 4ms (unchanged)
+backups/migration_20250817_155858/src/lib/firebase-admin.ts 24ms
+backups/migration_20250817_155858/src/lib/firebase-config.ts 3ms (unchanged)
+backups/migration_20250817_155858/src/lib/firebase.ts 3ms
+backups/migration_20250817_155858/src/lib/logger.ts 4ms (unchanged)
+backups/migration_20250817_155858/src/lib/sendgrid-email-service.ts 8ms
+backups/migration_20250817_155858/src/lib/sendgrid-templates.ts 5ms
+backups/migration_20250817_155858/src/lib/utils.ts 3ms
+backups/migration_20250817_155858/src/lib/validation.ts 5ms (unchanged)
+backups/migration_20250817_155858/src/providers/theme-provider.tsx 5ms
+backups/migration_20250817_155858/tailwind.config.ts 3ms (unchanged)
+backups/migration_20250817_155858/tsconfig.json 1ms (unchanged)
+backups/migration_20250817_155858/URGENT_AUTH_FIX.md 4ms
+backups/migration_20250817_155858/WEBDESIGN_AGENT.md 4ms
+backups/migration_20250817_155858/WORKSPACE-SETUP.md 4ms
+CF_QUICK_REFERENCE.md 3ms
+CHECK_BRANDING_TAB.md 3ms
+CHECK_FIREBASE_SECURITY_SETTINGS.md 4ms
+CHECK_GOOGLE_PROVIDER.md 4ms
+CLAUDE.md 9ms
+CLOUDFLARE_MIGRATION.md 4ms
+components.json 1ms (unchanged)
+CRITICAL_AUTH_DOMAIN_ISSUE.md 4ms
+DEPLOYMENT_METHOD.md 3ms
+docs/ADMIN_QUICK_START.md 5ms
+docs/api-key-architecture.md 2ms
+docs/blueprint.md 4ms
+docs/cloudflare-sendgrid-dns.md 6ms
+docs/compass-peak.css 61ms
+docs/custom-domain-setup.md 2ms
+docs/development-workflow.md 6ms
+docs/domain-email-setup.md 7ms
+docs/email-deliverability.md 11ms (unchanged)
+docs/email-setup-options.md 6ms
+docs/EULA.md 13ms (unchanged)
+docs/FIREBASE_ADMIN_SETUP.md 12ms
+docs/FIREBASE_SETUP.md 9ms
+docs/firebase-deployment.md 6ms
+docs/firebase-email-template-text.md 2ms
+docs/firebase-magic-link-setup.md 9ms (unchanged)
+docs/FIRESTORE_COLLECTIONS.md 9ms
+docs/FIRESTORE_SETUP.md 8ms
+docs/firestore-rules.md 2ms
+docs/fireweed-path.css 20ms (unchanged)
+docs/fix-api-key-restrictions.md 8ms
+docs/image-processing.md 8ms
+docs/oauth-setup.md 2ms
+docs/sendgrid-domain-decisions.md 3ms
+docs/sendgrid-email-setup.md 6ms
+docs/sendgrid-next-steps.md 15ms
+docs/sendgrid-setup-complete.md 6ms
+docs/sendgrid-template-management.md 12ms
+docs/theme-images.md 4ms
+docs/UPDATE_EMAIL_TEMPLATES.md 2ms
+docs/waiver.md 13ms
+DOMAIN_FIX_STEPS.md 3ms
+FIREBASE_LESSONS_LEARNED.md 14ms
+firebase-import/admins-data.json 1ms
+firebase-import/announcements-data.json 1ms
+firebase-import/firestore.indexes.json 2ms
+firebase-import/import-all.js 8ms
+firebase-import/package.json 1ms (unchanged)
+firebase-import/programs-data.json 1ms
+firebase-import/README.md 3ms
+firebase.json 0ms (unchanged)
+FIX_API_KEY_NOW.md 2ms
+FIX_AUTHORIZED_DOMAINS.md 3ms
+FIX_OAUTH_NOW.md 2ms
+FIX_PROJECT_OWNERS.md 3ms
+FIX_REDIRECT_URIS.md 2ms
+GOOGLE_CLOUD_DOMAIN_UPDATE.md 4ms
+KBE_ORCHESTRATOR.md 12ms
+MCP_INTEGRATION_GUIDE.md 6ms
+MIGRATE_DOMAIN_NOW.md 3ms
+NAVIGATE_TO_OAUTH_CONFIG.md 3ms
+next.config.js 2ms (unchanged)
+OAUTH_CONSENT_FIX.md 3ms
+OAUTH_VS_FIREBASE_EXPLAINED.md 3ms
+package.json 1ms (unchanged)
+PRODUCTION_API_KEY_FIX.md 3ms
+README.md 1ms
+roo-example.md 3ms
+roo-setup.md 1ms (unchanged)
+scripts/add-auth-domain.md 2ms
+scripts/debug-magic-link.js 4ms (unchanged)
+scripts/fix-markdown.js 0ms (unchanged)
+scripts/kbe-orchestrator-server.js 13ms
+scripts/sendgrid-verify.js 3ms
+scripts/setup-admin.js 3ms
+scripts/sync-sendgrid-templates.ts 7ms
+scripts/test-basic-email.js 2ms
+scripts/test-email.ts 4ms
+scripts/test-mcp-connection.js 5ms
+scripts/test-template-direct.js 2ms
+SIDEBAR_DEBUG_SESSION.md 6ms
+src/app/actions/send-welcome-email.ts 7ms
+src/app/admin/activity/page.tsx 10ms
+src/app/admin/calendar/page.tsx 2ms
+src/app/admin/communications/compose/page.tsx 7ms
+src/app/admin/communications/page.tsx 19ms
+src/app/admin/dashboard/page.tsx 19ms
+src/app/admin/email-settings/page.tsx 12ms
+src/app/admin/layout.tsx 8ms
+src/app/admin/page.tsx 2ms
+src/app/admin/programs/page.tsx 3ms
+src/app/admin/registrations/page.tsx 12ms
+src/app/admin/reports/page.tsx 16ms
+src/app/admin/settings/page.tsx 3ms
+src/app/admin/users/page.tsx 15ms
+src/app/admin/waivers/page.tsx 15ms
+src/app/announcements/page.tsx 15ms
+src/app/api-debug/page.tsx 5ms
+src/app/api/webhooks/sendgrid/route.ts 6ms
+src/app/auth-diagnostics/page.tsx 7ms
+src/app/auth-status/page.tsx 6ms
+src/app/calendar/page.tsx 18ms
+src/app/dashboard/announcements/page.tsx 3ms (unchanged)
+src/app/dashboard/layout.tsx 8ms
+src/app/dashboard/page.tsx 4ms
+src/app/debug-announcements/page.tsx 4ms
+src/app/debug-auth-clear/page.tsx 5ms
+src/app/debug-auth/page.tsx 5ms
+src/app/globals.css 7ms
+src/app/layout.tsx 3ms (unchanged)
+src/app/login/page.tsx 4ms
+src/app/page.tsx 8ms
+src/app/profile/page.tsx 16ms
+src/app/programs/mathcounts/page.tsx 11ms
+src/app/programs/page.tsx 6ms
+src/app/register/page.tsx 3ms
+src/app/resources/page.tsx 6ms
+src/app/schedule/page.tsx 8ms
+src/app/settings/page.tsx 8ms
+src/app/signout/page.tsx 3ms
+src/app/signup/page.tsx 16ms
+src/app/students/add/page.tsx 14ms
+src/app/system-status/page.tsx 10ms
+src/app/test-admin/page.tsx 3ms
+src/app/test-announcements/page.tsx 6ms
+src/app/test-auth/page.tsx 7ms
+src/app/theme-showcase/page.tsx 6ms
+src/app/waiver/page.tsx 22ms
+src/app/welcome/page.tsx 5ms
+src/components/admin/data-table.tsx 18ms
+src/components/announcements.tsx 11ms
+src/components/calendar/event-dialog.tsx 20ms
+src/components/dashboard-header.tsx 9ms
+src/components/error-boundary.tsx 9ms (unchanged)
+src/components/eula-dialog.tsx 12ms
+src/components/guardian-info-form.tsx 18ms
+src/components/icons.tsx 4ms
+src/components/layout-with-footer.tsx 3ms
+src/components/legal-footer.tsx 6ms
+src/components/login-form.tsx 17ms
+src/components/portal/mathcounts-schedule.tsx 6ms
+src/components/portal/quick-links.tsx 6ms
+src/components/portal/student-roster.tsx 10ms
+src/components/portal/upcoming-competitions.tsx 8ms
+src/components/portal/welcome-guide.tsx 9ms
+src/components/profile-completion-check.tsx 5ms
+src/components/public-header.tsx 7ms
+src/components/registration/add-students.tsx 15ms
+src/components/registration/parent-account.tsx 10ms
+src/components/registration/registration-flow.tsx 13ms
+src/components/registration/select-program.tsx 13ms
+src/components/session-calendar.tsx 6ms (unchanged)
+src/components/simple-header.tsx 9ms
+src/components/skip-navigation.tsx 7ms (unchanged)
+src/components/theme-image.tsx 9ms
+src/components/theme-switcher.tsx 12ms
+src/components/ui/accordion.tsx 9ms (unchanged)
+src/components/ui/alert-dialog.tsx 14ms (unchanged)
+src/components/ui/alert.tsx 13ms (unchanged)
+src/components/ui/avatar.tsx 9ms (unchanged)
+src/components/ui/badge.tsx 10ms (unchanged)
+src/components/ui/button.tsx 8ms (unchanged)
+src/components/ui/calendar.tsx 8ms (unchanged)
+src/components/ui/card.tsx 9ms
+src/components/ui/carousel.tsx 18ms (unchanged)
+src/components/ui/chart.tsx 28ms (unchanged)
+src/components/ui/checkbox.tsx 8ms (unchanged)
+src/components/ui/collapsible.tsx 4ms (unchanged)
+src/components/ui/dialog.tsx 9ms (unchanged)
+src/components/ui/dropdown-menu.tsx 16ms (unchanged)
+src/components/ui/form.tsx 15ms (unchanged)
+src/components/ui/hover-card.tsx 10ms
+src/components/ui/input.tsx 7ms (unchanged)
+src/components/ui/label.tsx 6ms (unchanged)
+src/components/ui/menubar.tsx 20ms (unchanged)
+src/components/ui/popover.tsx 9ms (unchanged)
+src/components/ui/progress.tsx 10ms (unchanged)
+src/components/ui/radio-group.tsx 10ms (unchanged)
+src/components/ui/scroll-area.tsx 11ms (unchanged)
+src/components/ui/select.tsx 19ms (unchanged)
+src/components/ui/separator.tsx 9ms (unchanged)
+src/components/ui/sheet.tsx 14ms (unchanged)
+src/components/ui/sidebar.tsx 75ms (unchanged)
+src/components/ui/skeleton.tsx 10ms (unchanged)
+src/components/ui/slider.tsx 11ms (unchanged)
+src/components/ui/switch.tsx 12ms (unchanged)
+src/components/ui/table.tsx 12ms (unchanged)
+src/components/ui/tabs.tsx 10ms (unchanged)
+src/components/ui/textarea.tsx 8ms (unchanged)
+src/components/ui/toast.tsx 13ms (unchanged)
+src/components/ui/toaster.tsx 9ms (unchanged)
+src/components/ui/tooltip.tsx 11ms (unchanged)
+src/components/waiver-status-widget.tsx 14ms
+src/hooks/use-admin.tsx 11ms
+src/hooks/use-auth.tsx 9ms
+src/hooks/use-mobile.tsx 4ms (unchanged)
+src/hooks/use-toast.ts 12ms (unchanged)
+src/lib/constants.ts 7ms (unchanged)
+src/lib/email-templates.ts 7ms
+src/lib/error-utils.ts 8ms (unchanged)
+src/lib/firebase-admin.ts 53ms
+src/lib/firebase-config.ts 8ms (unchanged)
+src/lib/firebase.ts 10ms
+src/lib/logger.ts 15ms (unchanged)
+src/lib/sendgrid-email-service.ts 22ms
+src/lib/sendgrid-templates.ts 13ms
+src/lib/utils.ts 8ms
+src/lib/validation.ts 11ms (unchanged)
+src/providers/theme-provider.tsx 12ms
+src/styles/themes/compass-peak.css 13ms
+src/styles/themes/default.css 10ms
+src/styles/themes/fireweed-path.css 11ms
+tailwind.config.ts 5ms (unchanged)
+tsconfig.json 1ms (unchanged)
+URGENT_AUTH_FIX.md 7ms
+WEBDESIGN_AGENT.md 9ms
+WORKSPACE-SETUP.md 6ms

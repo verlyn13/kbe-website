@@ -42,7 +42,7 @@ Click on the API key to see its configuration. You'll likely see:
 
 - Select: **HTTP referrers (websites)**
 - Add these referrers:
-  ```text
+  ````text
   http://localhost:9002/*
   https://localhost:9002/*
   https://kbe-website.firebaseapp.com/*
@@ -50,18 +50,20 @@ Click on the API key to see its configuration. You'll likely see:
   https://homerenrichment.com/*
   https://www.homerenrichment.com/*
   ```text
+  ````
 
 **API Restrictions:**
 
 - Select: **Restrict key**
 - Enable these APIs:
-  ```text
+  ````text
   ✓ Identity Toolkit API
   ✓ Firebase Auth API
   ✓ Firebase Management API
   ✓ Firebase Hosting API
   ✓ Google AI Generative Language API (for GenKit)
   ```text
+  ````
 
 ### 5. Alternative: Create a New Unrestricted Key
 
@@ -71,9 +73,10 @@ If modifying the existing key is problematic:
 2. Name it: "KBE Website - Development"
 3. Leave unrestricted initially
 4. Update your `.env.local`:
-   ```text
+   ````text
    NEXT_PUBLIC_FIREBASE_API_KEY=your-new-api-key
    ```text
+   ````
 
 ## Verification
 
@@ -82,14 +85,17 @@ After making changes:
 1. Wait 5-10 minutes for propagation
 2. Run the debug script:
 
-   ```bash
+   ````bash
    npm run debug:magic-link
    ```text
 
+   ````
+
 3. You should see:
-   ```text
+   ````text
    ✅ Success! Magic link sent.
    ```text
+   ````
 
 ## Security Best Practices
 
@@ -116,7 +122,7 @@ Once magic links are working:
 
 ## Quick Commands
 
-```bash
+````bash
 # Check current API key from .env
 grep NEXT_PUBLIC_FIREBASE_API_KEY .env.local
 
@@ -131,3 +137,4 @@ firebase use
 - [Google Cloud API Key Best Practices](https://cloud.google.com/docs/authentication/api-keys)
 - [Firebase Auth Error Codes](https://firebase.google.com/docs/auth/admin/errors)
 - [Identity Toolkit API](https://cloud.google.com/identity-platform/docs/reference/rest)
+````

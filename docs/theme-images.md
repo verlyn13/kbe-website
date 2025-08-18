@@ -7,13 +7,15 @@ Theme-specific images have been processed and integrated into the Homer Enrichme
 ## Processed Images
 
 ### 1. Fireweed Theme
+
 - **Original**: `/assets/raw/images/fireweed.svg` (37KB)
 - **Processed**:
   - `/public/images/themes/fireweed.svg` (30KB) - Optimized SVG
   - `/public/images/themes/fireweed.png` (35KB) - PNG fallback (400x344)
   - `/public/images/themes/fireweed.webp` (7KB) - WebP for performance
 
-### 2. Compass Peak Theme  
+### 2. Compass Peak Theme
+
 - **Original**: `/assets/raw/images/homerspit.svg` (202KB)
 - **Processed**:
   - `/public/images/themes/compass-peak.svg` (145KB) - Optimized SVG
@@ -53,6 +55,7 @@ import { ThemeImage, ThemeBackgroundImage } from '@/components/theme-image';
 ## Performance
 
 All images meet the performance targets:
+
 - Fireweed WebP: 7KB (< 20KB target)
 - Compass Peak WebP: 6.1KB (< 20KB target)
 - SVG files optimized with 19-27% size reduction

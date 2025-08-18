@@ -3,6 +3,7 @@
 ## Collections Overview
 
 ### 1. `admins` Collection
+
 **Purpose**: Store admin user records and permissions
 
 ```javascript
@@ -19,11 +20,13 @@
 ```
 
 **Create in Console**:
+
 1. Collection ID: `admins`
 2. Document ID: Use the user's UID from Firebase Auth
 3. Required for admin panel access
 
 ### 2. `registrations` Collection
+
 **Purpose**: Store all program registrations from parents
 
 ```javascript
@@ -34,7 +37,7 @@
   parentName: "Jane Doe",
   parentPhone: "(907) 555-1234",
   parentId: "userId123", // Firebase Auth UID
-  
+
   // Student Information
   students: [
     {
@@ -54,7 +57,7 @@
       }
     }
   ],
-  
+
   // Registration Metadata
   status: "pending", // pending, approved, waitlisted, withdrawn
   submittedAt: Timestamp,
@@ -62,7 +65,7 @@
   approvedAt: Timestamp,
   approvedBy: "adminUserId",
   notes: "Admin notes here",
-  
+
   // Program selections
   programs: ["mathcounts-2025"],
   totalAmount: 0, // Future use
@@ -71,6 +74,7 @@
 ```
 
 ### 3. `programs` Collection
+
 **Purpose**: Define available programs
 
 ```javascript
@@ -80,27 +84,27 @@
   name: "MathCounts 2024-2025",
   description: "Competition mathematics for middle school students",
   type: "mathcounts", // or "enrichment"
-  
+
   // Schedule
   startDate: "2025-01-15",
-  endDate: "2025-05-01", 
+  endDate: "2025-05-01",
   schedule: "Wednesdays 3:30-5:00 PM",
   location: "Homer Middle School Room 204",
-  
+
   // Enrollment
   capacity: 24,
   enrolled: 18,
   waitlist: 3,
-  
+
   // Requirements
   grades: ["6", "7", "8"],
   prerequisites: "Basic algebra knowledge",
-  
+
   // Status
   active: true,
   registrationOpen: true,
   registrationDeadline: "2025-01-10",
-  
+
   // Additional Info
   instructor: "Ms. Smith",
   fee: 0,
@@ -111,6 +115,7 @@
 ```
 
 ### 4. `announcements` Collection
+
 **Purpose**: System-wide announcements and communications
 
 ```javascript
@@ -119,22 +124,22 @@
   title: "MathCounts Practice Schedule Change",
   content: "Next week's practice moved to Thursday...",
   priority: "high", // low, normal, high
-  
+
   // Targeting
   recipients: "all", // all, mathcounts, enrichment, specific program
   programId: "mathcounts-2025", // if recipients is specific
-  
+
   // Metadata
   createdBy: "adminUserId",
   createdByName: "Jeffrey Johnson",
   createdAt: Timestamp,
   publishedAt: Timestamp,
   expiresAt: Timestamp, // optional
-  
+
   // Status
   status: "published", // draft, published, archived
   pinned: false,
-  
+
   // Tracking
   viewCount: 0,
   acknowledgedBy: [] // array of userIds who marked as read
@@ -142,6 +147,7 @@
 ```
 
 ### 5. `users` Collection (Future)
+
 **Purpose**: Extended user profiles for parents
 
 ```javascript
@@ -150,18 +156,18 @@
   email: "parent@example.com",
   displayName: "Jane Doe",
   phone: "(907) 555-1234",
-  
+
   // Preferences
   notifications: {
     email: true,
     sms: false,
     announcements: true
   },
-  
+
   // Related data
   studentIds: ["student1", "student2"],
   registrationIds: ["reg1", "reg2"],
-  
+
   // Metadata
   createdAt: Timestamp,
   lastLogin: Timestamp,
@@ -192,6 +198,7 @@
 ## Security Rules Applied
 
 The firestore.rules file already includes:
+
 - Admins can read/write all collections
 - Parents can read their own registrations
 - All authenticated users can read programs and announcements
@@ -216,6 +223,7 @@ Firestore will prompt you to create indexes when needed. Common ones:
 ## Sample Data for Testing
 
 ### Sample Program (mathcounts-2025):
+
 ```json
 {
   "id": "mathcounts-2025",
@@ -241,6 +249,7 @@ Firestore will prompt you to create indexes when needed. Common ones:
 ```
 
 ### Sample Announcement:
+
 ```json
 {
   "title": "Welcome to Homer Enrichment Hub!",

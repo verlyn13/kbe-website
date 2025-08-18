@@ -5,16 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { 
-  Users, 
-  Mail, 
-  Download, 
-  Calendar, 
+import {
+  Users,
+  Mail,
+  Download,
+  Calendar,
   UserPlus,
   Send,
   FileSpreadsheet,
   Clock,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -42,16 +42,16 @@ interface DashboardStats {
   }>;
 }
 
-function StatCard({ 
-  title, 
-  value, 
-  description, 
-  icon: Icon, 
-  trend 
-}: { 
-  title: string; 
-  value: number | string; 
-  description?: string; 
+function StatCard({
+  title,
+  value,
+  description,
+  icon: Icon,
+  trend,
+}: {
+  title: string;
+  value: number | string;
+  description?: string;
   icon: React.ElementType;
   trend?: 'up' | 'down' | 'neutral';
 }) {
@@ -59,13 +59,11 @@ function StatCard({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
+        <Icon className="text-muted-foreground h-4 w-4" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
+        {description && <p className="text-muted-foreground text-xs">{description}</p>}
       </CardContent>
     </Card>
   );
@@ -76,7 +74,7 @@ function QuickActionCard({
   subtitle,
   icon: Icon,
   href,
-  onClick
+  onClick,
 }: {
   title: string;
   subtitle: string;
@@ -86,32 +84,25 @@ function QuickActionCard({
 }) {
   const content = (
     <>
-      <Icon className="h-6 w-6 mb-2 text-primary" />
+      <Icon className="text-primary mb-2 h-6 w-6" />
       <h3 className="font-semibold">{title}</h3>
-      <p className="text-sm text-muted-foreground">{subtitle}</p>
+      <p className="text-muted-foreground text-sm">{subtitle}</p>
     </>
   );
 
   if (href) {
     return (
       <Link href={href}>
-        <Card className="hover:bg-accent cursor-pointer transition-colors h-full">
-          <CardContent className="pt-6">
-            {content}
-          </CardContent>
+        <Card className="hover:bg-accent h-full cursor-pointer transition-colors">
+          <CardContent className="pt-6">{content}</CardContent>
         </Card>
       </Link>
     );
   }
 
   return (
-    <Card 
-      className="hover:bg-accent cursor-pointer transition-colors h-full" 
-      onClick={onClick}
-    >
-      <CardContent className="pt-6">
-        {content}
-      </CardContent>
+    <Card className="hover:bg-accent h-full cursor-pointer transition-colors" onClick={onClick}>
+      <CardContent className="pt-6">{content}</CardContent>
     </Card>
   );
 }
@@ -126,7 +117,7 @@ export default function AdminDashboardPage() {
     async function loadDashboard() {
       try {
         const registrationStats = await registrationService.getStats('mathcounts-2025');
-        
+
         // Mock upcoming events for now
         const upcomingEvents = [
           {
@@ -279,21 +270,27 @@ export default function AdminDashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {stats?.upcomingEvents.map((event) => (
-                <div 
-                  key={event.id} 
-                  className="flex items-start gap-3 p-2 rounded-lg hover:bg-accent cursor-pointer transition-colors"
-                  onClick={() => router.push(`/calendar?eventId=${event.id}&date=${event.date.toISOString()}`)}
+                <div
+                  key={event.id}
+                  className="hover:bg-accent flex cursor-pointer items-start gap-3 rounded-lg p-2 transition-colors"
+                  onClick={() =>
+                    router.push(`/calendar?eventId=${event.id}&date=${event.date.toISOString()}`)
+                  }
                 >
-                  <div className={`rounded-full p-2 ${
-                    event.type === 'competition' ? 'bg-green-100' :
-                    event.type === 'deadline' ? 'bg-red-100' :
-                    'bg-blue-100'
-                  }`}>
+                  <div
+                    className={`rounded-full p-2 ${
+                      event.type === 'competition'
+                        ? 'bg-green-100'
+                        : event.type === 'deadline'
+                          ? 'bg-red-100'
+                          : 'bg-blue-100'
+                    }`}
+                  >
                     <Calendar className="h-4 w-4" />
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">{event.title}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       {event.date.toLocaleDateString('en-US', {
                         weekday: 'short',
                         month: 'short',
@@ -303,11 +300,15 @@ export default function AdminDashboardPage() {
                       })}
                     </p>
                   </div>
-                  <Badge variant={
-                    event.type === 'competition' ? 'default' :
-                    event.type === 'deadline' ? 'destructive' :
-                    'secondary'
-                  }>
+                  <Badge
+                    variant={
+                      event.type === 'competition'
+                        ? 'default'
+                        : event.type === 'deadline'
+                          ? 'destructive'
+                          : 'secondary'
+                    }
+                  >
                     {event.type}
                   </Badge>
                 </div>
@@ -326,12 +327,12 @@ export default function AdminDashboardPage() {
             <div className="space-y-4">
               {stats?.recentActivity.map((activity) => (
                 <div key={activity.id} className="flex items-start gap-3">
-                  <div className="rounded-full bg-muted p-2">
+                  <div className="bg-muted rounded-full p-2">
                     <UserPlus className="h-4 w-4" />
                   </div>
                   <div className="flex-1">
                     <p className="text-sm">{activity.action}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       {activity.timestamp.toLocaleTimeString('en-US', {
                         hour: 'numeric',
                         minute: '2-digit',
@@ -342,7 +343,7 @@ export default function AdminDashboardPage() {
                 </div>
               ))}
             </div>
-            <Button variant="outline" className="w-full mt-4" asChild>
+            <Button variant="outline" className="mt-4 w-full" asChild>
               <Link href="/admin/activity">View All Activity</Link>
             </Button>
           </CardContent>
@@ -359,13 +360,12 @@ export default function AdminDashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm mb-4">
-              You have {stats.registrations.pending} registration{stats.registrations.pending > 1 ? 's' : ''} waiting for approval.
+            <p className="mb-4 text-sm">
+              You have {stats.registrations.pending} registration
+              {stats.registrations.pending > 1 ? 's' : ''} waiting for approval.
             </p>
             <Button asChild>
-              <Link href="/admin/registrations?filter=pending">
-                Review Pending Registrations
-              </Link>
+              <Link href="/admin/registrations?filter=pending">Review Pending Registrations</Link>
             </Button>
           </CardContent>
         </Card>

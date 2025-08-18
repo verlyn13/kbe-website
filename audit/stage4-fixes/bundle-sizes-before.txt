@@ -1,0 +1,4 @@
+Route (app)                                 Size  First Load JS
+├ ○ /admin/communications                5.51 kB         290 kB
+├ ○ /calendar                            26.1 kB         301 kB
+├ ○ /register                            8.03 kB         296 kB

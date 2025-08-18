@@ -197,7 +197,7 @@ Homer Enrichment Hub
 Formerly Kachemak Bay Explorers
 Homer, Alaska
 
-© {{currentYear}} Homer Enrichment Hub. All rights reserved.`
+© {{currentYear}} Homer Enrichment Hub. All rights reserved.`,
   },
 
   welcome: {
@@ -291,7 +291,7 @@ Homer Enrichment Hub
 Formerly Kachemak Bay Explorers
 Homer, Alaska
 
-© {{currentYear}} Homer Enrichment Hub. All rights reserved.`
+© {{currentYear}} Homer Enrichment Hub. All rights reserved.`,
   },
 
   passwordReset: {
@@ -353,7 +353,7 @@ Homer Enrichment Hub
 Formerly Kachemak Bay Explorers
 Homer, Alaska
 
-© {{currentYear}} Homer Enrichment Hub. All rights reserved.`
+© {{currentYear}} Homer Enrichment Hub. All rights reserved.`,
   },
 
   announcement: {
@@ -407,7 +407,7 @@ Homer Enrichment Hub
 Formerly Kachemak Bay Explorers
 Homer, Alaska
 
-© {{currentYear}} Homer Enrichment Hub. All rights reserved.`
+© {{currentYear}} Homer Enrichment Hub. All rights reserved.`,
   },
 
   registrationConfirmation: {
@@ -489,8 +489,8 @@ Homer Enrichment Hub
 Formerly Kachemak Bay Explorers
 Homer, Alaska
 
-© {{currentYear}} Homer Enrichment Hub. All rights reserved.`
-  }
+© {{currentYear}} Homer Enrichment Hub. All rights reserved.`,
+  },
 };
 
 // Test data for each template (for development/preview)
@@ -498,24 +498,25 @@ export const templateTestData: Record<string, any> = {
   magicLink: {
     firstName: 'Sarah',
     magicLinkUrl: 'https://homerenrichment.com/__/auth/action?mode=signIn&oobCode=abc123',
-    currentYear: new Date().getFullYear()
+    currentYear: new Date().getFullYear(),
   },
   welcome: {
     firstName: 'Sarah',
     dashboardUrl: 'https://homerenrichment.com/dashboard',
-    currentYear: new Date().getFullYear()
+    currentYear: new Date().getFullYear(),
   },
   passwordReset: {
     firstName: 'Sarah',
     resetUrl: 'https://homerenrichment.com/__/auth/action?mode=resetPassword&oobCode=abc123',
-    currentYear: new Date().getFullYear()
+    currentYear: new Date().getFullYear(),
   },
   announcement: {
     firstName: 'Sarah',
     announcementTitle: 'Spring Registration Now Open',
-    announcementContent: '<p>We\'re excited to announce that registration for our Spring 2025 programs is now open!</p><p>Visit your dashboard to see all available programs and register your students.</p>',
+    announcementContent:
+      "<p>We're excited to announce that registration for our Spring 2025 programs is now open!</p><p>Visit your dashboard to see all available programs and register your students.</p>",
     announcementUrl: 'https://homerenrichment.com/announcements',
-    currentYear: new Date().getFullYear()
+    currentYear: new Date().getFullYear(),
   },
   registrationConfirmation: {
     guardianName: 'Sarah Johnson',
@@ -526,6 +527,6 @@ export const templateTestData: Record<string, any> = {
     startDate: 'January 15, 2025',
     schedule: 'Tuesdays and Thursdays, 4:00-5:30 PM',
     dashboardUrl: 'https://homerenrichment.com/dashboard',
-    currentYear: new Date().getFullYear()
-  }
+    currentYear: new Date().getFullYear(),
+  },
 };

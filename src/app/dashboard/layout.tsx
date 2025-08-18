@@ -43,23 +43,32 @@ function HehLogo() {
         <path d="M2 17l10 5 10-5" />
         <path d="M2 12l10 5 10-5" />
       </svg>
-      <h1 className="text-sidebar-foreground text-lg font-bold transition-opacity duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:w-0">
+      <h1 className="text-sidebar-foreground text-lg font-bold transition-opacity duration-200 group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:opacity-0">
         Guardian Portal
       </h1>
     </Link>
   );
 }
 
-function MobileAwareSidebarMenuButton({ href, children, ...props }: { href: string; children: React.ReactNode; isActive?: boolean; tooltip?: string }) {
+function MobileAwareSidebarMenuButton({
+  href,
+  children,
+  ...props
+}: {
+  href: string;
+  children: React.ReactNode;
+  isActive?: boolean;
+  tooltip?: string;
+}) {
   const { setOpenMobile } = useSidebar();
   const isMobile = useIsMobile();
-  
+
   const handleClick = () => {
     if (isMobile) {
       setOpenMobile(false);
     }
   };
-  
+
   return (
     <SidebarMenuButton asChild {...props}>
       <Link href={href} onClick={handleClick}>
@@ -166,9 +175,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <SidebarInset>
         <DashboardHeader />
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <ProfileCompletionCheck>
-            {children}
-          </ProfileCompletionCheck>
+          <ProfileCompletionCheck>{children}</ProfileCompletionCheck>
         </div>
       </SidebarInset>
     </SidebarProvider>

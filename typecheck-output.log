@@ -1,0 +1,153 @@
+.next/types/app/api/webhooks/sendgrid/route.ts(12,13): error TS2344: Type 'OmitWithTag<typeof import("/home/verlyn13/Projects/verlyn13/kbe-website/src/app/api/webhooks/sendgrid/route"), "config" | "dynamic" | "GET" | "POST" | "PATCH" | "DELETE" | "generateStaticParams" | ... 8 more ... | "PUT", "">' does not satisfy the constraint '{ [x: string]: never; }'.
+  Property 'verifyWebhookSignature' is incompatible with index signature.
+    Type '(publicKey: string, payload: string, signature: string, timestamp: string) => Promise<boolean>' is not assignable to type 'never'.
+backups/migration_20250817_155858/scripts/test-email.ts(69,29): error TS2345: Argument of type 'string' is not assignable to parameter of type '"magicLink" | "welcome" | "passwordReset" | "announcement" | "registrationConfirmation"'.
+backups/migration_20250817_155858/src/app/admin/email-settings/page.tsx(155,22): error TS2322: Type '"success"' is not assignable to type '"secondary" | "destructive" | "default" | "outline" | null | undefined'.
+backups/migration_20250817_155858/src/app/admin/email-settings/page.tsx(163,22): error TS2322: Type '"success"' is not assignable to type '"secondary" | "destructive" | "default" | "outline" | null | undefined'.
+backups/migration_20250817_155858/src/app/admin/email-settings/page.tsx(171,22): error TS2322: Type '"success"' is not assignable to type '"secondary" | "destructive" | "default" | "outline" | null | undefined'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(63,29): error TS2339: Property 'getByProgram' does not exist on type '{ getAll(filters?: { status?: "pending" | "active" | "withdrawn" | "waitlist" | undefined; programId?: string | undefined; } | undefined): Promise<Registration[]>; getById(id: string): Promise<...>; updateStatus(id: string, status: "pending" | ... 2 more ... | "waitlist", adminId: string): Promise<...>; getStats(pro...'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(73,20): error TS7006: Parameter 'reg' implicitly has an 'any' type.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(74,30): error TS7006: Parameter 'student' implicitly has an 'any' type.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(120,15): error TS2339: Property 'guardianName' does not exist on type 'Registration'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(121,15): error TS2339: Property 'guardianEmail' does not exist on type 'Registration'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(122,15): error TS2339: Property 'guardianPhone' does not exist on type 'Registration'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(123,19): error TS2339: Property 'name' does not exist on type 'Student'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(127,24): error TS2339: Property 'createdAt' does not exist on type 'Registration'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(340,55): error TS2339: Property 'guardianName' does not exist on type 'Registration'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(341,73): error TS2339: Property 'guardianEmail' does not exist on type 'Registration'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(347,34): error TS2339: Property 'name' does not exist on type 'Student'.
+backups/migration_20250817_155858/src/app/admin/reports/page.tsx(352,35): error TS2339: Property 'createdAt' does not exist on type 'Registration'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(11,40): error TS2305: Module '"@/lib/firebase-admin"' has no exported member 'Profile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(143,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(146,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(151,23): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(152,22): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(152,42): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(153,11): error TS2322: Type '"admin"' is not assignable to type '"superAdmin" | "programAdmin" | "volunteer"'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(163,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(166,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(186,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(186,50): error TS2322: Type '"admin"' is not assignable to type '"superAdmin" | "programAdmin" | "volunteer" | undefined'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(189,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(193,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(199,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(216,10): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(217,10): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(218,10): error TS2339: Property 'phone' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(322,41): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(326,52): error TS2339: Property 'avatarUrl' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(328,37): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(328,68): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(332,62): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(333,80): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(341,35): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(343,33): error TS2339: Property 'phone' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(346,55): error TS2339: Property 'phone' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(364,33): error TS2339: Property 'createdAt' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(364,59): error TS2339: Property 'createdAt' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(379,35): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(413,54): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(414,56): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(414,76): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/admin/users/page.tsx(416,46): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+backups/migration_20250817_155858/src/app/auth-diagnostics/page.tsx(79,30): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+backups/migration_20250817_155858/src/components/ui/chart.tsx(158,78): error TS2345: Argument of type 'ReactNode' is not assignable to parameter of type 'string | number'.
+  Type 'undefined' is not assignable to type 'string | number'.
+backups/migration_20250817_155858/src/components/ui/chart.tsx(188,45): error TS18048: 'item.payload' is possibly 'undefined'.
+backups/migration_20250817_155858/src/lib/firebase-admin.ts(376,71): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+backups/migration_20250817_155858/src/lib/firebase-admin.ts(493,27): error TS2304: Cannot find name 'Profile'.
+backups/migration_20250817_155858/src/lib/firebase-admin.ts(503,14): error TS2304: Cannot find name 'Profile'.
+backups/migration_20250817_155858/src/lib/firebase-admin.ts(520,59): error TS2304: Cannot find name 'Profile'.
+backups/migration_20250817_155858/src/lib/firebase-admin.ts(601,11): error TS2304: Cannot find name 'activityService'.
+backups/migration_20250817_155858/src/lib/firebase-admin.ts(635,11): error TS2304: Cannot find name 'activityService'.
+backups/migration_20250817_155858/src/lib/sendgrid-email-service.ts(11,15): error TS2339: Property 'apiKey' does not exist on type 'MailService'.
+scripts/test-email.ts(69,29): error TS2345: Argument of type 'string' is not assignable to parameter of type '"magicLink" | "welcome" | "passwordReset" | "announcement" | "registrationConfirmation"'.
+src/app/admin/email-settings/page.tsx(155,22): error TS2322: Type '"success"' is not assignable to type '"secondary" | "destructive" | "default" | "outline" | null | undefined'.
+src/app/admin/email-settings/page.tsx(163,22): error TS2322: Type '"success"' is not assignable to type '"secondary" | "destructive" | "default" | "outline" | null | undefined'.
+src/app/admin/email-settings/page.tsx(171,22): error TS2322: Type '"success"' is not assignable to type '"secondary" | "destructive" | "default" | "outline" | null | undefined'.
+src/app/admin/reports/page.tsx(63,29): error TS2339: Property 'getByProgram' does not exist on type '{ getAll(filters?: { status?: "pending" | "active" | "withdrawn" | "waitlist" | undefined; programId?: string | undefined; } | undefined): Promise<Registration[]>; getById(id: string): Promise<...>; updateStatus(id: string, status: "pending" | ... 2 more ... | "waitlist", adminId: string): Promise<...>; getStats(pro...'.
+src/app/admin/reports/page.tsx(73,20): error TS7006: Parameter 'reg' implicitly has an 'any' type.
+src/app/admin/reports/page.tsx(74,30): error TS7006: Parameter 'student' implicitly has an 'any' type.
+src/app/admin/reports/page.tsx(120,15): error TS2339: Property 'guardianName' does not exist on type 'Registration'.
+src/app/admin/reports/page.tsx(121,15): error TS2339: Property 'guardianEmail' does not exist on type 'Registration'.
+src/app/admin/reports/page.tsx(122,15): error TS2339: Property 'guardianPhone' does not exist on type 'Registration'.
+src/app/admin/reports/page.tsx(123,19): error TS2339: Property 'name' does not exist on type 'Student'.
+src/app/admin/reports/page.tsx(127,24): error TS2339: Property 'createdAt' does not exist on type 'Registration'.
+src/app/admin/reports/page.tsx(340,55): error TS2339: Property 'guardianName' does not exist on type 'Registration'.
+src/app/admin/reports/page.tsx(341,73): error TS2339: Property 'guardianEmail' does not exist on type 'Registration'.
+src/app/admin/reports/page.tsx(347,34): error TS2339: Property 'name' does not exist on type 'Student'.
+src/app/admin/reports/page.tsx(352,35): error TS2339: Property 'createdAt' does not exist on type 'Registration'.
+src/app/admin/users/page.tsx(11,40): error TS2305: Module '"@/lib/firebase-admin"' has no exported member 'Profile'.
+src/app/admin/users/page.tsx(143,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(146,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(151,23): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(152,22): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(152,42): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(153,11): error TS2322: Type '"admin"' is not assignable to type '"superAdmin" | "programAdmin" | "volunteer"'.
+src/app/admin/users/page.tsx(163,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(166,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(186,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(186,50): error TS2322: Type '"admin"' is not assignable to type '"superAdmin" | "programAdmin" | "volunteer" | undefined'.
+src/app/admin/users/page.tsx(189,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(193,40): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(199,32): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(216,10): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(217,10): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(218,10): error TS2339: Property 'phone' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(322,41): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(326,52): error TS2339: Property 'avatarUrl' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(328,37): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(328,68): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(332,62): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(333,80): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(341,35): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(343,33): error TS2339: Property 'phone' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(346,55): error TS2339: Property 'phone' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(364,33): error TS2339: Property 'createdAt' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(364,59): error TS2339: Property 'createdAt' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(379,35): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(413,54): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(414,56): error TS2339: Property 'displayName' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(414,76): error TS2339: Property 'email' does not exist on type 'UserWithProfile'.
+src/app/admin/users/page.tsx(416,46): error TS2339: Property 'userId' does not exist on type 'UserWithProfile'.
+src/app/auth-diagnostics/page.tsx(79,30): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+src/components/ui/chart.tsx(158,78): error TS2345: Argument of type 'ReactNode' is not assignable to parameter of type 'string | number'.
+  Type 'undefined' is not assignable to type 'string | number'.
+src/components/ui/chart.tsx(188,45): error TS18048: 'item.payload' is possibly 'undefined'.
+src/lib/firebase-admin.ts(376,71): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/firebase-admin.ts(493,27): error TS2304: Cannot find name 'Profile'.
+src/lib/firebase-admin.ts(503,14): error TS2304: Cannot find name 'Profile'.
+src/lib/firebase-admin.ts(520,59): error TS2304: Cannot find name 'Profile'.
+src/lib/firebase-admin.ts(601,11): error TS2304: Cannot find name 'activityService'.
+src/lib/firebase-admin.ts(635,11): error TS2304: Cannot find name 'activityService'.
+src/lib/sendgrid-email-service.ts(11,15): error TS2339: Property 'apiKey' does not exist on type 'MailService'.
+Files:                        1582
+Lines of Library:            43159
+Lines of Definitions:       203713
+Lines of TypeScript:         42856
+Lines of JavaScript:             0
+Lines of JSON:                   0
+Lines of Other:                  0
+Identifiers:                338974
+Symbols:                    405462
+Types:                       89916
+Instantiations:             586180
+Memory used:               558931K
+Assignability cache size:    64855
+Identity cache size:          5698
+Subtype cache size:           1880
+Strict subtype cache size:     424
+I/O Read time:               0.10s
+Parse time:                  0.71s
+ResolveTypeReference time:   0.01s
+ResolveModule time:          0.14s
+ResolveLibrary time:         0.01s
+Program time:                1.10s
+Bind time:                   0.31s
+Check time:                  5.50s
+I/O Write time:              0.00s
+printTime time:              0.02s
+Emit time:                   0.02s
+Total time:                  6.92s

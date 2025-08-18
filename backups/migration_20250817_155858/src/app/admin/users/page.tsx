@@ -9,9 +9,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
 import { profileService, adminService, Profile, AdminUser } from '@/lib/firebase-admin';
-import { 
-  Search, 
-  Shield, 
+import {
+  Search,
+  Shield,
   ShieldOff,
   Trash2,
   MoreVertical,
@@ -21,7 +21,7 @@ import {
   Calendar,
   AlertCircle,
   FileCheck,
-  Users
+  Users,
 } from 'lucide-react';
 import {
   Table,
@@ -76,23 +76,23 @@ export default function UserManagementPage() {
   async function loadUsers() {
     try {
       setLoading(true);
-      
+
       // Load all user profiles
       const [profiles, adminList] = await Promise.all([
         profileService.getAll(),
-        adminService.getAll()
+        adminService.getAll(),
       ]);
-      
+
       // Merge admin status with user profiles
-      const adminIds = new Set(adminList.map(a => a.id));
-      const adminRoles = Object.fromEntries(adminList.map(a => [a.id, a.role]));
-      
-      const usersWithAdminStatus = profiles.map(profile => ({
+      const adminIds = new Set(adminList.map((a) => a.id));
+      const adminRoles = Object.fromEntries(adminList.map((a) => [a.id, a.role]));
+
+      const usersWithAdminStatus = profiles.map((profile) => ({
         ...profile,
         isAdmin: adminIds.has(profile.userId),
-        adminRole: adminRoles[profile.userId] as 'admin' | 'superAdmin' | undefined
+        adminRole: adminRoles[profile.userId] as 'admin' | 'superAdmin' | undefined,
       }));
-      
+
       setUsers(usersWithAdminStatus);
       setAdmins(adminList);
     } catch (error) {
@@ -111,17 +111,17 @@ export default function UserManagementPage() {
     try {
       // Delete user profile
       await profileService.delete(userId);
-      
+
       // If user is admin, remove admin access
-      if (admins.some(a => a.id === userId)) {
+      if (admins.some((a) => a.id === userId)) {
         await adminService.delete(userId);
       }
-      
+
       toast({
         title: 'User deleted',
         description: 'The user has been removed from the system',
       });
-      
+
       // Reload users
       loadUsers();
     } catch (error) {
@@ -156,17 +156,17 @@ export default function UserManagementPage() {
             'manage_registrations',
             'send_announcements',
             'manage_programs',
-            'view_reports'
+            'view_reports',
           ],
         };
-        
+
         await adminService.create(user.userId, newAdmin);
         toast({
           title: 'Admin access granted',
           description: `${user.displayName} is now an admin`,
         });
       }
-      
+
       // Reload users
       loadUsers();
     } catch (error) {
@@ -190,16 +190,16 @@ export default function UserManagementPage() {
         });
       } else {
         // Promote to super admin
-        await adminService.update(user.userId, { 
+        await adminService.update(user.userId, {
           role: 'superAdmin',
-          permissions: ['all']
+          permissions: ['all'],
         });
         toast({
           title: 'Super admin access granted',
           description: `${user.displayName} is now a super admin`,
         });
       }
-      
+
       // Reload users
       loadUsers();
     } catch (error) {
@@ -212,15 +212,16 @@ export default function UserManagementPage() {
     }
   }
 
-  const filteredUsers = users.filter(user => 
-    user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.phone?.includes(searchQuery.replace(/\D/g, ''))
+  const filteredUsers = users.filter(
+    (user) =>
+      user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.phone?.includes(searchQuery.replace(/\D/g, ''))
   );
 
   if (!hasPermission('manage_settings')) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex h-full items-center justify-center">
         <p className="text-muted-foreground">You don't have permission to manage users.</p>
       </div>
     );
@@ -239,9 +240,7 @@ export default function UserManagementPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">User Management</h1>
-        <p className="text-muted-foreground">
-          Manage user accounts and admin access
-        </p>
+        <p className="text-muted-foreground">Manage user accounts and admin access</p>
       </div>
 
       {/* Stats */}
@@ -249,22 +248,22 @@ export default function UserManagementPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <User className="h-4 w-4 text-muted-foreground" />
+            <User className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{users.length}</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Admins</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
+            <Shield className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{admins.length}</div>
-            <p className="text-xs text-muted-foreground">
-              {admins.filter(a => a.role === 'superAdmin').length} super admins
+            <p className="text-muted-foreground text-xs">
+              {admins.filter((a) => a.role === 'superAdmin').length} super admins
             </p>
           </CardContent>
         </Card>
@@ -272,10 +271,10 @@ export default function UserManagementPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Guardians</CardTitle>
-            <User className="h-4 w-4 text-muted-foreground" />
+            <User className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{users.filter(u => !u.isAdmin).length}</div>
+            <div className="text-2xl font-bold">{users.filter((u) => !u.isAdmin).length}</div>
           </CardContent>
         </Card>
       </div>
@@ -289,7 +288,7 @@ export default function UserManagementPage() {
         <CardContent>
           <div className="mb-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
                 placeholder="Search by name, email, or phone..."
                 value={searchQuery}
@@ -313,7 +312,7 @@ export default function UserManagementPage() {
               <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground">
+                    <TableCell colSpan={5} className="text-muted-foreground text-center">
                       No users found
                     </TableCell>
                   </TableRow>
@@ -330,7 +329,7 @@ export default function UserManagementPage() {
                           </Avatar>
                           <div>
                             <p className="font-medium">{user.displayName || 'No name'}</p>
-                            <p className="text-sm text-muted-foreground">{user.email}</p>
+                            <p className="text-muted-foreground text-sm">{user.email}</p>
                           </div>
                         </div>
                       </TableCell>
@@ -341,7 +340,7 @@ export default function UserManagementPage() {
                             {user.email}
                           </div>
                           {user.phone && (
-                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <div className="text-muted-foreground flex items-center gap-1 text-sm">
                               <Phone className="h-3 w-3" />
                               {formatPhoneNumber(user.phone)}
                             </div>
@@ -350,7 +349,9 @@ export default function UserManagementPage() {
                       </TableCell>
                       <TableCell>
                         {user.isAdmin ? (
-                          <Badge variant={user.adminRole === 'superAdmin' ? 'default' : 'secondary'}>
+                          <Badge
+                            variant={user.adminRole === 'superAdmin' ? 'default' : 'secondary'}
+                          >
                             <Shield className="mr-1 h-3 w-3" />
                             {user.adminRole === 'superAdmin' ? 'Super Admin' : 'Admin'}
                           </Badge>
@@ -359,9 +360,11 @@ export default function UserManagementPage() {
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <div className="text-muted-foreground flex items-center gap-1 text-sm">
                           <Calendar className="h-3 w-3" />
-                          {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'}
+                          {user.createdAt
+                            ? new Date(user.createdAt).toLocaleDateString()
+                            : 'Unknown'}
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
@@ -374,7 +377,7 @@ export default function UserManagementPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            
+
                             {/* Don't allow users to modify their own admin status */}
                             {user.userId !== currentAdmin?.id && (
                               <>
@@ -385,17 +388,22 @@ export default function UserManagementPage() {
                                       Remove Admin Access
                                     </DropdownMenuItem>
                                     {user.adminRole === 'admin' && (
-                                      <DropdownMenuItem onClick={() => handleToggleSuperAdmin(user)}>
+                                      <DropdownMenuItem
+                                        onClick={() => handleToggleSuperAdmin(user)}
+                                      >
                                         <Shield className="mr-2 h-4 w-4" />
                                         Promote to Super Admin
                                       </DropdownMenuItem>
                                     )}
-                                    {user.adminRole === 'superAdmin' && currentAdmin?.role === 'superAdmin' && (
-                                      <DropdownMenuItem onClick={() => handleToggleSuperAdmin(user)}>
-                                        <ShieldOff className="mr-2 h-4 w-4" />
-                                        Demote to Admin
-                                      </DropdownMenuItem>
-                                    )}
+                                    {user.adminRole === 'superAdmin' &&
+                                      currentAdmin?.role === 'superAdmin' && (
+                                        <DropdownMenuItem
+                                          onClick={() => handleToggleSuperAdmin(user)}
+                                        >
+                                          <ShieldOff className="mr-2 h-4 w-4" />
+                                          Demote to Admin
+                                        </DropdownMenuItem>
+                                      )}
                                   </>
                                 ) : (
                                   <DropdownMenuItem onClick={() => handleToggleAdmin(user)}>
@@ -406,8 +414,8 @@ export default function UserManagementPage() {
                                 <DropdownMenuSeparator />
                               </>
                             )}
-                            
-                            <DropdownMenuItem 
+
+                            <DropdownMenuItem
                               className="text-destructive"
                               onClick={() => {
                                 setDeleteUserId(user.userId);
@@ -437,12 +445,14 @@ export default function UserManagementPage() {
             <AlertDialogTitle>Delete User</AlertDialogTitle>
             <AlertDialogDescription>
               <div className="space-y-3">
-                <p>Are you sure you want to delete <strong>{deleteUserName}</strong>?</p>
+                <p>
+                  Are you sure you want to delete <strong>{deleteUserName}</strong>?
+                </p>
                 <div className="flex items-center gap-2 text-amber-600">
                   <AlertCircle className="h-4 w-4" />
                   <span className="text-sm">This action cannot be undone.</span>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   The user's profile and all associated data will be permanently removed.
                 </p>
               </div>

@@ -7,9 +7,11 @@ import sgMail from '@sendgrid/mail';
 import { sendGridTemplates, templateTestData } from './sendgrid-templates';
 
 // Initialize SendGrid with API key - will be set when needed
+let sendgridInitialized = false;
 function ensureApiKey() {
-  if (!sgMail.apiKey && process.env.SENDGRID_API_KEY) {
+  if (!sendgridInitialized && process.env.SENDGRID_API_KEY) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    sendgridInitialized = true;
   }
 }
 
@@ -33,7 +35,12 @@ const DEFAULT_FROM = {
 
 interface SendEmailOptions {
   to: string | string[];
-  templateKey: 'magicLink' | 'welcome' | 'passwordReset' | 'announcement' | 'registrationConfirmation';
+  templateKey:
+    | 'magicLink'
+    | 'welcome'
+    | 'passwordReset'
+    | 'announcement'
+    | 'registrationConfirmation';
   dynamicData: Record<string, any>;
   from?: { email: string; name?: string };
   replyTo?: { email: string; name?: string };
@@ -54,11 +61,13 @@ export async function sendTemplatedEmail({
   customArgs = {},
 }: SendEmailOptions) {
   ensureApiKey();
-  
+
   const templateId = getTemplateId(templateKey);
-  
+
   if (!templateId) {
-    throw new Error(`Template ID not found for key: ${templateKey}. Run 'npm run sync-templates' and add the IDs to .env.local`);
+    throw new Error(
+      `Template ID not found for key: ${templateKey}. Run 'npm run sync-templates' and add the IDs to .env.local`
+    );
   }
 
   // Add common dynamic data
@@ -89,11 +98,7 @@ export async function sendTemplatedEmail({
 /**
  * Send magic link sign-in email
  */
-export async function sendMagicLinkEmail(
-  email: string, 
-  magicLinkUrl: string,
-  firstName?: string
-) {
+export async function sendMagicLinkEmail(email: string, magicLinkUrl: string, firstName?: string) {
   return sendTemplatedEmail({
     to: email,
     templateKey: 'magicLink',
@@ -108,10 +113,7 @@ export async function sendMagicLinkEmail(
 /**
  * Send welcome email to new users
  */
-export async function sendWelcomeEmail(
-  email: string,
-  firstName?: string
-) {
+export async function sendWelcomeEmail(email: string, firstName?: string) {
   return sendTemplatedEmail({
     to: email,
     templateKey: 'welcome',
@@ -126,11 +128,7 @@ export async function sendWelcomeEmail(
 /**
  * Send password reset email
  */
-export async function sendPasswordResetEmail(
-  email: string,
-  resetUrl: string,
-  firstName?: string
-) {
+export async function sendPasswordResetEmail(email: string, resetUrl: string, firstName?: string) {
   return sendTemplatedEmail({
     to: email,
     templateKey: 'passwordReset',
@@ -201,17 +199,22 @@ export async function sendRegistrationConfirmationEmail(
  * Test email templates (for development)
  */
 export async function testEmailTemplate(
-  templateKey: 'magicLink' | 'welcome' | 'passwordReset' | 'announcement' | 'registrationConfirmation',
+  templateKey:
+    | 'magicLink'
+    | 'welcome'
+    | 'passwordReset'
+    | 'announcement'
+    | 'registrationConfirmation',
   testEmail: string
 ) {
   const testData = templateTestData[templateKey];
-  
+
   if (!testData) {
     throw new Error(`No test data found for template: ${templateKey}`);
   }
 
   console.log(`📧 Sending test email for template: ${templateKey} to ${testEmail}`);
-  
+
   return sendTemplatedEmail({
     to: testEmail,
     templateKey,
@@ -226,7 +229,7 @@ export async function testEmailTemplate(
 export function previewTemplate(templateKey: keyof typeof sendGridTemplates) {
   const template = sendGridTemplates[templateKey];
   const testData = templateTestData[templateKey] || {};
-  
+
   if (!template) {
     throw new Error(`Template not found: ${templateKey}`);
   }
@@ -241,7 +244,7 @@ export function previewTemplate(templateKey: keyof typeof sendGridTemplates) {
   console.log('(Open in browser for best results)');
   console.log('\nPlain Text Preview:');
   console.log(template.plain_content);
-  
+
   return {
     html: template.html_content,
     text: template.plain_content,

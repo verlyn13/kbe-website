@@ -1,0 +1,74 @@
+
+> nextn@0.1.0 build
+> next build
+
+   ▲ Next.js 15.4.5
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 15.0s
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/46) ...
+   Generating static pages (11/46) 
+   Generating static pages (22/46) 
+   Generating static pages (34/46) 
+ ✓ Generating static pages (46/46)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    5.81 kB         240 kB
+├ ○ /_not-found                            999 B         101 kB
+├ ○ /admin                                 141 B         100 kB
+├ ○ /admin/activity                      2.56 kB         114 kB
+├ ○ /admin/calendar                        358 B         100 kB
+├ ○ /admin/communications                5.51 kB         290 kB
+├ ○ /admin/communications/compose         4.8 kB         266 kB
+├ ○ /admin/dashboard                     5.05 kB         235 kB
+├ ○ /admin/email-settings                3.25 kB         116 kB
+├ ○ /admin/programs                        141 B         100 kB
+├ ○ /admin/registrations                 11.6 kB         279 kB
+├ ○ /admin/reports                        7.7 kB         261 kB
+├ ○ /admin/settings                        141 B         100 kB
+├ ○ /admin/users                         9.22 kB         268 kB
+├ ○ /admin/waivers                       8.66 kB         262 kB
+├ ○ /announcements                       6.79 kB         279 kB
+├ ○ /api-debug                           2.13 kB         110 kB
+├ ƒ /api/webhooks/sendgrid                 141 B         100 kB
+├ ○ /auth-diagnostics                    4.17 kB         227 kB
+├ ○ /auth-status                         2.52 kB         110 kB
+├ ○ /calendar                            26.1 kB         301 kB
+├ ○ /dashboard                           6.28 kB         247 kB
+├ ○ /dashboard/announcements              2.2 kB         243 kB
+├ ○ /debug-announcements                 1.56 kB         224 kB
+├ ○ /debug-auth                          3.41 kB         226 kB
+├ ○ /debug-auth-clear                    3.46 kB         226 kB
+├ ○ /login                               13.1 kB         275 kB
+├ ○ /profile                             8.27 kB         270 kB
+├ ○ /programs                             2.6 kB         115 kB
+├ ○ /programs/mathcounts                 3.09 kB         248 kB
+├ ○ /register                            8.03 kB         296 kB
+├ ○ /resources                             305 B         243 kB
+├ ○ /schedule                              305 B         243 kB
+├ ○ /settings                            10.2 kB         125 kB
+├ ○ /signout                               928 B         216 kB
+├ ○ /signup                              9.72 kB         256 kB
+├ ○ /students/add                        8.54 kB         265 kB
+├ ○ /system-status                       4.83 kB         228 kB
+├ ○ /test-admin                            141 B         100 kB
+├ ○ /test-announcements                    762 B         218 kB
+├ ○ /test-auth                           3.94 kB         227 kB
+├ ○ /theme-showcase                      6.57 kB         149 kB
+├ ○ /waiver                              6.86 kB         115 kB
+└ ○ /welcome                             11.2 kB         269 kB
++ First Load JS shared by all            99.9 kB
+  ├ chunks/4bd1b696-cc729d47eba2cee4.js  54.1 kB
+  ├ chunks/5964-40978821a2ce41e4.js      43.9 kB
+  └ other shared chunks (total)          1.95 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -49,9 +49,10 @@ export function WaiverStatusWidget() {
     return () => unsubscribe();
   }, [user]);
 
-  const pendingWaivers = students.filter(s => s.waiverStatus === 'pending');
-  const hasExpiredWaivers = students.some(s => s.waiverStatus === 'expired');
-  const allWaiversReceived = students.length > 0 && students.every(s => s.waiverStatus === 'received');
+  const pendingWaivers = students.filter((s) => s.waiverStatus === 'pending');
+  const hasExpiredWaivers = students.some((s) => s.waiverStatus === 'expired');
+  const allWaiversReceived =
+    students.length > 0 && students.every((s) => s.waiverStatus === 'received');
 
   if (loading) {
     return (
@@ -61,8 +62,8 @@ export function WaiverStatusWidget() {
         </CardHeader>
         <CardContent>
           <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-muted rounded w-3/4"></div>
-            <div className="h-4 bg-muted rounded w-1/2"></div>
+            <div className="bg-muted h-4 w-3/4 rounded"></div>
+            <div className="bg-muted h-4 w-1/2 rounded"></div>
           </div>
         </CardContent>
       </Card>
@@ -80,9 +81,7 @@ export function WaiverStatusWidget() {
           )}
           Waiver Status
         </CardTitle>
-        <CardDescription>
-          Required liability waivers for your registered children
-        </CardDescription>
+        <CardDescription>Required liability waivers for your registered children</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {students.length === 0 ? (
@@ -97,7 +96,8 @@ export function WaiverStatusWidget() {
               <Alert className="border-amber-200 bg-amber-50">
                 <AlertCircle className="h-4 w-4 text-amber-600" />
                 <AlertDescription>
-                  <strong>Action Required:</strong> {pendingWaivers.length} waiver{pendingWaivers.length > 1 ? 's' : ''} needed
+                  <strong>Action Required:</strong> {pendingWaivers.length} waiver
+                  {pendingWaivers.length > 1 ? 's' : ''} needed
                 </AlertDescription>
               </Alert>
             )}
@@ -113,31 +113,40 @@ export function WaiverStatusWidget() {
 
             <div className="space-y-3">
               {students.map((student) => (
-                <div key={student.id} className="flex items-center justify-between p-3 rounded-lg border">
+                <div
+                  key={student.id}
+                  className="flex items-center justify-between rounded-lg border p-3"
+                >
                   <div className="flex-1">
                     <p className="font-medium">{student.studentName}</p>
                     {student.waiverStatus === 'received' && student.expiresDate && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-xs">
                         Expires: {student.expiresDate.toLocaleDateString()}
                       </p>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
                     {student.waiverStatus === 'pending' && (
-                      <Badge variant="outline" className="border-amber-200 bg-amber-50 text-amber-700">
-                        <FileX className="h-3 w-3 mr-1" />
+                      <Badge
+                        variant="outline"
+                        className="border-amber-200 bg-amber-50 text-amber-700"
+                      >
+                        <FileX className="mr-1 h-3 w-3" />
                         Waiver Needed
                       </Badge>
                     )}
                     {student.waiverStatus === 'received' && (
-                      <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700">
-                        <FileCheck className="h-3 w-3 mr-1" />
+                      <Badge
+                        variant="outline"
+                        className="border-green-200 bg-green-50 text-green-700"
+                      >
+                        <FileCheck className="mr-1 h-3 w-3" />
                         Waiver Received
                       </Badge>
                     )}
                     {student.waiverStatus === 'expired' && (
                       <Badge variant="outline" className="border-red-200 bg-red-50 text-red-700">
-                        <FileX className="h-3 w-3 mr-1" />
+                        <FileX className="mr-1 h-3 w-3" />
                         Expired
                       </Badge>
                     )}
@@ -147,14 +156,14 @@ export function WaiverStatusWidget() {
             </div>
 
             {(pendingWaivers.length > 0 || hasExpiredWaivers) && (
-              <div className="pt-2 space-y-2">
+              <div className="space-y-2 pt-2">
                 <Button asChild className="w-full">
                   <Link href="/waiver" target="_blank">
-                    <Download className="h-4 w-4 mr-2" />
+                    <Download className="mr-2 h-4 w-4" />
                     Download Waiver Form
                   </Link>
                 </Button>
-                <p className="text-xs text-center text-muted-foreground">
+                <p className="text-muted-foreground text-center text-xs">
                   Print, sign, and return to program coordinators
                 </p>
               </div>

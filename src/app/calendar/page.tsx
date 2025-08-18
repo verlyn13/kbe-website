@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { AdminProvider } from '@/hooks/use-admin';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,11 +9,12 @@ import { useAuth } from '@/hooks/use-auth';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-import { EventDialog } from '@/components/calendar/event-dialog';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Plus, 
+import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
+import { LazyEventDialog } from '@/components/lazy';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
   Calendar as CalendarIcon,
   MapPin,
   Clock,
@@ -22,24 +23,22 @@ import {
   Coffee,
   Palmtree,
   MoreVertical,
-  ArrowLeft
+  ArrowLeft,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { 
-  format, 
-  startOfMonth, 
-  endOfMonth, 
-  startOfWeek, 
-  endOfWeek,
-  eachDayOfInterval,
-  isSameMonth,
-  isSameDay,
-  isToday,
-  addMonths,
-  subMonths,
-  parseISO
-} from 'date-fns';
+// Optimize date-fns imports by importing only what we need
+import { format } from 'date-fns/format';
+import { startOfMonth } from 'date-fns/startOfMonth';
+import { endOfMonth } from 'date-fns/endOfMonth';
+import { startOfWeek } from 'date-fns/startOfWeek';
+import { endOfWeek } from 'date-fns/endOfWeek';
+import { eachDayOfInterval } from 'date-fns/eachDayOfInterval';
+import { isSameMonth } from 'date-fns/isSameMonth';
+import { isSameDay } from 'date-fns/isSameDay';
+import { isToday } from 'date-fns/isToday';
+import { addMonths } from 'date-fns/addMonths';
+import { subMonths } from 'date-fns/subMonths';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -78,12 +77,12 @@ function CalendarPageContent() {
     // Handle navigation from upcoming events
     const eventDate = searchParams.get('date');
     const eventId = searchParams.get('eventId');
-    
+
     if (eventDate) {
       const date = new Date(eventDate);
       setCurrentDate(date);
       setSelectedDate(date);
-      
+
       // Scroll to selected date section after render
       setTimeout(() => {
         const selectedDateElement = document.getElementById('selected-date-events');
@@ -118,7 +117,7 @@ function CalendarPageContent() {
   const goToToday = () => setCurrentDate(new Date());
 
   const getEventsForDay = (day: Date) => {
-    return events.filter(event => {
+    return events.filter((event) => {
       const eventDate = new Date(event.startDate);
       return isSameDay(eventDate, day);
     });
@@ -156,26 +155,26 @@ function CalendarPageContent() {
 
   if (loading) {
     return (
-      <div className="container max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <div className="container mx-auto max-w-7xl space-y-6 px-4 py-6">
         <Skeleton className="h-10 w-64" />
-        <Skeleton className="h-[600px]" />
+        <CalendarSkeleton />
       </div>
     );
   }
 
   return (
-    <div className="container max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="container mx-auto max-w-7xl space-y-4 p-4 sm:space-y-6 sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="flex items-center gap-2 mb-2">
+          <div className="mb-2 flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild className="sm:hidden">
               <Link href="/dashboard">
                 <ArrowLeft className="h-4 w-4" />
               </Link>
             </Button>
-            <h1 className="text-2xl sm:text-3xl font-bold">Calendar</h1>
+            <h1 className="text-2xl font-bold sm:text-3xl">Calendar</h1>
           </div>
-          <p className="text-sm sm:text-base text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             View upcoming classes, competitions, and events
           </p>
         </div>
@@ -198,7 +197,7 @@ function CalendarPageContent() {
 
       <Card>
         <CardHeader className="pb-3 sm:pb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <CardTitle className="text-xl sm:text-2xl">
               {format(currentDate, 'MMMM yyyy')}
             </CardTitle>
@@ -232,45 +231,48 @@ function CalendarPageContent() {
         </CardHeader>
         <CardContent>
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-px bg-muted rounded-lg overflow-hidden">
+          <div className="bg-muted grid grid-cols-7 gap-px overflow-hidden rounded-lg">
             {/* Day Headers */}
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
               <div
                 key={day}
-                className="bg-background p-1 sm:p-2 text-center text-xs sm:text-sm font-medium text-muted-foreground"
+                className="bg-background text-muted-foreground p-1 text-center text-xs font-medium sm:p-2 sm:text-sm"
               >
                 <span className="sm:hidden">{day.slice(0, 1)}</span>
                 <span className="hidden sm:inline">{day}</span>
               </div>
             ))}
-            
+
             {/* Calendar Days */}
             {calendarDays.map((day, index) => {
               const dayEvents = getEventsForDay(day);
               const isCurrentMonth = isSameMonth(day, currentDate);
               const isSelectedDay = selectedDate && isSameDay(day, selectedDate);
               const isTodayDate = isToday(day);
-              
+
               return (
                 <div
                   key={index}
                   onClick={() => setSelectedDate(day)}
                   className={cn(
-                    'bg-background min-h-[60px] sm:min-h-[100px] p-1 sm:p-2 cursor-pointer hover:bg-muted/50 transition-colors',
+                    'bg-background hover:bg-muted/50 min-h-[60px] cursor-pointer p-1 transition-colors sm:min-h-[100px] sm:p-2',
                     !isCurrentMonth && 'text-muted-foreground bg-muted/30',
-                    isSelectedDay && 'ring-2 ring-primary',
+                    isSelectedDay && 'ring-primary ring-2',
                     isTodayDate && 'bg-primary/5'
                   )}
                 >
-                  <div className="flex items-start justify-between mb-1">
-                    <span className={cn(
-                      'text-xs sm:text-sm font-medium',
-                      isTodayDate && 'bg-primary text-primary-foreground rounded-full w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center text-[10px] sm:text-xs'
-                    )}>
+                  <div className="mb-1 flex items-start justify-between">
+                    <span
+                      className={cn(
+                        'text-xs font-medium sm:text-sm',
+                        isTodayDate &&
+                          'bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-[10px] sm:h-7 sm:w-7 sm:text-xs'
+                      )}
+                    >
                       {format(day, 'd')}
                     </span>
                   </div>
-                  
+
                   {/* Event Dots - Mobile */}
                   <div className="sm:hidden">
                     {dayEvents.length > 0 && (
@@ -280,37 +282,32 @@ function CalendarPageContent() {
                           return (
                             <div
                               key={idx}
-                              className={cn('w-1.5 h-1.5 rounded-full', config.color)}
+                              className={cn('h-1.5 w-1.5 rounded-full', config.color)}
                             />
                           );
                         })}
                         {dayEvents.length > 3 && (
-                          <span className="text-[8px] text-muted-foreground ml-0.5">
+                          <span className="text-muted-foreground ml-0.5 text-[8px]">
                             +{dayEvents.length - 3}
                           </span>
                         )}
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Event List - Desktop */}
-                  <div className="hidden sm:block space-y-1">
+                  <div className="hidden space-y-1 sm:block">
                     {dayEvents.slice(0, 3).map((event, eventIndex) => {
                       const config = eventTypeConfig[event.type];
                       return (
-                        <div
-                          key={eventIndex}
-                          className="flex items-center gap-1"
-                        >
-                          <div className={cn('w-2 h-2 rounded-full flex-shrink-0', config.color)} />
-                          <span className="text-xs truncate">
-                            {event.title}
-                          </span>
+                        <div key={eventIndex} className="flex items-center gap-1">
+                          <div className={cn('h-2 w-2 flex-shrink-0 rounded-full', config.color)} />
+                          <span className="truncate text-xs">{event.title}</span>
                         </div>
                       );
                     })}
                     {dayEvents.length > 3 && (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-muted-foreground text-xs">
                         +{dayEvents.length - 3} more
                       </span>
                     )}
@@ -330,7 +327,7 @@ function CalendarPageContent() {
           </CardHeader>
           <CardContent>
             {getEventsForDay(selectedDate).length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">
+              <p className="text-muted-foreground py-8 text-center">
                 No events scheduled for this day
               </p>
             ) : (
@@ -338,25 +335,23 @@ function CalendarPageContent() {
                 {getEventsForDay(selectedDate).map((event) => {
                   const config = eventTypeConfig[event.type];
                   const Icon = config.icon;
-                  
+
                   return (
-                    <div
-                      key={event.id}
-                      className="flex items-start gap-4 p-4 rounded-lg border"
-                    >
-                      <div className={cn('p-2 rounded-lg', config.color, 'bg-opacity-20')}>
+                    <div key={event.id} className="flex items-start gap-4 rounded-lg border p-4">
+                      <div className={cn('rounded-lg p-2', config.color, 'bg-opacity-20')}>
                         <Icon className={cn('h-5 w-5', config.color.replace('bg-', 'text-'))} />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-start justify-between">
                           <div>
                             <h3 className="font-semibold">{event.title}</h3>
-                            <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                            <div className="text-muted-foreground mt-1 flex items-center gap-4 text-sm">
                               {!event.allDay && (
                                 <span className="flex items-center gap-1">
                                   <Clock className="h-3 w-3" />
                                   {format(new Date(event.startDate), 'h:mm a')}
-                                  {event.endDate && ` - ${format(new Date(event.endDate), 'h:mm a')}`}
+                                  {event.endDate &&
+                                    ` - ${format(new Date(event.endDate), 'h:mm a')}`}
                                 </span>
                               )}
                               {event.location && (
@@ -367,7 +362,7 @@ function CalendarPageContent() {
                               )}
                             </div>
                             {event.description && (
-                              <p className="mt-2 text-sm text-muted-foreground">
+                              <p className="text-muted-foreground mt-2 text-sm">
                                 {event.description}
                               </p>
                             )}
@@ -383,7 +378,7 @@ function CalendarPageContent() {
                                 <DropdownMenuItem onClick={() => handleEditEvent(event)}>
                                   Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem 
+                                <DropdownMenuItem
                                   className="text-destructive"
                                   onClick={() => handleDeleteEvent(event.id)}
                                 >
@@ -414,7 +409,7 @@ function CalendarPageContent() {
               const Icon = config.icon;
               return (
                 <div key={type} className="flex items-center gap-2">
-                  <div className={cn('w-4 h-4 rounded-full', config.color)} />
+                  <div className={cn('h-4 w-4 rounded-full', config.color)} />
                   <span className="text-sm">{config.label}</span>
                 </div>
               );
@@ -423,14 +418,16 @@ function CalendarPageContent() {
         </CardContent>
       </Card>
 
-      {/* Event Dialog */}
-      <EventDialog
-        open={eventDialogOpen}
-        onOpenChange={setEventDialogOpen}
-        event={selectedEvent}
-        initialDate={selectedDate || undefined}
-        onSuccess={loadEvents}
-      />
+      {/* Event Dialog - Only load when needed */}
+      {eventDialogOpen && (
+        <LazyEventDialog
+          open={eventDialogOpen}
+          onOpenChange={setEventDialogOpen}
+          event={selectedEvent}
+          initialDate={selectedDate || undefined}
+          onSuccess={loadEvents}
+        />
+      )}
     </div>
   );
 }

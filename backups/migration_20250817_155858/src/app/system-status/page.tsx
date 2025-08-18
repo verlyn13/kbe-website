@@ -3,7 +3,16 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, AlertCircle, Database, Users, Mail, FileText, Shield } from 'lucide-react';
+import {
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Database,
+  Users,
+  Mail,
+  FileText,
+  Shield,
+} from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db, auth } from '@/lib/firebase';
 import { useAuth } from '@/hooks/use-auth';
@@ -68,9 +77,9 @@ export default function SystemStatusPage() {
       const announcementsSnapshot = await getDocs(collection(db, 'announcements'));
       const count = announcementsSnapshot.size;
       const publishedCount = announcementsSnapshot.docs.filter(
-        doc => doc.data().status === 'published'
+        (doc) => doc.data().status === 'published'
       ).length;
-      
+
       systemChecks.push({
         name: 'Announcements',
         status: count > 0 ? 'ok' : 'warning',
@@ -138,7 +147,7 @@ export default function SystemStatusPage() {
       if (user?.email) {
         const adminEmails = ['jeffreyverlynjohnson@gmail.com', 'admin@example.com'];
         const isAdmin = adminEmails.includes(user.email);
-        
+
         systemChecks.push({
           name: 'Admin Access',
           status: isAdmin ? 'ok' : 'warning',
@@ -190,16 +199,16 @@ export default function SystemStatusPage() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">System Status Check</h1>
-      
+    <div className="container mx-auto max-w-4xl p-6">
+      <h1 className="mb-6 text-3xl font-bold">System Status Check</h1>
+
       <div className="space-y-4">
         {checks.map((check, index) => (
           <Card key={index}>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <check.icon className="h-5 w-5 text-muted-foreground" />
+                  <check.icon className="text-muted-foreground h-5 w-5" />
                   <CardTitle className="text-lg">{check.name}</CardTitle>
                 </div>
                 {getStatusBadge(check.status)}
@@ -222,13 +231,13 @@ export default function SystemStatusPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <a href="/debug-announcements" className="text-blue-600 hover:underline block">
+            <a href="/debug-announcements" className="block text-blue-600 hover:underline">
               → Debug Announcements
             </a>
-            <a href="/debug-auth" className="text-blue-600 hover:underline block">
+            <a href="/debug-auth" className="block text-blue-600 hover:underline">
               → Debug Authentication
             </a>
-            <a href="/test-admin" className="text-blue-600 hover:underline block">
+            <a href="/test-admin" className="block text-blue-600 hover:underline">
               → Test Admin Route
             </a>
           </div>

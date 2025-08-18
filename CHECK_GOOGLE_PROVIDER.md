@@ -14,13 +14,16 @@ For the Google provider, check:
    - Web client secret (optional, usually empty)
 
 ## If Google Provider is Disabled:
+
 1. Click on Google provider
 2. Toggle "Enable"
 3. It should auto-configure with your OAuth client
 4. Click "Save"
 
 ## If It's Already Enabled:
+
 Try this:
+
 1. Click on Google provider
 2. Toggle it OFF
 3. Save
@@ -34,15 +37,19 @@ This forces Firebase to reconfigure the OAuth connection.
 Go to: https://console.cloud.google.com/apis/library?project=kbe-website
 
 Make sure these are ENABLED (not just added):
+
 - **Identity Toolkit API** (search and enable if needed)
 - **Firebase Authentication API** (if available)
 
 ## Quick Test
+
 After enabling, test immediately at:
+
 - https://kbe-website--kbe-website.us-central1.hosted.app
 - https://homerenrichment.com
 
 The error specifically mentioning `projectconfigservice.getprojectconfig` suggests Firebase can't retrieve the project's auth configuration, which often happens when:
+
 1. Google provider is disabled in Firebase
 2. Identity Toolkit API is not enabled
 3. There's a mismatch between OAuth config and Firebase

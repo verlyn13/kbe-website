@@ -42,9 +42,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
           'jeffreyverlynjohnson@gmail.com',
           'admin@example.com', // Replace with your actual admin emails
         ];
-        
+
         console.log('[AdminCheck] Checking admin status for:', user.email);
-        
+
         if (TEMP_ADMIN_EMAILS.includes(user.email || '')) {
           // Create temporary admin object
           const tempAdmin: AdminUser = {
@@ -59,7 +59,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         } else {
           // Try to get from Firebase
           const adminData = await adminService.checkAdminRole(user.uid);
-          
+
           if (adminData) {
             setAdmin(adminData);
             await adminService.updateLastLogin(user.uid);

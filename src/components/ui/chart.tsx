@@ -154,8 +154,12 @@ const ChartTooltipContent = React.forwardRef<
           : itemConfig?.label;
 
       if (labelFormatter) {
+        const normalized =
+          typeof value === 'string' || typeof value === 'number' ? value : String(value);
         return (
-          <div className={cn('font-medium', labelClassName)}>{labelFormatter(value, payload)}</div>
+          <div className={cn('font-medium', labelClassName)}>
+            {labelFormatter(normalized, payload)}
+          </div>
         );
       }
 
@@ -185,7 +189,7 @@ const ChartTooltipContent = React.forwardRef<
           {payload.map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || 'value'}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            const indicatorColor = color || item.payload.fill || item.color;
+            const indicatorColor = color || getPayloadFill(item.payload) || item.color;
 
             return (
               <div
@@ -339,6 +343,12 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
   }
 
   return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
+}
+
+// Safely extract a 'fill' color from an arbitrary payload record
+function getPayloadFill(payload?: Record<string, unknown>): string | undefined {
+  const fill = payload?.['fill'];
+  return typeof fill === 'string' ? fill : undefined;
 }
 
 export {

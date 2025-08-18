@@ -9,7 +9,7 @@ import { DataTable } from '@/components/admin/data-table';
 import { Registration, registrationService } from '@/lib/firebase-admin';
 import { useAdmin } from '@/hooks/use-admin';
 import { ColumnDef } from '@tanstack/react-table';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -124,12 +124,15 @@ export default function AdminRegistrationsPage() {
       header: 'Status',
       cell: ({ row }) => {
         const status = row.getValue('status') as Registration['status'];
-        const variant = 
-          status === 'active' ? 'default' :
-          status === 'pending' ? 'secondary' :
-          status === 'waitlist' ? 'outline' :
-          'destructive';
-        
+        const variant =
+          status === 'active'
+            ? 'default'
+            : status === 'pending'
+              ? 'secondary'
+              : status === 'waitlist'
+                ? 'outline'
+                : 'destructive';
+
         return <Badge variant={variant}>{status}</Badge>;
       },
     },
@@ -168,24 +171,18 @@ export default function AdminRegistrationsPage() {
               <DropdownMenuSeparator />
               {registration.status === 'pending' && (
                 <>
-                  <DropdownMenuItem
-                    onClick={() => handleStatusUpdate(registration.id, 'active')}
-                  >
+                  <DropdownMenuItem onClick={() => handleStatusUpdate(registration.id, 'active')}>
                     <Check className="mr-2 h-4 w-4" />
                     Approve
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleStatusUpdate(registration.id, 'waitlist')}
-                  >
+                  <DropdownMenuItem onClick={() => handleStatusUpdate(registration.id, 'waitlist')}>
                     <Clock className="mr-2 h-4 w-4" />
                     Add to Waitlist
                   </DropdownMenuItem>
                 </>
               )}
               {registration.status === 'waitlist' && (
-                <DropdownMenuItem
-                  onClick={() => handleStatusUpdate(registration.id, 'active')}
-                >
+                <DropdownMenuItem onClick={() => handleStatusUpdate(registration.id, 'active')}>
                   <Check className="mr-2 h-4 w-4" />
                   Move to Active
                 </DropdownMenuItem>
@@ -204,9 +201,8 @@ export default function AdminRegistrationsPage() {
     },
   ];
 
-  const filteredRegistrations = 
-    activeTab === 'all' ? registrations :
-    registrations.filter(r => r.status === activeTab);
+  const filteredRegistrations =
+    activeTab === 'all' ? registrations : registrations.filter((r) => r.status === activeTab);
 
   if (loading) {
     return (
@@ -242,7 +238,7 @@ export default function AdminRegistrationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {registrations.filter(r => r.status === 'pending').length}
+              {registrations.filter((r) => r.status === 'pending').length}
             </div>
             <p className="text-muted-foreground text-xs">Awaiting review</p>
           </CardContent>
@@ -254,7 +250,7 @@ export default function AdminRegistrationsPage() {
           <CardContent>
             <div className="text-2xl font-bold">
               {registrations
-                .filter(r => r.status === 'active')
+                .filter((r) => r.status === 'active')
                 .reduce((sum, r) => sum + r.students.length, 0)}
             </div>
             <p className="text-muted-foreground text-xs">Currently enrolled</p>
@@ -266,7 +262,7 @@ export default function AdminRegistrationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {registrations.filter(r => r.status === 'waitlist').length}
+              {registrations.filter((r) => r.status === 'waitlist').length}
             </div>
             <p className="text-muted-foreground text-xs">Waiting for space</p>
           </CardContent>

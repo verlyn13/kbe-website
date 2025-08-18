@@ -21,7 +21,7 @@ export default function TestAnnouncementsPage() {
       testResults.allDocs = {
         success: true,
         count: snapshot.size,
-        docs: snapshot.docs.map(d => ({ id: d.id, ...d.data() })),
+        docs: snapshot.docs.map((d) => ({ id: d.id, ...d.data() })),
       };
     } catch (error: any) {
       testResults.allDocs = { success: false, error: error.message };
@@ -29,15 +29,12 @@ export default function TestAnnouncementsPage() {
 
     // Test 2: Simple status filter
     try {
-      const q = query(
-        collection(db, 'announcements'),
-        where('status', '==', 'published')
-      );
+      const q = query(collection(db, 'announcements'), where('status', '==', 'published'));
       const snapshot = await getDocs(q);
       testResults.statusFilter = {
         success: true,
         count: snapshot.size,
-        docs: snapshot.docs.map(d => ({ id: d.id, ...d.data() })),
+        docs: snapshot.docs.map((d) => ({ id: d.id, ...d.data() })),
       };
     } catch (error: any) {
       testResults.statusFilter = { success: false, error: error.message };
@@ -105,8 +102,8 @@ export default function TestAnnouncementsPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Announcement Query Tests</h1>
-      <pre className="bg-gray-100 p-4 rounded overflow-auto text-xs">
+      <h1 className="mb-4 text-2xl font-bold">Announcement Query Tests</h1>
+      <pre className="overflow-auto rounded bg-gray-100 p-4 text-xs">
         {JSON.stringify(results, null, 2)}
       </pre>
     </div>

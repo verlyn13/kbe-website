@@ -1,6 +1,7 @@
 # Fix API Key Configuration NOW
 
 ## The Problem
+
 Your API key has "API restrictions" set to "Selected APIs" but it's missing critical authentication APIs.
 
 ## Quick Fix (Immediate)
@@ -14,23 +15,28 @@ Your API key has "API restrictions" set to "Selected APIs" but it's missing crit
 6. Test authentication immediately
 
 ## Why This Works
+
 - "Don't restrict key" allows all Firebase APIs including authentication
 - Your current "Selected APIs" list is missing critical auth APIs
 - This is safe for a browser API key when combined with HTTP referrer restrictions
 
 ## After It Works (Optional Security)
+
 If you want to use "Selected APIs" later, you MUST include these:
+
 - ✅ Identity Toolkit API (CRITICAL - this is Firebase Auth!)
-- ✅ Token Service API 
+- ✅ Token Service API
 - ✅ Cloud Firestore API
 - ✅ Firebase Installations API
 - All your other currently selected APIs
 
 ## Test Authentication
+
 1. https://kbe-website--kbe-website.us-central1.hosted.app
 2. https://homerenrichment.com (once DNS propagates)
 
 ## Important Notes
+
 - "Application restrictions: None" is fine temporarily
 - Later you can add HTTP referrer restrictions for security
 - But API restrictions MUST include Identity Toolkit API for auth to work!

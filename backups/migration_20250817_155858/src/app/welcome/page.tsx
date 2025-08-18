@@ -20,7 +20,7 @@ export default function WelcomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-4">
         <Skeleton className="h-[600px] w-full max-w-2xl" />
       </div>
     );
@@ -31,15 +31,19 @@ export default function WelcomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="bg-background flex min-h-screen flex-col">
       <SimpleHeader />
       <div className="flex-1 p-4 py-8">
-        <div className="container max-w-4xl mx-auto">
+        <div className="container mx-auto max-w-4xl">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-primary mb-2">Welcome to Homer Enrichment Hub</h1>
-            <p className="text-muted-foreground">Let's complete your guardian profile to get started</p>
+            <h1 className="text-primary mb-2 text-3xl font-bold">
+              Welcome to Homer Enrichment Hub
+            </h1>
+            <p className="text-muted-foreground">
+              Let's complete your guardian profile to get started
+            </p>
           </div>
-          
+
           <GuardianInfoForm />
         </div>
       </div>

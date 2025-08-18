@@ -13,7 +13,7 @@ This guide covers the development setup and workflow for the KBE Website project
 
 ### 1. Clone and Install
 
-```bash
+````bash
 git clone <repository-url>
 cd kbe-website
 npm install
@@ -82,7 +82,7 @@ ESLint will auto-fix on save if VS Code is configured properly.
    @import 'tailwindcss/base';
    @import 'tailwindcss/components';
    @import 'tailwindcss/utilities';
-   ```
+````
 
 2. **PostCSS config simplified**:
 
@@ -133,7 +133,7 @@ Use "Debug All" compound configuration to debug both client and server simultane
 
 ### Commit Guidelines
 
-```bash
+````bash
 # Feature
 git commit -m "feat: add user profile page"
 
@@ -219,3 +219,4 @@ See `docs/firebase-deployment.md` for troubleshooting.
 5. **Verify AI features**: Test content generator if you modified AI code
 
 Remember: Firebase deployment is automatic on push to main, so always test thoroughly locally first!
+````

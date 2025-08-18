@@ -3,12 +3,14 @@
 ## WCAG 2.1 AA Compliance Requirements
 
 ### Color and Contrast
+
 - **Normal text**: Minimum 4.5:1 contrast ratio
 - **Large text**: Minimum 3:1 contrast ratio (18pt+ or 14pt+ bold)
 - **UI components**: Minimum 3:1 contrast ratio for borders and states
 - **Never rely on color alone** to convey information
 
 ### Color Testing Tools
+
 ```bash
 # Use these tools to verify contrast ratios
 - WebAIM Contrast Checker
@@ -19,9 +21,10 @@
 ## Keyboard Navigation
 
 ### Focus Management
+
 ```tsx
 // All interactive elements must be keyboard accessible
-<button 
+<button
   className="focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
   onKeyDown={(e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -32,17 +35,19 @@
 ```
 
 ### Tab Order
+
 - Logical tab sequence through content
 - Skip links for main navigation
 - Focus trapping in modals/dialogs
 - No keyboard traps (users can always escape)
 
 ### Skip Navigation
+
 ```tsx
 // Required skip link at top of page
-<a 
-  href="#main-content" 
-  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-white px-4 py-2 border border-slate-300 rounded"
+<a
+  href="#main-content"
+  className="sr-only rounded border border-slate-300 bg-white px-4 py-2 focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
 >
   Skip to main content
 </a>
@@ -51,6 +56,7 @@
 ## Screen Reader Support
 
 ### Semantic HTML
+
 ```tsx
 // Use proper heading hierarchy
 <h1>Page Title</h1>
@@ -66,13 +72,14 @@
 ```
 
 ### ARIA Labels and Descriptions
+
 ```tsx
 // Form controls
 <Label htmlFor="email" className="required">
   Email Address
   <span className="sr-only">required</span>
 </Label>
-<Input 
+<Input
   id="email"
   type="email"
   aria-describedby="email-error"
@@ -104,6 +111,7 @@
 ```
 
 ### Live Regions
+
 ```tsx
 // Status announcements
 <div aria-live="polite" aria-atomic="true" className="sr-only">
@@ -119,14 +127,17 @@
 ## Form Accessibility
 
 ### Labels and Instructions
+
 ```tsx
 // Always associate labels with form controls
 <div className="space-y-2">
   <Label htmlFor="password" className="text-sm font-medium">
     Password
-    <span className="text-red-500 ml-1" aria-label="required">*</span>
+    <span className="ml-1 text-red-500" aria-label="required">
+      *
+    </span>
   </Label>
-  <Input 
+  <Input
     id="password"
     type="password"
     aria-describedby="password-help password-error"
@@ -145,38 +156,42 @@
 ```
 
 ### Error Handling
+
 ```tsx
 // Form validation summary
-{errors && Object.keys(errors).length > 0 && (
-  <div role="alert" className="mb-4 p-4 border border-red-300 bg-red-50 rounded">
-    <h3 className="text-lg font-medium text-red-800 mb-2">
-      Please correct the following errors:
-    </h3>
-    <ul className="list-disc list-inside text-red-700">
-      {Object.entries(errors).map(([field, error]) => (
-        <li key={field}>
-          <a href={`#${field}`} className="underline hover:no-underline">
-            {error.message}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
+{
+  errors && Object.keys(errors).length > 0 && (
+    <div role="alert" className="mb-4 rounded border border-red-300 bg-red-50 p-4">
+      <h3 className="mb-2 text-lg font-medium text-red-800">
+        Please correct the following errors:
+      </h3>
+      <ul className="list-inside list-disc text-red-700">
+        {Object.entries(errors).map(([field, error]) => (
+          <li key={field}>
+            <a href={`#${field}`} className="underline hover:no-underline">
+              {error.message}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 ```
 
 ## Interactive Components
 
 ### Buttons and Links
+
 ```tsx
 // Descriptive button text
 <Button>Save Changes</Button> // Good
 <Button>Click Here</Button>   // Bad
 
 // External links
-<a 
-  href="https://example.com" 
-  target="_blank" 
+<a
+  href="https://example.com"
+  target="_blank"
   rel="noopener noreferrer"
   className="inline-flex items-center gap-1"
 >
@@ -187,6 +202,7 @@
 ```
 
 ### Modal Dialogs
+
 ```tsx
 // Proper dialog implementation
 <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -201,32 +217,39 @@
       <Button variant="outline" onClick={() => setIsOpen(false)}>
         Cancel
       </Button>
-      <Button onClick={handleConfirm}>
-        Confirm
-      </Button>
+      <Button onClick={handleConfirm}>Confirm</Button>
     </DialogFooter>
   </DialogContent>
 </Dialog>
 ```
 
 ### Tables
+
 ```tsx
 // Accessible data tables
 <table className="w-full">
-  <caption className="text-lg font-medium mb-4">
-    Student Progress Report
-  </caption>
+  <caption className="mb-4 text-lg font-medium">Student Progress Report</caption>
   <thead>
     <tr>
-      <th scope="col" className="text-left p-2">Student Name</th>
-      <th scope="col" className="text-left p-2">Subject</th>
-      <th scope="col" className="text-left p-2">Grade</th>
-      <th scope="col" className="text-left p-2">Actions</th>
+      <th scope="col" className="p-2 text-left">
+        Student Name
+      </th>
+      <th scope="col" className="p-2 text-left">
+        Subject
+      </th>
+      <th scope="col" className="p-2 text-left">
+        Grade
+      </th>
+      <th scope="col" className="p-2 text-left">
+        Actions
+      </th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row" className="p-2 font-medium">John Doe</th>
+      <th scope="row" className="p-2 font-medium">
+        John Doe
+      </th>
       <td className="p-2">Mathematics</td>
       <td className="p-2">A-</td>
       <td className="p-2">
@@ -242,25 +265,26 @@
 ## Images and Media
 
 ### Alt Text Guidelines
+
 ```tsx
 // Informative images
-<img 
-  src="/student-progress-chart.png" 
-  alt="Bar chart showing student progress: Math 85%, Science 92%, Reading 78%" 
+<img
+  src="/student-progress-chart.png"
+  alt="Bar chart showing student progress: Math 85%, Science 92%, Reading 78%"
 />
 
 // Decorative images
-<img 
-  src="/decorative-pattern.png" 
-  alt="" 
+<img
+  src="/decorative-pattern.png"
+  alt=""
   role="presentation"
 />
 
 // Complex images with longer descriptions
 <figure>
-  <img 
-    src="/complex-diagram.png" 
-    alt="Student learning pathway flowchart" 
+  <img
+    src="/complex-diagram.png"
+    alt="Student learning pathway flowchart"
     aria-describedby="diagram-description"
   />
   <figcaption id="diagram-description">
@@ -270,6 +294,7 @@
 ```
 
 ### Video Content
+
 ```tsx
 // Video with captions and transcripts
 <video controls aria-describedby="video-description">
@@ -286,17 +311,20 @@
 ## Educational Context Considerations
 
 ### Student Accessibility Needs
+
 - **Dyslexia-friendly**: High contrast, clear fonts, adequate spacing
 - **ADHD considerations**: Minimal distractions, clear focus indicators
 - **Motor impairments**: Large click targets (minimum 44px), adequate spacing
 - **Visual impairments**: Screen reader compatibility, keyboard navigation
 
 ### Parent Dashboard Accessibility
+
 - **Quick scanning**: Clear headings, consistent layout patterns
 - **Data comprehension**: Plain language summaries, visual hierarchy
 - **Mobile accessibility**: Touch-friendly targets, readable text sizes
 
 ### Progress Indicators
+
 ```tsx
 // Accessible progress bar
 <div className="space-y-2">
@@ -304,16 +332,16 @@
     <span>Progress</span>
     <span>{percentage}% complete</span>
   </div>
-  <div 
-    role="progressbar" 
-    aria-valuenow={percentage} 
-    aria-valuemin={0} 
+  <div
+    role="progressbar"
+    aria-valuenow={percentage}
+    aria-valuemin={0}
     aria-valuemax={100}
     aria-label={`Course progress: ${percentage}% complete`}
-    className="w-full bg-slate-200 rounded-full h-2"
+    className="h-2 w-full rounded-full bg-slate-200"
   >
-    <div 
-      className="bg-teal-600 h-2 rounded-full transition-all duration-300"
+    <div
+      className="h-2 rounded-full bg-teal-600 transition-all duration-300"
       style={{ width: `${percentage}%` }}
     />
   </div>
@@ -323,11 +351,13 @@
 ## Testing Checklist
 
 ### Automated Testing
+
 - Run axe-core accessibility tests
 - Use ESLint accessibility plugins
 - Implement accessibility unit tests
 
 ### Manual Testing
+
 - [ ] Navigate entire site using only keyboard
 - [ ] Test with screen reader (NVDA, JAWS, VoiceOver)
 - [ ] Verify color contrast ratios
@@ -336,6 +366,7 @@
 - [ ] Test forms with various input methods
 
 ### User Testing
+
 - Include users with disabilities in testing process
 - Test with assistive technologies in real-world scenarios
 - Gather feedback on cognitive load and usability

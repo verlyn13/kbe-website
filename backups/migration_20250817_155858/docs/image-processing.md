@@ -10,7 +10,8 @@ This document outlines how to process images for the Homer Enrichment Hub websit
 ## Image Requirements
 
 ### Logo
-- **Sizes needed**: 
+
+- **Sizes needed**:
   - Full logo: 200x60px (desktop navbar)
   - Square icon: 512x512px (PWA/favicon)
   - Email header: 600x150px
@@ -18,17 +19,20 @@ This document outlines how to process images for the Homer Enrichment Hub websit
 - **Location**: `/public/images/logo/`
 
 ### Hero Images
+
 - **Homepage banner**: 1920x1080px
 - **Program headers**: 1920x600px
 - **Format**: WebP with JPG fallback
 - **Quality**: 80-85%
 
 ### User Avatars
+
 - **Sizes**: 40x40px, 80x80px, 160x160px
 - **Format**: WebP/JPG
 - **Default avatars**: `/public/images/avatars/`
 
 ### Program Icons
+
 - **Size**: 64x64px
 - **Format**: SVG preferred
 - **Style**: Consistent with theme colors
@@ -84,17 +88,19 @@ import Image from 'next/image';
   priority
   placeholder="blur"
   blurDataURL="..." // Generate with plaiceholder
-/>
+/>;
 ```
 
 ## Color Guidelines
 
 ### Brand Colors (from theme)
+
 - Primary: `#008080` (Deep teal - bay waters)
 - Secondary: `#B8860B` (Muted gold - Kachemak Gold)
 - Background: `#E0EEEE` (Light grayish-teal)
 
 ### Image Processing
+
 - Maintain consistent color temperature
 - Ensure sufficient contrast for text overlays
 - Test in both light and dark themes
@@ -124,6 +130,7 @@ hero-banner-mobile.webp   # Mobile version
 ## Email Images
 
 Special requirements for email templates:
+
 - **Max width**: 600px
 - **Format**: JPG/PNG only (no WebP)
 - **Hosting**: Use absolute URLs
@@ -132,6 +139,7 @@ Special requirements for email templates:
 ## Checklist
 
 Before adding images:
+
 - [ ] Optimized for web (compressed, right format)
 - [ ] Multiple sizes created if needed
 - [ ] WebP version created

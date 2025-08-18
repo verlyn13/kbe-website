@@ -19,7 +19,7 @@ export default function SignOutPage() {
         router.push('/');
       }
     }
-    
+
     handleSignOut();
   }, [router]);
 

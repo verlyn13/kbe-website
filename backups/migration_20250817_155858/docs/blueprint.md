@@ -1,6 +1,7 @@
 # **App Name**: KBE Website
 
 ## Core Features
+
 - Parent Portal: Parent portal for accessing student information and program details.
 - Student Portal: Student portal to view progress, announcements, and weekly challenges.
 - Secure Authentication: Secure user authentication with email/password and Google sign-in options.
@@ -24,6 +25,7 @@
 - Adaptive Layouts: Adaptive Layouts for phone, tablet, and desktop with responsive design.
 
 ## Style Guidelines
+
 - Primary color: Deep teal (#008080) reflecting the bay's waters and a sense of enrichment.
 - Background color: Very light grayish-teal (#E0EEEE), maintaining a connection to the primary color without overwhelming the user.
 - Accent color: Muted gold (#B8860B), inspired by the 'Kachemak Gold' mineral, to highlight key elements and calls to action, and add richness to the color scheme.

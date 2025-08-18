@@ -52,7 +52,7 @@ env:
     secret: SENDGRID_API_KEY
     availability:
       - RUNTIME
-  
+
   # SendGrid Template IDs
   - variable: SENDGRID_TEMPLATE_MAGIC_LINK
     secret: SENDGRID_TEMPLATE_MAGIC_LINK

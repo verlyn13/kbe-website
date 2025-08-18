@@ -53,7 +53,7 @@ export function SelectProgramForm({ onSubmit, onBack, studentNames }: SelectProg
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="rounded-lg border bg-muted/50 p-6">
+            <div className="bg-muted/50 rounded-lg border p-6">
               <div className="mb-4 flex items-start justify-between">
                 <div>
                   <h3 className="text-xl font-semibold">MathCounts 2025 Season</h3>
@@ -63,52 +63,50 @@ export function SelectProgramForm({ onSubmit, onBack, studentNames }: SelectProg
                 </div>
                 <Badge variant="secondary">Registration Open</Badge>
               </div>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex items-start gap-3">
                   <Calendar className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0" />
                   <div>
                     <p className="font-medium">Meeting Schedule</p>
                     <p className="text-muted-foreground text-sm">
-                      Tuesdays, 4:00-5:30pm<br />
+                      Tuesdays, 4:00-5:30pm
+                      <br />
                       September 2025 - March 2025
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <MapPin className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0" />
                   <div>
                     <p className="font-medium">Location</p>
                     <p className="text-muted-foreground text-sm">
-                      Homer Middle School<br />
+                      Homer Middle School
+                      <br />
                       Room 203
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <Users className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0" />
                   <div>
                     <p className="font-medium">Grade Levels</p>
-                    <p className="text-muted-foreground text-sm">
-                      4th - 8th Grade
-                    </p>
+                    <p className="text-muted-foreground text-sm">4th - 8th Grade</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <Clock className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0" />
                   <div>
                     <p className="font-medium">First Meeting</p>
-                    <p className="text-muted-foreground text-sm">
-                      Tuesday, September 9, 2025
-                    </p>
+                    <p className="text-muted-foreground text-sm">Tuesday, September 9, 2025</p>
                   </div>
                 </div>
               </div>
-              
-              <div className="mt-6 rounded-md bg-background p-4">
+
+              <div className="bg-background mt-6 rounded-md p-4">
                 <h4 className="mb-2 font-medium">Important Competition Dates</h4>
                 <ul className="text-muted-foreground space-y-1 text-sm">
                   <li>• Chapter Competition: January 18, 2025</li>
@@ -117,23 +115,18 @@ export function SelectProgramForm({ onSubmit, onBack, studentNames }: SelectProg
                 </ul>
               </div>
             </div>
-            
+
             <FormField
               control={form.control}
               name="commitment"
               render={({ field }) => (
                 <FormItem className="rounded-lg border p-4">
-                  <div className="flex flex-row items-start space-x-3 space-y-0">
+                  <div className="flex flex-row items-start space-y-0 space-x-3">
                     <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        I acknowledge the weekly commitment
-                      </FormLabel>
+                      <FormLabel>I acknowledge the weekly commitment</FormLabel>
                       <FormDescription>
                         I understand that consistent attendance is important for the team's success
                         and commit to attending weekly meetings on Tuesdays from 4:00-5:30pm.
@@ -144,7 +137,7 @@ export function SelectProgramForm({ onSubmit, onBack, studentNames }: SelectProg
                 </FormItem>
               )}
             />
-            
+
             <div className="flex gap-4">
               <Button type="button" variant="outline" onClick={onBack}>
                 Back

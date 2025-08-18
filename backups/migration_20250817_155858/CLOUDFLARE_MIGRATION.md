@@ -1,9 +1,11 @@
 # Cloudflare Migration: homerconnect.com → homerenrichment.com
 
 ## Overview
+
 This project (kbe-website / Homer Enrichment Hub) needs to migrate from homerconnect.com to homerenrichment.com domain. The project is currently configured for homerconnect.com in 56 files.
 
 ## Current Configuration
+
 - **Current Domain**: homerconnect.com
 - **Target Domain**: homerenrichment.com
 - **Zone ID**: 7a95b1a3db5d14d1292fd04b9007ba32
@@ -12,6 +14,7 @@ This project (kbe-website / Homer Enrichment Hub) needs to migrate from homercon
 ## Cloudflare Management System Available
 
 ### CLI Tools
+
 ```bash
 # Context-aware Cloudflare CLI
 cf dns list                    # List DNS records
@@ -24,6 +27,7 @@ cf-go diag token              # Test token access
 ```
 
 ### Token Management (via gopass)
+
 ```bash
 # Available tokens for this project:
 gopass show -o cloudflare/tokens/projects/homerenrichment/dns       # DNS management
@@ -33,6 +37,7 @@ gopass show -o cloudflare/tokens/human/full                        # Full access
 ```
 
 ### Project Navigation
+
 ```bash
 # Use ds CLI for quick navigation
 cd $(ds cd kbe-website)        # Jump to this project
@@ -42,6 +47,7 @@ cd $(ds cd cloudflare-management) # Jump to Cloudflare IaC repo
 ## Migration Steps
 
 ### Phase 1: DNS Setup (Cloudflare API)
+
 ```bash
 # 1. Add required DNS records for homerenrichment.com
 export CLOUDFLARE_API_TOKEN=$(gopass show -o cloudflare/tokens/projects/homerenrichment/dns)
@@ -64,7 +70,9 @@ cf-go dns add TXT @ "v=spf1 include:sendgrid.net ~all"
 ### Phase 2: Code Updates
 
 #### Files to Update (56 total)
+
 Major categories:
+
 1. **SendGrid Email Configuration** (4 files)
    - `src/lib/sendgrid-email-service.ts`
    - `src/lib/sendgrid-templates.ts`
@@ -82,6 +90,7 @@ Major categories:
    - Domain migration docs
 
 #### Automated Update Script
+
 ```bash
 # Create a migration script
 cat > migrate-domain.sh << 'EOF'
@@ -108,20 +117,22 @@ chmod +x migrate-domain.sh
 ### Phase 3: Firebase Configuration
 
 1. **Update Firebase Auth Authorized Domains**:
+
    ```bash
    # Navigate to Firebase Console
    echo "https://console.firebase.google.com/project/homerenrichmenthub/authentication/settings"
-   
+
    # Add to Authorized domains:
    # - homerenrichment.com
    # - kbe.homerenrichment.com
    ```
 
 2. **Update API Key Restrictions**:
+
    ```bash
    # Update referrer restrictions in Google Cloud Console
    echo "https://console.cloud.google.com/apis/credentials?project=homerenrichmenthub"
-   
+
    # Add HTTP referrers:
    # - https://homerenrichment.com/*
    # - https://kbe.homerenrichment.com/*
@@ -138,6 +149,7 @@ chmod +x migrate-domain.sh
 ### Phase 4: SendGrid Configuration
 
 1. **Domain Authentication**:
+
    ```bash
    # Use SendGrid API or UI to authenticate homerenrichment.com
    # DNS records will be provided by SendGrid
@@ -152,6 +164,7 @@ chmod +x migrate-domain.sh
 ### Phase 5: Environment Variables
 
 Update `.env.local` and production secrets:
+
 ```bash
 # Local development
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=kbe.homerenrichment.com
@@ -182,6 +195,7 @@ node scripts/test-basic-email.js
 ## Rollback Plan
 
 If issues arise:
+
 ```bash
 # 1. Keep homerconnect.com DNS records active
 # 2. Use dual-domain support temporarily
@@ -193,6 +207,7 @@ git checkout -- .
 ## Post-Migration Cleanup
 
 Once confirmed working:
+
 ```bash
 # 1. Remove homerconnect.com from Firebase authorized domains
 # 2. Update all documentation

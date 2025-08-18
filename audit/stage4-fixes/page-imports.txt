@@ -1,0 +1,32 @@
+=== Calendar Page Imports ===
+import { useState, useEffect } from 'react';
+import { AdminProvider } from '@/hooks/use-admin';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { calendarService, CalendarEvent } from '@/lib/firebase-admin';
+import { useAuth } from '@/hooks/use-auth';
+import { useAdmin } from '@/hooks/use-admin';
+import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
+import { EventDialog } from '@/components/calendar/event-dialog';
+import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, MapPin, Clock, Users, Trophy, Coffee, Palmtree, MoreVertical, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isToday, addMonths, subMonths, parseISO } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';
+
+=== Register Page Imports ===
+import { RegistrationFlow } from '@/components/registration/registration-flow';
+import { PublicHeader } from '@/components/public-header';
+
+=== Admin Communications Imports ===
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { DataTable } from '@/components/admin/data-table';
+import { Announcement, announcementService } from '@/lib/firebase-admin';
+import { ColumnDef } from '@tanstack/react-table';
+import { Plus, Send, Clock, Check, Pin, Eye, Trash2, Edit } from 'lucide-react';

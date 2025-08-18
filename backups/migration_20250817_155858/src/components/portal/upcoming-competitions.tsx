@@ -50,7 +50,7 @@ export function UpcomingCompetitions() {
             >
               <div>
                 <p className="font-medium">{competition.name}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {competition.date.toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -65,7 +65,7 @@ export function UpcomingCompetitions() {
             </div>
           ))}
         </div>
-        <p className="mt-4 text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-4 text-xs">
           * National competition is for qualifying teams only
         </p>
       </CardContent>

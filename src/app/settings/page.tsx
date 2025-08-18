@@ -9,35 +9,35 @@ import { ArrowLeft, Palette, Moon, Sun, Monitor } from 'lucide-react';
 import Link from 'next/link';
 
 const themes = [
-  { 
-    id: 'default', 
-    name: 'Default', 
+  {
+    id: 'default',
+    name: 'Default',
     description: 'Classic HEH theme with deep teal and gold accents',
     preview: {
       primary: '#008080',
       secondary: '#E0EEEE',
-      accent: '#B8860B'
-    }
+      accent: '#B8860B',
+    },
   },
-  { 
-    id: 'compass-peak', 
-    name: 'Compass Peak', 
+  {
+    id: 'compass-peak',
+    name: 'Compass Peak',
     description: 'Inspired by glacial faces and Kenai Mountains',
     preview: {
       primary: '#A6CDE3',
       secondary: '#E2E8F0',
-      accent: '#F6AD55'
-    }
+      accent: '#F6AD55',
+    },
   },
-  { 
-    id: 'fireweed-path', 
-    name: 'Fireweed Path', 
+  {
+    id: 'fireweed-path',
+    name: 'Fireweed Path',
     description: 'Wildflower blooms and coastal rhythms',
     preview: {
       primary: '#d9469d',
       secondary: '#e8f0f7',
-      accent: '#7fb069'
-    }
+      accent: '#7fb069',
+    },
   },
 ];
 
@@ -51,8 +51,8 @@ export default function SettingsPage() {
   const { theme, setTheme, mode, setMode } = useTheme();
 
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="container mx-auto max-w-4xl space-y-6 p-6">
+      <div className="mb-6 flex items-center justify-between">
         <Button variant="ghost" asChild>
           <Link href="/dashboard">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -60,7 +60,7 @@ export default function SettingsPage() {
           </Link>
         </Button>
       </div>
-      
+
       <div>
         <h1 className="text-3xl font-bold">Settings</h1>
         <p className="text-muted-foreground">
@@ -75,37 +75,33 @@ export default function SettingsPage() {
             <Palette className="h-5 w-5" />
             Theme
           </CardTitle>
-          <CardDescription>
-            Choose a visual theme that suits your style
-          </CardDescription>
+          <CardDescription>Choose a visual theme that suits your style</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <RadioGroup value={theme} onValueChange={(value) => setTheme(value as any)}>
             {themes.map((themeOption) => (
-              <div key={themeOption.id} className="flex items-start space-x-3 space-y-0">
+              <div key={themeOption.id} className="flex items-start space-y-0 space-x-3">
                 <RadioGroupItem value={themeOption.id} id={themeOption.id} />
                 <Label htmlFor={themeOption.id} className="flex-1 cursor-pointer">
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
                       <span className="font-semibold">{themeOption.name}</span>
                       <div className="flex gap-1">
-                        <div 
-                          className="w-4 h-4 rounded-full border"
+                        <div
+                          className="h-4 w-4 rounded-full border"
                           style={{ backgroundColor: themeOption.preview.primary }}
                         />
-                        <div 
-                          className="w-4 h-4 rounded-full border"
+                        <div
+                          className="h-4 w-4 rounded-full border"
                           style={{ backgroundColor: themeOption.preview.secondary }}
                         />
-                        <div 
-                          className="w-4 h-4 rounded-full border"
+                        <div
+                          className="h-4 w-4 rounded-full border"
                           style={{ backgroundColor: themeOption.preview.accent }}
                         />
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {themeOption.description}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{themeOption.description}</p>
                   </div>
                 </Label>
               </div>
@@ -118,25 +114,21 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Appearance</CardTitle>
-          <CardDescription>
-            Control light and dark mode preferences
-          </CardDescription>
+          <CardDescription>Control light and dark mode preferences</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <RadioGroup value={mode} onValueChange={(value) => setMode(value as any)}>
             {modes.map((modeOption) => {
               const Icon = modeOption.icon;
               return (
-                <div key={modeOption.id} className="flex items-start space-x-3 space-y-0">
+                <div key={modeOption.id} className="flex items-start space-y-0 space-x-3">
                   <RadioGroupItem value={modeOption.id} id={`mode-${modeOption.id}`} />
                   <Label htmlFor={`mode-${modeOption.id}`} className="flex-1 cursor-pointer">
                     <div className="flex items-center gap-3">
                       <Icon className="h-4 w-4" />
                       <div>
                         <span className="font-medium">{modeOption.name}</span>
-                        <p className="text-sm text-muted-foreground">
-                          {modeOption.description}
-                        </p>
+                        <p className="text-muted-foreground text-sm">{modeOption.description}</p>
                       </div>
                     </div>
                   </Label>
@@ -151,14 +143,12 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Preview</CardTitle>
-          <CardDescription>
-            See how your selected theme looks
-          </CardDescription>
+          <CardDescription>See how your selected theme looks</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="p-4 rounded-lg bg-background border">
-              <h3 className="font-semibold mb-2">Sample Content</h3>
+            <div className="bg-background rounded-lg border p-4">
+              <h3 className="mb-2 font-semibold">Sample Content</h3>
               <p className="text-muted-foreground mb-4">
                 This is how regular text appears in your selected theme.
               </p>

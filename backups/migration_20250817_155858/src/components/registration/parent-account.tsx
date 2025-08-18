@@ -16,17 +16,19 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-const parentAccountSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  confirmPassword: z.string(),
-  fullName: z.string().min(2, 'Please enter your full name'),
-  phone: z.string().regex(/^\d{3}-\d{3}-\d{4}$/, 'Please enter phone in format: 555-555-5555'),
-  zipCode: z.string().regex(/^\d{5}$/, 'Please enter a valid 5-digit ZIP code'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ['confirmPassword'],
-});
+const parentAccountSchema = z
+  .object({
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string(),
+    fullName: z.string().min(2, 'Please enter your full name'),
+    phone: z.string().regex(/^\d{3}-\d{3}-\d{4}$/, 'Please enter phone in format: 555-555-5555'),
+    zipCode: z.string().regex(/^\d{5}$/, 'Please enter a valid 5-digit ZIP code'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 type ParentAccountFormData = z.infer<typeof parentAccountSchema>;
 
@@ -52,7 +54,8 @@ export function ParentAccountForm({ onSubmit }: ParentAccountFormProps) {
       <CardHeader>
         <CardTitle>Create Parent Account</CardTitle>
         <CardDescription>
-          First, let's set up your parent account. This will be used to manage all student registrations.
+          First, let's set up your parent account. This will be used to manage all student
+          registrations.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -138,9 +141,7 @@ export function ParentAccountForm({ onSubmit }: ParentAccountFormProps) {
                     <FormControl>
                       <Input placeholder="99603" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      Helps us recommend programs in your area
-                    </FormDescription>
+                    <FormDescription>Helps us recommend programs in your area</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
