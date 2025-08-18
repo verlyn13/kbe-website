@@ -3,15 +3,6 @@ name: Test Suite
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'src/**'
-      - 'app/**'
-      - 'scripts/**'
-      - '*.json'
-      - '*.js'
-      - '*.ts'
-      - '*.mjs'
-      - '.github/workflows/test.yml'
     paths-ignore:
       - '**/*.md'
       - 'docs/**'
@@ -22,8 +13,6 @@ on:
       - 'fix/**'
       - 'chore/**'
       - 'test/**'
-    branches-ignore:
-      - main
   workflow_dispatch:
     inputs:
       debug_enabled:
