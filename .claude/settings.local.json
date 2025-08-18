@@ -33,7 +33,10 @@
       "Bash(./scripts/check-firebase-auth.sh:*)",
       "Bash(npm run dev:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(gcloud config configurations:*)",
+      "Bash(gcloud config set:*)",
+      "Bash(gh run list:*)"
     ],
     "deny": []
   }

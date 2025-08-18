@@ -114,7 +114,7 @@ npm run typecheck    # TypeScript type checking (tsc --noEmit)
 
 4. **No Test Setup**: No testing framework configured yet
 
-5. **Deployment**: Firebase App Hosting with max 1 instance (see apphosting.yaml)
+5. **Deployment**: Firebase App Hosting via GitHub integration - push to main branch triggers automatic deployment (see DEPLOYMENT_METHOD.md)
 
 6. **Build Errors**: Next.js config ignores TypeScript/ESLint errors during build
 
@@ -196,7 +196,7 @@ cf-go dns add A kbe 35.219.200.11
 
 # 3. Update Firebase authorized domains
 echo "Add homerenrichment.com and kbe.homerenrichment.com to:"
-echo "https://console.firebase.google.com/project/homerenrichmenthub/authentication/settings"
+echo "https://console.firebase.google.com/project/kbe-website/authentication/settings"
 
 # 4. Test the migration
 npm run dev  # Check locally on port 9002

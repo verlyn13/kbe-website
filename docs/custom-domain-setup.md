@@ -202,5 +202,6 @@ firebase hosting:sites:list
 firebase hosting:site:open homerconnect
 
 # Deploy to custom domain
-firebase deploy --only hosting:homerconnect
+# Deployment happens automatically when pushing to main branch
+# Do NOT manually deploy - see DEPLOYMENT_METHOD.md
 ```text

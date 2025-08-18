@@ -77,7 +77,7 @@ dig kbe.homerenrichment.com
 curl -I https://kbe.homerenrichment.com
 
 # Check Firebase auth domains
-firebase projects:get homerenrichmenthub
+firebase projects:get kbe-website
 
 # Test email
 node scripts/test-basic-email.js
@@ -97,5 +97,5 @@ firebase functions:log
 
 - **Cloudflare Tokens**: Stored in gopass
 - **DNS Changes**: Use `cf` or `cf-go` CLI
-- **Firebase Console**: https://console.firebase.google.com/project/homerenrichmenthub
-- **Google Cloud Console**: https://console.cloud.google.com/home/dashboard?project=homerenrichmenthub
+- **Firebase Console**: https://console.firebase.google.com/project/kbe-website
+- **Google Cloud Console**: https://console.cloud.google.com/home/dashboard?project=kbe-website

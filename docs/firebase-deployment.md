@@ -70,7 +70,9 @@ Firebase App Hosting runs `npm ci --omit=dev` in production, which means:
 
 5. **Deploy**:
    ```bash
-   git push origin main  # Triggers automatic deployment
+   git push origin main  # Triggers automatic deployment via GitHub integration
+   # DO NOT use firebase deploy or any manual deployment commands
+   # See DEPLOYMENT_METHOD.md for details
    ```
 
 ## Troubleshooting

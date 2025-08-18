@@ -148,7 +148,7 @@ main() {
         echo "3. Update DNS records: cf dns add A kbe 35.219.200.11"
         echo "4. Update Firebase authorized domains in console"
         echo "5. Commit changes: git add -A && git commit -m 'Migrate domain from homerconnect.com to homerenrichment.com'"
-        echo "6. Deploy: firebase apphosting:rollouts:create"
+        echo "6. Deploy: git push origin main (automatic via GitHub)"
     else
         echo -e "${YELLOW}=== Migration Complete with Warnings ===${NC}"
         echo "Please review the remaining references manually."

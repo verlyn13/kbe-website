@@ -110,7 +110,7 @@ chmod +x migrate-domain.sh
 1. **Update Firebase Auth Authorized Domains**:
    ```bash
    # Navigate to Firebase Console
-   echo "https://console.firebase.google.com/project/homerenrichmenthub/authentication/settings"
+   echo "https://console.firebase.google.com/project/kbe-website/authentication/settings"
    
    # Add to Authorized domains:
    # - homerenrichment.com
@@ -120,7 +120,7 @@ chmod +x migrate-domain.sh
 2. **Update API Key Restrictions**:
    ```bash
    # Update referrer restrictions in Google Cloud Console
-   echo "https://console.cloud.google.com/apis/credentials?project=homerenrichmenthub"
+   echo "https://console.cloud.google.com/apis/credentials?project=kbe-website"
    
    # Add HTTP referrers:
    # - https://homerenrichment.com/*
