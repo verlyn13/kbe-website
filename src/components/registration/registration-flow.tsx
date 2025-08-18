@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { ParentAccountForm } from './parent-account';
-import { AddStudentsForm } from './add-students';
-import { SelectProgramForm } from './select-program';
+import { useState, Suspense } from 'react';
+import { LazyParentAccountForm, LazyAddStudentsForm, LazySelectProgramForm } from '@/components/lazy';
+import { FormSkeleton } from '@/components/loading/form-skeleton';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -57,35 +56,34 @@ export function RegistrationFlow() {
     }
   };
 
-  const handleParentSubmit = (data: any) => {
+  const handleParentSubmit = (data: NonNullable<RegistrationData['parent']>) => {
     setRegistrationData({ ...registrationData, parent: data });
     setCurrentStep('students');
   };
 
-  const handleStudentsSubmit = (data: any) => {
+  const handleStudentsSubmit = (data: { students: NonNullable<RegistrationData['students']> }) => {
     setRegistrationData({ ...registrationData, students: data.students });
     setCurrentStep('program');
   };
 
-  const handleProgramSubmit = async (data: any) => {
-    
+  const handleProgramSubmit = async (data: { programId: string }) => {
     try {
       const completeData = { ...registrationData, program: data };
       setRegistrationData(completeData);
-      
+
       // Create parent account
       const { parent, students } = completeData;
       if (!parent || !students) {
         throw new Error('Missing registration data');
       }
-      
+
       // Create auth account
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         parent.email,
         parent.password
       );
-      
+
       // Save parent profile
       await setDoc(doc(db, 'users', userCredential.user.uid), {
         fullName: parent.fullName,
@@ -95,7 +93,7 @@ export function RegistrationFlow() {
         role: 'parent',
         createdAt: new Date(),
       });
-      
+
       // Create registration record
       const registrationRecord = {
         parentId: userCredential.user.uid,
@@ -108,15 +106,16 @@ export function RegistrationFlow() {
         paymentStatus: 'pending',
         registrationDate: new Date(),
       };
-      
+
       await setDoc(doc(db, 'registrations', userCredential.user.uid), registrationRecord);
-      
+
       setCurrentStep('complete');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Registration error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to complete registration';
       toast({
         title: 'Registration Error',
-        description: error.message || 'Failed to complete registration',
+        description: errorMessage,
         variant: 'destructive',
       });
     }
@@ -124,7 +123,7 @@ export function RegistrationFlow() {
 
   const getStudentNames = () => {
     if (!registrationData.students) return [];
-    return registrationData.students.map(s => `${s.firstName} ${s.lastName}`);
+    return registrationData.students.map((s) => `${s.firstName} ${s.lastName}`);
   };
 
   return (
@@ -139,7 +138,9 @@ export function RegistrationFlow() {
       {currentStep !== 'complete' && (
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span>Step {currentStep === 'parent' ? 1 : currentStep === 'students' ? 2 : 3} of 3</span>
+            <span>
+              Step {currentStep === 'parent' ? 1 : currentStep === 'students' ? 2 : 3} of 3
+            </span>
             <span>{getProgress()}% Complete</span>
           </div>
           <Progress value={getProgress()} className="h-2" />
@@ -147,22 +148,25 @@ export function RegistrationFlow() {
       )}
 
       {currentStep === 'parent' && (
-        <ParentAccountForm onSubmit={handleParentSubmit} />
+        <Suspense fallback={<FormSkeleton fields={5} />}>
+          <LazyParentAccountForm onSubmit={handleParentSubmit} />
+        </Suspense>
       )}
 
       {currentStep === 'students' && (
-        <AddStudentsForm
-          onSubmit={handleStudentsSubmit}
-          onBack={() => setCurrentStep('parent')}
-        />
+        <Suspense fallback={<FormSkeleton fields={4} />}>
+          <LazyAddStudentsForm onSubmit={handleStudentsSubmit} onBack={() => setCurrentStep('parent')} />
+        </Suspense>
       )}
 
       {currentStep === 'program' && (
-        <SelectProgramForm
-          onSubmit={handleProgramSubmit}
-          onBack={() => setCurrentStep('students')}
-          studentNames={getStudentNames()}
-        />
+        <Suspense fallback={<FormSkeleton fields={3} />}>
+          <LazySelectProgramForm
+            onSubmit={handleProgramSubmit}
+            onBack={() => setCurrentStep('students')}
+            studentNames={getStudentNames()}
+          />
+        </Suspense>
       )}
 
       {currentStep === 'complete' && (
@@ -170,18 +174,19 @@ export function RegistrationFlow() {
           <CardContent className="pt-12 pb-12">
             <CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-600" />
             <h2 className="mb-2 text-2xl font-bold">Registration Complete!</h2>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Thank you for registering for MathCounts 2025. You'll receive a confirmation
-              email shortly with next steps.
+            <p className="text-muted-foreground mx-auto mb-6 max-w-md">
+              Thank you for registering for MathCounts 2025. You'll receive a confirmation email
+              shortly with next steps.
             </p>
-            <div className="rounded-lg bg-muted p-4 mb-6 max-w-sm mx-auto">
-              <p className="font-medium mb-1">First Meeting</p>
-              <p className="text-sm text-muted-foreground">
-                Tuesday, September 9, 2025<br />
+            <div className="bg-muted mx-auto mb-6 max-w-sm rounded-lg p-4">
+              <p className="mb-1 font-medium">First Meeting</p>
+              <p className="text-muted-foreground text-sm">
+                Tuesday, September 9, 2025
+                <br />
                 4:00-5:30pm at Homer Middle School
               </p>
             </div>
-            <div className="flex gap-4 justify-center">
+            <div className="flex justify-center gap-4">
               <Button variant="outline" asChild>
                 <a href="/parent-portal">Go to Parent Portal</a>
               </Button>

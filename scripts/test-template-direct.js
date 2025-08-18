@@ -26,13 +26,13 @@ const msg = {
   to: 'jeffreyverlynjohnson@gmail.com',
   from: {
     email: 'noreply@homerenrichment.com',
-    name: 'Homer Enrichment Hub'
+    name: 'Homer Enrichment Hub',
   },
   templateId: TEMPLATE_ID,
   dynamicTemplateData: {
     firstName: 'Jeffrey',
     dashboardUrl: 'https://homerenrichment.com/dashboard',
-    currentYear: new Date().getFullYear()
+    currentYear: new Date().getFullYear(),
   },
 };
 

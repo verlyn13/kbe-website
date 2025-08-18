@@ -1,0 +1,52 @@
+=== Heavy Page Analysis ===
+
+## Calendar Page (301KB)
+- Complex custom calendar implementation with date-fns (15+ imports)
+- Custom calendar grid with event rendering
+- Heavy EventDialog component loaded immediately
+- Multiple UI components: Cards, Buttons, Badges, DropdownMenus
+- Complex state management with multiple useState hooks
+- Large number of Lucide icons imported
+
+Key imports causing bloat:
+- date-fns: format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isToday, addMonths, subMonths, parseISO
+- EventDialog (likely heavy form component)
+- Multiple UI components from shadcn/ui
+- AdminProvider wrapper
+
+## Register Page (296KB)  
+- RegistrationFlow component contains all form steps
+- Firebase auth integration with createUserWithEmailAndPassword
+- Form validation with React Hook Form
+- Multiple form steps loaded immediately:
+  - ParentAccountForm
+  - AddStudentsForm  
+  - SelectProgramForm
+- Heavy form validation and state management
+
+Key imports causing bloat:
+- Firebase auth and firestore
+- React Hook Form ecosystem
+- Multiple form components loaded upfront
+- Zod validation (likely in child components)
+
+## Admin Communications (290KB)
+- @tanstack/react-table for DataTable
+- Multiple dialog components loaded immediately
+- Complex announcement data structure
+- date-fns formatting functions
+- Heavy UI components: Cards, Badges, Dialogs, AlertDialogs
+
+Key imports causing bloat:
+- @tanstack/react-table (heavy data table library)
+- Multiple dialog components
+- DataTable component with column definitions
+- Firebase admin services
+- Multiple UI components
+
+## Optimization Opportunities
+1. **Lazy load dialogs/modals** - Only load when user interactions trigger them
+2. **Dynamic import form steps** - Load registration steps progressively  
+3. **Split date-fns imports** - Import only needed functions
+4. **Component-level code splitting** - Heavy components like DataTable
+5. **Defer non-critical UI** - Load secondary components after main content

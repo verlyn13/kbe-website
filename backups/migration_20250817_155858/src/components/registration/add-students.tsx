@@ -102,16 +102,9 @@ export function AddStudentsForm({ onSubmit, onBack }: AddStudentsFormProps) {
             {fields.map((field, index) => (
               <div key={field.id} className="rounded-lg border p-6">
                 <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-lg font-medium">
-                    Student {index + 1}
-                  </h3>
+                  <h3 className="text-lg font-medium">Student {index + 1}</h3>
                   {fields.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => remove(index)}
-                    >
+                    <Button type="button" variant="ghost" size="sm" onClick={() => remove(index)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   )}
@@ -221,12 +214,7 @@ export function AddStudentsForm({ onSubmit, onBack }: AddStudentsFormProps) {
                 </div>
               </div>
             ))}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={addStudent}
-              className="w-full"
-            >
+            <Button type="button" variant="outline" onClick={addStudent} className="w-full">
               <Plus className="mr-2 h-4 w-4" />
               Add Another Student
             </Button>

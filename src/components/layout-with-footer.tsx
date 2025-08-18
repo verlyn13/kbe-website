@@ -8,10 +8,8 @@ interface LayoutWithFooterProps {
 
 export function LayoutWithFooter({ children, showFooter = true }: LayoutWithFooterProps) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-1">
-        {children}
-      </div>
+    <div className="flex min-h-screen flex-col">
+      <div className="flex-1">{children}</div>
       {showFooter && <LegalFooter />}
     </div>
   );

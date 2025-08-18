@@ -7,17 +7,22 @@
 3. **Choose options:**
 
 ### Security Rules
+
 Select: **Start in production mode**
+
 - We'll add proper rules after setup
 
 ### Location
+
 Choose: **us-central1 (or your nearest region)**
+
 - Important: This cannot be changed later
 - us-central1 is a good default for US-based projects
 
 ## Why Firestore?
 
 ### Perfect for this project because:
+
 - **Free tier generous**: 50K reads, 20K writes, 20K deletes per day
 - **Real-time updates**: Perfect for registration status changes
 - **No server management**: Fully managed by Google
@@ -25,6 +30,7 @@ Choose: **us-central1 (or your nearest region)**
 - **Built for web/mobile**: Native SDKs for React
 
 ### Cost Breakdown (estimated for small enrichment program):
+
 - **Free tier covers**: ~500-1000 active families
 - **If you exceed**: ~$0.02-0.10 per month per active family
 - **Storage**: 1GB free (enough for years of registrations)
@@ -34,15 +40,17 @@ Choose: **us-central1 (or your nearest region)**
 After creating the database, create these collections:
 
 ### 1. admins
+
 ```
 /admins/{userId}
   - email: string
-  - role: "superAdmin" | "admin" 
+  - role: "superAdmin" | "admin"
   - permissions: string[]
   - createdAt: timestamp
 ```
 
 ### 2. registrations
+
 ```
 /registrations/{registrationId}
   - parentName: string
@@ -58,6 +66,7 @@ After creating the database, create these collections:
 ```
 
 ### 3. programs
+
 ```
 /programs/{programId}
   - name: string
@@ -70,6 +79,7 @@ After creating the database, create these collections:
 ```
 
 ### 4. announcements
+
 ```
 /announcements/{announcementId}
   - title: string
@@ -93,37 +103,37 @@ service cloud.firestore {
     function isSignedIn() {
       return request.auth != null;
     }
-    
+
     function isAdmin() {
       return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
-    
+
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
-    
+
     // Admin collection - admins can read their own record
     match /admins/{userId} {
       allow read: if isOwner(userId);
       allow write: if false; // Only through Admin SDK
     }
-    
+
     // Registrations - parents read own, admins read/write all
     match /registrations/{registrationId} {
-      allow read: if isAdmin() || 
+      allow read: if isAdmin() ||
         (isSignedIn() && resource.data.parentEmail == request.auth.token.email);
-      allow create: if isSignedIn() && 
+      allow create: if isSignedIn() &&
         request.resource.data.parentEmail == request.auth.token.email;
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
-    
+
     // Programs - all authenticated users can read
     match /programs/{programId} {
       allow read: if isSignedIn();
       allow write: if isAdmin();
     }
-    
+
     // Announcements - all authenticated users can read
     match /announcements/{announcementId} {
       allow read: if isSignedIn();

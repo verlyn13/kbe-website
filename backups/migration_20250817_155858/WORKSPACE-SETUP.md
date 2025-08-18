@@ -29,7 +29,7 @@ Your development environment is now configured for smooth development with works
 
 #### Option 2: Use Terminal Commands
 
-```bash
+````bash
 # Setup environment (run once per terminal session)
 eval "$(fnm env)" && fnm use 22.16.0
 
@@ -88,3 +88,4 @@ Your current setup:
 - Terminal shows build output and errors
 
 Ready to start developing! 🎉
+````

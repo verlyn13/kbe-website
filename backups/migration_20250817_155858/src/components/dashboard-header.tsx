@@ -68,10 +68,11 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
  */
 export function DashboardHeader() {
   const { user, signOut } = useAuth();
-  
+
   // Check if user is admin
-  const isAdmin = user?.email === 'jeffreyverlynjohnson@gmail.com' || user?.email === 'admin@example.com';
-  
+  const isAdmin =
+    user?.email === 'jeffreyverlynjohnson@gmail.com' || user?.email === 'admin@example.com';
+
   return (
     <header className="bg-card sticky top-0 z-20 flex h-16 shrink-0 items-center gap-4 border-b px-4 lg:px-6">
       <SidebarTrigger className="-ml-1" />
@@ -80,7 +81,7 @@ export function DashboardHeader() {
         <div className="ml-auto flex items-center gap-2">
           <Button variant="ghost" size="sm" className="hidden sm:flex" asChild>
             <Link href="/announcements">
-              <Bell className="h-4 w-4 mr-2" />
+              <Bell className="mr-2 h-4 w-4" />
               <span className="hidden lg:inline">Announcements</span>
             </Link>
           </Button>

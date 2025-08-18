@@ -45,7 +45,7 @@ Most issues now auto-fix automatically. The remaining 4 issues are either:
 
 #### Terminal Commands
 
-```bash
+````bash
 # One-shot fix everything
 npm run lint -- --fix && npx prettier --write .
 
@@ -183,3 +183,4 @@ Your development environment now automatically handles:
 **No more manual formatting or style fixes needed!** 🚀
 
 The 20 problems you mentioned should now be automatically resolved on save. Happy coding!
+````

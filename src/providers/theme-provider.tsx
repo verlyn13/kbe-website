@@ -16,11 +16,11 @@ const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined
 export function useTheme() {
   const context = React.useContext(ThemeContext);
   const nextTheme = useNextTheme();
-  
+
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
-  
+
   return {
     ...context,
     mode: nextTheme.theme as 'light' | 'dark' | 'system',
@@ -59,14 +59,17 @@ export function ThemeProvider({
   }, [storageKey]);
 
   // Save theme preference
-  const setTheme = React.useCallback((newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem(storageKey, JSON.stringify(newTheme));
-    
-    // Update body classes
-    document.body.classList.remove('default', 'compass-peak', 'fireweed-path');
-    document.body.classList.add(newTheme);
-  }, [storageKey]);
+  const setTheme = React.useCallback(
+    (newTheme: Theme) => {
+      setThemeState(newTheme);
+      localStorage.setItem(storageKey, JSON.stringify(newTheme));
+
+      // Update body classes
+      document.body.classList.remove('default', 'compass-peak', 'fireweed-path');
+      document.body.classList.add(newTheme);
+    },
+    [storageKey]
+  );
 
   // Apply theme class on mount and changes
   React.useEffect(() => {
@@ -74,10 +77,7 @@ export function ThemeProvider({
     document.body.classList.add(theme);
   }, [theme]);
 
-  const value = React.useMemo(
-    () => ({ theme, setTheme }),
-    [theme, setTheme]
-  );
+  const value = React.useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
   return (
     <ThemeContext.Provider value={value}>

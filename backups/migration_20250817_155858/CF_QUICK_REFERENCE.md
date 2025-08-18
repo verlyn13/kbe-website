@@ -3,6 +3,7 @@
 ## Essential Commands
 
 ### DNS Management
+
 ```bash
 # List current DNS records
 cf dns list
@@ -25,6 +26,7 @@ cf dns delete kbe
 ```
 
 ### Token Management
+
 ```bash
 # View available tokens
 gopass list | grep cloudflare/tokens
@@ -37,6 +39,7 @@ cf-go diag token
 ```
 
 ### Context Information
+
 ```bash
 # Check current context
 cf context
@@ -48,6 +51,7 @@ cd $(ds cd cloudflare-management)    # Cloudflare IaC
 ```
 
 ## Zone Details
+
 - **Domain**: homerenrichment.com
 - **Zone ID**: 7a95b1a3db5d14d1292fd04b9007ba32
 - **Account ID**: 13eb584192d9cefb730fde0cfd271328

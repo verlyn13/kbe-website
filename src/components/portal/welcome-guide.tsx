@@ -22,7 +22,7 @@ export function WelcomeGuide() {
       try {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         const userData = userDoc.data();
-        
+
         // Show guide if user hasn't dismissed it and has no students registered
         if (!userData?.hasSeenWelcomeGuide) {
           setShowGuide(true);
@@ -62,12 +62,7 @@ export function WelcomeGuide() {
               Let's get you started with registering your children for programs
             </CardDescription>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={dismissGuide}
-          >
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={dismissGuide}>
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -75,14 +70,14 @@ export function WelcomeGuide() {
       <CardContent className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
           <Link href="/students/add">
-            <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
+            <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-colors">
               <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <UserPlus className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <UserPlus className="text-primary h-5 w-5" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-medium">1. Add Your Children</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Start by adding your children to your account
                   </p>
                 </div>
@@ -91,14 +86,14 @@ export function WelcomeGuide() {
           </Link>
 
           <Link href="/programs">
-            <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
+            <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-colors">
               <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <BookOpen className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <BookOpen className="text-primary h-5 w-5" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-medium">2. Browse Programs</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Explore MathCounts and upcoming programs
                   </p>
                 </div>
@@ -107,14 +102,14 @@ export function WelcomeGuide() {
           </Link>
 
           <Link href="/calendar">
-            <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
+            <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-colors">
               <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <Calendar className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <Calendar className="text-primary h-5 w-5" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-medium">3. Check Schedule</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     View program schedules and important dates
                   </p>
                 </div>
@@ -123,14 +118,14 @@ export function WelcomeGuide() {
           </Link>
 
           <Link href="/profile">
-            <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
+            <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-colors">
               <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <Mail className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <Mail className="text-primary h-5 w-5" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-medium">4. Email Settings</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Manage your notification preferences
                   </p>
                 </div>
@@ -141,12 +136,13 @@ export function WelcomeGuide() {
 
         <Alert>
           <AlertDescription>
-            <strong>MathCounts registration is now open!</strong> Add your children and enroll them in the program to secure their spot.
+            <strong>MathCounts registration is now open!</strong> Add your children and enroll them
+            in the program to secure their spot.
           </AlertDescription>
         </Alert>
 
         <div className="flex items-center justify-between pt-2">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Need help? Contact us at{' '}
             <a href="mailto:info@homerenrichment.com" className="text-primary hover:underline">
               info@homerenrichment.com

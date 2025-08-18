@@ -1,0 +1,33 @@
+
+> nextn@0.1.0 build
+> next build
+
+   ▲ Next.js 15.4.5
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/lib/dynamic-import.ts
+Error:   [31mx[0m Expected '>', got 'className'
+    ,-[[36;1;4m/home/verlyn13/Projects/verlyn13/kbe-website/src/lib/dynamic-import.ts[0m:27:1]
+ [2m24[0m |         // Return a fallback component
+ [2m25[0m |         return {
+ [2m26[0m |           default: () => (
+ [2m27[0m |             <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive">
+    : [35;1m                 ^^^^^^^^^[0m
+ [2m28[0m |               Failed to load component. Please refresh the page.
+ [2m29[0m |             </div>
+ [2m30[0m |           ),
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/lib/dynamic-import.ts
+./src/components/lazy/index.tsx
+./src/app/calendar/page.tsx
+
+
+> Build failed because of webpack errors

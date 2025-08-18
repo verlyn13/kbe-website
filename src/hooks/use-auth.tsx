@@ -23,13 +23,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     console.log('[AuthProvider] Setting up auth listener');
     console.time('[AuthProvider] First auth state change');
-    
+
     // Add a timeout to detect if auth is hanging
     const timeoutId = setTimeout(() => {
       console.error('[AuthProvider] WARNING: Auth state change is taking too long (>5s)');
       console.log('[AuthProvider] Current auth instance:', auth);
     }, 5000);
-    
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       clearTimeout(timeoutId);
       console.timeEnd('[AuthProvider] First auth state change');

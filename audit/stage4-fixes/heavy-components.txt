@@ -1,0 +1,9 @@
+=== Heavy Component Analysis ===
+
+Heavy libraries identified in package.json:
+- recharts: ^3.1.0 (charts/data visualization)
+- embla-carousel-react: ^8.6.0 (carousel component)  
+- react-day-picker: ^9.8.1 (calendar/date picker)
+- @tanstack/react-table: ^8.21.3 (data tables)
+
+Files using these libraries:

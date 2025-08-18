@@ -36,7 +36,7 @@ This project uses a **two-key architecture** for better security and separation 
 
 Your `.env.local` should have:
 
-```bash
+````bash
 # Firebase Authentication
 NEXT_PUBLIC_FIREBASE_API_KEY=your-firebase-api-key
 
@@ -110,3 +110,4 @@ Monitor key usage in Google Cloud Console:
 
 - APIs & Services → Credentials → Click on key → View metrics
 - Set up alerts for unusual usage patterns
+````

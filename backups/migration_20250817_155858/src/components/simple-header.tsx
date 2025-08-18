@@ -55,7 +55,7 @@ export function SimpleHeader() {
         </svg>
         <h1 className="text-lg font-bold">Homer Enrichment Hub</h1>
       </Link>
-      
+
       <div className="ml-auto flex items-center gap-2">
         {user && (
           <DropdownMenu>

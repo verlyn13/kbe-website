@@ -84,7 +84,7 @@ export function EventDialog({
     if (event) {
       const startDate = new Date(event.startDate);
       const endDate = new Date(event.endDate);
-      
+
       setFormData({
         title: event.title,
         description: event.description || '',
@@ -97,7 +97,7 @@ export function EventDialog({
         endTime: format(endDate, 'HH:mm'),
       });
     } else if (initialDate) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         startDate: initialDate,
         endDate: initialDate,
@@ -115,16 +115,16 @@ export function EventDialog({
       // Combine date and time
       const [startHour, startMinute] = formData.startTime.split(':').map(Number);
       const [endHour, endMinute] = formData.endTime.split(':').map(Number);
-      
-      const startDateTime = set(formData.startDate, { 
-        hours: formData.allDay ? 0 : startHour, 
+
+      const startDateTime = set(formData.startDate, {
+        hours: formData.allDay ? 0 : startHour,
         minutes: formData.allDay ? 0 : startMinute,
         seconds: 0,
         milliseconds: 0,
       });
-      
-      const endDateTime = set(formData.endDate, { 
-        hours: formData.allDay ? 23 : endHour, 
+
+      const endDateTime = set(formData.endDate, {
+        hours: formData.allDay ? 23 : endHour,
         minutes: formData.allDay ? 59 : endMinute,
         seconds: formData.allDay ? 59 : 0,
         milliseconds: 0,
@@ -172,7 +172,7 @@ export function EventDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[525px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[525px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{event ? 'Edit Event' : 'Create Event'}</DialogTitle>
@@ -180,7 +180,7 @@ export function EventDialog({
               {event ? 'Update the event details' : 'Add a new event to the calendar'}
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="title">Title</Label>
@@ -188,7 +188,7 @@ export function EventDialog({
                 id="title"
                 placeholder="Event title"
                 value={formData.title}
-                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
                 required
               />
             </div>
@@ -197,7 +197,7 @@ export function EventDialog({
               <Label htmlFor="type">Type</Label>
               <Select
                 value={formData.type}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as any }))}
+                onValueChange={(value) => setFormData((prev) => ({ ...prev, type: value as any }))}
               >
                 <SelectTrigger id="type">
                   <SelectValue />
@@ -216,7 +216,7 @@ export function EventDialog({
               <Switch
                 id="all-day"
                 checked={formData.allDay}
-                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, allDay: checked }))}
+                onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, allDay: checked }))}
               />
               <Label htmlFor="all-day">All day event</Label>
             </div>
@@ -241,7 +241,9 @@ export function EventDialog({
                     <Calendar
                       mode="single"
                       selected={formData.startDate}
-                      onSelect={(date) => date && setFormData(prev => ({ ...prev, startDate: date }))}
+                      onSelect={(date) =>
+                        date && setFormData((prev) => ({ ...prev, startDate: date }))
+                      }
                       initialFocus
                     />
                   </PopoverContent>
@@ -253,7 +255,9 @@ export function EventDialog({
                   <Label>Start Time</Label>
                   <Select
                     value={formData.startTime}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, startTime: value }))}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, startTime: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -290,7 +294,9 @@ export function EventDialog({
                     <Calendar
                       mode="single"
                       selected={formData.endDate}
-                      onSelect={(date) => date && setFormData(prev => ({ ...prev, endDate: date }))}
+                      onSelect={(date) =>
+                        date && setFormData((prev) => ({ ...prev, endDate: date }))
+                      }
                       initialFocus
                     />
                   </PopoverContent>
@@ -302,7 +308,7 @@ export function EventDialog({
                   <Label>End Time</Label>
                   <Select
                     value={formData.endTime}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, endTime: value }))}
+                    onValueChange={(value) => setFormData((prev) => ({ ...prev, endTime: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -325,7 +331,7 @@ export function EventDialog({
                 id="location"
                 placeholder="Event location"
                 value={formData.location}
-                onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
               />
             </div>
 
@@ -335,7 +341,7 @@ export function EventDialog({
                 id="description"
                 placeholder="Event description"
                 value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
                 rows={3}
               />
             </div>

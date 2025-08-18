@@ -7,7 +7,18 @@ import { Button } from '@/components/ui/button';
 import { announcementService, Announcement } from '@/lib/firebase-admin';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDistanceToNow, format } from 'date-fns';
-import { Pin, AlertCircle, Info, Clock, CheckCircle, ArrowLeft, EyeOff, Eye, Trash2, MoreVertical } from 'lucide-react';
+import {
+  Pin,
+  AlertCircle,
+  Info,
+  Clock,
+  CheckCircle,
+  ArrowLeft,
+  EyeOff,
+  Eye,
+  Trash2,
+  MoreVertical,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { Separator } from '@/components/ui/separator';
@@ -47,7 +58,7 @@ export default function AnnouncementsPage() {
 
   async function loadAnnouncements() {
     if (!user) return;
-    
+
     try {
       // Load visible announcements
       const visibleData = await announcementService.getAll({
@@ -56,16 +67,16 @@ export default function AnnouncementsPage() {
         showHidden: false,
       });
       setAnnouncements(visibleData);
-      
+
       // Load hidden announcements
       const allData = await announcementService.getAll({
         status: 'published',
         userId: user.uid,
         showHidden: true,
       });
-      const hidden = allData.filter(a => a.hiddenBy?.includes(user.uid));
+      const hidden = allData.filter((a) => a.hiddenBy?.includes(user.uid));
       setHiddenAnnouncements(hidden);
-      
+
       // Mark as viewed
       if (visibleData.length > 0) {
         visibleData.forEach(async (announcement) => {
@@ -88,7 +99,7 @@ export default function AnnouncementsPage() {
 
   async function handleHide(announcement: Announcement) {
     if (!user) return;
-    
+
     try {
       await announcementService.hide(announcement.id, user.uid);
       toast({
@@ -107,7 +118,7 @@ export default function AnnouncementsPage() {
 
   async function handleUnhide(announcement: Announcement) {
     if (!user) return;
-    
+
     try {
       await announcementService.unhide(announcement.id, user.uid);
       toast({
@@ -126,7 +137,7 @@ export default function AnnouncementsPage() {
 
   async function handleDelete() {
     if (!announcementToDelete) return;
-    
+
     try {
       await announcementService.delete(announcementToDelete.id);
       toast({
@@ -169,16 +180,22 @@ export default function AnnouncementsPage() {
     }
   };
 
-  const AnnouncementCard = ({ announcement, isHidden = false }: { announcement: Announcement; isHidden?: boolean }) => (
-    <Card 
-      className={`cursor-pointer hover:shadow-lg transition-shadow ${isHidden ? 'opacity-60' : ''}`}
+  const AnnouncementCard = ({
+    announcement,
+    isHidden = false,
+  }: {
+    announcement: Announcement;
+    isHidden?: boolean;
+  }) => (
+    <Card
+      className={`cursor-pointer transition-shadow hover:shadow-lg ${isHidden ? 'opacity-60' : ''}`}
       onClick={() => setSelectedAnnouncement(announcement)}
     >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
             {getPriorityIcon(announcement.priority)}
-            {announcement.pinned && <Pin className="h-4 w-4 text-muted-foreground" />}
+            {announcement.pinned && <Pin className="text-muted-foreground h-4 w-4" />}
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs">
@@ -192,18 +209,22 @@ export default function AnnouncementsPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {isHidden ? (
-                  <DropdownMenuItem onClick={(e) => {
-                    e.stopPropagation();
-                    handleUnhide(announcement);
-                  }}>
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUnhide(announcement);
+                    }}
+                  >
                     <Eye className="mr-2 h-4 w-4" />
                     Unhide
                   </DropdownMenuItem>
                 ) : (
-                  <DropdownMenuItem onClick={(e) => {
-                    e.stopPropagation();
-                    handleHide(announcement);
-                  }}>
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleHide(announcement);
+                    }}
+                  >
                     <EyeOff className="mr-2 h-4 w-4" />
                     Hide
                   </DropdownMenuItem>
@@ -211,7 +232,7 @@ export default function AnnouncementsPage() {
                 {user && announcement.createdBy === user.uid && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       className="text-destructive"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -230,16 +251,14 @@ export default function AnnouncementsPage() {
         </div>
         <CardTitle className="line-clamp-1">{announcement.title}</CardTitle>
         <CardDescription className="text-xs">
-          {announcement.publishedAt && 
-            formatDistanceToNow(new Date(announcement.publishedAt), { addSuffix: true })
-          } by {announcement.createdByName}
+          {announcement.publishedAt &&
+            formatDistanceToNow(new Date(announcement.publishedAt), { addSuffix: true })}{' '}
+          by {announcement.createdByName}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground line-clamp-3">
-          {announcement.content}
-        </p>
-        <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
+        <p className="text-muted-foreground line-clamp-3 text-sm">{announcement.content}</p>
+        <div className="text-muted-foreground mt-4 flex items-center gap-4 text-xs">
           <span>{announcement.viewCount} views</span>
           {announcement.acknowledgedBy.includes(user?.uid || '') && (
             <span className="flex items-center gap-1">
@@ -253,7 +272,7 @@ export default function AnnouncementsPage() {
 
   if (loading) {
     return (
-      <div className="container max-w-6xl mx-auto p-6 space-y-6">
+      <div className="container mx-auto max-w-6xl space-y-6 p-6">
         <Skeleton className="h-10 w-64" />
         <div className="grid gap-4 md:grid-cols-2">
           {[1, 2, 3, 4].map((i) => (
@@ -266,14 +285,14 @@ export default function AnnouncementsPage() {
 
   if (selectedAnnouncement) {
     const isOwner = user && selectedAnnouncement.createdBy === user.uid;
-    
+
     return (
-      <div className="container max-w-4xl mx-auto p-6">
+      <div className="container mx-auto max-w-4xl p-6">
         <Button variant="ghost" onClick={() => setSelectedAnnouncement(null)} className="mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to all announcements
         </Button>
-        
+
         <Card>
           <CardHeader>
             <div className="flex items-start justify-between gap-4">
@@ -283,16 +302,17 @@ export default function AnnouncementsPage() {
                   <CardTitle className="text-2xl">{selectedAnnouncement.title}</CardTitle>
                 </div>
                 <CardDescription>
-                  By {selectedAnnouncement.createdByName} • {' '}
-                  {selectedAnnouncement.publishedAt && 
-                    format(new Date(selectedAnnouncement.publishedAt), 'MMMM d, yyyy at h:mm a')
-                  }
+                  By {selectedAnnouncement.createdByName} •{' '}
+                  {selectedAnnouncement.publishedAt &&
+                    format(new Date(selectedAnnouncement.publishedAt), 'MMMM d, yyyy at h:mm a')}
                 </CardDescription>
               </div>
-              <div className="flex flex-col gap-2 items-end">
+              <div className="flex flex-col items-end gap-2">
                 {getPriorityBadge(selectedAnnouncement.priority)}
                 <Badge variant="outline">
-                  {selectedAnnouncement.recipients === 'all' ? 'All Families' : selectedAnnouncement.recipients}
+                  {selectedAnnouncement.recipients === 'all'
+                    ? 'All Families'
+                    : selectedAnnouncement.recipients}
                 </Badge>
                 {isOwner && (
                   <Button
@@ -303,7 +323,7 @@ export default function AnnouncementsPage() {
                       setDeleteDialogOpen(true);
                     }}
                   >
-                    <Trash2 className="h-4 w-4 mr-2" />
+                    <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                   </Button>
                 )}
@@ -315,7 +335,7 @@ export default function AnnouncementsPage() {
               <p className="whitespace-pre-wrap">{selectedAnnouncement.content}</p>
             </div>
             <Separator className="my-6" />
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4" />
                 <span>{selectedAnnouncement.viewCount} views</span>
@@ -323,9 +343,11 @@ export default function AnnouncementsPage() {
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span>
-                  Posted {selectedAnnouncement.publishedAt && 
-                    formatDistanceToNow(new Date(selectedAnnouncement.publishedAt), { addSuffix: true })
-                  }
+                  Posted{' '}
+                  {selectedAnnouncement.publishedAt &&
+                    formatDistanceToNow(new Date(selectedAnnouncement.publishedAt), {
+                      addSuffix: true,
+                    })}
                 </span>
               </div>
             </div>
@@ -336,7 +358,7 @@ export default function AnnouncementsPage() {
   }
 
   return (
-    <div className="container max-w-6xl mx-auto p-6 space-y-6">
+    <div className="container mx-auto max-w-6xl space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Announcements</h1>
@@ -354,21 +376,17 @@ export default function AnnouncementsPage() {
 
       <Tabs defaultValue="visible" className="w-full">
         <TabsList>
-          <TabsTrigger value="visible">
-            Announcements ({announcements.length})
-          </TabsTrigger>
-          <TabsTrigger value="hidden">
-            Hidden ({hiddenAnnouncements.length})
-          </TabsTrigger>
+          <TabsTrigger value="visible">Announcements ({announcements.length})</TabsTrigger>
+          <TabsTrigger value="hidden">Hidden ({hiddenAnnouncements.length})</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="visible" className="mt-6">
           {announcements.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-16">
-                <Info className="h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-lg text-muted-foreground">No announcements to show</p>
-                <p className="text-sm text-muted-foreground mt-2">
+                <Info className="text-muted-foreground mb-4 h-12 w-12" />
+                <p className="text-muted-foreground text-lg">No announcements to show</p>
+                <p className="text-muted-foreground mt-2 text-sm">
                   Check the hidden tab if you've hidden any announcements
                 </p>
               </CardContent>
@@ -381,13 +399,13 @@ export default function AnnouncementsPage() {
             </div>
           )}
         </TabsContent>
-        
+
         <TabsContent value="hidden" className="mt-6">
           {hiddenAnnouncements.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-16">
-                <EyeOff className="h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-lg text-muted-foreground">No hidden announcements</p>
+                <EyeOff className="text-muted-foreground mb-4 h-12 w-12" />
+                <p className="text-muted-foreground text-lg">No hidden announcements</p>
               </CardContent>
             </Card>
           ) : (
@@ -406,12 +424,16 @@ export default function AnnouncementsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Announcement</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{announcementToDelete?.title}"? This will remove it for all users and cannot be undone.
+              Are you sure you want to delete "{announcementToDelete?.title}"? This will remove it
+              for all users and cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

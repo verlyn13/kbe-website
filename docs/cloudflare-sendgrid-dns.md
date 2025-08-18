@@ -3,6 +3,7 @@
 ## Step-by-Step Instructions
 
 ### 1. Log into Cloudflare
+
 - Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
 - Select your domain: `homerenrichment.com`
 - Click on "DNS" in the left sidebar
@@ -12,6 +13,7 @@
 For each CNAME record below, click "Add record" and enter:
 
 #### Record 1 - Link Tracking
+
 - **Type**: CNAME
 - **Name**: `url3778` (Cloudflare will append .homerenrichment.com)
 - **Target**: `sendgrid.net`
@@ -19,6 +21,7 @@ For each CNAME record below, click "Add record" and enter:
 - **TTL**: Auto
 
 #### Record 2 - Click Tracking
+
 - **Type**: CNAME
 - **Name**: `54920324`
 - **Target**: `sendgrid.net`
@@ -26,6 +29,7 @@ For each CNAME record below, click "Add record" and enter:
 - **TTL**: Auto
 
 #### Record 3 - Email Subdomain
+
 - **Type**: CNAME
 - **Name**: `em5187`
 - **Target**: `u54920324.wl075.sendgrid.net`
@@ -33,6 +37,7 @@ For each CNAME record below, click "Add record" and enter:
 - **TTL**: Auto
 
 #### Record 4 - DKIM Key 1
+
 - **Type**: CNAME
 - **Name**: `s1._domainkey`
 - **Target**: `s1.domainkey.u54920324.wl075.sendgrid.net`
@@ -40,6 +45,7 @@ For each CNAME record below, click "Add record" and enter:
 - **TTL**: Auto
 
 #### Record 5 - DKIM Key 2
+
 - **Type**: CNAME
 - **Name**: `s2._domainkey`
 - **Target**: `s2.domainkey.u54920324.wl075.sendgrid.net`
@@ -49,6 +55,7 @@ For each CNAME record below, click "Add record" and enter:
 ### 3. Add the TXT Record
 
 #### Record 6 - DMARC Policy
+
 - **Type**: TXT
 - **Name**: `_dmarc`
 - **Content**: `v=DMARC1; p=none;`
@@ -64,6 +71,7 @@ Check if you already have a TXT record for `@` (root domain) with SPF. If not, a
 - **TTL**: Auto
 
 If you already have an SPF record, modify it to include SendGrid:
+
 ```
 v=spf1 include:sendgrid.net include:_spf.google.com ~all
 ```
@@ -71,16 +79,19 @@ v=spf1 include:sendgrid.net include:_spf.google.com ~all
 ## Important Notes
 
 ### Proxy Status (Orange vs Gray Cloud)
+
 - **ALWAYS use DNS only (gray cloud)** for email-related records
 - If you use Cloudflare proxy (orange cloud), email authentication will fail
 
 ### What Each Record Does
+
 - **url3778 & 54920324**: Link branding - makes links show as your domain
 - **em5187**: Email sending subdomain
-- **s1 & s2._domainkey**: DKIM authentication for email security
-- **_dmarc**: DMARC policy for email authentication
+- **s1 & s2.\_domainkey**: DKIM authentication for email security
+- **\_dmarc**: DMARC policy for email authentication
 
 ### Verification Timeline
+
 - Records typically propagate within 5-30 minutes
 - SendGrid will automatically verify once records are detected
 - You'll see green checkmarks in SendGrid when verified
@@ -95,12 +106,14 @@ v=spf1 include:sendgrid.net include:_spf.google.com ~all
 ## Troubleshooting
 
 ### If verification fails:
+
 1. Ensure all records have gray cloud (DNS only)
 2. Check for typos in record names/values
 3. Wait 30 minutes and try again
 4. Use DNS checker: https://dnschecker.org
 
 ### Common Issues:
+
 - **Proxy enabled**: Must be DNS only for email records
 - **Typos**: Copy/paste exactly from SendGrid
 - **Existing records**: Check for conflicts with existing DKIM records
@@ -108,6 +121,7 @@ v=spf1 include:sendgrid.net include:_spf.google.com ~all
 ## DMARC Upgrade (Optional)
 
 The basic DMARC policy (`p=none`) just monitors. To enforce:
+
 - `p=quarantine` - Suspicious emails go to spam
 - `p=reject` - Block unauthorized emails
 

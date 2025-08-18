@@ -3,6 +3,7 @@
 ## Before ANY Code Changes
 
 ### ✅ Dependency Check
+
 ```bash
 # WRONG ❌
 "devDependencies": {
@@ -16,6 +17,7 @@
 ```
 
 ### ✅ Tailwind CSS 4 Syntax
+
 ```css
 /* WRONG ❌ */
 @tailwind base;
@@ -28,6 +30,7 @@
 ```
 
 ### ✅ API Key Setup
+
 ```env
 # WRONG ❌
 GOOGLE_API_KEY=AIza...  # One key for everything
@@ -38,39 +41,44 @@ GOOGLE_AI_API_KEY=AIza...    # Generative Language API only
 ```
 
 ### ✅ Next.js Config
+
 ```typescript
 // REQUIRED for Firebase
 const nextConfig = {
-  output: 'standalone',  // MUST have this!
+  output: 'standalone', // MUST have this!
   typescript: {
-    ignoreBuildErrors: true
+    ignoreBuildErrors: true,
   },
   eslint: {
-    ignoreDuringBuilds: true
-  }
-}
+    ignoreDuringBuilds: true,
+  },
+};
 ```
 
 ## Agent-Specific Reminders
 
 ### 🎨 kbe-ui Agent
+
 - ALWAYS use new Tailwind CSS 4 syntax
 - CHECK globals.css has @config directive
 - VERIFY CSS variables are scoped correctly
 
-### 🔌 kbe-api Agent  
+### 🔌 kbe-api Agent
+
 - NEVER share API keys between services
 - CHECK Firebase API key has Identity Toolkit enabled
 - VERIFY auth configuration before testing
 
 ### ⚡ kbe-performance Agent
+
 - MOVE all build deps to dependencies
 - CHECK standalone output is generated
 - VERIFY bundle includes all requirements
 
 ### 🐛 kbe-debug Agent
+
 - IF CSS not rendering → Check Tailwind syntax
-- IF auth failing → Check API key permissions  
+- IF auth failing → Check API key permissions
 - IF build failing → Check dependencies location
 
 ## Pre-Deployment Checklist
@@ -107,6 +115,7 @@ node scripts/debug-magic-link.js
 ## Golden Rule
 
 **When in doubt, remember:**
+
 > Firebase App Hosting ≠ Vercel/Netlify
 
 What works locally might NOT work on Firebase. Always validate!

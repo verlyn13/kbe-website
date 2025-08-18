@@ -1,17 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { 
-  Shield, 
-  FileText, 
-  Home, 
-  Users, 
-  Mail, 
-  Calendar, 
-  FileSpreadsheet, 
+import {
+  Shield,
+  FileText,
+  Home,
+  Users,
+  Mail,
+  Calendar,
+  FileSpreadsheet,
   Settings,
   LayoutDashboard,
-  FileCheck 
+  FileCheck,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -59,16 +59,26 @@ function HehLogo() {
   );
 }
 
-function MobileAwareSidebarMenuButton({ href, children, isActive, tooltip }: { href: string; children: React.ReactNode; isActive?: boolean; tooltip?: string }) {
+function MobileAwareSidebarMenuButton({
+  href,
+  children,
+  isActive,
+  tooltip,
+}: {
+  href: string;
+  children: React.ReactNode;
+  isActive?: boolean;
+  tooltip?: string;
+}) {
   const { setOpenMobile } = useSidebar();
   const isMobile = useIsMobile();
-  
+
   const handleClick = () => {
     if (isMobile) {
       setOpenMobile(false);
     }
   };
-  
+
   return (
     <SidebarMenuButton asChild isActive={isActive} tooltip={tooltip}>
       <Link href={href} onClick={handleClick}>
@@ -189,10 +199,10 @@ function AdminSidebar() {
             <SidebarMenu>
               {group.items.map((item) => {
                 if (!hasPermission(item.permission)) return null;
-                
+
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <MobileAwareSidebarMenuButton 
+                    <MobileAwareSidebarMenuButton
                       href={item.href}
                       isActive={pathname === item.href}
                       tooltip={item.label}
@@ -248,9 +258,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       <AdminSidebar />
       <SidebarInset>
         <DashboardHeader />
-        <main className="h-[calc(100vh-4rem)] overflow-y-auto p-4 sm:p-6 lg:p-8">
-          {children}
-        </main>
+        <main className="h-[calc(100vh-4rem)] overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -11,6 +11,7 @@ Homer Enrichment Hub (HEH) is a registration and information gateway for enrichm
 ## Infrastructure Management
 
 ### Cloudflare DNS Management
+
 This project uses the integrated Cloudflare management system:
 
 ```bash
@@ -27,18 +28,21 @@ cf-go api GET zones                 # Direct API calls
 ```
 
 ### Secret Management (gopass)
+
 All tokens and credentials stored securely:
+
 ```bash
 # Project tokens
 gopass show -o cloudflare/tokens/projects/homerenrichment/dns
 gopass show -o cloudflare/tokens/projects/homerenrichment/terraform
 
-# General tokens  
+# General tokens
 gopass show -o cloudflare/tokens/human/readonly  # Safe read-only
 gopass show -o cloudflare/tokens/human/full      # Management access
 ```
 
 ### Repository Navigation (ds CLI)
+
 ```bash
 cd $(ds cd kbe-website)              # Jump to this project
 cd $(ds cd cloudflare-management)    # Jump to Cloudflare IaC
@@ -46,6 +50,7 @@ ds status                            # Check all repo statuses
 ```
 
 ### Zone Information
+
 - **Domain**: homerenrichment.com (migrating from homerconnect.com)
 - **Zone ID**: 7a95b1a3db5d14d1292fd04b9007ba32
 - **Account ID**: 13eb584192d9cefb730fde0cfd271328
@@ -166,6 +171,7 @@ Required secrets include:
 ## AI Assistant Guidelines (Copilot, Cursor, etc.)
 
 ### CRITICAL: Never move these to devDependencies
+
 - `typescript`
 - `@tailwindcss/postcss`
 - `postcss`
@@ -174,6 +180,7 @@ Required secrets include:
 These MUST remain in `dependencies` because Firebase App Hosting only installs production dependencies (`npm ci --omit=dev`). Moving them will break deployment.
 
 ### Other Important Rules
+
 - Use Tailwind CSS v4 import syntax: `@import 'tailwindcss/base'`
 - Don't add custom webpack configs to next.config.js
 - Development server runs on port 9002
@@ -181,11 +188,13 @@ These MUST remain in `dependencies` because Firebase App Hosting only installs p
 ## Domain Migration: homerconnect.com → homerenrichment.com
 
 ### Current Status
+
 - 56 files reference homerconnect.com
 - Migration script available: `./migrate-domain.sh`
 - Full guide: `CLOUDFLARE_MIGRATION.md`
 
 ### Quick Migration Commands
+
 ```bash
 # 1. Update DNS records (using Cloudflare API)
 export CLOUDFLARE_API_TOKEN=$(gopass show -o cloudflare/tokens/projects/homerenrichment/dns)
@@ -203,6 +212,7 @@ npm run dev  # Check locally on port 9002
 ```
 
 ### DNS Records Needed
+
 - A record: kbe → Firebase App Hosting IP
 - CNAME records: SendGrid email authentication
 - TXT records: SPF, DMARC for email
@@ -218,6 +228,7 @@ Homer Enrichment Hub is designed as a simple, professional gateway for program r
 - Gamification elements
 
 Instead, focus on:
+
 - Simple, clear registration flows
 - Easy access to schedules and information
 - Professional parent-friendly interface

@@ -3,6 +3,7 @@
 ## Current Implementation
 
 The app uses a hybrid approach:
+
 1. **Temporary email whitelist** in `/src/hooks/use-admin.tsx` for quick development
 2. **Firestore admins collection** for production
 
@@ -59,20 +60,24 @@ export const setAdminRole = functions.https.onCall(async (data, context) => {
   }
 
   const { userId, role } = data;
-  
+
   // Set custom claims
   await admin.auth().setCustomUserClaims(userId, {
     admin: true,
-    role: role || 'admin'
+    role: role || 'admin',
   });
 
   // Also create Firestore record for additional data
-  await admin.firestore().collection('admins').doc(userId).set({
-    email: (await admin.auth().getUser(userId)).email,
-    role: role || 'admin',
-    createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    createdBy: context.auth.uid
-  });
+  await admin
+    .firestore()
+    .collection('admins')
+    .doc(userId)
+    .set({
+      email: (await admin.auth().getUser(userId)).email,
+      role: role || 'admin',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdBy: context.auth.uid,
+    });
 
   return { success: true };
 });
@@ -88,12 +93,12 @@ admin.initializeApp();
 async function setupFirstAdmin() {
   const email = 'jeffreyverlynjohnson@gmail.com';
   const user = await admin.auth().getUserByEmail(email);
-  
+
   await admin.auth().setCustomUserClaims(user.uid, {
     admin: true,
-    role: 'superAdmin'
+    role: 'superAdmin',
   });
-  
+
   console.log(`Admin role set for ${email}`);
 }
 
@@ -125,7 +130,7 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow write: if false; // Server-side only
     }
-    
+
     // Check if user is admin
     function isAdmin() {
       return request.auth != null && (
@@ -133,13 +138,13 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/admins/$(request.auth.uid))
       );
     }
-    
+
     // Protected collections
     match /registrations/{document} {
       allow read: if request.auth != null;
       allow write: if isAdmin();
     }
-    
+
     match /announcements/{document} {
       allow read: if request.auth != null;
       allow write: if isAdmin();
@@ -178,7 +183,7 @@ export const adminService = {
       console.error('Error checking admin role:', error);
       return null;
     }
-  }
+  },
 };
 ```
 

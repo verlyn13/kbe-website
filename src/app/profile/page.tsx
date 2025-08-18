@@ -13,18 +13,18 @@ import { useAuth } from '@/hooks/use-auth';
 import { profileService, UserProfile } from '@/lib/firebase-admin';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-import { 
-  Camera, 
-  Save, 
-  User, 
-  Phone, 
-  Mail, 
+import {
+  Camera,
+  Save,
+  User,
+  Phone,
+  Mail,
   Users,
   Brain,
   Sparkles,
   AlertCircle,
   Info,
-  ArrowLeft
+  ArrowLeft,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -34,17 +34,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 
 // Format phone number as user types
 function formatPhoneNumber(value: string): string {
   // Remove all non-digit characters
   const phoneNumber = value.replace(/\D/g, '');
-  
+
   // Format based on length
   if (phoneNumber.length <= 3) {
     return phoneNumber;
@@ -61,29 +57,30 @@ function formatPhoneNumber(value: string): string {
 const mathPersonalities = [
   {
     type: 'Visual Learner',
-    description: 'Learns best through diagrams, charts, and visual representations of mathematical concepts.',
-    icon: '👁️'
+    description:
+      'Learns best through diagrams, charts, and visual representations of mathematical concepts.',
+    icon: '👁️',
   },
   {
     type: 'Problem Solver',
     description: 'Enjoys tackling challenging problems and finding creative solutions.',
-    icon: '🧩'
+    icon: '🧩',
   },
   {
     type: 'Pattern Seeker',
     description: 'Excels at recognizing patterns and relationships in numbers and sequences.',
-    icon: '🔍'
+    icon: '🔍',
   },
   {
     type: 'Creative Thinker',
     description: 'Approaches math with imagination and finds unique ways to solve problems.',
-    icon: '🎨'
+    icon: '🎨',
   },
   {
     type: 'Logical Analyst',
     description: 'Thrives on step-by-step reasoning and systematic problem-solving approaches.',
-    icon: '🔬'
-  }
+    icon: '🔬',
+  },
 ];
 
 export default function ProfilePage() {
@@ -93,7 +90,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
-  
+
   // Form state
   const [formData, setFormData] = useState({
     guardianName: '',
@@ -112,7 +109,7 @@ export default function ProfilePage() {
 
   async function loadProfile() {
     if (!user) return;
-    
+
     try {
       const data = await profileService.get(user.uid);
       if (data) {
@@ -127,7 +124,7 @@ export default function ProfilePage() {
         });
       } else {
         // Initialize with user's email
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           email: user.email || '',
         }));
@@ -146,7 +143,7 @@ export default function ProfilePage() {
 
   async function handleSave() {
     if (!user) return;
-    
+
     // Validate required fields
     if (!formData.guardianName || !formData.email || !formData.phone) {
       toast({
@@ -170,7 +167,7 @@ export default function ProfilePage() {
     }
 
     setSaving(true);
-    
+
     try {
       const profileData: any = {
         guardianName: formData.guardianName,
@@ -180,7 +177,6 @@ export default function ProfilePage() {
         bio: formData.bio || '',
         children: formData.children,
       };
-      
 
       if (profile) {
         await profileService.update(user.uid, profileData);
@@ -192,7 +188,7 @@ export default function ProfilePage() {
         title: 'Success',
         description: 'Profile saved successfully',
       });
-      
+
       loadProfile();
     } catch (error) {
       console.error('Error saving profile:', error);
@@ -228,23 +224,23 @@ export default function ProfilePage() {
   }
 
   function addChild() {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       children: [...prev.children, { name: '', preferredName: '', grade: '' }],
     }));
   }
 
   function removeChild(index: number) {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       children: prev.children.filter((_, i) => i !== index),
     }));
   }
 
   function updateChild(index: number, field: 'name' | 'preferredName' | 'grade', value: string) {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      children: prev.children.map((child, i) => 
+      children: prev.children.map((child, i) =>
         i === index ? { ...child, [field]: value } : child
       ),
     }));
@@ -252,7 +248,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="container max-w-4xl mx-auto p-6 space-y-6">
+      <div className="container mx-auto max-w-4xl space-y-6 p-6">
         <Skeleton className="h-10 w-48" />
         <Skeleton className="h-96" />
       </div>
@@ -260,8 +256,8 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="container mx-auto max-w-4xl space-y-6 p-6">
+      <div className="mb-6 flex items-center justify-between">
         <Button variant="ghost" asChild>
           <Link href="/dashboard">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -273,12 +269,10 @@ export default function ProfilePage() {
           {saving ? 'Saving...' : 'Save Changes'}
         </Button>
       </div>
-      
+
       <div>
         <h1 className="text-3xl font-bold">My Profile</h1>
-        <p className="text-muted-foreground">
-          Manage your account information and preferences
-        </p>
+        <p className="text-muted-foreground">Manage your account information and preferences</p>
       </div>
 
       <Card>
@@ -286,15 +280,18 @@ export default function ProfilePage() {
           <div className="flex items-center gap-6">
             <div className="relative">
               <Avatar className="h-24 w-24">
-                <AvatarImage 
-                  src={profile?.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${user?.uid}`} 
-                  alt={formData.guardianName} 
+                <AvatarImage
+                  src={
+                    profile?.avatarUrl ||
+                    `https://api.dicebear.com/7.x/initials/svg?seed=${user?.uid}`
+                  }
+                  alt={formData.guardianName}
                 />
                 <AvatarFallback>
                   {formData.guardianName?.charAt(0) || user?.email?.charAt(0) || 'U'}
                 </AvatarFallback>
               </Avatar>
-              <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 cursor-pointer">
+              <label htmlFor="avatar-upload" className="absolute right-0 bottom-0 cursor-pointer">
                 <div className="bg-primary text-primary-foreground rounded-full p-2">
                   <Camera className="h-4 w-4" />
                 </div>
@@ -308,7 +305,9 @@ export default function ProfilePage() {
               </label>
             </div>
             <div>
-              <h2 className="text-2xl font-bold">{formData.displayName || formData.guardianName || 'Your Name'}</h2>
+              <h2 className="text-2xl font-bold">
+                {formData.displayName || formData.guardianName || 'Your Name'}
+              </h2>
               <p className="text-muted-foreground">{formData.email}</p>
             </div>
           </div>
@@ -325,9 +324,7 @@ export default function ProfilePage() {
           <Card>
             <CardHeader>
               <CardTitle>Contact Information</CardTitle>
-              <CardDescription>
-                Required information for program communications
-              </CardDescription>
+              <CardDescription>Required information for program communications</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
@@ -336,33 +333,35 @@ export default function ProfilePage() {
                     Guardian Name <span className="text-destructive">*</span>
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <User className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
                     <Input
                       id="guardianName"
                       placeholder="Your full name"
                       value={formData.guardianName}
-                      onChange={(e) => setFormData(prev => ({ ...prev, guardianName: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, guardianName: e.target.value }))
+                      }
                       className="pl-10"
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="displayName">
-                    Display Name (Optional)
-                  </Label>
+                  <Label htmlFor="displayName">Display Name (Optional)</Label>
                   <Input
                     id="displayName"
                     placeholder="How you'd like to be called"
                     value={formData.displayName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, displayName: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, displayName: e.target.value }))
+                    }
                   />
-                  <p className="text-xs text-muted-foreground">Leave blank to use your full name</p>
+                  <p className="text-muted-foreground text-xs">Leave blank to use your full name</p>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="phone">
-                    <Phone className="inline h-4 w-4 mr-1" />
+                    <Phone className="mr-1 inline h-4 w-4" />
                     Phone Number <span className="text-destructive">*</span>
                   </Label>
                   <Input
@@ -372,26 +371,26 @@ export default function ProfilePage() {
                     value={formData.phone}
                     onChange={(e) => {
                       const formatted = formatPhoneNumber(e.target.value);
-                      setFormData(prev => ({ ...prev, phone: formatted }));
+                      setFormData((prev) => ({ ...prev, phone: formatted }));
                     }}
                     maxLength={14} // For format: (123) 456-7890
                   />
-                  <p className="text-xs text-muted-foreground">US phone number format</p>
+                  <p className="text-muted-foreground text-xs">US phone number format</p>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="email">
                   Email Address <span className="text-destructive">*</span>
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Mail className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="your@email.com"
                     value={formData.email}
-                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                     className="pl-10"
                   />
                 </div>
@@ -403,10 +402,10 @@ export default function ProfilePage() {
                   id="bio"
                   placeholder="Tell other families a bit about yourself..."
                   value={formData.bio}
-                  onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))}
                   rows={4}
                 />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   This will be visible to other program participants
                 </p>
               </div>
@@ -424,10 +423,12 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {formData.children.map((child, index) => (
-                <div key={index} className="space-y-4 p-4 border rounded-lg">
+                <div key={index} className="space-y-4 rounded-lg border p-4">
                   <div className="grid gap-4 md:grid-cols-3">
                     <div className="space-y-2">
-                      <Label>Full Name <span className="text-destructive">*</span></Label>
+                      <Label>
+                        Full Name <span className="text-destructive">*</span>
+                      </Label>
                       <Input
                         placeholder="Child's full name"
                         value={child.name}
@@ -443,7 +444,9 @@ export default function ProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Grade <span className="text-destructive">*</span></Label>
+                      <Label>
+                        Grade <span className="text-destructive">*</span>
+                      </Label>
                       <Select
                         value={child.grade || ''}
                         onValueChange={(value) => updateChild(index, 'grade', value)}
@@ -470,22 +473,14 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeChild(index)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => removeChild(index)}>
                       Remove Child
                     </Button>
                   </div>
                 </div>
               ))}
-              
-              <Button
-                variant="outline"
-                onClick={addChild}
-                className="w-full"
-              >
+
+              <Button variant="outline" onClick={addChild} className="w-full">
                 <Users className="mr-2 h-4 w-4" />
                 Add Child
               </Button>

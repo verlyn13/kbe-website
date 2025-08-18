@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { auth } from '@/lib/firebase';
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+} from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -13,16 +18,18 @@ export default function AuthDiagnosticsPage() {
 
   useEffect(() => {
     // Check for redirect result
-    getRedirectResult(auth).then((result) => {
-      if (result) {
-        addStatus('✅ Redirect sign-in successful!');
-        addStatus(`User: ${result.user.email}`);
-      }
-    }).catch((error) => {
-      if (error.code !== 'auth/popup-blocked-by-browser') {
-        addStatus(`❌ Redirect error: ${error.message}`);
-      }
-    });
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          addStatus('✅ Redirect sign-in successful!');
+          addStatus(`User: ${result.user.email}`);
+        }
+      })
+      .catch((error) => {
+        if (error.code !== 'auth/popup-blocked-by-browser') {
+          addStatus(`❌ Redirect error: ${error.message}`);
+        }
+      });
 
     // Log current environment
     addStatus(`🌐 Current URL: ${window.location.href}`);
@@ -31,26 +38,25 @@ export default function AuthDiagnosticsPage() {
   }, []);
 
   const addStatus = (message: string) => {
-    setStatus(prev => [...prev, message]);
+    setStatus((prev) => [...prev, message]);
   };
 
   const testGooglePopup = async () => {
     try {
       setError('');
       addStatus('🔄 Testing Google sign-in with popup...');
-      
+
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      
+
       addStatus('✅ Popup sign-in successful!');
       addStatus(`User: ${result.user.email}`);
       addStatus(`Provider: ${result.providerId}`);
-      
     } catch (error: any) {
       setError(error.message);
       addStatus(`❌ Popup error: ${error.code}`);
       addStatus(`Details: ${error.message}`);
-      
+
       if (error.code === 'auth/popup-blocked-by-browser') {
         addStatus('💡 Popup was blocked. Trying redirect...');
         testGoogleRedirect();
@@ -62,10 +68,9 @@ export default function AuthDiagnosticsPage() {
     try {
       setError('');
       addStatus('🔄 Testing Google sign-in with redirect...');
-      
+
       const provider = new GoogleAuthProvider();
       await signInWithRedirect(auth, provider);
-      
     } catch (error: any) {
       setError(error.message);
       addStatus(`❌ Redirect error: ${error.code}`);
@@ -80,16 +85,14 @@ export default function AuthDiagnosticsPage() {
   };
 
   return (
-    <div className="container max-w-3xl mx-auto p-6">
+    <div className="container mx-auto max-w-3xl p-6">
       <Card>
         <CardHeader>
           <CardTitle>Firebase Auth Diagnostics</CardTitle>
-          <CardDescription>
-            Comprehensive authentication testing and diagnostics
-          </CardDescription>
+          <CardDescription>Comprehensive authentication testing and diagnostics</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <Button onClick={testGooglePopup} variant="default">
               Test Google Popup
             </Button>
@@ -111,9 +114,9 @@ export default function AuthDiagnosticsPage() {
 
           <div className="space-y-2">
             <h3 className="font-semibold">Status Log:</h3>
-            <div className="bg-muted rounded-lg p-4 h-96 overflow-y-auto">
+            <div className="bg-muted h-96 overflow-y-auto rounded-lg p-4">
               {status.map((s, i) => (
-                <div key={i} className="text-sm font-mono py-1">
+                <div key={i} className="py-1 font-mono text-sm">
                   {s}
                 </div>
               ))}
@@ -123,7 +126,7 @@ export default function AuthDiagnosticsPage() {
           <Alert>
             <AlertDescription>
               <strong>Common Issues:</strong>
-              <ul className="list-disc list-inside mt-2 space-y-1">
+              <ul className="mt-2 list-inside list-disc space-y-1">
                 <li>OAuth consent screen not configured</li>
                 <li>Domain not in authorized domains list</li>
                 <li>Google provider not enabled in Firebase</li>
@@ -132,27 +135,33 @@ export default function AuthDiagnosticsPage() {
             </AlertDescription>
           </Alert>
 
-          <div className="p-4 bg-muted rounded-lg">
-            <h4 className="font-semibold mb-2">Required Firebase Console Checks:</h4>
-            <ol className="list-decimal list-inside space-y-1 text-sm">
+          <div className="bg-muted rounded-lg p-4">
+            <h4 className="mb-2 font-semibold">Required Firebase Console Checks:</h4>
+            <ol className="list-inside list-decimal space-y-1 text-sm">
               <li>
-                <a href="https://console.firebase.google.com/project/kbe-website/authentication/providers" 
-                   target="_blank" 
-                   className="text-primary hover:underline">
+                <a
+                  href="https://console.firebase.google.com/project/kbe-website/authentication/providers"
+                  target="_blank"
+                  className="text-primary hover:underline"
+                >
                   Check Google Provider is Enabled
                 </a>
               </li>
               <li>
-                <a href="https://console.firebase.google.com/project/kbe-website/authentication/settings" 
-                   target="_blank"
-                   className="text-primary hover:underline">
+                <a
+                  href="https://console.firebase.google.com/project/kbe-website/authentication/settings"
+                  target="_blank"
+                  className="text-primary hover:underline"
+                >
                   Check Authorized Domains
                 </a>
               </li>
               <li>
-                <a href="https://console.cloud.google.com/apis/credentials/consent?project=kbe-website" 
-                   target="_blank"
-                   className="text-primary hover:underline">
+                <a
+                  href="https://console.cloud.google.com/apis/credentials/consent?project=kbe-website"
+                  target="_blank"
+                  className="text-primary hover:underline"
+                >
                   Check OAuth Consent Screen
                 </a>
               </li>

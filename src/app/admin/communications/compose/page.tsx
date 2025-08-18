@@ -7,7 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { announcementService } from '@/lib/firebase-admin';
 import { useAdmin } from '@/hooks/use-admin';
@@ -19,7 +25,7 @@ export default function ComposeAnnouncementPage() {
   const router = useRouter();
   const { admin } = useAdmin();
   const { toast } = useToast();
-  
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [recipients, setRecipients] = useState<'all' | 'mathcounts' | 'enrichment'>('all');
@@ -94,9 +100,7 @@ export default function ComposeAnnouncementPage() {
       <Card>
         <CardHeader>
           <CardTitle>Compose Announcement</CardTitle>
-          <CardDescription>
-            Create a new announcement for families in your programs
-          </CardDescription>
+          <CardDescription>Create a new announcement for families in your programs</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
@@ -162,18 +166,11 @@ export default function ComposeAnnouncementPage() {
           </div>
 
           <div className="flex justify-end gap-4">
-            <Button
-              variant="outline"
-              onClick={() => handleSubmit('draft')}
-              disabled={sending}
-            >
+            <Button variant="outline" onClick={() => handleSubmit('draft')} disabled={sending}>
               <Save className="mr-2 h-4 w-4" />
               Save Draft
             </Button>
-            <Button
-              onClick={() => handleSubmit('published')}
-              disabled={sending}
-            >
+            <Button onClick={() => handleSubmit('published')} disabled={sending}>
               <Send className="mr-2 h-4 w-4" />
               Publish Now
             </Button>

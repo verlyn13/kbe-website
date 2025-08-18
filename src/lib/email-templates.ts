@@ -198,9 +198,9 @@ Visit our website: https://homerenrichment.com
 Contact Support: support@homerenrichment.com
 
 This email was sent by Homer Enrichment Hub. Please do not reply to this email as this mailbox is not monitored.
-    `
+    `,
   },
-  
+
   welcome: {
     subject: 'Welcome to Homer Enrichment Hub!',
     html: (recipientName: string) => `
@@ -340,8 +340,8 @@ Visit your dashboard: https://homerenrichment.com/dashboard
 ---
 © ${new Date().getFullYear()} Homer Enrichment Hub
 Enriching young minds in Homer, Alaska
-    `
-  }
+    `,
+  },
 };
 
 // Helper function to send custom emails
@@ -351,19 +351,21 @@ export async function sendCustomEmail(
   data?: { url?: string; recipientName?: string }
 ) {
   const emailTemplate = emailTemplates[template];
-  
+
   // This would integrate with your email service (SendGrid, etc.)
   // For now, this is a placeholder showing the structure
   const emailData = {
     to,
     subject: emailTemplate.subject,
-    html: template === 'magicLink' 
-      ? emailTemplate.html(data?.url || '', data?.recipientName)
-      : emailTemplate.html(data?.recipientName || ''),
-    text: template === 'magicLink'
-      ? emailTemplate.text(data?.url || '', data?.recipientName)
-      : emailTemplate.text(data?.recipientName || ''),
+    html:
+      template === 'magicLink'
+        ? emailTemplate.html(data?.url || '', data?.recipientName)
+        : emailTemplate.html(data?.recipientName || ''),
+    text:
+      template === 'magicLink'
+        ? emailTemplate.text(data?.url || '', data?.recipientName)
+        : emailTemplate.text(data?.recipientName || ''),
   };
-  
+
   return emailData;
 }

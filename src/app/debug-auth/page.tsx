@@ -14,16 +14,20 @@ export default function DebugAuthPage() {
     // Check current auth state
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setAuthState({
-        user: user ? {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          metadata: user.metadata,
-        } : null,
-        currentUser: auth.currentUser ? {
-          uid: auth.currentUser.uid,
-          email: auth.currentUser.email,
-        } : null,
+        user: user
+          ? {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              metadata: user.metadata,
+            }
+          : null,
+        currentUser: auth.currentUser
+          ? {
+              uid: auth.currentUser.uid,
+              email: auth.currentUser.email,
+            }
+          : null,
       });
     });
 
@@ -36,7 +40,7 @@ export default function DebugAuthPage() {
   const checkIndexedDB = async () => {
     try {
       const databases = await indexedDB.databases();
-      const firebaseDbs = databases.filter(db => db.name?.includes('firebase'));
+      const firebaseDbs = databases.filter((db) => db.name?.includes('firebase'));
       setIndexedDBData(JSON.stringify(firebaseDbs, null, 2));
     } catch (error) {
       setIndexedDBData('Error checking IndexedDB: ' + error);
@@ -47,13 +51,13 @@ export default function DebugAuthPage() {
     try {
       // Sign out from Firebase
       await signOut(auth);
-      
+
       // Clear all localStorage
       localStorage.clear();
-      
+
       // Clear all sessionStorage
       sessionStorage.clear();
-      
+
       // Clear IndexedDB Firebase databases
       const databases = await indexedDB.databases();
       for (const db of databases) {
@@ -61,7 +65,7 @@ export default function DebugAuthPage() {
           await indexedDB.deleteDatabase(db.name);
         }
       }
-      
+
       // Reload the page
       window.location.href = '/';
     } catch (error) {
@@ -71,16 +75,16 @@ export default function DebugAuthPage() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <h1 className="text-2xl font-bold mb-4">Auth Debug Page</h1>
-      
+    <div className="container mx-auto max-w-4xl p-4">
+      <h1 className="mb-4 text-2xl font-bold">Auth Debug Page</h1>
+
       <Card className="mb-4">
         <CardHeader>
           <CardTitle>Current Auth State</CardTitle>
           <CardDescription>Firebase Auth current state</CardDescription>
         </CardHeader>
         <CardContent>
-          <pre className="bg-gray-100 p-4 rounded overflow-auto">
+          <pre className="overflow-auto rounded bg-gray-100 p-4">
             {JSON.stringify(authState, null, 2)}
           </pre>
         </CardContent>
@@ -92,9 +96,7 @@ export default function DebugAuthPage() {
           <CardDescription>Persistent storage used by Firebase</CardDescription>
         </CardHeader>
         <CardContent>
-          <pre className="bg-gray-100 p-4 rounded overflow-auto">
-            {indexedDBData}
-          </pre>
+          <pre className="overflow-auto rounded bg-gray-100 p-4">{indexedDBData}</pre>
         </CardContent>
       </Card>
 
@@ -104,7 +106,7 @@ export default function DebugAuthPage() {
           <CardDescription>Keys stored in localStorage</CardDescription>
         </CardHeader>
         <CardContent>
-          <pre className="bg-gray-100 p-4 rounded overflow-auto">
+          <pre className="overflow-auto rounded bg-gray-100 p-4">
             {JSON.stringify(Object.keys(localStorage), null, 2)}
           </pre>
         </CardContent>
@@ -114,10 +116,10 @@ export default function DebugAuthPage() {
         <Button onClick={clearAllAuth} variant="destructive">
           Clear All Auth Data & Sign Out
         </Button>
-        <Button onClick={() => window.location.href = '/'} variant="outline">
+        <Button onClick={() => (window.location.href = '/')} variant="outline">
           Go to Login Page
         </Button>
-        <Button onClick={() => window.location.href = '/admin'} variant="outline">
+        <Button onClick={() => (window.location.href = '/admin')} variant="outline">
           Try Admin Route
         </Button>
       </div>

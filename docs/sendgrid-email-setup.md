@@ -1,6 +1,7 @@
 # SendGrid Email Setup for Homer Enrichment Hub
 
 ## Overview
+
 Set up professional email sending from `noreply@homerenrichment.com` using SendGrid with Firebase Extensions.
 
 ## Step 1: Create SendGrid Account
@@ -27,7 +28,7 @@ CNAME   s1._domainkey           s1.domainkey.u1234.wl.sendgrid.net
 CNAME   s2._domainkey           s2.domainkey.u1234.wl.sendgrid.net
 ```
 
-*Note: The exact values will be provided by SendGrid*
+_Note: The exact values will be provided by SendGrid_
 
 ## Step 3: Create SendGrid API Key
 
@@ -44,6 +45,7 @@ firebase ext:install firebase/firestore-send-email --project=kbe-website
 ```
 
 During installation, configure:
+
 - **SMTP connection URI**: Leave empty (we'll use API key)
 - **SendGrid API Key**: Paste your SendGrid API key
 - **Default FROM address**: `noreply@homerenrichment.com`
@@ -82,7 +84,7 @@ export async function sendMagicLinkEmail(email: string, link: string, userName?:
   const subject = 'Sign in to Homer Enrichment Hub';
   const html = emailTemplates.magicLink.html(link, userName);
   const text = emailTemplates.magicLink.text(link, userName);
-  
+
   return sendEmail(email, subject, html, text);
 }
 ```
@@ -115,17 +117,20 @@ export async function sendMagicLinkEmail(email: string, link: string, userName?:
 ## Troubleshooting
 
 ### Emails Going to Spam
+
 1. Ensure domain authentication is complete
 2. Add SPF record: `v=spf1 include:sendgrid.net ~all`
 3. Check email content for spam triggers
 4. Warm up sending reputation gradually
 
 ### Authentication Failing
+
 1. Verify all DNS records are added correctly
 2. Wait 24-48 hours for propagation
 3. Re-verify domain in SendGrid
 
 ### Rate Limits
+
 - Free tier: 100 emails/day
 - Monitor usage in SendGrid dashboard
 - Upgrade if needed
@@ -133,6 +138,7 @@ export async function sendMagicLinkEmail(email: string, link: string, userName?:
 ## Security Notes
 
 1. Store SendGrid API key in Firebase secrets:
+
    ```bash
    firebase functions:secrets:set SENDGRID_API_KEY
    ```

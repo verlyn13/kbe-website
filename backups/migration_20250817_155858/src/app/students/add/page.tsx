@@ -6,7 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowLeft, AlertCircle, User } from 'lucide-react';
@@ -58,7 +64,7 @@ export default function AddStudentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
       toast({
         title: 'Authentication required',
@@ -69,7 +75,13 @@ export default function AddStudentPage() {
     }
 
     // Validate required fields
-    if (!formData.firstName || !formData.lastName || !formData.grade || !formData.school || !formData.dateOfBirth) {
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.grade ||
+      !formData.school ||
+      !formData.dateOfBirth
+    ) {
       toast({
         title: 'Missing information',
         description: 'Please fill in all required fields.',
@@ -115,7 +127,7 @@ export default function AddStudentPage() {
 
       toast({
         title: 'Student added successfully!',
-        description: formData.registerForMathCounts 
+        description: formData.registerForMathCounts
           ? `${formData.firstName} has been registered for MathCounts 2025.`
           : `${formData.firstName} has been added to your account.`,
       });
@@ -135,11 +147,11 @@ export default function AddStudentPage() {
   };
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-8">
+    <div className="container mx-auto max-w-3xl px-4 py-8">
       <div className="mb-6">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/dashboard">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Link>
         </Button>
@@ -159,18 +171,19 @@ export default function AddStudentPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* MathCounts Registration Alert */}
             <Alert className="border-primary bg-primary/10">
-              <AlertCircle className="h-4 w-4 text-primary" />
+              <AlertCircle className="text-primary h-4 w-4" />
               <AlertDescription>
-                <strong>MathCounts 2025 Registration is Open!</strong><br />
-                By adding your child, you can immediately register them for MathCounts 2025.
-                The program runs Tuesdays at 4:00 PM starting in January.
+                <strong>MathCounts 2025 Registration is Open!</strong>
+                <br />
+                By adding your child, you can immediately register them for MathCounts 2025. The
+                program runs Tuesdays at 4:00 PM starting in January.
               </AlertDescription>
             </Alert>
 
             {/* Student Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Student Information</h3>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">
@@ -264,10 +277,11 @@ export default function AddStudentPage() {
             {/* Emergency Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Emergency Information</h3>
-              <p className="text-sm text-muted-foreground">
-                This can be the same as your contact information or someone else we should contact in an emergency.
+              <p className="text-muted-foreground text-sm">
+                This can be the same as your contact information or someone else we should contact
+                in an emergency.
               </p>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="emergencyContact">Emergency Contact Name</Label>
@@ -294,9 +308,7 @@ export default function AddStudentPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="medicalNotes">
-                  Medical Notes / Allergies (Optional)
-                </Label>
+                <Label htmlFor="medicalNotes">Medical Notes / Allergies (Optional)</Label>
                 <Input
                   id="medicalNotes"
                   value={formData.medicalNotes}
@@ -310,13 +322,13 @@ export default function AddStudentPage() {
             {/* Program Registration */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Program Registration</h3>
-              
-              <div className="rounded-lg border p-4 space-y-3">
+
+              <div className="space-y-3 rounded-lg border p-4">
                 <div className="flex items-start space-x-3">
                   <Checkbox
                     id="mathcounts"
                     checked={formData.registerForMathCounts}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setFormData({ ...formData, registerForMathCounts: checked as boolean })
                     }
                     disabled={loading}
@@ -324,19 +336,20 @@ export default function AddStudentPage() {
                   <div className="space-y-1">
                     <label
                       htmlFor="mathcounts"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Register for MathCounts 2025
                     </label>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Tuesdays at 4:00 PM • Grades 5-8 • Starts January 2025
                     </p>
                   </div>
                 </div>
               </div>
-              
-              <p className="text-sm text-muted-foreground">
-                More programs coming soon! You can add additional programs later from your dashboard.
+
+              <p className="text-muted-foreground text-sm">
+                More programs coming soon! You can add additional programs later from your
+                dashboard.
               </p>
             </div>
 
@@ -344,9 +357,9 @@ export default function AddStudentPage() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                <strong>Important:</strong> A signed liability waiver is required before your child can 
-                participate in any programs. You'll be able to download and print the waiver form after 
-                adding your child.
+                <strong>Important:</strong> A signed liability waiver is required before your child
+                can participate in any programs. You'll be able to download and print the waiver
+                form after adding your child.
               </AlertDescription>
             </Alert>
 

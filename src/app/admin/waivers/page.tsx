@@ -10,8 +10,8 @@ import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
 import { collection, query, getDocs, doc, updateDoc, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { 
-  Search, 
+import {
+  Search,
   FileCheck,
   FileX,
   User,
@@ -19,7 +19,7 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
-  XCircle
+  XCircle,
 } from 'lucide-react';
 import {
   Table,
@@ -57,7 +57,9 @@ export default function WaiversPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'received' | 'rejected'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'received' | 'rejected'>(
+    'all'
+  );
   const [updating, setUpdating] = useState<string | null>(null);
 
   useEffect(() => {
@@ -69,28 +71,28 @@ export default function WaiversPage() {
       // Get all students
       const studentsSnapshot = await getDocs(collection(db, 'students'));
       const studentsData: Student[] = [];
-      
+
       for (const studentDoc of studentsSnapshot.docs) {
         const data = studentDoc.data();
-        
+
         // Get guardian info
         let guardianName = '';
         let guardianEmail = '';
-        
+
         if (data.guardianId) {
           const guardianQuery = query(
             collection(db, 'profiles'),
             where('__name__', '==', data.guardianId)
           );
           const guardianSnapshot = await getDocs(guardianQuery);
-          
+
           if (!guardianSnapshot.empty) {
             const guardianData = guardianSnapshot.docs[0].data();
             guardianName = guardianData.displayName || guardianData.guardianName || '';
             guardianEmail = guardianData.email || '';
           }
         }
-        
+
         studentsData.push({
           id: studentDoc.id,
           displayName: data.displayName || `${data.firstName} ${data.lastName}`,
@@ -104,14 +106,14 @@ export default function WaiversPage() {
           createdAt: data.createdAt?.toDate() || new Date(),
         });
       }
-      
+
       // Sort by waiver status (pending first) then by name
       studentsData.sort((a, b) => {
         if (a.waiverStatus === 'pending' && b.waiverStatus !== 'pending') return -1;
         if (a.waiverStatus !== 'pending' && b.waiverStatus === 'pending') return 1;
         return a.displayName.localeCompare(b.displayName);
       });
-      
+
       setStudents(studentsData);
     } catch (error) {
       console.error('Error loading students:', error);
@@ -125,30 +127,39 @@ export default function WaiversPage() {
     }
   }
 
-  async function updateWaiverStatus(studentId: string, newStatus: 'pending' | 'received' | 'rejected') {
+  async function updateWaiverStatus(
+    studentId: string,
+    newStatus: 'pending' | 'received' | 'rejected'
+  ) {
     setUpdating(studentId);
-    
+
     try {
       const updateData: any = {
         waiverStatus: newStatus,
       };
-      
+
       // Add or remove waiver date based on status
       if (newStatus === 'received') {
         updateData.waiverDate = new Date();
       } else {
         updateData.waiverDate = null;
       }
-      
+
       await updateDoc(doc(db, 'students', studentId), updateData);
-      
+
       // Update local state
-      setStudents(students.map(s => 
-        s.id === studentId 
-          ? { ...s, waiverStatus: newStatus, waiverDate: newStatus === 'received' ? new Date() : undefined }
-          : s
-      ));
-      
+      setStudents(
+        students.map((s) =>
+          s.id === studentId
+            ? {
+                ...s,
+                waiverStatus: newStatus,
+                waiverDate: newStatus === 'received' ? new Date() : undefined,
+              }
+            : s
+        )
+      );
+
       toast({
         title: 'Success',
         description: `Waiver status updated to ${newStatus}`,
@@ -165,28 +176,28 @@ export default function WaiversPage() {
     }
   }
 
-  const filteredStudents = students.filter(student => {
-    const matchesSearch = 
+  const filteredStudents = students.filter((student) => {
+    const matchesSearch =
       student.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.guardianName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.guardianEmail?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.school.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesStatus = statusFilter === 'all' || student.waiverStatus === statusFilter;
-    
+
     return matchesSearch && matchesStatus;
   });
 
   const stats = {
     total: students.length,
-    pending: students.filter(s => s.waiverStatus === 'pending').length,
-    received: students.filter(s => s.waiverStatus === 'received').length,
-    rejected: students.filter(s => s.waiverStatus === 'rejected').length,
+    pending: students.filter((s) => s.waiverStatus === 'pending').length,
+    received: students.filter((s) => s.waiverStatus === 'received').length,
+    rejected: students.filter((s) => s.waiverStatus === 'rejected').length,
   };
 
   if (!hasPermission('manage_users')) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex h-full items-center justify-center">
         <p className="text-muted-foreground">You don't have permission to manage waivers.</p>
       </div>
     );
@@ -205,9 +216,7 @@ export default function WaiversPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Waiver Management</h1>
-        <p className="text-muted-foreground">
-          Track and manage student liability waivers
-        </p>
+        <p className="text-muted-foreground">Track and manage student liability waivers</p>
       </div>
 
       {/* Stats */}
@@ -215,13 +224,13 @@ export default function WaiversPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Students</CardTitle>
-            <User className="h-4 w-4 text-muted-foreground" />
+            <User className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Waivers</CardTitle>
@@ -229,7 +238,7 @@ export default function WaiversPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-amber-600">{stats.pending}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               {stats.total > 0 ? Math.round((stats.pending / stats.total) * 100) : 0}% of total
             </p>
           </CardContent>
@@ -242,7 +251,7 @@ export default function WaiversPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">{stats.received}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               {stats.total > 0 ? Math.round((stats.received / stats.total) * 100) : 0}% complete
             </p>
           </CardContent>
@@ -251,10 +260,10 @@ export default function WaiversPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Rejected</CardTitle>
-            <XCircle className="h-4 w-4 text-destructive" />
+            <XCircle className="text-destructive h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">{stats.rejected}</div>
+            <div className="text-destructive text-2xl font-bold">{stats.rejected}</div>
           </CardContent>
         </Card>
       </div>
@@ -264,8 +273,8 @@ export default function WaiversPage() {
         <Alert className="border-amber-200 bg-amber-50">
           <AlertCircle className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-800">
-            <strong>{stats.pending} students</strong> are waiting for waiver approval. 
-            Students cannot participate in programs until their waiver is received.
+            <strong>{stats.pending} students</strong> are waiting for waiver approval. Students
+            cannot participate in programs until their waiver is received.
           </AlertDescription>
         </Alert>
       )}
@@ -277,9 +286,9 @@ export default function WaiversPage() {
           <CardDescription>Search and update waiver status for all students</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex flex-col sm:flex-row gap-4">
+          <div className="mb-4 flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
                 placeholder="Search by student name, guardian, or school..."
                 value={searchQuery}
@@ -315,7 +324,7 @@ export default function WaiversPage() {
               <TableBody>
                 {filteredStudents.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground">
+                    <TableCell colSpan={6} className="text-muted-foreground text-center">
                       No students found
                     </TableCell>
                   </TableRow>
@@ -328,37 +337,46 @@ export default function WaiversPage() {
                       <TableCell>
                         <div className="space-y-1">
                           <p className="text-sm">{student.guardianName || 'Unknown'}</p>
-                          <p className="text-xs text-muted-foreground">{student.guardianEmail}</p>
+                          <p className="text-muted-foreground text-xs">{student.guardianEmail}</p>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
                           <p>Grade {student.grade}</p>
-                          <p className="text-xs text-muted-foreground">{student.school}</p>
+                          <p className="text-muted-foreground text-xs">{student.school}</p>
                         </div>
                       </TableCell>
                       <TableCell>
                         {student.waiverStatus === 'pending' && (
-                          <Badge variant="outline" className="border-amber-200 bg-amber-50 text-amber-700">
+                          <Badge
+                            variant="outline"
+                            className="border-amber-200 bg-amber-50 text-amber-700"
+                          >
                             <Clock className="mr-1 h-3 w-3" />
                             Pending
                           </Badge>
                         )}
                         {student.waiverStatus === 'received' && (
-                          <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700">
+                          <Badge
+                            variant="outline"
+                            className="border-green-200 bg-green-50 text-green-700"
+                          >
                             <CheckCircle className="mr-1 h-3 w-3" />
                             Received
                           </Badge>
                         )}
                         {student.waiverStatus === 'rejected' && (
-                          <Badge variant="outline" className="border-red-200 bg-red-50 text-red-700">
+                          <Badge
+                            variant="outline"
+                            className="border-red-200 bg-red-50 text-red-700"
+                          >
                             <XCircle className="mr-1 h-3 w-3" />
                             Rejected
                           </Badge>
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-muted-foreground text-sm">
                           {student.waiverDate ? (
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />

@@ -36,7 +36,16 @@
       "Bash(curl:*)",
       "Bash(gcloud config configurations:*)",
       "Bash(gcloud config set:*)",
-      "Bash(gh run list:*)"
+      "Bash(gh run list:*)",
+      "Bash(cat:*)",
+      "Bash(npm audit:*)",
+      "Bash(grep:*)",
+      "Bash(npm test:*)",
+      "Bash(npx eslint:*)",
+      "Bash(chmod:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

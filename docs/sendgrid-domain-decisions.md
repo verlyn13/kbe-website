@@ -3,12 +3,14 @@
 ## Recommended Settings for Homer Enrichment Hub
 
 ### 1. **Domain**: `homerenrichment.com` ✅
+
 - Use your primary domain for best recognition
 - Ensures emails appear to come directly from your organization
 
 ### 2. **Brand the link for this domain**: **YES** ✅
+
 - **Why**: Links will show as `links.homerenrichment.com` instead of `sendgrid.net`
-- **Benefits**: 
+- **Benefits**:
   - Increased trust (users see your domain)
   - Better click-through rates
   - Consistent branding
@@ -17,19 +19,23 @@
 ### 3. **Advanced Settings**
 
 #### **Use automated security**: **YES** ✅
+
 - **Why**: Automatically rotates DKIM keys for maximum security
 - **Benefits**: No manual maintenance required
 
 #### **Use custom return path**: **NO** ❌
+
 - **Why**: SendGrid's default works well
 - **Unless**: You have specific compliance requirements
 
 #### **Use a custom link subdomain**: **NO** ❌ (use default)
+
 - **Default**: `links.homerenrichment.com`
 - **Why**: Standard and recognizable
 - **Alternative**: Could use `click.homerenrichment.com` if preferred
 
 #### **Use a custom DKIM selector**: **NO** ❌ (unless conflict)
+
 - **Default**: Uses "s1" and "s2"
 - **Only change if**: You already use SendGrid with another service
 
@@ -53,14 +59,14 @@ TXT     @                           → v=spf1 include:sendgrid.net ~all
 
 ## Summary of Decisions
 
-| Setting | Choice | Reason |
-|---------|--------|---------|
-| Domain | homerenrichment.com | Primary domain for recognition |
-| Link Branding | Yes | Professional appearance, better deliverability |
-| Automated Security | Yes | Automatic DKIM rotation |
-| Custom Return Path | No | Default works well |
-| Custom Link Subdomain | No | Use standard "links" |
-| Custom DKIM Selector | No | No conflicts expected |
+| Setting               | Choice              | Reason                                         |
+| --------------------- | ------------------- | ---------------------------------------------- |
+| Domain                | homerenrichment.com | Primary domain for recognition                 |
+| Link Branding         | Yes                 | Professional appearance, better deliverability |
+| Automated Security    | Yes                 | Automatic DKIM rotation                        |
+| Custom Return Path    | No                  | Default works well                             |
+| Custom Link Subdomain | No                  | Use standard "links"                           |
+| Custom DKIM Selector  | No                  | No conflicts expected                          |
 
 ## Next Steps
 

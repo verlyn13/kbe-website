@@ -2,39 +2,24 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp@latest"
-      ],
-      "alwaysAllow": [
-        "databases_list",
-        "search_query",
-        "files_diff"
-      ],
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "alwaysAllow": ["databases_list", "search_query", "files_diff"],
       "description": "Enhanced context and semantic search capabilities",
       "disabled": false
     },
     "kbe-content": {
       "command": "node",
-      "args": [
-        "./scripts/content-generator.js"
-      ],
+      "args": ["./scripts/content-generator.js"],
       "env": {
         "OPENAI_API_KEY": "${env:OPENAI_API_KEY}",
         "GOOGLE_AI_API_KEY": "${env:GOOGLE_AI_API_KEY}"
       },
-      "alwaysAllow": [
-        "generate_lesson_plan",
-        "create_activity",
-        "generate_content"
-      ],
+      "alwaysAllow": ["generate_lesson_plan", "create_activity", "generate_content"],
       "description": "Educational content generation for KBE Portal"
     },
     "kbe-orchestrator": {
       "command": "node",
-      "args": [
-        "./scripts/kbe-orchestrator-server.js"
-      ],
+      "args": ["./scripts/kbe-orchestrator-server.js"],
       "env": {
         "NODE_ENV": "development"
       },

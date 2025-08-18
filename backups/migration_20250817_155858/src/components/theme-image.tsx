@@ -11,11 +11,11 @@ interface ThemeImageProps {
   priority?: boolean;
 }
 
-export function ThemeImage({ 
+export function ThemeImage({
   className = '',
   width = 200,
   height = 200,
-  priority = false 
+  priority = false,
 }: ThemeImageProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
@@ -29,19 +29,19 @@ export function ThemeImage({
   }
 
   const images = {
-    'default': null,
+    default: null,
     'compass-peak': {
       src: '/images/themes/compass-peak',
-      alt: 'Compass Peak - Mountain and glacier landscape'
+      alt: 'Compass Peak - Mountain and glacier landscape',
     },
     'fireweed-path': {
       src: '/images/themes/fireweed',
-      alt: 'Fireweed Path - Alaska wildflowers'
-    }
+      alt: 'Fireweed Path - Alaska wildflowers',
+    },
   };
 
   const imageConfig = images[theme];
-  
+
   if (!imageConfig) {
     return null;
   }
@@ -76,18 +76,18 @@ export function ThemeBackgroundImage({ className = '' }: { className?: string })
 
   const images = {
     'compass-peak': '/images/themes/compass-peak.svg',
-    'fireweed-path': '/images/themes/fireweed.svg'
+    'fireweed-path': '/images/themes/fireweed.svg',
   };
 
   const imageSrc = images[theme];
-  
+
   if (!imageSrc) {
     return null;
   }
 
   return (
-    <div 
-      className={`fixed inset-0 pointer-events-none ${className}`}
+    <div
+      className={`pointer-events-none fixed inset-0 ${className}`}
       style={{
         backgroundImage: `url(${imageSrc})`,
         backgroundPosition: 'bottom right',
@@ -95,7 +95,7 @@ export function ThemeBackgroundImage({ className = '' }: { className?: string })
         backgroundSize: 'clamp(300px, 25vw, 400px)',
         opacity: 0.03,
         zIndex: 0,
-        transform: 'translate(10%, 10%)'
+        transform: 'translate(10%, 10%)',
       }}
       aria-hidden="true"
     />

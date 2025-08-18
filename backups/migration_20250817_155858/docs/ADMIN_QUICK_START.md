@@ -6,10 +6,11 @@
 
 1. **Update Admin Emails**
    Edit `/src/hooks/use-admin.tsx` and update the `TEMP_ADMIN_EMAILS` array (around line 41):
+
    ```typescript
    const TEMP_ADMIN_EMAILS = [
-     'your-email@example.com',  // Replace with your email
-     'colleague@example.com',   // Replace with colleague's email
+     'your-email@example.com', // Replace with your email
+     'colleague@example.com', // Replace with colleague's email
    ];
    ```
 
@@ -34,7 +35,7 @@
    - Go to Firestore Database
    - Create/open `admins` collection
    - Add document for each admin:
-   
+
    ```json
    Document ID: [User's UID from Authentication tab]
    {
@@ -49,22 +50,26 @@
 ## Admin Features
 
 ### Dashboard (`/admin/dashboard`)
+
 - Overview of registrations
 - Quick action buttons
 - Pending tasks alerts
 
 ### Registrations (`/admin/registrations`)
+
 - View all registrations
 - Approve/Waitlist/Withdraw students
 - Filter by status
 - Bulk email capabilities
 
 ### Communications (`/admin/communications`)
+
 - Send announcements to families
 - Target by grade or all families
 - View announcement history
 
 ### Other Sections (Coming Soon)
+
 - Programs: Manage schedules and capacity
 - Reports: Export data and analytics
 - Settings: Manage admin users
@@ -79,16 +84,19 @@
 ## Troubleshooting
 
 ### Can't Access Admin Panel?
+
 1. Make sure you're logged in with an admin email
 2. Check browser console for errors
 3. Verify email is in `TEMP_ADMIN_EMAILS` or Firebase `admins` collection
 
 ### Registration Management Not Working?
+
 1. Make sure Firestore is properly initialized
 2. Check Firebase Console for any security rule errors
 3. Ensure you have proper permissions set
 
 ### Need Help?
+
 - Check `/docs/FIREBASE_SETUP.md` for detailed Firebase configuration
 - Review browser console for specific error messages
 - Verify all Firebase services are enabled in console

@@ -1,6 +1,6 @@
-import { 
-  collection, 
-  doc, 
+import {
+  collection,
+  doc,
   getDoc,
   getDocs,
   setDoc,
@@ -15,7 +15,7 @@ import {
   serverTimestamp,
   addDoc,
   arrayUnion,
-  increment
+  increment,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -61,7 +61,12 @@ export interface UserProfile {
   avatarUrl?: string;
   bio?: string; // Description they'd like others to see
   mathPersonality?: {
-    type: 'Visual Learner' | 'Problem Solver' | 'Pattern Seeker' | 'Creative Thinker' | 'Logical Analyst';
+    type:
+      | 'Visual Learner'
+      | 'Problem Solver'
+      | 'Pattern Seeker'
+      | 'Creative Thinker'
+      | 'Logical Analyst';
     description?: string;
   };
   children: {
@@ -154,31 +159,34 @@ export const registrationService = {
     programId?: string;
   }): Promise<Registration[]> {
     const constraints: QueryConstraint[] = [orderBy('registrationDate', 'desc')];
-    
+
     if (filters?.status) {
       constraints.push(where('status', '==', filters.status));
     }
     if (filters?.programId) {
       constraints.push(where('programId', '==', filters.programId));
     }
-    
+
     const q = query(collection(db, 'registrations'), ...constraints);
     const snapshot = await getDocs(q);
-    
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      registrationDate: doc.data().registrationDate?.toDate(),
-      approvedDate: doc.data().approvedDate?.toDate(),
-    } as Registration));
+
+    return snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+          registrationDate: doc.data().registrationDate?.toDate(),
+          approvedDate: doc.data().approvedDate?.toDate(),
+        }) as Registration
+    );
   },
 
   async getById(id: string): Promise<Registration | null> {
     const docRef = doc(db, 'registrations', id);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) return null;
-    
+
     return {
       id: docSnap.id,
       ...docSnap.data(),
@@ -187,35 +195,31 @@ export const registrationService = {
     } as Registration;
   },
 
-  async updateStatus(
-    id: string, 
-    status: Registration['status'],
-    adminId: string
-  ): Promise<void> {
-    const updateData: any = { 
+  async updateStatus(id: string, status: Registration['status'], adminId: string): Promise<void> {
+    const updateData: any = {
       status,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     if (status === 'active') {
       updateData.approvedDate = serverTimestamp();
       updateData.approvedBy = adminId;
     }
-    
+
     await updateDoc(doc(db, 'registrations', id), updateData);
   },
 
   async getStats(programId?: string) {
     const registrations = await this.getAll({ programId });
-    
+
     return {
-      pending: registrations.filter(r => r.status === 'pending').length,
-      active: registrations.filter(r => r.status === 'active').length,
-      waitlist: registrations.filter(r => r.status === 'waitlist').length,
-      withdrawn: registrations.filter(r => r.status === 'withdrawn').length,
+      pending: registrations.filter((r) => r.status === 'pending').length,
+      active: registrations.filter((r) => r.status === 'active').length,
+      waitlist: registrations.filter((r) => r.status === 'waitlist').length,
+      withdrawn: registrations.filter((r) => r.status === 'withdrawn').length,
       totalStudents: registrations.reduce((sum, r) => sum + r.students.length, 0),
     };
-  }
+  },
 };
 
 // Program Management
@@ -223,9 +227,9 @@ export const programService = {
   async get(id: string): Promise<Program | null> {
     const docRef = doc(db, 'programs', id);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) return null;
-    
+
     return {
       id: docSnap.id,
       ...docSnap.data(),
@@ -241,11 +245,14 @@ export const programService = {
 
   async getAll(): Promise<Program[]> {
     const snapshot = await getDocs(collection(db, 'programs'));
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    } as Program));
-  }
+    return snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        }) as Program
+    );
+  },
 };
 
 // Admin User Management
@@ -253,9 +260,9 @@ export const adminService = {
   async checkAdminRole(userId: string): Promise<AdminUser | null> {
     const docRef = doc(db, 'admins', userId);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) return null;
-    
+
     return {
       id: docSnap.id,
       ...docSnap.data(),
@@ -293,16 +300,19 @@ export const adminService = {
   async getAll(): Promise<AdminUser[]> {
     try {
       const querySnapshot = await getDocs(collection(db, 'admins'));
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-      } as AdminUser));
+      return querySnapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+            createdAt: doc.data().createdAt?.toDate() || new Date(),
+          }) as AdminUser
+      );
     } catch (error) {
       console.error('Error getting all admins:', error);
       return [];
     }
-  }
+  },
 };
 
 // Attendance Service
@@ -317,7 +327,7 @@ export const attendanceService = {
   }): Promise<void> {
     const dateKey = data.date.toISOString().split('T')[0];
     const docRef = doc(db, 'attendance', `${data.programId}_${dateKey}`);
-    
+
     await setDoc(docRef, {
       ...data,
       date: Timestamp.fromDate(data.date),
@@ -329,14 +339,14 @@ export const attendanceService = {
     const dateKey = date.toISOString().split('T')[0];
     const docRef = doc(db, 'attendance', `${programId}_${dateKey}`);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) return null;
-    
+
     return {
       ...docSnap.data(),
       date: docSnap.data().date?.toDate(),
     };
-  }
+  },
 };
 
 // Announcement Service
@@ -351,8 +361,8 @@ export const announcementService = {
     // Get all announcements first, then filter/sort in memory
     // This avoids complex index requirements
     const snapshot = await getDocs(collection(db, 'announcements'));
-    
-    let announcements = snapshot.docs.map(doc => {
+
+    let announcements = snapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         id: doc.id,
@@ -362,32 +372,32 @@ export const announcementService = {
         expiresAt: data.expiresAt?.toDate(),
       } as Announcement;
     });
-    
+
     // Apply filters in memory
     if (filters?.status) {
-      announcements = announcements.filter(a => a.status === filters.status);
+      announcements = announcements.filter((a) => a.status === filters.status);
     }
     if (filters?.recipients) {
-      announcements = announcements.filter(a => a.recipients === filters.recipients);
+      announcements = announcements.filter((a) => a.recipients === filters.recipients);
     }
-    
+
     // Filter out hidden announcements unless showing hidden
     if (!filters?.showHidden && filters?.userId) {
-      announcements = announcements.filter(a => !a.hiddenBy?.includes(filters.userId));
+      announcements = announcements.filter((a) => !a.hiddenBy?.includes(filters.userId));
     }
-    
+
     // Sort by publishedAt descending
     announcements.sort((a, b) => {
       const dateA = a.publishedAt || a.createdAt;
       const dateB = b.publishedAt || b.createdAt;
       return dateB.getTime() - dateA.getTime();
     });
-    
+
     // Apply limit if specified
     if (filters?.limitCount) {
       announcements = announcements.slice(0, filters.limitCount);
     }
-    
+
     return announcements;
   },
 
@@ -411,11 +421,11 @@ export const announcementService = {
   async update(id: string, data: Partial<Announcement>): Promise<void> {
     const docRef = doc(db, 'announcements', id);
     const updateData: any = { ...data };
-    
+
     if (data.status === 'published' && !data.publishedAt) {
       updateData.publishedAt = serverTimestamp();
     }
-    
+
     await updateDoc(docRef, updateData);
   },
 
@@ -439,7 +449,7 @@ export const announcementService = {
         hiddenBy: hiddenBy.filter((id: string) => id !== userId),
       });
     }
-  }
+  },
 };
 
 // User Profile Service
@@ -448,9 +458,9 @@ export const profileService = {
     try {
       const docRef = doc(db, 'profiles', userId);
       const docSnap = await getDoc(docRef);
-      
+
       if (!docSnap.exists()) return null;
-      
+
       const data = docSnap.data();
       return {
         id: docSnap.id,
@@ -464,7 +474,10 @@ export const profileService = {
     }
   },
 
-  async create(userId: string, data: Omit<UserProfile, 'id' | 'createdAt' | 'updatedAt'>): Promise<void> {
+  async create(
+    userId: string,
+    data: Omit<UserProfile, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<void> {
     await setDoc(doc(db, 'profiles', userId), {
       ...data,
       createdAt: serverTimestamp(),
@@ -472,7 +485,10 @@ export const profileService = {
     });
   },
 
-  async update(userId: string, data: Partial<Omit<UserProfile, 'id' | 'createdAt' | 'updatedAt'>>): Promise<void> {
+  async update(
+    userId: string,
+    data: Partial<Omit<UserProfile, 'id' | 'createdAt' | 'updatedAt'>>
+  ): Promise<void> {
     await updateDoc(doc(db, 'profiles', userId), {
       ...data,
       updatedAt: serverTimestamp(),
@@ -493,7 +509,7 @@ export const profileService = {
   async getAll(): Promise<Profile[]> {
     try {
       const querySnapshot = await getDocs(collection(db, 'profiles'));
-      return querySnapshot.docs.map(doc => {
+      return querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           userId: doc.id,
@@ -517,10 +533,13 @@ export const profileService = {
     }
   },
 
-  async createOrUpdate(userId: string, data: Partial<Omit<Profile, 'userId' | 'createdAt' | 'updatedAt'>>): Promise<void> {
+  async createOrUpdate(
+    userId: string,
+    data: Partial<Omit<Profile, 'userId' | 'createdAt' | 'updatedAt'>>
+  ): Promise<void> {
     const docRef = doc(db, 'profiles', userId);
     const docSnap = await getDoc(docRef);
-    
+
     if (docSnap.exists()) {
       // Update existing profile
       await updateDoc(docRef, {
@@ -535,19 +554,19 @@ export const profileService = {
         updatedAt: serverTimestamp(),
       });
     }
-  }
+  },
 };
 
 // Calendar Event Service
 export const calendarService = {
   async getEvents(startDate?: Date, endDate?: Date): Promise<CalendarEvent[]> {
     let q = collection(db, 'events');
-    
+
     // Note: For simplicity, we'll fetch all events and filter in memory
     // In production, you'd want to use proper date range queries
     const snapshot = await getDocs(q);
-    
-    let events = snapshot.docs.map(doc => {
+
+    let events = snapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         id: doc.id,
@@ -561,7 +580,7 @@ export const calendarService = {
 
     // Filter by date range if provided
     if (startDate && endDate) {
-      events = events.filter(event => {
+      events = events.filter((event) => {
         const eventStart = new Date(event.startDate);
         const eventEnd = new Date(event.endDate);
         return eventEnd >= startDate && eventStart <= endDate;
@@ -575,9 +594,9 @@ export const calendarService = {
   async getEvent(id: string): Promise<CalendarEvent | null> {
     const docRef = doc(db, 'events', id);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) return null;
-    
+
     const data = docSnap.data();
     return {
       id: docSnap.id,
@@ -597,7 +616,7 @@ export const calendarService = {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
-    
+
     await activityService.log({
       action: 'event.created',
       resourceType: 'event',
@@ -606,32 +625,35 @@ export const calendarService = {
       userId: event.createdBy,
       userName: event.createdByName,
     });
-    
+
     return docRef.id;
   },
 
-  async update(id: string, updates: Partial<Omit<CalendarEvent, 'id' | 'createdAt'>>): Promise<void> {
+  async update(
+    id: string,
+    updates: Partial<Omit<CalendarEvent, 'id' | 'createdAt'>>
+  ): Promise<void> {
     const updateData: any = {
       ...updates,
       updatedAt: serverTimestamp(),
     };
-    
+
     if (updates.startDate) {
       updateData.startDate = Timestamp.fromDate(new Date(updates.startDate));
     }
     if (updates.endDate) {
       updateData.endDate = Timestamp.fromDate(new Date(updates.endDate));
     }
-    
+
     await updateDoc(doc(db, 'events', id), updateData);
   },
 
   async delete(id: string, userId: string, userName: string): Promise<void> {
     const event = await this.getEvent(id);
     if (!event) return;
-    
+
     await deleteDoc(doc(db, 'events', id));
-    
+
     await activityService.log({
       action: 'event.deleted',
       resourceType: 'event',
@@ -640,5 +662,5 @@ export const calendarService = {
       userId,
       userName,
     });
-  }
+  },
 };

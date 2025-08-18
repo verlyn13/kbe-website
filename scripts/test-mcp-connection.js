@@ -16,24 +16,24 @@ const servers = [
     name: 'KBE Orchestrator',
     command: 'node',
     args: ['./scripts/kbe-orchestrator-server.js'],
-    testTimeout: 5000
+    testTimeout: 5000,
   },
   {
     name: 'Content Generator',
     command: 'node',
     args: ['./scripts/content-generator.js'],
-    testTimeout: 5000
-  }
+    testTimeout: 5000,
+  },
 ];
 
 async function testServer(config) {
   console.log(`Testing ${config.name}...`);
-  
+
   return new Promise((resolve) => {
     const child = spawn(config.command, config.args, {
       cwd: path.resolve(__dirname, '..'),
       env: { ...process.env, NODE_ENV: 'test' },
-      stdio: ['pipe', 'pipe', 'pipe']
+      stdio: ['pipe', 'pipe', 'pipe'],
     });
 
     let output = '';
@@ -47,8 +47,10 @@ async function testServer(config) {
 
     child.stderr.on('data', (data) => {
       errorOutput += data.toString();
-      if (data.toString().includes('Server running') || 
-          data.toString().includes('MCP Server running')) {
+      if (
+        data.toString().includes('Server running') ||
+        data.toString().includes('MCP Server running')
+      ) {
         console.log(`  ✅ ${config.name} started successfully!`);
         if (!resolved) {
           resolved = true;
@@ -99,7 +101,7 @@ async function runTests() {
   console.log('\n');
 
   const results = [];
-  
+
   for (const server of servers) {
     const result = await testServer(server);
     results.push(result);
@@ -109,21 +111,21 @@ async function runTests() {
   // Summary
   console.log('\n📊 Test Summary:');
   console.log('─'.repeat(40));
-  
-  const successful = results.filter(r => r.success).length;
-  const failed = results.filter(r => !r.success).length;
-  
-  results.forEach(result => {
+
+  const successful = results.filter((r) => r.success).length;
+  const failed = results.filter((r) => !r.success).length;
+
+  results.forEach((result) => {
     const icon = result.success ? '✅' : '❌';
     const status = result.success ? 'PASSED' : 'FAILED';
     console.log(`${icon} ${result.name}: ${status}`);
     if (result.error) console.log(`   Error: ${result.error}`);
     if (result.timeout) console.log(`   Note: Timed out but may be running`);
   });
-  
+
   console.log('─'.repeat(40));
   console.log(`Total: ${results.length} | Passed: ${successful} | Failed: ${failed}`);
-  
+
   if (failed > 0) {
     console.log('\n💡 Troubleshooting tips:');
     console.log('1. Check if required dependencies are installed');

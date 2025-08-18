@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatPhoneNumber(value: string): string {
   // Remove all non-digits
   const phoneNumber = value.replace(/\D/g, '');
-  
+
   // Format as (XXX) XXX-XXXX
   if (phoneNumber.length <= 3) {
     return phoneNumber;
@@ -25,9 +25,7 @@ export function formatPhoneNumber(value: string): string {
 export function getAppUrl() {
   // In development, use the actual port
   if (process.env.NODE_ENV === 'development') {
-    return typeof window !== 'undefined' 
-      ? window.location.origin 
-      : 'http://localhost:9002';
+    return typeof window !== 'undefined' ? window.location.origin : 'http://localhost:9002';
   }
   // In production, use the configured URL
   return process.env.NEXT_PUBLIC_APP_URL || 'https://homerconnect.com';

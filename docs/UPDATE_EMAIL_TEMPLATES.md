@@ -10,17 +10,17 @@ While we set up custom domain email, let's improve the current emails immediatel
    - https://console.firebase.google.com/project/kbe-website/authentication/emails
 
 2. **Update Each Template**
-   
+
    Click on each template and update:
-   
+
    **Email address verification**
    - Subject: `Verify your email for Homer Enrichment Hub`
    - Sender name: `Homer Enrichment Hub`
-   
+
    **Password reset**
    - Subject: `Reset your Homer Enrichment Hub password`
    - Sender name: `Homer Enrichment Hub`
-   
+
    **Email address change**
    - Subject: `Your Homer Enrichment Hub email was changed`
    - Sender name: `Homer Enrichment Hub`
@@ -30,8 +30,9 @@ While we set up custom domain email, let's improve the current emails immediatel
    - To: `https://homerenrichment.com/__/auth/action`
 
 4. **Customize Message Content**
-   
+
    For Password Reset:
+
    ```
    Hello,
 
@@ -47,6 +48,7 @@ While we set up custom domain email, let's improve the current emails immediatel
    ```
 
    For Email Verification:
+
    ```
    Welcome to Homer Enrichment Hub!
 
@@ -60,12 +62,14 @@ While we set up custom domain email, let's improve the current emails immediatel
    ```
 
 ## Benefits:
+
 - Immediate improvement in email professionalism
 - Better user recognition of emails
 - Reduced chance of marking as spam
 - No code changes required
 
 ## Note:
+
 - Emails will still come from `noreply@kbe-website.firebaseapp.com`
 - But with "Homer Enrichment Hub" as the sender name
 - Full custom domain setup will change the actual email address

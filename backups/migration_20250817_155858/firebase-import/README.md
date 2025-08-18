@@ -20,16 +20,19 @@ This directory contains scripts to import initial data into your Firestore datab
 ## What Gets Imported
 
 ### 1. Admin User
+
 - Creates admin record for jeffreyverlynjohnson@gmail.com
 - Uses your Firebase Auth UID as document ID
 - Grants superAdmin role with all permissions
 
 ### 2. Programs
+
 - Creates MathCounts 2024-2025 program
 - Sets up registration dates and capacity
 - Ready for parent registrations
 
-### 3. Announcements  
+### 3. Announcements
+
 - Creates welcome announcement
 - Pinned and marked as high priority
 - Links to your admin account

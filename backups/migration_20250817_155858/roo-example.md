@@ -6,7 +6,7 @@ Based on the Roo Code documentation, here's the correct YAML schema format for d
 
 ### Basic Structure
 
-```yaml
+````yaml
 groups:
   - read
   - - edit # First element of the tuple
@@ -124,3 +124,4 @@ customModes:
       Focus on responsive design and accessibility
 ```text
 The key is maintaining the exact nested list structure where edit restrictions are defined as a two-element list within the groups array.
+````

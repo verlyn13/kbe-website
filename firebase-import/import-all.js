@@ -20,7 +20,7 @@ const serviceAccount = require('./serviceAccountKey.json');
 
 // Initialize Firebase Admin
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const db = admin.firestore();
@@ -39,14 +39,14 @@ async function getAdminUID() {
 // Import function with proper Firestore timestamps
 async function importCollection(collectionName, dataFile) {
   console.log(`\n📁 Importing ${collectionName}...`);
-  
+
   try {
     const rawData = fs.readFileSync(dataFile);
     const documents = JSON.parse(rawData);
-    
+
     // Get admin UID for announcements
     const adminUID = await getAdminUID();
-    
+
     for (const doc of documents) {
       // Convert timestamp objects to Firestore Timestamps
       const processedDoc = Object.entries(doc).reduce((acc, [key, value]) => {
@@ -61,7 +61,7 @@ async function importCollection(collectionName, dataFile) {
         }
         return acc;
       }, {});
-      
+
       // Determine document ID
       let docId;
       if (collectionName === 'admins' && adminUID) {
@@ -76,12 +76,12 @@ async function importCollection(collectionName, dataFile) {
         console.log(`  ✅ Added document to ${collectionName}`);
         continue;
       }
-      
+
       // Set document with specific ID
       await db.collection(collectionName).doc(docId).set(processedDoc);
       console.log(`  ✅ Added document: ${docId}`);
     }
-    
+
     console.log(`✨ ${collectionName} import complete!`);
   } catch (error) {
     console.error(`❌ Error importing ${collectionName}:`, error.message);
@@ -91,18 +91,18 @@ async function importCollection(collectionName, dataFile) {
 // Main import function
 async function importAll() {
   console.log('🚀 Starting Firebase data import...\n');
-  
+
   // Import collections in order
   await importCollection('admins', './admins-data.json');
   await importCollection('programs', './programs-data.json');
   await importCollection('announcements', './announcements-data.json');
-  
+
   console.log('\n🎉 All imports complete!');
   console.log('\n📌 Next steps:');
   console.log('1. Visit your app and sign in with jeffreyverlynjohnson@gmail.com');
   console.log('2. Click your avatar → Admin Panel');
   console.log('3. Test creating a registration from the parent portal');
-  
+
   process.exit(0);
 }
 

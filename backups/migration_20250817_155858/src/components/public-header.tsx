@@ -19,9 +19,9 @@ export function PublicHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container flex h-16 items-center">
-        <div className="flex items-center gap-2 mr-8">
+        <div className="mr-8 flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -36,23 +36,23 @@ export function PublicHeader() {
             <path d="M2 17l10 5 10-5" />
             <path d="M2 12l10 5 10-5" />
           </svg>
-          <span className="font-bold text-lg hidden sm:inline-block">Homer Enrichment Hub</span>
-          <span className="font-bold text-lg sm:hidden">HEH</span>
+          <span className="hidden text-lg font-bold sm:inline-block">Homer Enrichment Hub</span>
+          <span className="text-lg font-bold sm:hidden">HEH</span>
         </div>
 
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium flex-1">
+        <nav className="hidden flex-1 items-center space-x-6 text-sm font-medium md:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              className="hover:text-foreground/80 text-foreground/60 transition-colors"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-4 ml-auto">
+        <div className="ml-auto flex items-center gap-4">
           {user ? (
             <Button asChild variant="default" size="sm">
               <Link href="/dashboard">Parent Portal</Link>
@@ -88,11 +88,7 @@ export function PublicHeader() {
                   </Link>
                 ))}
                 {!user && (
-                  <Link
-                    href="/"
-                    className="text-lg font-medium"
-                    onClick={() => setOpen(false)}
-                  >
+                  <Link href="/" className="text-lg font-medium" onClick={() => setOpen(false)}>
                     Sign In
                   </Link>
                 )}

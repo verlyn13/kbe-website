@@ -7,8 +7,8 @@ Look for line ~42 and update the `TEMP_ADMIN_EMAILS` array:
 
 ```typescript
 const TEMP_ADMIN_EMAILS = [
-  'your-email@example.com',  // Replace with your actual email
-  'colleague@example.com',   // Replace with colleague's email
+  'your-email@example.com', // Replace with your actual email
+  'colleague@example.com', // Replace with colleague's email
 ];
 ```
 

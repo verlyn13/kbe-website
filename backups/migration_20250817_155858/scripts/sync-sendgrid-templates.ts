@@ -35,14 +35,14 @@ interface TemplateMapping {
 const templateMappings: TemplateMapping = {};
 
 async function makeRequest(
-  endpoint: string, 
+  endpoint: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',
   body?: any
 ) {
   const response = await fetch(`${SENDGRID_API_URL}${endpoint}`, {
     method,
     headers: {
-      'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+      Authorization: `Bearer ${SENDGRID_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -77,7 +77,7 @@ async function createTemplateVersion(
   testData: any
 ): Promise<void> {
   console.log(`📄 Creating version for template: ${template.name}`);
-  
+
   await makeRequest(`/templates/${templateId}/versions`, 'POST', {
     template_id: templateId,
     name: template.name,
@@ -96,7 +96,7 @@ async function updateTemplateVersion(
   testData: any
 ): Promise<void> {
   console.log(`🔄 Updating version for template: ${template.name}`);
-  
+
   await makeRequest(`/templates/${templateId}/versions/${versionId}`, 'PATCH', {
     name: template.name,
     subject: template.subject,
@@ -121,34 +121,27 @@ async function syncTemplates() {
     console.log(`Found ${existingTemplates.length} existing templates\n`);
 
     // Create a map of existing templates by name
-    const existingMap = new Map(
-      existingTemplates.map(t => [t.name, t])
-    );
+    const existingMap = new Map(existingTemplates.map((t) => [t.name, t]));
 
     // Sync each template
     for (const [key, template] of Object.entries(sendGridTemplates)) {
       console.log(`\n--- Processing: ${template.name} ---`);
-      
+
       const existing = existingMap.get(template.name);
       const testData = templateTestData[key] || {};
-      
+
       if (existing) {
         // Template exists, update it
         console.log(`✅ Template exists (ID: ${existing.id})`);
         templateMappings[key] = existing.id;
-        
+
         // Get existing versions
         const versions = await getTemplateVersions(existing.id);
-        
+
         if (versions.length > 0) {
           // Update the active version
-          const activeVersion = versions.find(v => v.active === 1) || versions[0];
-          await updateTemplateVersion(
-            existing.id,
-            activeVersion.id,
-            template,
-            testData
-          );
+          const activeVersion = versions.find((v) => v.active === 1) || versions[0];
+          await updateTemplateVersion(existing.id, activeVersion.id, template, testData);
         } else {
           // Create first version
           await createTemplateVersion(existing.id, template, testData);
@@ -158,7 +151,7 @@ async function syncTemplates() {
         const templateId = await createTemplate(template.name);
         templateMappings[key] = templateId;
         console.log(`✅ Created template (ID: ${templateId})`);
-        
+
         // Create first version
         await createTemplateVersion(templateId, template, testData);
       }
@@ -167,14 +160,16 @@ async function syncTemplates() {
     // Save template mappings
     console.log('\n\n📌 Template ID Mappings:');
     console.log('Add these to your .env.local file:\n');
-    
+
     for (const [key, id] of Object.entries(templateMappings)) {
-      const envKey = `SENDGRID_TEMPLATE_${key.toUpperCase().replace(/([A-Z])/g, '_$1').replace(/^_/, '')}`;
+      const envKey = `SENDGRID_TEMPLATE_${key
+        .toUpperCase()
+        .replace(/([A-Z])/g, '_$1')
+        .replace(/^_/, '')}`;
       console.log(`${envKey}=${id}`);
     }
 
     console.log('\n✨ Template sync completed successfully!');
-
   } catch (error) {
     console.error('❌ Error syncing templates:', error);
     process.exit(1);

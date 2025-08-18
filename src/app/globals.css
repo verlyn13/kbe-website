@@ -115,12 +115,11 @@ body {
     position: relative;
     z-index: 0;
   }
-  
+
   /* Ensure sidebar content stays within bounds during collapse */
-  [data-sidebar="sidebar"] {
+  [data-sidebar='sidebar'] {
     overflow: hidden;
   }
-
 }
 
 /* Print styles for waiver form */
@@ -128,28 +127,31 @@ body {
   body {
     font-size: 12pt;
   }
-  
+
   /* Hide elements with print:hidden class when printing */
   .print-hidden {
     display: none !important;
   }
-  
+
   /* Hide UI elements when printing */
-  nav, footer, header, aside {
+  nav,
+  footer,
+  header,
+  aside {
     display: none !important;
   }
-  
+
   /* Ensure waiver form fills the page properly */
   @page {
     margin: 0.5in;
     size: letter;
   }
-  
+
   /* Prevent page breaks inside sections */
   section {
     page-break-inside: avoid;
   }
-  
+
   /* Ensure signature lines are visible */
   .border-b {
     border-bottom: 1px solid #000 !important;
@@ -162,17 +164,17 @@ body {
   .text-primary {
     color: hsl(201 48% 35%); /* Much darker glacier blue */
   }
-  
+
   /* In dark mode, use the regular primary color */
   .dark .text-primary {
     color: hsl(var(--primary));
   }
-  
+
   /* Ensure hover states have good contrast too */
   .hover\:text-primary:hover {
     color: hsl(201 48% 25%); /* Even darker on hover in light mode */
   }
-  
+
   .dark .hover\:text-primary:hover {
     color: hsl(201 48% 76%); /* Lighter on hover in dark mode */
   }

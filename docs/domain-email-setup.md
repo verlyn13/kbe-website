@@ -78,6 +78,7 @@ TXT     _dmarc            v=DMARC1; p=none;                      -
 ### Custom Action URL
 
 Update the action URL in Firebase:
+
 ```
 https://homerenrichment.com/__/auth/action
 ```
@@ -85,6 +86,7 @@ https://homerenrichment.com/__/auth/action
 ## 4. Testing
 
 1. **Test domain access**:
+
    ```bash
    curl https://homerenrichment.com
    ```
@@ -97,17 +99,20 @@ https://homerenrichment.com/__/auth/action
 ## 5. Troubleshooting
 
 ### Domain not working
+
 - Check DNS propagation (can take 48 hours)
 - Verify A records point to Firebase IPs
 - Check SSL certificate status in Firebase Console
 
 ### Emails going to spam
+
 - Verify SPF, DKIM, DMARC records
 - Use authenticated domain
 - Improve email content (avoid spam triggers)
 - Add sender to contacts
 
 ### SSL Certificate Issues
+
 - Wait for automatic provisioning
 - Check domain verification status
 - Contact Firebase support if stuck
@@ -115,6 +120,7 @@ https://homerenrichment.com/__/auth/action
 ## 6. Environment Updates
 
 Update `.env.local`:
+
 ```
 NEXT_PUBLIC_APP_URL=https://homerenrichment.com
 ```
@@ -126,6 +132,7 @@ Update Firebase authentication settings to use custom domain for redirect URLs.
 When you get the error: `auth/requests-to-this-api-identitytoolkit-method-are-blocked`
 
 ### Quick Fix:
+
 1. Go to: https://console.cloud.google.com/apis/credentials?project=kbe-website
 2. Find your Browser API key (starts with AIzaSy...)
 3. Click to edit
@@ -135,6 +142,7 @@ When you get the error: `auth/requests-to-this-api-identitytoolkit-method-are-bl
 7. Try logging in again
 
 ### Secure Fix (After Testing):
+
 1. Change "Application restrictions" back to "HTTP referrers"
 2. Add these referrers:
    - `https://homerenrichment.com/*`

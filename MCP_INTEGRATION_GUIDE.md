@@ -27,6 +27,7 @@ This guide explains how to properly configure and use the Model Context Protocol
 ## Configuration Files
 
 ### 1. VS Code Settings (`.vscode/settings.json`)
+
 ```json
 {
   "roo-cline.mcpServers": {
@@ -42,13 +43,17 @@ This guide explains how to properly configure and use the Model Context Protocol
 ```
 
 ### 2. Project MCP Config (`.roo/mcp.json`)
+
 Already configured with:
+
 - **context7**: Semantic search capabilities
 - **kbe-content**: Educational content generation
 - **firebase-tools**: Deployment management
 
 ### 3. Agent Modes (`.roomodes`)
+
 Already configured with specialized agents:
+
 - **kbe-ui**: Frontend development
 - **kbe-api**: Backend development
 - **kbe-test**: Testing
@@ -58,6 +63,7 @@ Already configured with specialized agents:
 ## Usage Patterns
 
 ### 1. Simple Task (Single Agent)
+
 ```
 User: "Update the dashboard header color"
 → Orchestrator analyzes task
@@ -67,6 +73,7 @@ User: "Update the dashboard header color"
 ```
 
 ### 2. Complex Task (Multi-Agent)
+
 ```
 User: "Add a new weekly challenge feature with AI generation"
 → Orchestrator decomposes task:
@@ -80,6 +87,7 @@ User: "Add a new weekly challenge feature with AI generation"
 ```
 
 ### 3. Emergency Response
+
 ```
 User: "The dashboard is not loading on mobile"
 → Orchestrator triggers emergency protocol
@@ -94,18 +102,21 @@ User: "The dashboard is not loading on mobile"
 ### Common Issues
 
 1. **MCP Server Not Starting**
+
    ```bash
    # Test connection
    node scripts/test-mcp-connection.js
    ```
 
 2. **Missing Dependencies**
+
    ```bash
    # Install MCP SDK
    npm install @modelcontextprotocol/sdk
    ```
 
 3. **Permission Issues**
+
    ```bash
    # Fix permissions
    chmod +x scripts/*.js
@@ -134,16 +145,19 @@ node -e "console.log(require('./.roo/mcp.json'))"
 ## Best Practices
 
 ### 1. Task Description
+
 - Be specific about requirements
 - Mention if task needs multiple capabilities
 - Specify any constraints or preferences
 
 ### 2. Agent Communication
+
 - Agents preserve context during handoffs
 - Progress is reported at each major step
 - Blockers are escalated immediately
 
 ### 3. Workflow Optimization
+
 - Parallel tasks run simultaneously when possible
 - Sequential dependencies are respected
 - Quality gates between major transitions
@@ -151,14 +165,18 @@ node -e "console.log(require('./.roo/mcp.json'))"
 ## Integration with VS Code
 
 ### Roo Cline Extension
+
 The Roo Cline extension should automatically:
+
 1. Detect `.roomodes` configuration
 2. Load MCP servers from `.roo/mcp.json`
 3. Connect to the KBE Orchestrator
 4. Enable agent switching via UI
 
 ### Manual Agent Selection
+
 You can manually select agents:
+
 - Click the agent selector in VS Code status bar
 - Choose appropriate agent for your task
 - Orchestrator coordinates automatically
@@ -166,6 +184,7 @@ You can manually select agents:
 ## Project-Specific Context
 
 The orchestrator knows:
+
 - **Tech Stack**: Next.js 15.4.5, React 19, Tailwind CSS 4
 - **Port**: Development on 9002
 - **Theme**: Teal (#008080) and Gold (#B8860B)
@@ -175,12 +194,14 @@ The orchestrator knows:
 ## Extending the System
 
 ### Adding New Agents
+
 1. Define in `.roomodes`
 2. Register in `.roo/agents.json`
 3. Update orchestrator knowledge base
 4. Test integration
 
 ### Creating Custom MCP Servers
+
 1. Follow the pattern in `kbe-orchestrator-server.js`
 2. Implement standard MCP protocol
 3. Register in `.roo/mcp.json`
@@ -207,6 +228,7 @@ curl -X POST http://localhost:9002/api/orchestrator/coordinate \
 ## Support
 
 For issues:
+
 1. Check this guide first
 2. Run connection tests
 3. Review logs in `.roo/mcp.log`

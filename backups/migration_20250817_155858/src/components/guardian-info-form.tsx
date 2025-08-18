@@ -43,7 +43,7 @@ export function GuardianInfoForm() {
         // Check if profile is already complete
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         const userData = userDoc.data();
-        
+
         if (userData?.profileCompleted) {
           setIsProfileComplete(true);
           return;
@@ -106,7 +106,7 @@ export function GuardianInfoForm() {
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
     const formatted = formatPhoneNumber(e.target.value);
-    setFormData(prev => ({ ...prev, phone: formatted }));
+    setFormData((prev) => ({ ...prev, phone: formatted }));
   }
 
   // Don't show email verification message for Google/OAuth users
@@ -118,7 +118,7 @@ export function GuardianInfoForm() {
   // Show next steps if profile is complete
   if (isProfileComplete) {
     return (
-      <Card className="max-w-3xl mx-auto">
+      <Card className="mx-auto max-w-3xl">
         <CardHeader>
           <CardTitle className="text-2xl">Welcome to Homer Enrichment Hub! 🎉</CardTitle>
           <CardDescription>
@@ -128,14 +128,14 @@ export function GuardianInfoForm() {
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <Link href="/students/add" className="block">
-              <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-all hover:bg-accent hover:shadow-md">
+              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
                 <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-primary/10 p-2">
-                    <UserPlus className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <UserPlus className="text-primary h-5 w-5" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-medium group-hover:text-primary">Add Your Children</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="group-hover:text-primary font-medium">Add Your Children</h3>
+                    <p className="text-muted-foreground text-sm">
                       Register your children in the system
                     </p>
                   </div>
@@ -144,14 +144,14 @@ export function GuardianInfoForm() {
             </Link>
 
             <Link href="/programs" className="block">
-              <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-all hover:bg-accent hover:shadow-md">
+              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
                 <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-primary/10 p-2">
-                    <BookOpen className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <BookOpen className="text-primary h-5 w-5" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-medium group-hover:text-primary">Browse Programs</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="group-hover:text-primary font-medium">Browse Programs</h3>
+                    <p className="text-muted-foreground text-sm">
                       Explore MathCounts and other activities
                     </p>
                   </div>
@@ -160,32 +160,28 @@ export function GuardianInfoForm() {
             </Link>
 
             <Link href="/calendar" className="block">
-              <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-all hover:bg-accent hover:shadow-md">
+              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
                 <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-primary/10 p-2">
-                    <Calendar className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Calendar className="text-primary h-5 w-5" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-medium group-hover:text-primary">View Schedule</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Check dates and deadlines
-                    </p>
+                    <h3 className="group-hover:text-primary font-medium">View Schedule</h3>
+                    <p className="text-muted-foreground text-sm">Check dates and deadlines</p>
                   </div>
                 </div>
               </div>
             </Link>
 
             <Link href="/dashboard" className="block">
-              <div className="group cursor-pointer rounded-lg border bg-card p-4 transition-all hover:bg-accent hover:shadow-md">
+              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
                 <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-primary/10 p-2">
-                    <ArrowRight className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <ArrowRight className="text-primary h-5 w-5" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-medium group-hover:text-primary">Go to Dashboard</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Access all features
-                    </p>
+                    <h3 className="group-hover:text-primary font-medium">Go to Dashboard</h3>
+                    <p className="text-muted-foreground text-sm">Access all features</p>
                   </div>
                 </div>
               </div>
@@ -196,7 +192,10 @@ export function GuardianInfoForm() {
             <Mail className="h-4 w-4" />
             <AlertDescription>
               <strong>Questions?</strong> Contact Jeffrey at{' '}
-              <a href="mailto:jeffreyverlynjohnson@gmail.com" className="text-primary hover:underline">
+              <a
+                href="mailto:jeffreyverlynjohnson@gmail.com"
+                className="text-primary hover:underline"
+              >
                 jeffreyverlynjohnson@gmail.com
               </a>
             </AlertDescription>
@@ -207,7 +206,7 @@ export function GuardianInfoForm() {
   }
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="mx-auto max-w-2xl">
       <CardHeader>
         <CardTitle className="text-2xl">Complete Your Guardian Profile</CardTitle>
         <CardDescription>
@@ -219,14 +218,14 @@ export function GuardianInfoForm() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="displayName">
-                <User className="inline h-4 w-4 mr-1" />
+                <User className="mr-1 inline h-4 w-4" />
                 Full Name
               </Label>
               <Input
                 id="displayName"
                 placeholder="Your full name"
                 value={formData.displayName}
-                onChange={(e) => setFormData(prev => ({ ...prev, displayName: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, displayName: e.target.value }))}
                 required
                 disabled={loading}
               />
@@ -234,7 +233,7 @@ export function GuardianInfoForm() {
 
             <div className="space-y-2">
               <Label htmlFor="email">
-                <Mail className="inline h-4 w-4 mr-1" />
+                <Mail className="mr-1 inline h-4 w-4" />
                 Email Address
               </Label>
               <Input
@@ -242,7 +241,7 @@ export function GuardianInfoForm() {
                 type="email"
                 placeholder="your@email.com"
                 value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                 required
                 disabled={loading}
               />
@@ -250,7 +249,7 @@ export function GuardianInfoForm() {
 
             <div className="space-y-2">
               <Label htmlFor="phone">
-                <Phone className="inline h-4 w-4 mr-1" />
+                <Phone className="mr-1 inline h-4 w-4" />
                 Phone Number
               </Label>
               <Input
@@ -265,10 +264,10 @@ export function GuardianInfoForm() {
             </div>
           </div>
 
-          <div className="space-y-4 pt-4 border-t">
+          <div className="space-y-4 border-t pt-4">
             <div className="space-y-2">
               <Label className="text-base font-semibold">Email Preferences</Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Stay connected with updates about programs and activities
               </p>
             </div>
@@ -279,7 +278,7 @@ export function GuardianInfoForm() {
                   id="announcements"
                   checked={formData.emailPreferences.announcements}
                   onCheckedChange={(checked) =>
-                    setFormData(prev => ({
+                    setFormData((prev) => ({
                       ...prev,
                       emailPreferences: {
                         ...prev.emailPreferences,
@@ -292,11 +291,11 @@ export function GuardianInfoForm() {
                 <div className="space-y-1">
                   <label
                     htmlFor="announcements"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Important Announcements
                   </label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Receive updates about schedule changes, deadlines, and urgent information
                   </p>
                 </div>
@@ -307,7 +306,7 @@ export function GuardianInfoForm() {
                   id="programUpdates"
                   checked={formData.emailPreferences.programUpdates}
                   onCheckedChange={(checked) =>
-                    setFormData(prev => ({
+                    setFormData((prev) => ({
                       ...prev,
                       emailPreferences: {
                         ...prev.emailPreferences,
@@ -320,11 +319,11 @@ export function GuardianInfoForm() {
                 <div className="space-y-1">
                   <label
                     htmlFor="programUpdates"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Program Updates
                   </label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Information about MathCounts, new programs, and registration openings
                   </p>
                 </div>
@@ -335,7 +334,7 @@ export function GuardianInfoForm() {
                   id="newsletters"
                   checked={formData.emailPreferences.newsletters}
                   onCheckedChange={(checked) =>
-                    setFormData(prev => ({
+                    setFormData((prev) => ({
                       ...prev,
                       emailPreferences: {
                         ...prev.emailPreferences,
@@ -348,11 +347,11 @@ export function GuardianInfoForm() {
                 <div className="space-y-1">
                   <label
                     htmlFor="newsletters"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Community Newsletter
                   </label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Monthly updates about student achievements and upcoming events
                   </p>
                 </div>
@@ -362,8 +361,8 @@ export function GuardianInfoForm() {
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                We recommend keeping announcements enabled to stay informed about important program updates.
-                You can change these preferences anytime in your profile settings.
+                We recommend keeping announcements enabled to stay informed about important program
+                updates. You can change these preferences anytime in your profile settings.
               </AlertDescription>
             </Alert>
           </div>
@@ -384,9 +383,12 @@ export function GuardianInfoForm() {
             Save and Continue
           </Button>
 
-          <p className="text-sm text-center text-muted-foreground">
+          <p className="text-muted-foreground text-center text-sm">
             Need help? Contact Jeffrey at{' '}
-            <a href="mailto:jeffreyverlynjohnson@gmail.com" className="text-primary hover:underline">
+            <a
+              href="mailto:jeffreyverlynjohnson@gmail.com"
+              className="text-primary hover:underline"
+            >
               jeffreyverlynjohnson@gmail.com
             </a>
           </p>

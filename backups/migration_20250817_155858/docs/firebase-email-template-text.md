@@ -5,11 +5,13 @@ Copy and paste these into Firebase Console → Authentication → Templates
 ## 1. Email Address Verification
 
 **Subject Line:**
+
 ```
 Verify your email for Homer Enrichment Hub
 ```
 
 **Email Body:**
+
 ```
 Hello,
 
@@ -39,11 +41,13 @@ https://homerconnect.com
 ## 2. Password Reset
 
 **Subject Line:**
+
 ```
 Reset your Homer Enrichment Hub password
 ```
 
 **Email Body:**
+
 ```
 Hello,
 
@@ -69,11 +73,13 @@ https://homerconnect.com
 ## 3. Email Address Change
 
 **Subject Line:**
+
 ```
 Your Homer Enrichment Hub email was changed
 ```
 
 **Email Body:**
+
 ```
 Hello,
 
@@ -102,6 +108,7 @@ https://homerconnect.com
 ## 4. SMS Multi-Factor Authentication
 
 **SMS Message:**
+
 ```
 Your Homer Enrichment Hub verification code is %CODE%. Do not share this code with anyone.
 ```

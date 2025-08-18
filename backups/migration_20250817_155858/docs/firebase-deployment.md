@@ -107,7 +107,7 @@ Don't fight it - work with it.
 
 All secrets must be in Google Cloud Secret Manager and referenced in `apphosting.yaml`:
 
-```yaml
+````yaml
 env:
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
     secret: NEXT_PUBLIC_FIREBASE_API_KEY
@@ -177,3 +177,4 @@ A successful deployment will show:
 4. "Deployment successful"
 
 The app should be accessible at your Firebase Hosting URL.
+````

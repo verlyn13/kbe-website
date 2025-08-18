@@ -98,34 +98,35 @@ export function Announcements() {
         <ScrollArea className="h-[300px] pr-4">
           <div className="space-y-6">
             {announcements.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">
+              <p className="text-muted-foreground py-8 text-center">
                 No announcements at this time
               </p>
             ) : (
               announcements.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="flex gap-4 cursor-pointer hover:bg-muted/50 rounded-lg p-2 -m-2 transition-colors"
+                <div
+                  key={item.id}
+                  className="hover:bg-muted/50 -m-2 flex cursor-pointer gap-4 rounded-lg p-2 transition-colors"
                   onClick={() => router.push('/announcements')}
                 >
                   <div className={`w-1.5 rounded-full ${getPriorityColor(item.priority)}`}></div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        {item.pinned && <Pin className="h-3 w-3 text-muted-foreground" />}
+                        {item.pinned && <Pin className="text-muted-foreground h-3 w-3" />}
                         <h3 className="font-semibold">{item.title}</h3>
                       </div>
                       <p className="text-muted-foreground text-xs whitespace-nowrap">
-                        {item.publishedAt && formatDistanceToNow(new Date(item.publishedAt), { addSuffix: true })}
+                        {item.publishedAt &&
+                          formatDistanceToNow(new Date(item.publishedAt), { addSuffix: true })}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="mt-1 flex items-center gap-2">
                       {getPriorityIcon(item.priority)}
                       <Badge variant="secondary" className="text-xs">
                         {item.recipients === 'all' ? 'All Families' : item.recipients}
                       </Badge>
                     </div>
-                    <p className="text-muted-foreground mt-2 text-sm line-clamp-2">
+                    <p className="text-muted-foreground mt-2 line-clamp-2 text-sm">
                       {item.content}
                     </p>
                   </div>

@@ -35,7 +35,7 @@ You are an expert web designer specializing in modern educational portal applica
 
 #### Dashboard Layout
 
-```text
+````text
 ┌─────────────────────────────────────┐
 │ Header (sticky, z-10)               │
 ├────────┬────────────────────────────┤
@@ -158,3 +158,4 @@ When making design decisions for the KBE portal:
 - [ ] Component library maintained
 
 This agent embodies the expertise needed to maintain and enhance the KBE portal's design system, ensuring a cohesive, accessible, and delightful user experience for the Homer, Alaska educational community.
+````

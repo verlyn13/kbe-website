@@ -47,11 +47,11 @@ export function QuickLinks() {
               <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined}>
                 <link.icon className="mr-3 h-4 w-4 shrink-0" />
                 <div className="flex-1">
-                  <p className="font-medium text-sm">{link.title}</p>
-                  <p className="text-xs text-muted-foreground">{link.description}</p>
+                  <p className="text-sm font-medium">{link.title}</p>
+                  <p className="text-muted-foreground text-xs">{link.description}</p>
                 </div>
                 {link.href.startsWith('http') && (
-                  <ExternalLink className="ml-2 h-3 w-3 text-muted-foreground" />
+                  <ExternalLink className="text-muted-foreground ml-2 h-3 w-3" />
                 )}
               </a>
             </Button>
