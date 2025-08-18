@@ -1,10 +1,11 @@
 import dynamic from 'next/dynamic';
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 interface DynamicImportOptions<P> {
-  loading?: ComponentType;
+  // Accept either a component or a function, we'll coerce to what next/dynamic expects
+  loading?: ComponentType | ((props?: unknown) => ReactNode);
   ssr?: boolean;
-  suspense?: boolean;
+  // suspense option is ignored here to match Next dynamic typings
 }
 
 /**
@@ -33,8 +34,8 @@ export function createDynamicComponent<P extends object>(
     },
     {
       ssr: options.ssr ?? true,
-      suspense: options.suspense ?? false,
-      loading: options.loading,
+      // next/dynamic expects a function signature; cast to any to avoid over-constraining
+      loading: options.loading as any,
     }
   );
 }

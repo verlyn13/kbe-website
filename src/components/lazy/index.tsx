@@ -47,20 +47,20 @@ export const LazySelectProgramForm = createDynamicComponent(
 
 // Data table for admin
 export const LazyDataTable = createDynamicComponent(
-  () => import('@/components/admin/data-table').then(mod => ({ default: mod.DataTable })),
+  () => import('@/components/admin/announcement-table').then((mod) => ({ default: mod.default })),
   { 
     loading: () => <TableSkeleton rows={5} columns={6} />, 
     ssr: false 
   }
 );
 
-// Dialog components
+// Dialog components (load concrete component entry points)
 export const LazyDialog = createDynamicComponent(
-  () => import('@/components/ui/dialog').then(mod => mod),
+  () => import('@/components/ui/dialog').then((mod) => ({ default: mod.Dialog })),
   { loading: () => null, ssr: false }
 );
 
 export const LazyAlertDialog = createDynamicComponent(
-  () => import('@/components/ui/alert-dialog').then(mod => mod),
+  () => import('@/components/ui/alert-dialog').then((mod) => ({ default: mod.AlertDialog })),
   { loading: () => null, ssr: false }
 );
