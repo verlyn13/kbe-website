@@ -47,12 +47,12 @@ env:
       - BUILD
       - RUNTIME
 
-  # App Check (reCAPTCHA Enterprise) - temporarily disabled due to secret access issues
-  # - variable: NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY
-  #   secret: NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY
-  #   availability:
-  #     - BUILD
-  #     - RUNTIME
+  # App Check (reCAPTCHA Enterprise)
+  - variable: NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY
+    secret: NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY
+    availability:
+      - BUILD
+      - RUNTIME
 
   # SendGrid Configuration
   - variable: SENDGRID_API_KEY
