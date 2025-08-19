@@ -25,3 +25,11 @@ npm run typecheck    # TypeScript type checking
 ## Deployment
 
 This project is deployed on Firebase App Hosting. See apphosting.yaml for configuration.
+
+## Cloudflare Integration
+
+This repo integrates with Cloudflare for DNS and zone diagnostics via the `cf-go` CLI.
+
+- Project config: `.cloudflare` (contains `PROJECT_NAME` and `ZONE`)
+- Helper targets: `make preflight`, `make zone`, `make ns`, `make dns`
+- Full details: see `docs/cloudflare.md`

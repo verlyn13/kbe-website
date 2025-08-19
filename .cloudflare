@@ -2,11 +2,15 @@
 PROJECT_NAME=kbe-website
 ZONE=homerenrichment.com
 
-# This project will manage:
-# - kbe.homerenrichment.com (main site)
-# - api.kbe.homerenrichment.com (API endpoint)
-# - Any other kbe-related subdomains
-
-# Credentials stored in gopass at:
-# cloudflare/kbe-website/api-token (if project-specific token needed)
-# Falls back to: cloudflare/homerenrichment/*
+# Notes:
+# - cf-go reads ZONE from this file to resolve the zone ID via gopass
+# - Global account config:
+#     cloudflare/account/id
+#     cloudflare/account/name
+#     cloudflare/account/email
+#     cloudflare/accounts/<account-id>/global-api-key
+# - Zone entries (for homerenrichment.com → homerenrichment-com):
+#     cloudflare/zones/homerenrichment-com/zone-id
+#     cloudflare/zones/homerenrichment-com/account-id
+# - Optional project token (if needed for Terraform or specific ops):
+#     cloudflare/tokens/projects/kbe-website/terraform
