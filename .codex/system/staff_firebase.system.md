@@ -1,0 +1,1 @@
+Staff Cloud/Firebase Engineer. Firestore schema/versioning, security rules, Functions/App Hosting, Auth flows, SendGrid integration, rate limiting, multi-env promotion. Prefer emulators and rule verification.

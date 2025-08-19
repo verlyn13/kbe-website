@@ -1,0 +1,307 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# kbe-website / Codex Project Config
+# Date: 2025-08-18
+# Purpose: role-focused profiles, commands, and safe tools for a Next.js 15 /
+# React 19 / RSC / Firebase app with enterprise-grade quality gates.
+# Inherits sane defaults from your global ~/.codex/config.toml.
+# ─────────────────────────────────────────────────────────────────────────────
+
+[project]
+name    = "kbe-website"
+purpose = "Next.js 15 + Firebase web app with strong DX, a11y, security, and SLOs"
+
+[defaults]
+model             = "gpt-5"
+temperature       = 0.3
+max_output_tokens = 4096
+approval          = "on-request"
+stream            = true
+json_mode         = "auto"
+timeout_seconds   = 120
+retries           = 1
+
+[cost]
+enable          = true
+max_usd_per_run = 0.90
+max_usd_per_day = 20.0
+warn_at_usd     = 0.50
+
+[paths]
+runs      = "./.codex/runs"
+logs      = "./.codex/logs"
+templates = "./.codex/templates"
+system    = "./.codex/system"
+tools     = "./.codex/tools"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SYSTEM PROMPTS (local to project)
+# ─────────────────────────────────────────────────────────────────────────────
+[system_prompts]
+principal_arch   = "principal_arch.system.md"
+eng_manager      = "eng_manager.system.md"
+
+staff_fe_arch    = "staff_fe_arch.system.md"
+senior_ux        = "senior_ux.system.md"
+design_systems   = "design_systems.system.md"
+
+staff_firebase   = "staff_firebase.system.md"
+platform_devex   = "platform_devex.system.md"
+sre_obs          = "sre_obs.system.md"
+
+qa_lead          = "qa_lead.system.md"
+a11y_engineer    = "a11y_engineer.system.md"
+appsec_cloudsec  = "appsec_cloudsec.system.md"
+
+data_analytics   = "data_analytics.system.md"
+email_comms      = "email_comms.system.md"
+
+fullstack        = "fullstack.system.md"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PROFILES (map to your Core Leads + Specialists)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Core Leads
+[profiles.principal_arch]
+model             = "gpt-5"
+temperature       = 0.25
+max_output_tokens = 8192
+system_prompt     = "principal_arch.system.md"
+
+[profiles.eng_manager]
+model             = "gpt-5-mini"
+temperature       = 0.35
+system_prompt     = "eng_manager.system.md"
+
+# Frontend Specialists
+[profiles.staff_fe_arch]
+model             = "gpt-5"
+temperature       = 0.25
+system_prompt     = "staff_fe_arch.system.md"
+max_output_tokens = 6144
+
+[profiles.senior_ux]
+model             = "gpt-5-mini"
+temperature       = 0.45
+system_prompt     = "senior_ux.system.md"
+
+[profiles.design_systems]
+model             = "gpt-5"
+temperature       = 0.3
+system_prompt     = "design_systems.system.md"
+max_output_tokens = 6144
+
+# Backend / Platform
+[profiles.staff_firebase]
+model             = "gpt-5"
+temperature       = 0.25
+system_prompt     = "staff_firebase.system.md"
+
+[profiles.platform_devex]
+model             = "gpt-5"
+temperature       = 0.25
+system_prompt     = "platform_devex.system.md"
+json_mode         = "force"
+
+[profiles.sre_obs]
+model             = "gpt-5"
+temperature       = 0.2
+system_prompt     = "sre_obs.system.md"
+json_mode         = "auto"
+
+# Quality & Security
+[profiles.qa_lead]
+model             = "gpt-5"
+temperature       = 0.2
+system_prompt     = "qa_lead.system.md"
+json_mode         = "force"
+max_output_tokens = 6144
+
+[profiles.a11y_engineer]
+model             = "gpt-5-mini"
+temperature       = 0.35
+system_prompt     = "a11y_engineer.system.md"
+
+[profiles.appsec_cloudsec]
+model             = "gpt-5"
+temperature       = 0.2
+system_prompt     = "appsec_cloudsec.system.md"
+json_mode         = "force"
+max_output_tokens = 6144
+
+# Data & Messaging
+[profiles.data_analytics]
+model             = "gpt-5"
+temperature       = 0.25
+system_prompt     = "data_analytics.system.md"
+
+[profiles.email_comms]
+model             = "gpt-5-mini"
+temperature       = 0.35
+system_prompt     = "email_comms.system.md"
+
+# Full-Stack Builders
+[profiles.fullstack]
+model             = "gpt-5-mini"
+temperature       = 0.35
+system_prompt     = "fullstack.system.md"
+
+# CI: strict, deterministic, JSON-only
+[profiles.ci]
+model             = "gpt-5"
+temperature       = 0.1
+json_mode         = "force"
+approval          = "never"
+timeout_seconds   = 90
+retries           = 0
+max_output_tokens = 2048
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMMAND SHORTCUTS → templates under ./.codex/templates
+# ─────────────────────────────────────────────────────────────────────────────
+
+[commands]
+# Leadership / Architecture
+arch-rsc-boundaries   = { template = "arch_rsc_boundaries.md",    default_profile = "principal_arch" }
+arch-migration-plan   = { template = "arch_migration_plan.md",    default_profile = "principal_arch" }
+eng-weekly-brief      = { template = "eng_weekly_brief.md",       default_profile = "eng_manager" }
+
+# Frontend
+ds-architecture       = { template = "ds_architecture.md",        default_profile = "staff_fe_arch" }
+ds-tokens             = { template = "ds_tokens.md",              default_profile = "design_systems" }
+ux-interactions       = { template = "ux_interactions.md",        default_profile = "senior_ux" }
+storybook-plan        = { template = "storybook_plan.md",         default_profile = "senior_ux" }
+
+# Backend / Platform
+firebase-rules-audit  = { template = "firebase_rules_audit.md",   default_profile = "staff_firebase" }
+firebase-env-promo    = { template = "firebase_env_promo.md",     default_profile = "staff_firebase" }
+devex-biomemigrate    = { template = "devex_biome_migration.md",  default_profile = "platform_devex" }
+ci-pipeline-plan      = { template = "ci_pipeline_plan.md",       default_profile = "platform_devex" }
+
+# SRE / Observability
+sre-slo               = { template = "sre_slo.md",                default_profile = "sre_obs" }
+otel-wiring           = { template = "otel_wiring.md",            default_profile = "sre_obs" }
+incident-playbook     = { template = "incident_playbook.md",      default_profile = "sre_obs" }
+
+# Quality & Security
+qa-test-matrix        = { template = "qa_test_matrix.md",         default_profile = "qa_lead" }
+playwright-journeys   = { template = "playwright_journeys.md",    default_profile = "qa_lead" }
+msw-contracts         = { template = "msw_contracts.md",          default_profile = "qa_lead" }
+a11y-checklist        = { template = "a11y_checklist.md",         default_profile = "a11y_engineer" }
+appsec-threat-model   = { template = "appsec_threat_model.md",    default_profile = "appsec_cloudsec" }
+email-auth            = { template = "email_auth.md",             default_profile = "appsec_cloudsec" }
+
+# Data & Messaging
+event-model           = { template = "event_model.md",            default_profile = "data_analytics" }
+ga4-bq-pipeline       = { template = "ga4_bq_pipeline.md",        default_profile = "data_analytics" }
+sendgrid-templates    = { template = "sendgrid_templates.md",     default_profile = "email_comms" }
+
+# Fullstack / Feature Work
+feature-slice         = { template = "feature_slice.md",          default_profile = "fullstack" }
+perf-plan             = { template = "perf_plan.md",              default_profile = "staff_fe_arch" }
+
+# CI Gates
+coverage-gate         = { template = "coverage_gate.md",          default_profile = "ci" }
+a11y-gate             = { template = "a11y_gate.md",              default_profile = "ci" }
+bundle-gate           = { template = "bundle_gate.md",            default_profile = "ci" }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TOOLS (safe allowlists for this stack)
+# ─────────────────────────────────────────────────────────────────────────────
+[tools]
+enable = true
+available = [
+  "shell.exec.safe",
+  "git.status",
+  "git.diff",
+
+  # Node / Next / Test
+  "npm.run.json",            # wrapper to emit JSON outcome
+  "next.build.json",
+  "biome.lint.json",
+  "vitest.run.json",
+  "playwright.run.json",
+  "storybook.build.json",
+  "lhci.run.json",
+
+  # Firebase / GCP
+  "firebase.rules.test.json",
+  "firebase.deploy.dryrun.json",
+  "gcloud.run.json"
+]
+
+[tool_defaults.shell.exec.safe]
+allow = [
+  "echo","cat","ls","rg","fd","awk","sed","xargs","jq","yq",
+  "node","npm","npx","corepack","tsx",
+  "next","biome","vitest","playwright","storybook","turbo","tsc",
+  "firebase","gcloud","lhci","dotenv","just","make","ds","gopass","cf","cf-go"
+]
+deny = ["curl","wget","ssh","scp","rm","dd","mkfs","mount","docker","podman","kubectl"]
+
+# JSON-emitting wrappers (your CLI can call these to capture output)
+[tool_defaults.npm.run.json]
+command = "npm"
+args    = ["run"]  # pass script via tool call
+
+[tool_defaults.next.build.json]
+command = "npm"
+args    = ["run","build"]
+
+[tool_defaults.biome.lint.json]
+command = "npm"
+args    = ["run","lint"]   # assumes biome is wired to `lint`
+
+[tool_defaults.vitest.run.json]
+command = "npm"
+args    = ["run","test:ci"]  # vitest --run --coverage --reporter=json
+
+[tool_defaults.playwright.run.json]
+command = "npm"
+args    = ["run","pw:ci"]    # playwright test --reporter=list,json
+
+[tool_defaults.storybook.build.json]
+command = "npm"
+args    = ["run","sb:build"] # storybook build --loglevel warn
+
+[tool_defaults.lhci.run.json]
+command = "npm"
+args    = ["run","lhci:ci"]  # lhci autorun --upload.target=temporary-public-storage
+
+[tool_defaults.firebase.rules.test.json]
+command = "npm"
+args    = ["run","fb:rules:test"]  # uses firebase emulators + rules-unit-testing
+
+[tool_defaults.firebase.deploy.dryrun.json]
+command = "npm"
+args    = ["run","fb:deploy:dry"]  # firebase deploy --only hosting,functions --debug --non-interactive --except database --dry-run
+
+[tool_defaults.gcloud.run.json]
+command = "gcloud"
+args    = ["--quiet"]  # pass subcommands per call
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MCP SERVERS (Project-specific configuration)
+# ─────────────────────────────────────────────────────────────────────────────
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem"]
+env = { "ALLOWED_DIRECTORIES" = "/home/verlyn13/Projects/verlyn13/kbe-website,/home/verlyn13/.codex,/home/verlyn13/.config/codex,/home/verlyn13/bin" }
+
+[mcp_servers.git]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-git"]
+env = { "GIT_SAFE_MODE" = "true", "REPO_PATH" = "/home/verlyn13/Projects/verlyn13/kbe-website" }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# REDACTION (project secrets in logs/artifacts)
+# ─────────────────────────────────────────────────────────────────────────────
+[redaction]
+patterns = [
+  "(?i)FIREBASE_(API_KEY|PROJECT_ID|APP_ID|MEASUREMENT_ID)\\s*[:=]\\s*['\\\"][^'\\\"]+['\\\"]",
+  "(?i)SENDGRID_API_KEY\\s*[:=]\\s*['\\\"][^'\\\"]+['\\\"]",
+  "(?i)GOOGLE_APPLICATION_CREDENTIALS\\s*[:=]\\s*['\\\"][^'\\\"]+['\\\"]",
+  "(?i)OPENAI_API_KEY\\s*[:=]\\s*['\\\"][^'\\\"]+['\\\"]",
+  "(?i)CLOUDFLARE_API_TOKEN\\s*[:=]\\s*['\\\"][^'\\\"]+['\\\"]"
+]
+replacement = "«redacted»"
