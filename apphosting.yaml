@@ -47,6 +47,13 @@ env:
       - BUILD
       - RUNTIME
 
+  # App Check (reCAPTCHA Enterprise)
+  - variable: NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY
+    secret: NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+
   # SendGrid Configuration
   - variable: SENDGRID_API_KEY
     secret: SENDGRID_API_KEY

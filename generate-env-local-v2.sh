@@ -65,6 +65,8 @@ declare -A SECRETS=(
     # App Config
     ["NEXT_PUBLIC_APP_URL"]="app/url"
     ["NODE_ENV"]="app/node-env"
+    # App Check
+    ["NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY"]="appcheck/site-key"
     
     # Auth
     ["NEXTAUTH_SECRET"]="auth/nextauth-secret"
@@ -104,9 +106,22 @@ for env_var in "${!SECRETS[@]}"; do
     
     # Try gopass first (faster, works offline)
     if [ "$USE_GOPASS" = true ]; then
-        VALUE=$(get_from_gopass "$gopass_path")
-        if [ ! -z "$VALUE" ]; then
-            SOURCE="gopass"
+        if [ "$env_var" = "NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY" ]; then
+            # Prefer dev site key for local development if present
+            VALUE=$(get_from_gopass "appcheck/site-key-dev")
+            if [ ! -z "$VALUE" ]; then
+                SOURCE="gopass"
+            else
+                VALUE=$(get_from_gopass "$gopass_path")
+                if [ ! -z "$VALUE" ]; then
+                    SOURCE="gopass"
+                fi
+            fi
+        else
+            VALUE=$(get_from_gopass "$gopass_path")
+            if [ ! -z "$VALUE" ]; then
+                SOURCE="gopass"
+            fi
         fi
     fi
     
