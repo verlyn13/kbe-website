@@ -61,6 +61,9 @@ declare -A SECRETS=(
     ["app/url"]="NEXT_PUBLIC_APP_URL"
     ["app/node-env"]="NODE_ENV"
     
+    # App Check
+    ["appcheck/site-key"]="NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY"
+    
     # Auth
     ["auth/nextauth-secret"]="NEXTAUTH_SECRET"
     ["auth/jwt-secret"]="JWT_SECRET"

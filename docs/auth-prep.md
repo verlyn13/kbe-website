@@ -21,6 +21,9 @@ This document outlines immediate prep tasks to stabilize and improve Firebase Au
 - [ ] Update tests/mocks in `src/test/setup.ts` to match the unified module.
 - [ ] Verify `.env.example` lists all required `NEXT_PUBLIC_FIREBASE_*` keys (no secrets committed).
 - [ ] Validate allowed auth domains in Firebase Console match current domains.
+- [ ] Enforce API key restrictions per policy (see `docs/api-key-policy.md`):
+  - Inspect: `scripts/keys/verify-api-key.sh <KEY_ID>`
+  - Apply: `scripts/keys/enforce-firebase-web-key.sh --key-id <KEY_ID> --env <dev|preview|prod>`
 - [ ] Manual QA: sign-in link flow, Google OAuth, and sign-out across fresh tab/session.
 
 ## Verification Steps
@@ -37,4 +40,3 @@ This document outlines immediate prep tasks to stabilize and improve Firebase Au
   - [ ] Session-only (safer for shared devices)
   - [ ] Local (persist across restarts)
 - Any SSR boundaries needed for auth usage in layouts/providers.
-

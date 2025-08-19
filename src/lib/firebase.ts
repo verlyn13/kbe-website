@@ -1,4 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
@@ -27,6 +28,22 @@ if (typeof window !== 'undefined') {
       console.error('[Firebase] Error setting auth persistence:', error);
     }
   });
+
+  // Initialize Firebase App Check with reCAPTCHA Enterprise (auto-refresh tokens)
+  try {
+    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY as string | undefined;
+    if (siteKey) {
+      initializeAppCheck(app, {
+        provider: new ReCaptchaEnterpriseProvider(siteKey),
+        isTokenAutoRefreshEnabled: true,
+      });
+    }
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('[Firebase] App Check init error:', err);
+    }
+  }
 }
 
 export { app, auth, db };
