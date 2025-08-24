@@ -2,8 +2,9 @@
 
 Copy and paste each of these lines into the "Website restrictions" field in Google Cloud Console:
 
-https://homerconnect.com/*
-https://www.homerconnect.com/*
+https://homerenrichment.com/*
+https://www.homerenrichment.com/*
+https://kbe.homerenrichment.com/*
 https://kbe-website.firebaseapp.com/*
 https://kbe-website.web.app/*
 https://kbe-website--kbe-website.us-central1.hosted.app/*

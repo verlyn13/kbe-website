@@ -10,7 +10,12 @@
 2. Copy environment variables: `cp .env.example .env.local`
 3. Fill in your Firebase and SendGrid credentials
 4. Install dependencies: `npm ci`
-5. Run development server: `npm run dev`
+5. **Configure Firebase App Check** (CRITICAL):
+   - Go to Firebase Console → App Check → Apps
+   - Set Authentication API to "Unenforced"
+   - Set Cloud Firestore API to "Unenforced"
+   - Without this, Google OAuth will fail with `auth/internal-error`
+6. Run development server: `npm run dev`
 
 ## Environment Variables Required
 See `.env.example` for all required variables.

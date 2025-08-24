@@ -1,0 +1,218 @@
+{
+  "name": "Homer Enrichment Hub MCP Configuration",
+  "description": "Educational platform MCP servers for enhanced orchestration capabilities",
+  "version": "1.0.0",
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "memory-bank": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-memory"],
+      "env": {
+        "MEMORY_BANK_PATH": "${PWD}/.memory"
+      }
+    },
+    "filesystem": {
+      "command": "npx", 
+      "args": ["-y", "@anthropic-ai/mcp-server-filesystem"],
+      "env": {
+        "ALLOWED_DIRECTORIES": "${PWD},${HOME}/.claude,${HOME}/Projects/verlyn13"
+      }
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-puppeteer"],
+      "env": {
+        "HEADLESS": "true",
+        "DEFAULT_VIEWPORT_WIDTH": "1280",
+        "DEFAULT_VIEWPORT_HEIGHT": "720"
+      }
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_SEARCH_API_KEY}"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-sequential-thinking"]
+    },
+    "fetch": {
+      "command": "npx", 
+      "args": ["-y", "@anthropic-ai/mcp-server-fetch"],
+      "env": {
+        "USER_AGENT": "HomerEnrichmentHub/1.0 Educational Platform Testing"
+      }
+    }
+  },
+  "workflows": {
+    "e2e-authentication-testing": {
+      "description": "End-to-end authentication testing with browser automation",
+      "required_servers": ["puppeteer", "memory-bank", "github"],
+      "workflow": [
+        "Use puppeteer to navigate to authentication pages",
+        "Test all auth providers (Email, Google, Magic Link)",
+        "Validate reCAPTCHA Enterprise integration", 
+        "Store test results in memory-bank",
+        "Create GitHub issues for any failures"
+      ]
+    },
+    "deployment-monitoring": {
+      "description": "Monitor Firebase App Hosting deployments",
+      "required_servers": ["github", "memory-bank", "fetch"],
+      "workflow": [
+        "Monitor GitHub workflow status via github server",
+        "Fetch deployment status from Firebase URLs",
+        "Track deployment metrics in memory-bank",
+        "Alert on deployment failures"
+      ]
+    },
+    "educational-content-research": {
+      "description": "Research educational platform best practices",
+      "required_servers": ["brave-search", "fetch", "memory-bank"],
+      "workflow": [
+        "Search for educational platform UX patterns",
+        "Fetch relevant documentation and examples", 
+        "Store research findings in memory-bank",
+        "Generate implementation recommendations"
+      ]
+    },
+    "code-quality-analysis": {
+      "description": "Comprehensive code analysis with sequential thinking",
+      "required_servers": ["sequential-thinking", "filesystem", "github"],
+      "workflow": [
+        "Use sequential-thinking for complex analysis",
+        "Read codebase via filesystem server",
+        "Analyze patterns and potential improvements",
+        "Create GitHub issues for recommended changes"
+      ]
+    },
+    "parent-journey-testing": {
+      "description": "Test critical parent user journeys",
+      "required_servers": ["puppeteer", "memory-bank"],
+      "workflow": [
+        "Simulate mobile parent registration flow",
+        "Test accessibility with screen reader simulation",
+        "Validate form completion under various conditions",
+        "Document user experience issues"
+      ]
+    }
+  },
+  "agent_integrations": {
+    "orchestrator": {
+      "available_servers": ["memory-bank", "sequential-thinking", "github"],
+      "use_cases": [
+        "Complex workflow coordination",
+        "Decision tree processing",
+        "Multi-agent task distribution"
+      ]
+    },
+    "heh-architect": {
+      "available_servers": ["brave-search", "fetch", "memory-bank"],
+      "use_cases": [
+        "Educational platform research", 
+        "Architecture pattern discovery",
+        "Design system evolution"
+      ]
+    },
+    "auth-engineer": {
+      "available_servers": ["puppeteer", "memory-bank", "github"],
+      "use_cases": [
+        "Authentication flow testing",
+        "Security vulnerability assessment",
+        "Integration testing automation"
+      ]
+    },
+    "ui-craftsman": {
+      "available_servers": ["puppeteer", "memory-bank", "fetch"],
+      "use_cases": [
+        "Component testing and validation",
+        "Accessibility compliance checking", 
+        "Responsive design verification"
+      ]
+    },
+    "deployment-manager": {
+      "available_servers": ["github", "fetch", "memory-bank"],
+      "use_cases": [
+        "Deployment status monitoring",
+        "Performance metric collection",
+        "Infrastructure health checks"
+      ]
+    }
+  },
+  "environment_variables": {
+    "required": [
+      "GITHUB_TOKEN",
+      "MEMORY_BANK_PATH"
+    ],
+    "optional": [
+      "BRAVE_SEARCH_API_KEY",
+      "DEFAULT_VIEWPORT_WIDTH", 
+      "DEFAULT_VIEWPORT_HEIGHT"
+    ],
+    "notes": {
+      "GITHUB_TOKEN": "Stored in gopass at github/tokens/claude-code",
+      "BRAVE_SEARCH_API_KEY": "Optional - enables web search capabilities",
+      "MEMORY_BANK_PATH": "Defaults to .memory in project root"
+    }
+  },
+  "educational_platform_optimizations": {
+    "parent_centric_testing": {
+      "servers": ["puppeteer", "memory-bank"],
+      "focus": [
+        "Mobile-first responsive testing",
+        "Touch-friendly interaction validation",
+        "Simplified navigation patterns",
+        "Clear error messaging"
+      ]
+    },
+    "trust_building_validation": {
+      "servers": ["fetch", "puppeteer"],
+      "focus": [
+        "Professional appearance consistency",
+        "Security indicator verification",
+        "Certificate and domain validation",
+        "Performance benchmarking"
+      ]
+    },
+    "accessibility_compliance": {
+      "servers": ["puppeteer", "memory-bank"],
+      "focus": [
+        "WCAG 2.1 AA compliance testing",
+        "Screen reader compatibility",
+        "Keyboard navigation validation",
+        "Color contrast verification"
+      ]
+    }
+  },
+  "integration_patterns": {
+    "gopass_secret_sync": {
+      "description": "Sync MCP server credentials from gopass",
+      "command": "source ~/.config/gopass/agent-init.sh && export GITHUB_TOKEN=$(gopass show -o github/tokens/claude-code)",
+      "servers_affected": ["github"]
+    },
+    "firebase_integration": {
+      "description": "Coordinate with Firebase services",
+      "workflow": [
+        "Use fetch server for Firebase API calls",
+        "Monitor deployment status via github server",
+        "Store Firebase metrics in memory-bank"
+      ]
+    },
+    "cloudflare_coordination": {
+      "description": "DNS and domain management integration", 
+      "workflow": [
+        "Use fetch for Cloudflare API validation",
+        "Store DNS configuration in memory-bank",
+        "Track domain migration progress"
+      ]
+    }
+  }
+}
