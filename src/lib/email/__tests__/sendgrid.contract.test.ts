@@ -30,4 +30,3 @@ describe('SendGrid email contract', () => {
     );
   });
 });
-

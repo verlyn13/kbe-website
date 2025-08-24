@@ -1,0 +1,15 @@
+.next
+.turbo
+.vercel
+coverage
+dist
+build
+node_modules
+.firebase
+firebase-debug.log
+functions/lib
+storage_export
+migration
+backups
+*.min.js
+*.min.css

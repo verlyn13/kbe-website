@@ -17,7 +17,7 @@ export function SkeletonWrapper({
   children,
 }: SkeletonWrapperProps) {
   if (children) return <>{children}</>;
-  
+
   return (
     <div className={cn('space-y-4', className)}>
       {Array.from({ length: count }).map((_, i) => (

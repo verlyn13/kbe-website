@@ -108,6 +108,7 @@ mcp__sequential-thinking__* functions - Multi-step problem solving
 ### Educational Platform Workflow Patterns
 
 #### E2E Authentication Testing
+
 ```bash
 # Automated workflow using puppeteer + memory-bank + github
 1. Browser automation tests all auth providers
@@ -117,6 +118,7 @@ mcp__sequential-thinking__* functions - Multi-step problem solving
 ```
 
 #### Parent Journey Validation
+
 ```bash
 # Mobile-first testing workflow
 1. Simulate parent on mobile device (busy, distracted context)
@@ -126,6 +128,7 @@ mcp__sequential-thinking__* functions - Multi-step problem solving
 ```
 
 #### Deployment Intelligence
+
 ```bash
 # Coordinated deployment monitoring
 1. GitHub workflow status via mcp__github__
@@ -137,6 +140,7 @@ mcp__sequential-thinking__* functions - Multi-step problem solving
 ### Agent Coordination Patterns
 
 #### Sequential Workflows
+
 ```typescript
 // Phase-based execution with quality gates
 Phase 1: Architecture & Planning (orchestrator → heh-architect)
@@ -146,16 +150,18 @@ Phase 4: Deployment (deployment-manager with monitoring)
 ```
 
 #### Parallel Investigation
+
 ```typescript
 // Multi-agent debugging for complex issues
 Route by category:
 - Authentication: auth-engineer + security specialist
-- UI/UX: ui-craftsman + accessibility validator  
+- UI/UX: ui-craftsman + accessibility validator
 - Infrastructure: deployment-manager + performance analyst
 - Data: firebase-specialist + security auditor
 ```
 
 #### Context-Aware Routing
+
 ```typescript
 // Educational platform specific decision tree
 Parent impact: High → Immediate specialist assignment
@@ -236,12 +242,14 @@ npm run typecheck    # TypeScript type checking (tsc --noEmit)
 **Known Issue**: Firebase App Check in "Enforce" mode blocks Google OAuth authentication.
 
 **Current Solution**: App Check is set to **"Unenforced"** for:
+
 - Authentication API
 - Cloud Firestore API
 
 **Details**: See `APP_CHECK_OAUTH_ISSUE.md` for full documentation.
 
 **To Fix if OAuth Fails**:
+
 1. Firebase Console → App Check → Apps → Web App
 2. Set Authentication and Firestore to "Unenforced"
 3. Wait 1-2 minutes for propagation
@@ -364,6 +372,7 @@ Instead, focus on:
 ### Available Orchestration Patterns
 
 **Multi-Agent Workflows:**
+
 - Use **Task tool** for spawning specialized subagents
 - Prefix complex requests with **"think hard"** for deep analysis
 - Use **"/heh-feature-development"** for complete feature development
@@ -371,6 +380,7 @@ Instead, focus on:
 - Use **"/heh-deploy"** for deployment monitoring and validation
 
 **Subagent Specializations:**
+
 - **orchestrator**: Master coordinator (always start here for complex tasks)
 - **heh-architect**: Educational platform architecture and design
 - **auth-engineer**: Firebase Authentication + App Check specialist
@@ -398,19 +408,22 @@ Instead, focus on:
 ### Project-Specific Orchestration
 
 This project includes specialized workflows for:
+
 - **Educational Platform Features**: Parent-centric, mobile-first design
 - **Authentication Systems**: Multi-provider Firebase Auth + App Check
 - **Firebase App Hosting Deployments**: Auto-deploy from main branch
 - **Family Data Security**: COPPA compliance and privacy protection
 
 **Orchestration Commands Available:**
+
 ```bash
 /heh-feature-development "Build waitlist system"
-/heh-debug-issue "Fix authentication failures"  
+/heh-debug-issue "Fix authentication failures"
 /heh-deploy "Monitor production deployment"
 ```
 
 **Agent Coordination Patterns:**
+
 - **Feature Development**: heh-architect → ui-craftsman + auth-engineer → test-engineer → deployment-manager
 - **Bug Investigation**: orchestrator → appropriate specialists (parallel) → solution implementation
 - **Security Enhancement**: security-guardian → auth-engineer + firebase-specialist → test-engineer
@@ -418,12 +431,14 @@ This project includes specialized workflows for:
 ### Educational Platform Context
 
 **Core Philosophy**: Simple registration gateway for enrichment programs
+
 - **Target Users**: Busy parents, often on mobile devices
 - **NOT an LMS**: Avoid grade tracking, assignments, complex features
 - **Trust-Building**: Professional, reliable experience
 - **Accessibility-First**: WCAG 2.1 AA compliance minimum
 
 **Current Architecture Status**: 75% production ready
+
 - Authentication working (needs ToS modal fix)
 - Firebase App Hosting deployed and functional
 - reCAPTCHA Enterprise + App Check configured

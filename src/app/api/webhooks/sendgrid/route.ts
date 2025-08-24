@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     // Parse and validate the webhook payload
     const body = await request.json();
     const validationResult = sendGridWebhookSchema.safeParse(body);
-    
+
     if (!validationResult.success) {
       console.error('Invalid SendGrid webhook payload:', validationResult.error);
       return NextResponse.json(
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     const events = validationResult.data;
 
     // Process each event

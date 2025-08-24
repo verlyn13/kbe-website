@@ -64,10 +64,14 @@ afterEach(() => {
   consoleWarnSpy.mockRestore();
 
   if (errorCalls.length > 0) {
-    throw new Error(`console.error called ${errorCalls.length} time(s):\n` + JSON.stringify(errorCalls[0]));
+    throw new Error(
+      `console.error called ${errorCalls.length} time(s):\n` + JSON.stringify(errorCalls[0])
+    );
   }
   if (warnCalls.length > 0) {
-    throw new Error(`console.warn called ${warnCalls.length} time(s):\n` + JSON.stringify(warnCalls[0]));
+    throw new Error(
+      `console.warn called ${warnCalls.length} time(s):\n` + JSON.stringify(warnCalls[0])
+    );
   }
 });
 

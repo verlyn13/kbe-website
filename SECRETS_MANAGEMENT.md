@@ -3,6 +3,7 @@
 ## Overview
 
 This project uses a dual-layer secrets management approach:
+
 1. **Production**: Google Cloud Secret Manager (source of truth)
 2. **Local Development**: gopass (fast, offline mirror)
 
@@ -53,6 +54,7 @@ npm run dev
 ### In Google Cloud Secret Manager
 
 All secrets are stored flat with descriptive names:
+
 - `NEXT_PUBLIC_FIREBASE_API_KEY`
 - `SENDGRID_API_KEY`
 - etc.
@@ -93,17 +95,20 @@ projects/kbe-website/
 ## Scripts
 
 ### `sync-gopass-secrets.sh`
+
 - Pulls all secrets from Google Cloud Secret Manager
 - Stores them in gopass under `projects/kbe-website/`
 - Run when secrets are updated in production
 
 ### `generate-env-local-v2.sh`
+
 - Generates `.env.local` file for local development
 - Prefers gopass (fast, offline) over Google Cloud
 - Falls back to Google Cloud if gopass unavailable
 - Validates critical variables are present
 
 ### `generate-env-local.sh` (legacy)
+
 - Original script that only uses Google Cloud
 - Slower, requires internet connection
 - Still works but `v2` is preferred
@@ -111,11 +116,13 @@ projects/kbe-website/
 ## Manual Secret Access
 
 ### View all project secrets
+
 ```bash
 gopass ls projects/kbe-website
 ```
 
 ### Get a specific secret
+
 ```bash
 # From gopass (fast)
 gopass show projects/kbe-website/firebase/api-key
@@ -127,6 +134,7 @@ gcloud secrets versions access latest \
 ```
 
 ### Update a secret
+
 ```bash
 # 1. Update in Google Cloud (production)
 echo -n "new-value" | gcloud secrets versions add \
@@ -170,12 +178,14 @@ The following secrets are **required** for the app to start:
 ## Troubleshooting
 
 ### Missing secrets in gopass
+
 ```bash
 # Re-sync from Google Cloud
 ./sync-gopass-secrets.sh
 ```
 
 ### Can't access Google Cloud secrets
+
 ```bash
 # Authenticate with gcloud
 gcloud auth login
@@ -185,6 +195,7 @@ gcloud config set project kbe-website
 ```
 
 ### App won't start (missing Firebase config)
+
 ```bash
 # Check what's in .env.local
 grep FIREBASE .env.local
@@ -198,6 +209,7 @@ grep FIREBASE .env.local
 ```
 
 ### View current secret sources
+
 ```bash
 # Check if secrets are in gopass
 gopass ls projects/kbe-website | wc -l

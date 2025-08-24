@@ -1,6 +1,7 @@
 # Stage 3: Build & Runtime Verification
 
 ## Context from Previous Stages
+
 - **TypeScript**: Clean compilation in 8.74s
 - **Framework**: Next.js with App Router
 - **Deployment**: Firebase App Hosting
@@ -12,6 +13,7 @@
 ## 3.1 Production Build Analysis
 
 ### Clean Build Test
+
 ```bash
 # Remove previous build artifacts
 rm -rf .next
@@ -31,12 +33,14 @@ ls -la .next/server/app/ 2>/dev/null | head -10
 ```
 
 **Capture:**
+
 - Build time
 - Route types (○ Static, λ Dynamic, ● ISR)
 - Bundle sizes
 - Any warnings or errors
 
 ### Bundle Size Analysis
+
 ```bash
 # Get page bundle sizes
 grep -A 50 "Route (app)" build-output.log | grep -E "kB|MB"
@@ -52,11 +56,13 @@ grep -E "First Load JS" build-output.log | grep -E "[0-9]+ kB" | sort -t' ' -k4 
 ```
 
 **Pass Criteria:**
+
 - First Load JS < 200KB for main pages
 - No individual chunk > 500KB
 - Build completes without errors
 
 ### Check for Build Warnings
+
 ```bash
 # Extract all warnings
 grep -i "warn" build-output.log | grep -v "node_modules"
@@ -73,6 +79,7 @@ grep -i "not found\|missing" build-output.log
 ## 3.2 Static vs Dynamic Route Analysis
 
 ### Identify Route Types
+
 ```bash
 # List all app routes
 find app -name "page.tsx" -o -name "route.ts" | sort
@@ -91,6 +98,7 @@ grep -r "^'use client'" app/ --include="*.tsx" | cut -d: -f1 | sort -u
 ```
 
 **Document:**
+
 - Static routes (can be cached at edge)
 - Dynamic routes (require server execution)
 - Client components vs Server components ratio
@@ -100,6 +108,7 @@ grep -r "^'use client'" app/ --include="*.tsx" | cut -d: -f1 | sort -u
 ## 3.3 Development vs Production Parity Check
 
 ### Start Production Server
+
 ```bash
 # Build and start production server
 npm run build
@@ -120,6 +129,7 @@ kill $PROD_PID
 ```
 
 ### Start Development Server
+
 ```bash
 # Start dev server (with Turbo if available)
 PORT=3000 npm run dev > dev-server.log 2>&1 &
@@ -136,6 +146,7 @@ kill $DEV_PID
 ```
 
 ### Compare Outputs
+
 ```bash
 # Compare HTML structure (ignore React dev IDs)
 diff -u prod-home.html dev-home.html | grep -v "data-react\|<!--\|__next" | head -30
@@ -149,6 +160,7 @@ grep -i "error\|warning" dev-server.log | head -10
 ```
 
 **Pass Criteria:**
+
 - No significant HTML structure differences
 - No hydration warnings in development
 - Both environments render the same content
@@ -158,6 +170,7 @@ grep -i "error\|warning" dev-server.log | head -10
 ## 3.4 API Routes & Server Functions
 
 ### Test API Routes
+
 ```bash
 # Find all API routes
 find app -path "*/api/*" -name "route.ts" | while read route; do
@@ -174,6 +187,7 @@ curl -X POST http://localhost:3000/api/webhooks/sendgrid \
 ```
 
 ### Check Server Actions
+
 ```bash
 # Find server actions (use server directive)
 grep -r "^'use server'" app/ lib/ --include="*.ts" --include="*.tsx"
@@ -187,6 +201,7 @@ grep -r "async function.*Page\|export default async function" app/ --include="*.
 ## 3.5 Environment Variables & Configuration
 
 ### Check Environment Setup
+
 ```bash
 # List all environment variables used
 grep -r "process.env\." src/ app/ lib/ --include="*.ts" --include="*.tsx" | \
@@ -205,6 +220,7 @@ done
 ```
 
 ### Firebase Configuration Check
+
 ```bash
 # Check Firebase client config
 grep -A 10 "const firebaseConfig" src/lib/firebase-config.ts
@@ -221,6 +237,7 @@ grep -r "serviceAccountKey\|GOOGLE_APPLICATION_CREDENTIALS" . --include="*.ts" -
 ## 3.6 Image Optimization
 
 ### Check Image Usage
+
 ```bash
 # Find all image imports
 grep -r "next/image" app/ src/ --include="*.tsx" -l | wc -l
@@ -238,6 +255,7 @@ find public -type f \( -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name
 ```
 
 **Pass Criteria:**
+
 - All images use next/image component
 - Image domains configured in next.config.mjs
 - No unoptimized image tags
@@ -247,6 +265,7 @@ find public -type f \( -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name
 ## 3.7 Middleware & Redirects
 
 ### Check Middleware
+
 ```bash
 # Look for middleware file
 ls -la middleware.ts 2>/dev/null || ls -la src/middleware.ts 2>/dev/null || echo "No middleware found"
@@ -263,6 +282,7 @@ grep -r "redirect\|permanentRedirect" app/ --include="*.tsx" --include="*.ts" | 
 ## 3.8 Performance Optimizations
 
 ### Check Lazy Loading
+
 ```bash
 # Find dynamic imports (code splitting)
 grep -r "dynamic\|lazy" app/ src/ --include="*.tsx" | grep -E "import|require" | head -10
@@ -275,6 +295,7 @@ find app -name "loading.tsx" | head -10
 ```
 
 ### Font Optimization
+
 ```bash
 # Check font configuration
 grep -r "next/font" app/ src/ --include="*.tsx" --include="*.ts"
@@ -288,11 +309,12 @@ ls -la public/fonts/ 2>/dev/null || echo "No custom fonts directory"
 ## 3.9 Error Handling
 
 ### Check Error Boundaries
+
 ```bash
 # Find error.tsx files
 find app -name "error.tsx"
 
-# Find not-found.tsx files  
+# Find not-found.tsx files
 find app -name "not-found.tsx"
 
 # Check for try-catch in server components
@@ -305,43 +327,52 @@ grep -r "try {" app/ --include="*.tsx" | grep -v "use client" | head -10
 
 ```markdown
 # Stage 3 Audit Report: Build & Runtime Verification
+
 **Date**: [DATE]
 **Build Time**: [TIME]
 **Bundle Size**: [SIZE]
 
 ## 3.1 Build Health
+
 - **Build Status**: ✅/❌
 - **Build Time**: [X]s
 - **Warnings**: [COUNT]
 - **Total Bundle Size**: [SIZE]
 
 ### Route Analysis
+
 - **Static Routes**: [COUNT]
 - **Dynamic Routes**: [COUNT]
 - **API Routes**: [COUNT]
 
 ### Largest Pages
+
 1. [PAGE]: [SIZE]
 2. [PAGE]: [SIZE]
 
 ## 3.2 Runtime Parity
+
 - **Dev/Prod Differences**: [COUNT]
 - **Hydration Issues**: [YES/NO]
 - **Console Errors**: [COUNT]
 
 ## 3.3 Optimization Status
+
 - **Images Optimized**: [X/Y]
 - **Code Splitting**: [YES/NO]
 - **Fonts Optimized**: [YES/NO]
 - **Suspense Boundaries**: [COUNT]
 
 ## Critical Issues
+
 [List any build failures or runtime errors]
 
 ## Recommendations
+
 [Specific optimization suggestions]
 
 ## Fix Commands
+
 [Automated fixes if applicable]
 ```
 
@@ -350,11 +381,13 @@ grep -r "try {" app/ --include="*.tsx" | grep -v "use client" | head -10
 ## Decision Gate for Stage 4
 
 **Proceed to Stage 4 if:**
+
 - ✅ Build completes successfully
 - ✅ No runtime errors
 - ✅ Bundle size reasonable (< 500KB main)
 
 **Stop and fix if:**
+
 - ❌ Build fails
 - ❌ Dev/Prod parity issues
 - ❌ Bundle size > 1MB for main pages

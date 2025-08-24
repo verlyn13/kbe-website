@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { auth, app } from '@/lib/firebase';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken as getAppCheckToken } from 'firebase/app-check';
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+  getToken as getAppCheckToken,
+} from 'firebase/app-check';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -55,23 +59,23 @@ export default function AuthDiagnosticsPage() {
         // App Check might already be initialized
         addStatus('⚠️ App Check may already be initialized');
       }
-      
+
       // Attempt to get a token without forcing refresh
       if (appCheck) {
         getAppCheckToken(appCheck, false)
-        .then((res) => {
-          if (res && res.token) {
-            setAppCheckInfo('App Check token acquired');
-            addStatus('✅ App Check token acquired successfully');
-          } else {
-            setAppCheckInfo('App Check token not available');
-            addStatus('⚠️ App Check token not available');
-          }
-        })
-        .catch((e) => {
-          setAppCheckInfo(`App Check token error: ${e?.message || e}`);
-          addStatus(`❌ App Check token error: ${e?.code || ''} ${e?.message || e}`);
-        });
+          .then((res) => {
+            if (res && res.token) {
+              setAppCheckInfo('App Check token acquired');
+              addStatus('✅ App Check token acquired successfully');
+            } else {
+              setAppCheckInfo('App Check token not available');
+              addStatus('⚠️ App Check token not available');
+            }
+          })
+          .catch((e) => {
+            setAppCheckInfo(`App Check token error: ${e?.message || e}`);
+            addStatus(`❌ App Check token error: ${e?.code || ''} ${e?.message || e}`);
+          });
       }
     } catch (e: any) {
       setAppCheckInfo('App Check not initialized');
@@ -181,7 +185,9 @@ export default function AuthDiagnosticsPage() {
           <div className="bg-muted rounded-lg p-4">
             <h4 className="mb-2 font-semibold">Required Firebase Console Checks:</h4>
             {appCheckInfo && (
-              <p className="mb-2 text-sm"><strong>App Check:</strong> {appCheckInfo}</p>
+              <p className="mb-2 text-sm">
+                <strong>App Check:</strong> {appCheckInfo}
+              </p>
             )}
             <ol className="list-inside list-decimal space-y-1 text-sm">
               <li>
@@ -217,7 +223,8 @@ export default function AuthDiagnosticsPage() {
                   target="_blank"
                   className="text-primary hover:underline"
                 >
-                  Verify App Check (reCAPTCHA Enterprise) domains include homerenrichment.com and www
+                  Verify App Check (reCAPTCHA Enterprise) domains include homerenrichment.com and
+                  www
                 </a>
               </li>
             </ol>

@@ -27,6 +27,7 @@ npm run typecheck    # TypeScript type checking
 **Important**: Firebase App Check must be set to "Unenforced" mode for OAuth to work.
 
 If Google sign-in fails with `auth/internal-error`:
+
 1. Go to Firebase Console → App Check → Apps
 2. Set Authentication and Firestore APIs to "Unenforced"
 3. Wait 1-2 minutes and test again

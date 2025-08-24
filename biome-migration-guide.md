@@ -1,19 +1,22 @@
 # Biome Migration Guide - KBE Website
 
 ## Overview
+
 Complete migration guide for replacing ESLint + Prettier with Biome in the KBE Website Next.js + TypeScript project. This workflow ensures zero downtime and safe, incremental migration.
 
 ## Current Setup Analysis
 
 ### ESLint Configuration
+
 - **Base**: `next/core-web-vitals` (Next.js recommended rules)
 - **Disabled Rules**:
   - `react/display-name`: off
-  - `no-unused-vars`: off  
+  - `no-unused-vars`: off
   - `@typescript-eslint/no-unused-vars`: off
 - **Known Issues**: Multiple `react/no-unescaped-entities` warnings
 
 ### Prettier Configuration
+
 - **Settings**:
   - Semi-colons: true
   - Single quotes: true
@@ -27,6 +30,7 @@ Complete migration guide for replacing ESLint + Prettier with Biome in the KBE W
 - **Tailwind Functions**: `cn`, `cva`
 
 ### Package Dependencies
+
 - **ESLint**: v9.32.0 with Next.js plugin
 - **Prettier**: v3.6.2 with Tailwind plugin
 - **TypeScript**: v5.8.3
@@ -37,6 +41,7 @@ Complete migration guide for replacing ESLint + Prettier with Biome in the KBE W
   - `typecheck`: TypeScript check
 
 ## Prerequisites
+
 - Git repository with clean working tree
 - Node.js 22+ (project requirement)
 - npm 11+ (project requirement)
@@ -48,6 +53,7 @@ Complete migration guide for replacing ESLint + Prettier with Biome in the KBE W
 ## Phase 1: Preparation & Analysis (30 min)
 
 ### 1.1 Create Migration Branch
+
 ```bash
 # Ensure clean working tree
 git status
@@ -55,6 +61,7 @@ git checkout -b feature/migrate-to-biome-2.2.0
 ```
 
 ### 1.2 Document Current State
+
 ```bash
 # Capture current lint/format issues for comparison
 npm run lint > migration/eslint-baseline.log 2>&1 || true
@@ -65,6 +72,7 @@ npm ls | grep -E "eslint|prettier" > migration/current-deps.txt
 ```
 
 ### 1.3 Install Biome (Pinned Version)
+
 ```bash
 # Install and pin to 2.2.0 for stability
 pnpm add -D @biomejs/biome@2.2.0
@@ -78,11 +86,13 @@ pnpm add -D @biomejs/biome@2.2.0
 ## Phase 2: Configuration Setup (45 min)
 
 ### 2.1 Initialize Biome
+
 ```bash
 pnpm biome init
 ```
 
 ### 2.2 Replace with Production Config
+
 Create `biome.jsonc` with this v2.2.0-optimized configuration:
 
 ```jsonc
@@ -94,7 +104,7 @@ Create `biome.jsonc` with this v2.2.0-optimized configuration:
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true,
-    "defaultBranch": "main"
+    "defaultBranch": "main",
   },
 
   // File handling with 2.2.0 ignore semantics (no /** suffix)
@@ -111,8 +121,8 @@ Create `biome.jsonc` with this v2.2.0-optimized configuration:
       ".firebase",
       "firebase-debug.log",
       "functions/lib",
-      "storage_export"
-    ]
+      "storage_export",
+    ],
   },
 
   // Formatter configuration
@@ -120,13 +130,13 @@ Create `biome.jsonc` with this v2.2.0-optimized configuration:
     "enabled": true,
     "indentWidth": 2,
     "indentStyle": "space",
-    "lineWidth": 100
+    "lineWidth": 100,
   },
 
   // Import organization (2.2.0 feature)
   "organizeImports": {
     "enabled": true,
-    "identifierOrder": "natural"
+    "identifierOrder": "natural",
   },
 
   // Linter with recommended rules
@@ -137,10 +147,10 @@ Create `biome.jsonc` with this v2.2.0-optimized configuration:
       "suspicious": {
         "noImportCycles": {
           "level": "error",
-          "options": { "ignoreTypes": true }
-        }
-      }
-    }
+          "options": { "ignoreTypes": true },
+        },
+      },
+    },
   },
 
   // Project-specific overrides
@@ -150,26 +160,27 @@ Create `biome.jsonc` with this v2.2.0-optimized configuration:
       "linter": {
         "rules": {
           "correctness": {
-            "noUndeclaredVariables": "off"
-          }
-        }
-      }
+            "noUndeclaredVariables": "off",
+          },
+        },
+      },
     },
     {
       "include": ["app/**", "src/app/**"],
       "linter": {
         "rules": {
           "correctness": {
-            "noNextAsyncClientComponent": "warn"
-          }
-        }
-      }
-    }
-  ]
+            "noNextAsyncClientComponent": "warn",
+          },
+        },
+      },
+    },
+  ],
 }
 ```
 
 ### 2.3 Migrate Existing Configs
+
 ```bash
 # Auto-migrate ESLint configuration
 pnpm dlx @biomejs/biome@2.2.0 migrate eslint --write
@@ -188,6 +199,7 @@ git diff biome.jsonc
 ## Phase 3: Script Migration (30 min)
 
 ### 3.1 Update package.json Scripts
+
 ```json
 {
   "scripts": {
@@ -196,11 +208,11 @@ git diff biome.jsonc
     "lint:fix": "biome check --write --unsafe .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    
+
     // Git-aware commands
     "lint:staged": "biome check --staged --error-on-warnings",
     "check:ci": "biome ci --changed .",
-    
+
     // Legacy aliases (temporary)
     "eslint:legacy": "eslint .",
     "prettier:legacy": "prettier --check ."
@@ -209,6 +221,7 @@ git diff biome.jsonc
 ```
 
 ### 3.2 Test New Scripts
+
 ```bash
 # Dry run to see what would change
 pnpm biome check . --dry-run
@@ -227,6 +240,7 @@ pnpm biome check . 2>&1 | grep -E "error|warning" | wc -l
 ## Phase 4: Code Fixes & Validation (1 hour)
 
 ### 4.1 Apply Safe Fixes
+
 ```bash
 # Apply only safe fixes first
 pnpm biome check --write .
@@ -241,6 +255,7 @@ git commit -m "chore: apply Biome safe fixes"
 ```
 
 ### 4.2 Apply Unsafe Fixes (Review Carefully)
+
 ```bash
 # Create separate commit for unsafe fixes
 pnpm biome check --write --unsafe .
@@ -258,6 +273,7 @@ git commit -m "chore: apply Biome unsafe fixes (reviewed)"
 ```
 
 ### 4.3 Verify Functionality
+
 ```bash
 # Build should succeed
 pnpm build
@@ -276,6 +292,7 @@ pnpm typecheck
 ## Phase 5: Editor Integration (15 min)
 
 ### 5.1 VS Code Setup
+
 1. Install Biome extension: `biomejs.biome`
 2. Update workspace settings:
 
@@ -296,7 +313,7 @@ pnpm typecheck
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  
+
   // Disable ESLint/Prettier extensions for this workspace
   "eslint.enable": false,
   "prettier.enable": false
@@ -313,6 +330,7 @@ pnpm typecheck
 ## Phase 6: CI/CD Integration (30 min)
 
 ### 6.1 Update GitHub Actions
+
 ```yaml
 # .github/workflows/biome.yml
 name: Code Quality
@@ -326,28 +344,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v4
         with:
           version: 9
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
-      
+          cache: 'pnpm'
+
       - run: pnpm i --frozen-lockfile
-      
+
       # For PRs, only check changed files
       - run: pnpm run check:ci
         if: github.event_name == 'pull_request'
-      
+
       # For main, check everything
       - run: pnpm biome ci .
         if: github.ref == 'refs/heads/main'
 ```
 
 ### 6.2 Test CI Pipeline
+
 ```bash
 # Push to feature branch
 git push origin feature/migrate-to-biome-2.2.0
@@ -362,6 +381,7 @@ git push origin feature/migrate-to-biome-2.2.0
 ## Phase 7: Cleanup & Documentation (15 min)
 
 ### 7.1 Remove ESLint/Prettier (After Stability Period)
+
 ```bash
 # Remove configurations
 rm -f .eslintrc* .prettierrc* .eslintignore .prettierignore
@@ -374,6 +394,7 @@ pnpm remove eslint prettier eslint-config-* eslint-plugin-* prettier-plugin-*
 ```
 
 ### 7.2 Update Documentation
+
 ```markdown
 # Add to README.md
 
@@ -382,16 +403,19 @@ pnpm remove eslint prettier eslint-config-* eslint-plugin-* prettier-plugin-*
 This project uses [Biome](https://biomejs.dev) v2.2.0 for linting, formatting, and import organization.
 
 ### Commands
+
 - `pnpm lint` - Check for issues
 - `pnpm lint:fix` - Fix all issues
 - `pnpm format` - Format code
 - `pnpm check:ci` - CI validation
 
 ### Editor Setup
+
 Install the Biome extension for VS Code: `biomejs.biome`
 ```
 
 ### 7.3 Final Commit
+
 ```bash
 git add -A
 git commit -m "chore: complete migration to Biome 2.2.0
@@ -449,18 +473,22 @@ git branch -D feature/migrate-to-biome-2.2.0
 ### Common Issues & Solutions
 
 **Issue**: "Biome reports errors ESLint didn't catch"
+
 - This is expected; Biome has different/stricter rules
 - Review and fix, or disable specific rules if needed
 
 **Issue**: "Format differs from Prettier"
+
 - Biome has its own formatter; small differences are normal
 - Adjust `formatter` settings in `biome.jsonc` if needed
 
 **Issue**: "CI fails on unchanged files"
+
 - Use `--changed` flag for PR checks
 - Ensure `vcs.defaultBranch` matches your repo
 
 **Issue**: "VS Code not formatting"
+
 - Verify Biome extension is installed
 - Check workspace settings override user settings
 - Reload VS Code window
@@ -470,6 +498,7 @@ git branch -D feature/migrate-to-biome-2.2.0
 ## Post-Migration Monitoring
 
 Track these metrics for 2 weeks:
+
 - CI run times (should be faster)
 - Developer feedback on DX
 - False positive rate

@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, Suspense } from 'react';
-import { LazyParentAccountForm, LazyAddStudentsForm, LazySelectProgramForm } from '@/components/lazy';
+import {
+  LazyParentAccountForm,
+  LazyAddStudentsForm,
+  LazySelectProgramForm,
+} from '@/components/lazy';
 import { FormSkeleton } from '@/components/loading/form-skeleton';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle } from 'lucide-react';
@@ -112,7 +116,8 @@ export function RegistrationFlow() {
       setCurrentStep('complete');
     } catch (error) {
       console.error('Registration error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to complete registration';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to complete registration';
       toast({
         title: 'Registration Error',
         description: errorMessage,
@@ -155,7 +160,10 @@ export function RegistrationFlow() {
 
       {currentStep === 'students' && (
         <Suspense fallback={<FormSkeleton fields={4} />}>
-          <LazyAddStudentsForm onSubmit={handleStudentsSubmit} onBack={() => setCurrentStep('parent')} />
+          <LazyAddStudentsForm
+            onSubmit={handleStudentsSubmit}
+            onBack={() => setCurrentStep('parent')}
+          />
         </Suspense>
       )}
 

@@ -5,6 +5,7 @@ This comprehensive testing suite validates all authentication flows for the Home
 ## Overview
 
 The Homer Enrichment Hub supports multiple authentication methods:
+
 - **Google OAuth** - Primary authentication method
 - **Email/Password** - Traditional username/password login
 - **Magic Link** - Passwordless email authentication
@@ -13,6 +14,7 @@ The Homer Enrichment Hub supports multiple authentication methods:
 ## Test Scripts
 
 ### 1. Configuration Validator (`test-auth-config.js`)
+
 Validates Firebase configuration, environment variables, and security settings.
 
 ```bash
@@ -20,6 +22,7 @@ node test-auth-config.js
 ```
 
 **Checks:**
+
 - Environment variables (.env.local)
 - Firebase SDK initialization
 - Authentication providers setup
@@ -28,6 +31,7 @@ node test-auth-config.js
 - Git ignore configuration
 
 ### 2. End-to-End HTTP Tests (`test-auth-e2e.js`)
+
 Tests authentication flows via HTTP requests without browser interaction.
 
 ```bash
@@ -35,6 +39,7 @@ node test-auth-e2e.js
 ```
 
 **Tests:**
+
 - Server health checks
 - Firebase configuration validation
 - Authentication provider availability
@@ -43,6 +48,7 @@ node test-auth-e2e.js
 - Both local (localhost:9002) and production environments
 
 ### 3. Browser Tests (`test-auth-playwright.js`)
+
 Automated browser testing using Playwright for realistic user interactions.
 
 ```bash
@@ -53,6 +59,7 @@ node test-auth-playwright.js
 ```
 
 **Tests:**
+
 - Page loading and rendering
 - Auth diagnostics page functionality
 - Login form presence and validation
@@ -63,6 +70,7 @@ node test-auth-playwright.js
 - Protected route access control
 
 ### 4. Manual Testing Guide (`test-auth-manual.js`)
+
 Interactive testing script that guides you through manual verification.
 
 ```bash
@@ -70,6 +78,7 @@ node test-auth-manual.js
 ```
 
 **Features:**
+
 - Step-by-step testing instructions
 - Interactive pass/fail reporting
 - Screenshot capture guidance
@@ -77,6 +86,7 @@ node test-auth-manual.js
 - Comprehensive test coverage
 
 ### 5. Test Suite Runner (`run-auth-tests.js`)
+
 Orchestrates all test suites and generates comprehensive reports.
 
 ```bash
@@ -89,11 +99,13 @@ node run-auth-tests.js --help
 ## Quick Start
 
 1. **Start the development server:**
+
    ```bash
    npm run dev
    ```
 
 2. **Run all tests:**
+
    ```bash
    node run-auth-tests.js
    ```
@@ -107,11 +119,13 @@ node run-auth-tests.js --help
 ## Prerequisites
 
 ### Required
+
 - Node.js 18+ and npm
 - Development server running on port 9002
 - Firebase project with authentication enabled
 
 ### Optional
+
 - Playwright (auto-installed when needed)
 - curl (for HTTP testing)
 - Real email account for magic link testing
@@ -119,6 +133,7 @@ node run-auth-tests.js --help
 ## Environment Setup
 
 ### Local Development (.env.local)
+
 ```env
 # Firebase Configuration (required)
 NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
@@ -154,6 +169,7 @@ NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY=your_recaptcha_site_key
 Based on the latest test runs:
 
 ### ✅ Working
+
 - Firebase SDK configuration
 - Authentication method setup (code level)
 - Form validation and UI components
@@ -161,12 +177,14 @@ Based on the latest test runs:
 - Package dependencies
 
 ### ❌ Issues Found
+
 - Missing Firebase environment variables
 - Invalid API key in local environment
 - App Check and reCAPTCHA not fully configured
 - Missing security headers
 
 ### ⚠️ Needs Attention
+
 - Local development server (500 errors due to config)
 - Production environment authentication flow
 - Manual testing with real credentials
@@ -174,6 +192,7 @@ Based on the latest test runs:
 ## Fixing Common Issues
 
 ### 1. Invalid API Key Error
+
 ```bash
 # Add proper Firebase config to .env.local
 cp .env.example .env.local
@@ -181,16 +200,19 @@ cp .env.example .env.local
 ```
 
 ### 2. Google OAuth Not Working
+
 - Verify OAuth consent screen is configured
 - Check authorized domains in Firebase Console
 - Ensure Google provider is enabled
 
 ### 3. Magic Links Not Working
+
 - Verify email provider is enabled in Firebase
 - Check authorized domains for email links
 - Test with real email address
 
 ### 4. App Check Issues
+
 - Enable App Check in Firebase Console
 - Configure reCAPTCHA Enterprise
 - Add all domains to reCAPTCHA configuration
@@ -198,6 +220,7 @@ cp .env.example .env.local
 ## Production Testing
 
 Test the production environment:
+
 ```bash
 # Production URL
 https://kbe-website--kbe-website.us-central1.hosted.app
@@ -217,6 +240,7 @@ https://kbe-website--kbe-website.us-central1.hosted.app/auth-diagnostics
 ## Monitoring and Alerts
 
 Set up monitoring for:
+
 - Authentication success/failure rates
 - App Check token validation
 - Performance metrics
@@ -273,6 +297,7 @@ rm -rf test-screenshots/ *.json
 ## Contributing
 
 When adding new authentication features:
+
 1. Update the relevant test scripts
 2. Add new test cases for edge cases
 3. Update this documentation

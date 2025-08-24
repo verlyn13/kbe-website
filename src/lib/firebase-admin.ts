@@ -718,7 +718,13 @@ export const activityService = {
     // No-op or replace with real logging integration
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
-      console.debug('[activity]', entry.action, entry.resourceType, entry.resourceId, entry.details);
+      console.debug(
+        '[activity]',
+        entry.action,
+        entry.resourceType,
+        entry.resourceId,
+        entry.details
+      );
     }
   },
 };

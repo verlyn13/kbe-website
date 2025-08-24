@@ -44,6 +44,7 @@ git push origin main # Triggers Firebase App Hosting deployment
 ## Critical Warnings
 
 ### Firebase App Hosting Requirements
+
 - ALL production dependencies MUST be in `dependencies` section
 - These packages MUST stay in `dependencies`:
   - `typescript`
@@ -53,6 +54,7 @@ git push origin main # Triggers Firebase App Hosting deployment
 - Moving them to `devDependencies` will break deployment
 
 ### Domain Migration
+
 - Currently migrating from homerenrichment.com to homerenrichment.com
 - Use `./migrate-domain.sh` script for migration
 - Check `CLOUDFLARE_MIGRATION.md` for details
@@ -78,21 +80,25 @@ git push origin main # Triggers Firebase App Hosting deployment
 ## Common Tasks
 
 ### Add a new page
+
 1. Create file in `/src/app/[route]/page.tsx`
 2. Use existing layout patterns from other pages
 3. Import components from `@/components/`
 
 ### Update Firebase configuration
+
 1. Edit `.env.local` for development
 2. Update secrets in Google Cloud Secret Manager for production
 3. Run `firebase apphosting:secrets:grantaccess` if adding new secrets
 
 ### Fix type errors
+
 1. Run `npm run typecheck` to see all errors
 2. Check `audit/testing-type-fix-strategy.md` for common solutions
 3. Use typed wrappers for dynamic imports when needed
 
 ### Deploy to production
+
 1. Ensure all changes committed: `git status`
 2. Push to main branch: `git push origin main`
 3. Monitor deployment: Check GitHub Actions or Firebase Console

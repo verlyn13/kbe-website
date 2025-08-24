@@ -55,4 +55,3 @@ This project follows a strict, environment-isolated API key policy.
 - `scripts/keys/verify-api-key.sh` – Print current restrictions for a given key ID
 - `sync-gopass-secrets.sh` – Sync Secret Manager → gopass
 - `generate-env-local-v2.sh` – Generate `.env.local` from gopass/Secret Manager
-
