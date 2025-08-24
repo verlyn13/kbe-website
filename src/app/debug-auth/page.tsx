@@ -10,6 +10,16 @@ export default function DebugAuthPage() {
   const [authState, setAuthState] = useState<any>(null);
   const [indexedDBData, setIndexedDBData] = useState<string>('');
 
+  const checkIndexedDB = async () => {
+    try {
+      const databases = await indexedDB.databases();
+      const firebaseDbs = databases.filter((db) => db.name?.includes('firebase'));
+      setIndexedDBData(JSON.stringify(firebaseDbs, null, 2));
+    } catch (error) {
+      setIndexedDBData(`Error checking IndexedDB: ${error}`);
+    }
+  };
+
   useEffect(() => {
     // Check current auth state
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -35,20 +45,7 @@ export default function DebugAuthPage() {
     checkIndexedDB();
 
     return () => unsubscribe();
-  }, [
-    // Check IndexedDB for Firebase data
-    checkIndexedDB,
-  ]);
-
-  const checkIndexedDB = async () => {
-    try {
-      const databases = await indexedDB.databases();
-      const firebaseDbs = databases.filter((db) => db.name?.includes('firebase'));
-      setIndexedDBData(JSON.stringify(firebaseDbs, null, 2));
-    } catch (error) {
-      setIndexedDBData(`Error checking IndexedDB: ${error}`);
-    }
-  };
+  }, [checkIndexedDB]);
 
   const clearAllAuth = async () => {
     try {

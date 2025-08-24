@@ -22,6 +22,10 @@ export default function AuthDiagnosticsPage() {
   const [error, setError] = useState<string>('');
   const [appCheckInfo, setAppCheckInfo] = useState<string>('');
 
+  const addStatus = (message: string) => {
+    setStatus((prev) => [...prev, message]);
+  };
+
   useEffect(() => {
     // Check for redirect result
     getRedirectResult(auth)
@@ -82,10 +86,6 @@ export default function AuthDiagnosticsPage() {
       addStatus('❌ App Check not initialized or error accessing it');
     }
   }, [addStatus]);
-
-  const addStatus = (message: string) => {
-    setStatus((prev) => [...prev, message]);
-  };
 
   const testGooglePopup = async () => {
     try {
