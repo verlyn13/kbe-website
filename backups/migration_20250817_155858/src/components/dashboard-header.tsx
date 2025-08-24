@@ -1,28 +1,10 @@
 'use client';
 
-import {
-  Bell,
-  ChevronDown,
-  CircleUser,
-  Home,
-  LineChart,
-  LogOut,
-  Menu,
-  Package,
-  Package2,
-  Repeat,
-  Search,
-  Shield,
-  ShoppingCart,
-  User,
-  Users,
-} from 'lucide-react';
+import { Bell, Home, LogOut, Repeat, Shield, User } from 'lucide-react';
 import Link from 'next/link';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,8 +17,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/use-auth';
 

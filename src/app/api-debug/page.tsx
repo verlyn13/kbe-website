@@ -15,7 +15,7 @@ export default function ApiDebugPage() {
       userAgent: navigator.userAgent,
       timestamp: new Date().toISOString(),
       firebaseConfig: {
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.substring(0, 10) + '...',
+        apiKey: `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.substring(0, 10)}...`,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
       },

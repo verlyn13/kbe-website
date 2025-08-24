@@ -9,7 +9,7 @@ import {
   signInWithEmailLink,
   signInWithPopup,
 } from 'firebase/auth';
-import { Loader2, Mail } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';

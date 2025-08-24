@@ -54,7 +54,7 @@ export default function AnnouncementsPage() {
 
   useEffect(() => {
     loadAnnouncements();
-  }, [user]);
+  }, [loadAnnouncements]);
 
   async function loadAnnouncements() {
     if (!user) return;

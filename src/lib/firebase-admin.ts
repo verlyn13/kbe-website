@@ -8,7 +8,6 @@ import {
   getDoc,
   getDocs,
   increment,
-  limit,
   orderBy,
   type QueryConstraint,
   query,

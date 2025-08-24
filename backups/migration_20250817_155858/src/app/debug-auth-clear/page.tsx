@@ -1,7 +1,7 @@
 'use client';
 
 import { signOut } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/firebase';
@@ -29,7 +29,7 @@ export default function DebugAuthClearPage() {
       document.cookie.split(';').forEach((c) => {
         document.cookie = c
           .replace(/^ +/, '')
-          .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
       });
       newStatus.push('✓ Cleared accessible cookies');
 

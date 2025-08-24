@@ -9,7 +9,6 @@ import {
   LayoutDashboard,
   Mail,
   Settings,
-  Shield,
   Users,
 } from 'lucide-react';
 import Link from 'next/link';

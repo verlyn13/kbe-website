@@ -1,6 +1,6 @@
 'use client';
 
-import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { announcementService } from '@/lib/firebase-admin';
@@ -10,7 +10,7 @@ export default function TestAnnouncementsPage() {
 
   useEffect(() => {
     runTests();
-  }, []);
+  }, [runTests]);
 
   async function runTests() {
     const testResults: any = {};

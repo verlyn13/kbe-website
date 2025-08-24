@@ -64,7 +64,7 @@ export default function WaiversPage() {
 
   useEffect(() => {
     loadStudents();
-  }, []);
+  }, [loadStudents]);
 
   async function loadStudents() {
     try {

@@ -31,7 +31,7 @@ export default function SystemStatusPage() {
 
   useEffect(() => {
     runSystemChecks();
-  }, []);
+  }, [runSystemChecks]);
 
   async function runSystemChecks() {
     const systemChecks: SystemCheck[] = [];

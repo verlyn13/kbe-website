@@ -1629,10 +1629,10 @@ pre code {
   *,
   *::before,
   *::after {
-    background: transparent !important;
-    color: #000 !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
+    background: transparent;
+    color: #000;
+    box-shadow: none;
+    text-shadow: none;
   }
 
   a,
@@ -1654,7 +1654,7 @@ pre code {
   }
 
   pre {
-    white-space: pre-wrap !important;
+    white-space: pre-wrap;
   }
 
   pre,
@@ -1717,10 +1717,10 @@ pre code {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
   }
 }
 

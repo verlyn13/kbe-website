@@ -35,7 +35,7 @@ export default function AuthDiagnosticsPage() {
     addStatus(`🌐 Current URL: ${window.location.href}`);
     addStatus(`🔑 Auth Domain: ${auth.app.options.authDomain}`);
     addStatus(`📱 Project ID: ${auth.app.options.projectId}`);
-  }, []);
+  }, [addStatus]);
 
   const addStatus = (message: string) => {
     setStatus((prev) => [...prev, message]);

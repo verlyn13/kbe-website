@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircle, Calendar, Clock, Download, Filter, UserCheck, Users } from 'lucide-react';
+import { AlertCircle, Clock, Download, UserCheck, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -46,7 +46,7 @@ export default function AdminReportsPage() {
     if (hasPermission('view_reports')) {
       loadRegistrationData();
     }
-  }, [selectedProgram, hasPermission]);
+  }, [hasPermission, loadRegistrationData]);
 
   async function loadRegistrationData() {
     try {

@@ -64,7 +64,7 @@ export default function AuthDiagnosticsPage() {
       if (appCheck) {
         getAppCheckToken(appCheck, false)
           .then((res) => {
-            if (res && res.token) {
+            if (res?.token) {
               setAppCheckInfo('App Check token acquired');
               addStatus('✅ App Check token acquired successfully');
             } else {
@@ -81,7 +81,7 @@ export default function AuthDiagnosticsPage() {
       setAppCheckInfo('App Check not initialized');
       addStatus('❌ App Check not initialized or error accessing it');
     }
-  }, []);
+  }, [addStatus]);
 
   const addStatus = (message: string) => {
     setStatus((prev) => [...prev, message]);

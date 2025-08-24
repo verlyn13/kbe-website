@@ -35,7 +35,10 @@ export default function DebugAuthPage() {
     checkIndexedDB();
 
     return () => unsubscribe();
-  }, []);
+  }, [
+    // Check IndexedDB for Firebase data
+    checkIndexedDB,
+  ]);
 
   const checkIndexedDB = async () => {
     try {
@@ -43,7 +46,7 @@ export default function DebugAuthPage() {
       const firebaseDbs = databases.filter((db) => db.name?.includes('firebase'));
       setIndexedDBData(JSON.stringify(firebaseDbs, null, 2));
     } catch (error) {
-      setIndexedDBData('Error checking IndexedDB: ' + error);
+      setIndexedDBData(`Error checking IndexedDB: ${error}`);
     }
   };
 
@@ -70,7 +73,7 @@ export default function DebugAuthPage() {
       window.location.href = '/';
     } catch (error) {
       console.error('Error clearing auth:', error);
-      alert('Error clearing auth: ' + error);
+      alert(`Error clearing auth: ${error}`);
     }
   };
 

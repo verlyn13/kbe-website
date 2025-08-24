@@ -6,7 +6,6 @@ import {
   Clock,
   Download,
   FileSpreadsheet,
-  Mail,
   Send,
   UserPlus,
   Users,

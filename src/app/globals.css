@@ -130,7 +130,7 @@ body {
 
   /* Hide elements with print:hidden class when printing */
   .print-hidden {
-    display: none !important;
+    display: none;
   }
 
   /* Hide UI elements when printing */
@@ -138,7 +138,7 @@ body {
   footer,
   header,
   aside {
-    display: none !important;
+    display: none;
   }
 
   /* Ensure waiver form fills the page properly */
@@ -154,7 +154,7 @@ body {
 
   /* Ensure signature lines are visible */
   .border-b {
-    border-bottom: 1px solid #000 !important;
+    border-bottom: 1px solid #000;
   }
 }
 

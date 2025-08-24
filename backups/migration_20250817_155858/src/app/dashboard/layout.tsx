@@ -1,7 +1,7 @@
 'use client';
 
 import { doc, getDoc } from 'firebase/firestore';
-import { Bell, Calendar, Home, Puzzle, Settings, Shield } from 'lucide-react';
+import { Bell, Calendar, Home, Settings, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';

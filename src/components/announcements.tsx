@@ -30,7 +30,7 @@ export function Announcements() {
     if (user) {
       loadAnnouncements();
     }
-  }, [user]);
+  }, [user, loadAnnouncements]);
 
   async function loadAnnouncements() {
     try {

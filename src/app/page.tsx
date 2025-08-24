@@ -1,13 +1,12 @@
 'use client';
 
 import { ArrowRight, Calendar, GraduationCap, Heart, Menu, Users } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ThemeBackgroundImage } from '@/components/theme-image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
 
 export default function LandingPage() {

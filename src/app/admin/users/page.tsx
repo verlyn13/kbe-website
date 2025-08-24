@@ -3,7 +3,6 @@
 import {
   AlertCircle,
   Calendar,
-  FileCheck,
   Mail,
   MoreVertical,
   Phone,
@@ -12,7 +11,6 @@ import {
   ShieldOff,
   Trash2,
   User,
-  Users,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import {
@@ -71,7 +69,7 @@ export default function UserManagementPage() {
     if (hasPermission('manage_settings')) {
       loadUsers();
     }
-  }, [hasPermission]);
+  }, [hasPermission, loadUsers]);
 
   async function loadUsers() {
     try {

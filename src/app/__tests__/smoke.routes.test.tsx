@@ -1,5 +1,3 @@
-import React from 'react';
-
 vi.mock('@/hooks/use-auth', () => ({
   useAuth: () => ({ user: null, loading: false }),
 }));

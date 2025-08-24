@@ -1,8 +1,8 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { format, formatDistanceToNow } from 'date-fns';
-import { Check, Clock, Edit, Eye, Pin, Plus, Send, Trash2 } from 'lucide-react';
+import { format } from 'date-fns';
+import { Check, Clock, Eye, Plus, Send, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { LazyDataTable } from '@/components/lazy';
@@ -40,7 +40,7 @@ export default function AdminCommunicationsPage() {
 
   useEffect(() => {
     loadAnnouncements();
-  }, []);
+  }, [loadAnnouncements]);
 
   async function loadAnnouncements() {
     try {

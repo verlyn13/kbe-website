@@ -1,4 +1,4 @@
-import { collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { type NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { type SendGridEvent, sendGridWebhookSchema } from '@/lib/validations/api';
@@ -141,10 +141,10 @@ async function logActivity(type: string, data: Record<string, unknown>) {
 // Verify webhook signature (optional but recommended)
 // SendGrid uses signed webhooks for security
 async function verifyWebhookSignature(
-  publicKey: string,
-  payload: string,
-  signature: string,
-  timestamp: string
+  _publicKey: string,
+  _payload: string,
+  _signature: string,
+  _timestamp: string
 ): Promise<boolean> {
   // Implementation depends on SendGrid's webhook verification setup
   // See: https://docs.sendgrid.com/for-developers/tracking-events/getting-started-event-webhook-security-features

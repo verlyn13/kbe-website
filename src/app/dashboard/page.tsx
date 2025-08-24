@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Announcements } from '@/components/announcements';
 import { MathCountsSchedule } from '@/components/portal/mathcounts-schedule';
 import { QuickLinks } from '@/components/portal/quick-links';

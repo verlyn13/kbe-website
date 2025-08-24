@@ -29,7 +29,7 @@ const studentSchema = z.object({
   firstName: z.string().min(2, 'Please enter first name'),
   lastName: z.string().min(2, 'Please enter last name'),
   grade: z.string().refine((val) => {
-    const grade = parseInt(val);
+    const grade = parseInt(val, 10);
     return grade >= 4 && grade <= 8;
   }, 'MathCounts is for grades 4-8'),
   school: z.string().min(1, 'Please select a school'),

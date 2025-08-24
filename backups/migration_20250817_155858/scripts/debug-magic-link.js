@@ -5,11 +5,11 @@
  * Run with: node scripts/debug-magic-link.js
  */
 
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as dotenv from 'dotenv';
 import { initializeApp } from 'firebase/app';
 import { getAuth, sendSignInLinkToEmail } from 'firebase/auth';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

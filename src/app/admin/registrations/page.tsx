@@ -31,7 +31,7 @@ export default function AdminRegistrationsPage() {
 
   useEffect(() => {
     loadRegistrations();
-  }, []);
+  }, [loadRegistrations]);
 
   async function loadRegistrations() {
     try {

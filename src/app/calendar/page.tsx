@@ -28,12 +28,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LazyEventDialog } from '@/components/lazy';
 import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -70,7 +69,7 @@ function CalendarPageContent() {
 
   useEffect(() => {
     loadEvents();
-  }, [currentDate]);
+  }, [loadEvents]);
 
   useEffect(() => {
     // Handle navigation from upcoming events

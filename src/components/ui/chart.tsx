@@ -186,7 +186,7 @@ const ChartTooltipContent = React.forwardRef<
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
-          {payload.map((item, index) => {
+          {payload.map((item, _index) => {
             const key = `${nameKey || item.name || item.dataKey || 'value'}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
             const indicatorColor = color || getPayloadFill(item.payload) || item.color;
@@ -347,7 +347,7 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
 
 // Safely extract a 'fill' color from an arbitrary payload record
 function getPayloadFill(payload?: Record<string, unknown>): string | undefined {
-  const fill = payload?.['fill'];
+  const fill = payload?.fill;
   return typeof fill === 'string' ? fill : undefined;
 }
 

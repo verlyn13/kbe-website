@@ -1,25 +1,11 @@
 'use client';
 
-import {
-  AlertCircle,
-  ArrowLeft,
-  Brain,
-  Camera,
-  Info,
-  Mail,
-  Phone,
-  Save,
-  Sparkles,
-  User,
-  Users,
-} from 'lucide-react';
+import { ArrowLeft, Camera, Mail, Phone, Save, User, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -105,7 +91,7 @@ export default function ProfilePage() {
     if (user) {
       loadProfile();
     }
-  }, [user]);
+  }, [user, loadProfile]);
 
   async function loadProfile() {
     if (!user) return;

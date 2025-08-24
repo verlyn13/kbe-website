@@ -99,7 +99,7 @@ export default function AddStudentPage() {
         displayName: `${formData.firstName} ${formData.lastName}`,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        grade: parseInt(formData.grade),
+        grade: parseInt(formData.grade, 10),
         school: formData.school,
         dateOfBirth: formData.dateOfBirth,
         medicalNotes: formData.medicalNotes,

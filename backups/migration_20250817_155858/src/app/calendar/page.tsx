@@ -9,7 +9,6 @@ import {
   isSameDay,
   isSameMonth,
   isToday,
-  parseISO,
   startOfMonth,
   startOfWeek,
   subMonths,
@@ -32,9 +31,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { EventDialog } from '@/components/calendar/event-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,7 +69,7 @@ function CalendarPageContent() {
 
   useEffect(() => {
     loadEvents();
-  }, [currentDate]);
+  }, [loadEvents]);
 
   useEffect(() => {
     // Handle navigation from upcoming events

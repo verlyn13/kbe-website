@@ -11,7 +11,7 @@ export default function DebugAnnouncementsPage() {
 
   useEffect(() => {
     loadAllAnnouncements();
-  }, []);
+  }, [loadAllAnnouncements]);
 
   async function loadAllAnnouncements() {
     try {

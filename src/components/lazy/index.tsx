@@ -1,8 +1,6 @@
 'use client';
 
-import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
 import { FormSkeleton } from '@/components/loading/form-skeleton';
-import { SkeletonWrapper } from '@/components/loading/skeleton-wrapper';
 import { TableSkeleton } from '@/components/loading/table-skeleton';
 import { createDynamicComponent } from '@/lib/dynamic-import';
 
