@@ -22,7 +22,10 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "off",
-        "noUnusedImports": "warn"
+        "noUnusedImports": "warn",
+        "useExhaustiveDependencies": "warn",
+        "useUniqueElementIds": "error",
+        "noInvalidPositionAtImportRule": "error"
       },
       "style": {
         "noNonNullAssertion": "off",
@@ -30,7 +33,19 @@
       },
       "suspicious": {
         "noExplicitAny": "off",
-        "noImplicitAnyLet": "off"
+        "noImplicitAnyLet": "off",
+        "noArrayIndexKey": "warn",
+        "noAssignInExpressions": "error"
+      },
+      "a11y": {
+        "noLabelWithoutControl": "error",
+        "useKeyWithClickEvents": "warn",
+        "noStaticElementInteractions": "warn",
+        "noSvgWithoutTitle": "warn",
+        "useValidAnchor": "error"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
       }
     }
   },

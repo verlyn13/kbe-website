@@ -13,3 +13,5 @@ migration
 backups
 *.min.js
 *.min.css
+.cspell.json
+cspell.json

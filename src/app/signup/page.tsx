@@ -5,7 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { ArrowLeft, Info } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useId } from 'react';
 import { sendWelcomeEmailAction } from '@/app/actions/send-welcome-email';
 import { EULADialog } from '@/components/eula-dialog';
 import { Icons } from '@/components/icons';
@@ -29,6 +29,15 @@ import { profileService } from '@/lib/firebase-admin';
 import { formatPhoneNumber } from '@/lib/utils';
 
 export default function SignUpPage() {
+  const signupFormId = useId();
+  const displayNameId = useId();
+  const emailId = useId();
+  const phoneId = useId();
+  const passwordId = useId();
+  const confirmPasswordId = useId();
+  const announcementsId = useId();
+  const programUpdatesId = useId();
+  const newslettersId = useId();
   const router = useRouter();
   const { toast } = useToast();
   const { user, loading: authLoading } = useAuth();
@@ -236,12 +245,12 @@ export default function SignUpPage() {
             Let's get you set up so you can register your children for MathCounts and other programs
           </CardDescription>
         </CardHeader>
-        <form id="signup-form" onSubmit={handleSubmit}>
+        <form id={signupFormId} onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="displayName">Full Name</Label>
+              <Label htmlFor={displayNameId}>Full Name</Label>
               <Input
-                id="displayName"
+                id={displayNameId}
                 placeholder="John Doe"
                 value={formData.displayName}
                 onChange={(e) => setFormData((prev) => ({ ...prev, displayName: e.target.value }))}
@@ -254,9 +263,9 @@ export default function SignUpPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor={emailId}>Email</Label>
               <Input
-                id="email"
+                id={emailId}
                 type="email"
                 placeholder="name@example.com"
                 value={formData.email}
@@ -268,9 +277,9 @@ export default function SignUpPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor={phoneId}>Phone Number</Label>
               <Input
-                id="phone"
+                id={phoneId}
                 type="tel"
                 placeholder="(555) 123-4567"
                 value={formData.phone}
@@ -282,9 +291,9 @@ export default function SignUpPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor={passwordId}>Password</Label>
               <Input
-                id="password"
+                id={passwordId}
                 type="password"
                 placeholder="••••••••"
                 value={formData.password}
@@ -296,9 +305,9 @@ export default function SignUpPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor={confirmPasswordId}>Confirm Password</Label>
               <Input
-                id="confirmPassword"
+                id={confirmPasswordId}
                 type="password"
                 placeholder="••••••••"
                 value={formData.confirmPassword}
@@ -324,7 +333,7 @@ export default function SignUpPage() {
               <div className="space-y-3">
                 <div className="flex items-start space-x-3">
                   <Checkbox
-                    id="announcements"
+                    id={announcementsId}
                     checked={formData.emailPreferences.announcements}
                     onCheckedChange={(checked) =>
                       setFormData((prev) => ({
@@ -339,7 +348,7 @@ export default function SignUpPage() {
                   />
                   <div className="space-y-1">
                     <label
-                      htmlFor="announcements"
+                      htmlFor={announcementsId}
                       className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Important Announcements
@@ -352,7 +361,7 @@ export default function SignUpPage() {
 
                 <div className="flex items-start space-x-3">
                   <Checkbox
-                    id="programUpdates"
+                    id={programUpdatesId}
                     checked={formData.emailPreferences.programUpdates}
                     onCheckedChange={(checked) =>
                       setFormData((prev) => ({
@@ -367,7 +376,7 @@ export default function SignUpPage() {
                   />
                   <div className="space-y-1">
                     <label
-                      htmlFor="programUpdates"
+                      htmlFor={programUpdatesId}
                       className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Program Updates
@@ -380,7 +389,7 @@ export default function SignUpPage() {
 
                 <div className="flex items-start space-x-3">
                   <Checkbox
-                    id="newsletters"
+                    id={newslettersId}
                     checked={formData.emailPreferences.newsletters}
                     onCheckedChange={(checked) =>
                       setFormData((prev) => ({
@@ -395,7 +404,7 @@ export default function SignUpPage() {
                   />
                   <div className="space-y-1">
                     <label
-                      htmlFor="newsletters"
+                      htmlFor={newslettersId}
                       className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Community Newsletter

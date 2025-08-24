@@ -98,7 +98,8 @@
       "Bash(for ip in 216.239.32.21 216.239.34.21 216.239.36.21 216.239.38.21)",
       "Bash(echo:*)",
       "Bash(gcloud beta run domain-mappings describe:*)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "Bash(sed:*)"
     ],
     "deny": []
   }

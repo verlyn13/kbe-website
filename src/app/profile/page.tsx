@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Camera, Mail, Phone, Save, User, Users } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useId } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -70,6 +70,12 @@ const mathPersonalities = [
 ];
 
 export default function ProfilePage() {
+  const avatarUploadId = useId();
+  const guardianNameId = useId();
+  const displayNameId = useId();
+  const phoneId = useId();
+  const emailId = useId();
+  const bioId = useId();
   const { user } = useAuth();
   const { toast } = useToast();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -277,12 +283,12 @@ export default function ProfilePage() {
                   {formData.guardianName?.charAt(0) || user?.email?.charAt(0) || 'U'}
                 </AvatarFallback>
               </Avatar>
-              <label htmlFor="avatar-upload" className="absolute right-0 bottom-0 cursor-pointer">
+              <label htmlFor={avatarUploadId} className="absolute right-0 bottom-0 cursor-pointer">
                 <div className="bg-primary text-primary-foreground rounded-full p-2">
                   <Camera className="h-4 w-4" />
                 </div>
                 <input
-                  id="avatar-upload"
+                  id={avatarUploadId}
                   type="file"
                   accept="image/*"
                   className="hidden"
@@ -315,13 +321,13 @@ export default function ProfilePage() {
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="guardianName">
+                  <Label htmlFor={guardianNameId}>
                     Guardian Name <span className="text-destructive">*</span>
                   </Label>
                   <div className="relative">
                     <User className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
                     <Input
-                      id="guardianName"
+                      id={guardianNameId}
                       placeholder="Your full name"
                       value={formData.guardianName}
                       onChange={(e) =>
@@ -333,9 +339,9 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="displayName">Display Name (Optional)</Label>
+                  <Label htmlFor={displayNameId}>Display Name (Optional)</Label>
                   <Input
-                    id="displayName"
+                    id={displayNameId}
                     placeholder="How you'd like to be called"
                     value={formData.displayName}
                     onChange={(e) =>
@@ -346,12 +352,12 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone">
+                  <Label htmlFor={phoneId}>
                     <Phone className="mr-1 inline h-4 w-4" />
                     Phone Number <span className="text-destructive">*</span>
                   </Label>
                   <Input
-                    id="phone"
+                    id={phoneId}
                     type="tel"
                     placeholder="(555) 123-4567"
                     value={formData.phone}
@@ -366,13 +372,13 @@ export default function ProfilePage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">
+                <Label htmlFor={emailId}>
                   Email Address <span className="text-destructive">*</span>
                 </Label>
                 <div className="relative">
                   <Mail className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
                   <Input
-                    id="email"
+                    id={emailId}
                     type="email"
                     placeholder="your@email.com"
                     value={formData.email}
@@ -383,9 +389,9 @@ export default function ProfilePage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="bio">About You (Optional)</Label>
+                <Label htmlFor={bioId}>About You (Optional)</Label>
                 <Textarea
-                  id="bio"
+                  id={bioId}
                   placeholder="Tell other families a bit about yourself..."
                   value={formData.bio}
                   onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))}

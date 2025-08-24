@@ -79,39 +79,39 @@ export default function WaiverPage() {
             <div className="space-y-2">
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Child's Full Name:</label>
+                  <span className="text-sm">Child's Full Name:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Date of Birth:</label>
+                  <span className="text-sm">Date of Birth:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="w-24">
-                  <label className="text-sm">Grade:</label>
+                  <span className="text-sm">Grade:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="flex-1">
-                  <label className="text-sm">School:</label>
+                  <span className="text-sm">School:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
               <div>
-                <label className="text-sm">Home Address:</label>
+                <span className="text-sm">Home Address:</span>
                 <div className="h-6 border-b border-gray-400"></div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">City:</label>
+                  <span className="text-sm">City:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="w-16">
-                  <label className="text-sm">State:</label>
+                  <span className="text-sm">State:</span>
                   <div className="h-6 border-b border-gray-400">AK</div>
                 </div>
                 <div className="w-32">
-                  <label className="text-sm">Zip:</label>
+                  <span className="text-sm">Zip:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
@@ -123,34 +123,34 @@ export default function WaiverPage() {
             <h3 className="mb-3 font-bold">PARENT/GUARDIAN INFORMATION</h3>
             <div className="space-y-2">
               <div>
-                <label className="text-sm">Parent/Guardian Name:</label>
+                <span className="text-sm">Parent/Guardian Name:</span>
                 <div className="h-6 border-b border-gray-400"></div>
               </div>
               <div>
-                <label className="text-sm">Relationship to Child:</label>
+                <span className="text-sm">Relationship to Child:</span>
                 <div className="h-6 border-b border-gray-400"></div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Primary Phone:</label>
+                  <span className="text-sm">Primary Phone:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="flex-1">
-                  <label className="text-sm">Secondary Phone:</label>
+                  <span className="text-sm">Secondary Phone:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
               <div>
-                <label className="text-sm">Email:</label>
+                <span className="text-sm">Email:</span>
                 <div className="h-6 border-b border-gray-400"></div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Emergency Contact (if different):</label>
+                  <span className="text-sm">Emergency Contact (if different):</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="w-48">
-                  <label className="text-sm">Emergency Phone:</label>
+                  <span className="text-sm">Emergency Phone:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
@@ -162,34 +162,34 @@ export default function WaiverPage() {
             <h3 className="mb-3 font-bold">MEDICAL INFORMATION</h3>
             <div className="space-y-2">
               <div>
-                <label className="text-sm">Known Allergies:</label>
+                <span className="text-sm">Known Allergies:</span>
                 <div className="h-6 border-b border-gray-400"></div>
               </div>
               <div>
-                <label className="text-sm">Medical Conditions:</label>
+                <span className="text-sm">Medical Conditions:</span>
                 <div className="h-6 border-b border-gray-400"></div>
               </div>
               <div>
-                <label className="text-sm">Current Medications:</label>
+                <span className="text-sm">Current Medications:</span>
                 <div className="h-6 border-b border-gray-400"></div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Physician Name:</label>
+                  <span className="text-sm">Physician Name:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="w-48">
-                  <label className="text-sm">Phone:</label>
+                  <span className="text-sm">Phone:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Insurance Provider:</label>
+                  <span className="text-sm">Insurance Provider:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="flex-1">
-                  <label className="text-sm">Policy #:</label>
+                  <span className="text-sm">Policy #:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
@@ -347,16 +347,16 @@ export default function WaiverPage() {
           <section className="border-t pt-4">
             <h3 className="mb-3 font-bold">PHOTOGRAPHY RELEASE</h3>
             <div className="flex gap-8">
-              <label className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <div className="h-4 w-4 border border-gray-400"></div>
-                <span className="font-semibold">YES</span> - I grant permission for my child to be
-                photographed/recorded for program documentation and promotion
-              </label>
-              <label className="flex items-center gap-2">
+                <span><span className="font-semibold">YES</span> - I grant permission for my child to be
+                photographed/recorded for program documentation and promotion</span>
+              </div>
+              <div className="flex items-center gap-2">
                 <div className="h-4 w-4 border border-gray-400"></div>
-                <span className="font-semibold">NO</span> - I do not grant permission for
-                photography/recording
-              </label>
+                <span><span className="font-semibold">NO</span> - I do not grant permission for
+                photography/recording</span>
+              </div>
             </div>
           </section>
 
@@ -385,25 +385,25 @@ export default function WaiverPage() {
             <div className="space-y-4">
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Parent/Guardian Printed Name:</label>
+                  <span className="text-sm">Parent/Guardian Printed Name:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
                 <div className="w-32">
-                  <label className="text-sm">Date:</label>
+                  <span className="text-sm">Date:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
               <div>
-                <label className="text-sm">Parent/Guardian Signature:</label>
+                <span className="text-sm">Parent/Guardian Signature:</span>
                 <div className="h-12 border-b border-gray-400"></div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm">Child's Signature (if 13 or older):</label>
+                  <span className="text-sm">Child's Signature (if 13 or older):</span>
                   <div className="h-12 border-b border-gray-400"></div>
                 </div>
                 <div className="w-32">
-                  <label className="text-sm">Date:</label>
+                  <span className="text-sm">Date:</span>
                   <div className="h-6 border-b border-gray-400"></div>
                 </div>
               </div>
