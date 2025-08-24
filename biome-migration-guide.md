@@ -1,11 +1,45 @@
-# Biome 2.2.0 Migration Workflow
+# Biome Migration Guide - KBE Website
 
 ## Overview
-Complete migration guide for replacing ESLint + Prettier with Biome 2.2.0 in Next.js + TypeScript projects. This workflow ensures zero downtime and safe, incremental migration.
+Complete migration guide for replacing ESLint + Prettier with Biome in the KBE Website Next.js + TypeScript project. This workflow ensures zero downtime and safe, incremental migration.
+
+## Current Setup Analysis
+
+### ESLint Configuration
+- **Base**: `next/core-web-vitals` (Next.js recommended rules)
+- **Disabled Rules**:
+  - `react/display-name`: off
+  - `no-unused-vars`: off  
+  - `@typescript-eslint/no-unused-vars`: off
+- **Known Issues**: Multiple `react/no-unescaped-entities` warnings
+
+### Prettier Configuration
+- **Settings**:
+  - Semi-colons: true
+  - Single quotes: true
+  - Print width: 100
+  - Tab width: 2 spaces
+  - Trailing comma: ES5
+  - Arrow parens: always
+  - Bracket spacing: true
+  - End of line: auto
+- **Plugins**: `prettier-plugin-tailwindcss` for class sorting
+- **Tailwind Functions**: `cn`, `cva`
+
+### Package Dependencies
+- **ESLint**: v9.32.0 with Next.js plugin
+- **Prettier**: v3.6.2 with Tailwind plugin
+- **TypeScript**: v5.8.3
+- **Scripts**:
+  - `lint`: ESLint check
+  - `lint:fix`: ESLint auto-fix
+  - `format`: Prettier write
+  - `typecheck`: TypeScript check
 
 ## Prerequisites
 - Git repository with clean working tree
-- Node.js 20+ and pnpm/npm
+- Node.js 22+ (project requirement)
+- npm 11+ (project requirement)
 - Backup of current lint/format configuration
 - 2-3 hours for complete migration
 
