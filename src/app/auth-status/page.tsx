@@ -1,8 +1,8 @@
 'use client';
 
+import { AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 
 export default function AuthStatusPage() {
   const [checks, setChecks] = useState<any[]>([]);

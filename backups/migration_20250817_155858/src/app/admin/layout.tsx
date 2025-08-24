@@ -1,37 +1,36 @@
 'use client';
 
-import Link from 'next/link';
 import {
-  Shield,
+  Calendar,
+  FileCheck,
+  FileSpreadsheet,
   FileText,
   Home,
-  Users,
-  Mail,
-  Calendar,
-  FileSpreadsheet,
-  Settings,
   LayoutDashboard,
-  FileCheck,
+  Mail,
+  Settings,
+  Shield,
+  Users,
 } from 'lucide-react';
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarInset,
-  useSidebar,
-  SidebarGroupLabel,
-  SidebarGroup,
-} from '@/components/ui/sidebar';
-import { DashboardHeader } from '@/components/dashboard-header';
-import { AdminProvider } from '@/hooks/use-admin';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useAdmin } from '@/hooks/use-admin';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { DashboardHeader } from '@/components/dashboard-header';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AdminProvider, useAdmin } from '@/hooks/use-admin';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 function HehLogo() {

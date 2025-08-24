@@ -1,24 +1,24 @@
 'use client';
 
+import { formatDistanceToNow } from 'date-fns';
+import { AlertCircle, ArrowRight, Info, Pin } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/use-auth';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { Button } from './ui/button';
-import { ArrowRight, Pin, AlertCircle, Info } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { announcementService, Announcement } from '@/lib/firebase-admin';
 import { Skeleton } from '@/components/ui/skeleton';
-import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { useAuth } from '@/hooks/use-auth';
+import { type Announcement, announcementService } from '@/lib/firebase-admin';
+import { Button } from './ui/button';
 
 export function Announcements() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);

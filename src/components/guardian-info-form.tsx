@@ -1,22 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { ArrowRight, BookOpen, Calendar, Info, Mail, Phone, User, UserPlus } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useState } from 'react';
+import { Icons } from '@/components/icons';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Icons } from '@/components/icons';
-import { formatPhoneNumber } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { profileService } from '@/lib/firebase-admin';
-import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Mail, Phone, User, ArrowRight, BookOpen, UserPlus, Calendar, Info } from 'lucide-react';
-import Link from 'next/link';
-import { Checkbox } from '@/components/ui/checkbox';
+import { profileService } from '@/lib/firebase-admin';
+import { formatPhoneNumber } from '@/lib/utils';
 
 export function GuardianInfoForm() {
   const { user } = useAuth();

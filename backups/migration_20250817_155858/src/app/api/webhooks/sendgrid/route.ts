@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { type NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
-import { collection, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 // SendGrid Event Types
 interface SendGridEvent {

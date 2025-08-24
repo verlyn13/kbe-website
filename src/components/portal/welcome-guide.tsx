@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { X, UserPlus, Calendar, Mail, BookOpen } from 'lucide-react';
-import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { BookOpen, Calendar, Mail, UserPlus, X } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
 
 export function WelcomeGuide() {

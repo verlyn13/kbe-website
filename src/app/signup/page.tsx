@@ -1,33 +1,32 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { profileService } from '@/lib/firebase-admin';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/use-auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { ArrowLeft, Info } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { sendWelcomeEmailAction } from '@/app/actions/send-welcome-email';
+import { EULADialog } from '@/components/eula-dialog';
+import { Icons } from '@/components/icons';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from '@/components/ui/card';
-import { Icons } from '@/components/icons';
-import { formatPhoneNumber } from '@/lib/utils';
-import { ArrowLeft, Info } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { sendWelcomeEmailAction } from '@/app/actions/send-welcome-email';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { EULADialog } from '@/components/eula-dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { auth, db } from '@/lib/firebase';
+import { profileService } from '@/lib/firebase-admin';
+import { formatPhoneNumber } from '@/lib/utils';
 
 export default function SignUpPage() {
   const router = useRouter();

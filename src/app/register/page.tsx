@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { LazyRegistrationFlow } from '@/components/lazy';
-import { PublicHeader } from '@/components/public-header';
 import { FormSkeleton } from '@/components/loading/form-skeleton';
+import { PublicHeader } from '@/components/public-header';
 
 export default function RegisterPage() {
   return (

@@ -1,5 +1,5 @@
-import React from 'react';
-import { render as rtlRender, RenderOptions } from '@testing-library/react';
+import { type RenderOptions, render as rtlRender } from '@testing-library/react';
+import type React from 'react';
 import { ThemeProvider } from '@/providers/theme-provider';
 
 interface ProvidersProps {

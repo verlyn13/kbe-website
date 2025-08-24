@@ -1,53 +1,52 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { AdminProvider } from '@/hooks/use-admin';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { calendarService, CalendarEvent } from '@/lib/firebase-admin';
-import { useAuth } from '@/hooks/use-auth';
-import { useAdmin } from '@/hooks/use-admin';
-import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
-import { EventDialog } from '@/components/calendar/event-dialog';
 import {
+  addMonths,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameDay,
+  isSameMonth,
+  isToday,
+  parseISO,
+  startOfMonth,
+  startOfWeek,
+  subMonths,
+} from 'date-fns';
+import {
+  ArrowLeft,
+  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
-  Plus,
-  Calendar as CalendarIcon,
-  MapPin,
   Clock,
-  Users,
-  Trophy,
   Coffee,
-  Palmtree,
+  MapPin,
   MoreVertical,
-  ArrowLeft,
+  Palmtree,
+  Plus,
+  Trophy,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import {
-  format,
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-  isSameMonth,
-  isSameDay,
-  isToday,
-  addMonths,
-  subMonths,
-  parseISO,
-} from 'date-fns';
-import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import { EventDialog } from '@/components/calendar/event-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AdminProvider, useAdmin } from '@/hooks/use-admin';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { type CalendarEvent, calendarService } from '@/lib/firebase-admin';
+import { cn } from '@/lib/utils';
 
 const eventTypeConfig = {
   class: { icon: Users, color: 'bg-blue-500', label: 'Class' },

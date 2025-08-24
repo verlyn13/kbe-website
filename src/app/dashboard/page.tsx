@@ -1,12 +1,12 @@
-import { StudentRoster } from '@/components/portal/student-roster';
-import { MathCountsSchedule } from '@/components/portal/mathcounts-schedule';
-import { UpcomingCompetitions } from '@/components/portal/upcoming-competitions';
-import { QuickLinks } from '@/components/portal/quick-links';
-import { Announcements } from '@/components/announcements';
-import { WelcomeGuide } from '@/components/portal/welcome-guide';
-import { WaiverStatusWidget } from '@/components/waiver-status-widget';
-import { Skeleton } from '@/components/ui/skeleton';
 import React, { Suspense } from 'react';
+import { Announcements } from '@/components/announcements';
+import { MathCountsSchedule } from '@/components/portal/mathcounts-schedule';
+import { QuickLinks } from '@/components/portal/quick-links';
+import { StudentRoster } from '@/components/portal/student-roster';
+import { UpcomingCompetitions } from '@/components/portal/upcoming-competitions';
+import { WelcomeGuide } from '@/components/portal/welcome-guide';
+import { Skeleton } from '@/components/ui/skeleton';
+import { WaiverStatusWidget } from '@/components/waiver-status-widget';
 
 export default function DashboardPage() {
   return (

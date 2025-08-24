@@ -1,6 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Book, Calculator, ExternalLink, FileText, Globe, Users, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Book, Video, FileText, Globe, Users, Calculator } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const resourceCategories = [
   {

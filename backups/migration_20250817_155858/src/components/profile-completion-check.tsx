@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/use-auth';
 import { doc, getDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
 
 export function ProfileCompletionCheck({ children }: { children: React.ReactNode }) {

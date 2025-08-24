@@ -1,10 +1,10 @@
 @config "../../tailwind.config.ts";
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Import theme files */
-@import '../styles/themes/default.css';
-@import '../styles/themes/compass-peak.css';
-@import '../styles/themes/fireweed-path.css';
+@import "../styles/themes/default.css";
+@import "../styles/themes/compass-peak.css";
+@import "../styles/themes/fireweed-path.css";
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -117,7 +117,7 @@ body {
   }
 
   /* Ensure sidebar content stays within bounds during collapse */
-  [data-sidebar='sidebar'] {
+  [data-sidebar="sidebar"] {
     overflow: hidden;
   }
 }

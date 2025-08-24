@@ -1,52 +1,51 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { AdminProvider } from '@/hooks/use-admin';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { calendarService, CalendarEvent } from '@/lib/firebase-admin';
-import { useAuth } from '@/hooks/use-auth';
-import { useAdmin } from '@/hooks/use-admin';
-import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
-import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
-import { LazyEventDialog } from '@/components/lazy';
+import { addMonths } from 'date-fns/addMonths';
+import { eachDayOfInterval } from 'date-fns/eachDayOfInterval';
+import { endOfMonth } from 'date-fns/endOfMonth';
+import { endOfWeek } from 'date-fns/endOfWeek';
+// Optimize date-fns imports by importing only what we need
+import { format } from 'date-fns/format';
+import { isSameDay } from 'date-fns/isSameDay';
+import { isSameMonth } from 'date-fns/isSameMonth';
+import { isToday } from 'date-fns/isToday';
+import { startOfMonth } from 'date-fns/startOfMonth';
+import { startOfWeek } from 'date-fns/startOfWeek';
+import { subMonths } from 'date-fns/subMonths';
 import {
+  ArrowLeft,
+  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
-  Plus,
-  Calendar as CalendarIcon,
-  MapPin,
   Clock,
-  Users,
-  Trophy,
   Coffee,
-  Palmtree,
+  MapPin,
   MoreVertical,
-  ArrowLeft,
+  Palmtree,
+  Plus,
+  Trophy,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-// Optimize date-fns imports by importing only what we need
-import { format } from 'date-fns/format';
-import { startOfMonth } from 'date-fns/startOfMonth';
-import { endOfMonth } from 'date-fns/endOfMonth';
-import { startOfWeek } from 'date-fns/startOfWeek';
-import { endOfWeek } from 'date-fns/endOfWeek';
-import { eachDayOfInterval } from 'date-fns/eachDayOfInterval';
-import { isSameMonth } from 'date-fns/isSameMonth';
-import { isSameDay } from 'date-fns/isSameDay';
-import { isToday } from 'date-fns/isToday';
-import { addMonths } from 'date-fns/addMonths';
-import { subMonths } from 'date-fns/subMonths';
-import { cn } from '@/lib/utils';
+import { Suspense, useEffect, useState } from 'react';
+import { LazyEventDialog } from '@/components/lazy';
+import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AdminProvider, useAdmin } from '@/hooks/use-admin';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { type CalendarEvent, calendarService } from '@/lib/firebase-admin';
+import { cn } from '@/lib/utils';
 
 const eventTypeConfig = {
   class: { icon: Users, color: 'bg-blue-500', label: 'Class' },

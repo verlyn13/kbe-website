@@ -1,7 +1,7 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@/test/test-utils';
 import { waitFor } from '@testing-library/react';
+import React from 'react';
 import { ParentAccountForm } from '@/components/registration/parent-account';
+import { fireEvent, render, screen } from '@/test/test-utils';
 
 describe('Enrollment form contract', () => {
   it('submits minimal valid parent account data', async () => {

@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/firebase';
 
 export default function DebugAuthPage() {
   const [authState, setAuthState] = useState<any>(null);

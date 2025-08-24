@@ -7,7 +7,7 @@
  */
 
 import * as dotenv from 'dotenv';
-import { testEmailTemplate, previewTemplate } from '../src/lib/sendgrid-email-service';
+import { previewTemplate, testEmailTemplate } from '../src/lib/sendgrid-email-service';
 import { sendGridTemplates } from '../src/lib/sendgrid-templates';
 
 // Load environment variables

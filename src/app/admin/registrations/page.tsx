@@ -1,14 +1,13 @@
 'use client';
 
+import type { ColumnDef } from '@tanstack/react-table';
+import { Check, Clock, Eye, Mail, MoreHorizontal, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DataTable } from '@/components/admin/data-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DataTable } from '@/components/admin/data-table';
-import { Registration, registrationService } from '@/lib/firebase-admin';
-import { useAdmin } from '@/hooks/use-admin';
-import { ColumnDef } from '@tanstack/react-table';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,10 +16,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Check, X, Clock, Mail, Eye } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAdmin } from '@/hooks/use-admin';
+import { useToast } from '@/hooks/use-toast';
+import { type Registration, registrationService } from '@/lib/firebase-admin';
 
 export default function AdminRegistrationsPage() {
   const { admin } = useAdmin();

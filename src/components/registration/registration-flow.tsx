@@ -1,22 +1,21 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { CheckCircle } from 'lucide-react';
+import { Suspense, useState } from 'react';
 import {
-  LazyParentAccountForm,
   LazyAddStudentsForm,
+  LazyParentAccountForm,
   LazySelectProgramForm,
 } from '@/components/lazy';
 import { FormSkeleton } from '@/components/loading/form-skeleton';
-import { Progress } from '@/components/ui/progress';
-import { CheckCircle } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
+import { auth, db } from '@/lib/firebase';
 
 type RegistrationStep = 'parent' | 'students' | 'program' | 'complete';
 

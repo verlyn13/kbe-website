@@ -1,5 +1,5 @@
-import { RegistrationFlow } from '@/components/registration/registration-flow';
 import { PublicHeader } from '@/components/public-header';
+import { RegistrationFlow } from '@/components/registration/registration-flow';
 
 export default function RegisterPage() {
   return (

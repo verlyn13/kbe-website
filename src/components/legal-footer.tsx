@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export function LegalFooter() {
   const pathname = usePathname();

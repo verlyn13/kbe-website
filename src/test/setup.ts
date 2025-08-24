@@ -82,7 +82,7 @@ process.on('unhandledRejection', (reason) => {
 
 // Polyfill matchMedia for next-themes and components relying on it
 if (typeof window !== 'undefined' && !window.matchMedia) {
-  // @ts-ignore
+  // @ts-expect-error
   window.matchMedia = () => ({
     matches: false,
     media: '',

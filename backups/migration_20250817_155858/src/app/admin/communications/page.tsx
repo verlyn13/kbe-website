@@ -1,22 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { DataTable } from '@/components/admin/data-table';
-import { Announcement, announcementService } from '@/lib/firebase-admin';
-import { ColumnDef } from '@tanstack/react-table';
-import { Plus, Send, Clock, Check, Pin, Eye, Trash2, Edit } from 'lucide-react';
+import type { ColumnDef } from '@tanstack/react-table';
+import { format, formatDistanceToNow } from 'date-fns';
+import { Check, Clock, Edit, Eye, Pin, Plus, Send, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { useEffect, useState } from 'react';
+import { DataTable } from '@/components/admin/data-table';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,8 +16,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { formatDistanceToNow, format } from 'date-fns';
+import { type Announcement, announcementService } from '@/lib/firebase-admin';
 
 export default function AdminCommunicationsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);

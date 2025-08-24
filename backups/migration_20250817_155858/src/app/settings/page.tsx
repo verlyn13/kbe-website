@@ -1,12 +1,12 @@
 'use client';
 
-import { useTheme } from '@/providers/theme-provider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { ArrowLeft, Palette, Moon, Sun, Monitor } from 'lucide-react';
+import { ArrowLeft, Monitor, Moon, Palette, Sun } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useTheme } from '@/providers/theme-provider';
 
 const themes = [
   {

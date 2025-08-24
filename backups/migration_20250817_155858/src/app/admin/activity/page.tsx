@@ -1,10 +1,10 @@
 'use client';
 
+import { formatDistanceToNow } from 'date-fns';
+import { Activity, FileText, Mail, Settings, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Activity, User, Mail, FileText, Settings } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
 
 interface ActivityLog {
   id: string;

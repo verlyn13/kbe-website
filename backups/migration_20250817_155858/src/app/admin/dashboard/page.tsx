@@ -1,25 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
-  Users,
-  Mail,
-  Download,
-  Calendar,
-  UserPlus,
-  Send,
-  FileSpreadsheet,
-  Clock,
   AlertCircle,
+  Calendar,
+  Clock,
+  Download,
+  FileSpreadsheet,
+  Mail,
+  Send,
+  UserPlus,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { registrationService } from '@/lib/firebase-admin';
+import { useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useAdmin } from '@/hooks/use-admin';
+import { registrationService } from '@/lib/firebase-admin';
 
 interface DashboardStats {
   registrations: {
