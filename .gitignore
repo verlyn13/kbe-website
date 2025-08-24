@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/test-results
 
 # next.js
 /.next/
@@ -47,6 +48,23 @@ firestore-debug.log
 
 # claude
 .claude/
+
+# Authentication testing artifacts
+test-auth-*.js
+run-auth-tests.js
+verify-auth-setup.js
+auth-config-report.json
+auth-test-report.json
+
+# Codex artifacts
+.codex/logs/
+.codex/runs/
+.codex/tmp/
+
+# Storybook and Lighthouse
+.storybook-out/
+storybook-static/
+lhci_reports/
 
 # Force include firebase files despite global gitignore patterns
 !src/lib/firebase-admin.ts

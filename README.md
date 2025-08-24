@@ -22,6 +22,17 @@ npm run lint         # Run ESLint
 npm run typecheck    # TypeScript type checking
 ```
 
+### ⚠️ Known Issue: App Check & OAuth
+
+**Important**: Firebase App Check must be set to "Unenforced" mode for OAuth to work.
+
+If Google sign-in fails with `auth/internal-error`:
+1. Go to Firebase Console → App Check → Apps
+2. Set Authentication and Firestore APIs to "Unenforced"
+3. Wait 1-2 minutes and test again
+
+See `APP_CHECK_OAUTH_ISSUE.md` for details.
+
 ## Deployment
 
 This project is deployed on Firebase App Hosting. See apphosting.yaml for configuration.

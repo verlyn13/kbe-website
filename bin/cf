@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if command -v cf-go >/dev/null 2>&1; then
+  echo "⚠️  Using cf-go via wrapper; prefer calling 'cf-go' directly." >&2
+  exec cf-go "$@"
+else
+  echo "❌ 'cf-go' not found. Install from the cf-go repo: 'make install'." >&2
+  exit 127
+fi

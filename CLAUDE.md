@@ -56,6 +56,114 @@ ds status                            # Check all repo statuses
 - **Account ID**: 13eb584192d9cefb730fde0cfd271328
 - **Subdomains**: kbe.homerenrichment.com (main site)
 
+## Advanced Orchestration & MCP Integration
+
+### Agent Team Structure
+
+This project uses specialized Claude Code agents for coordinated workflows:
+
+- **orchestrator** - Master coordination and decision routing
+- **heh-architect** - Educational platform architecture specialist
+- **auth-engineer** - Firebase Auth and App Check security expert
+- **ui-craftsman** - Next.js + shadcn/ui accessibility specialist
+- **deployment-manager** - Firebase App Hosting deployment expert
+
+### Orchestration Commands
+
+```bash
+# Feature development workflow (4-phase with quality gates)
+/heh-feature-development "Build waitlist registration system"
+
+# Multi-agent debugging workflow
+/heh-debug-issue "Parents can't complete registration on mobile"
+
+# Deployment monitoring and validation
+/heh-deploy "Deploy authentication updates to production"
+```
+
+### MCP Server Capabilities
+
+The project is configured with 7 MCP servers for enhanced functionality:
+
+```bash
+# GitHub integration for repository operations
+mcp__github__* functions - PR management, issue tracking, workflow monitoring
+
+# Memory bank for persistent context across sessions
+mcp__memory-bank__* functions - Decision logging, progress tracking, context management
+
+# Browser automation for E2E testing
+mcp__puppeteer__* functions - Authentication flow testing, mobile simulation
+
+# File system operations with security boundaries
+mcp__filesystem__* functions - Code analysis, configuration management
+
+# Web research and content analysis
+mcp__brave-search__* and mcp__fetch__* functions - Educational platform research
+
+# Complex reasoning for architecture decisions
+mcp__sequential-thinking__* functions - Multi-step problem solving
+```
+
+### Educational Platform Workflow Patterns
+
+#### E2E Authentication Testing
+```bash
+# Automated workflow using puppeteer + memory-bank + github
+1. Browser automation tests all auth providers
+2. Validates reCAPTCHA Enterprise integration
+3. Stores results in memory bank
+4. Creates GitHub issues for failures
+```
+
+#### Parent Journey Validation
+```bash
+# Mobile-first testing workflow
+1. Simulate parent on mobile device (busy, distracted context)
+2. Test touch-friendly interactions and accessibility
+3. Validate registration flow under real conditions
+4. Document UX issues with specific recommendations
+```
+
+#### Deployment Intelligence
+```bash
+# Coordinated deployment monitoring
+1. GitHub workflow status via mcp__github__
+2. Firebase App Hosting health via mcp__fetch__
+3. Performance metrics collection and analysis
+4. Automated rollback triggers for quality issues
+```
+
+### Agent Coordination Patterns
+
+#### Sequential Workflows
+```typescript
+// Phase-based execution with quality gates
+Phase 1: Architecture & Planning (orchestrator → heh-architect)
+Phase 2: Implementation (ui-craftsman + auth-engineer parallel)
+Phase 3: Security & Testing (sequential validation)
+Phase 4: Deployment (deployment-manager with monitoring)
+```
+
+#### Parallel Investigation
+```typescript
+// Multi-agent debugging for complex issues
+Route by category:
+- Authentication: auth-engineer + security specialist
+- UI/UX: ui-craftsman + accessibility validator  
+- Infrastructure: deployment-manager + performance analyst
+- Data: firebase-specialist + security auditor
+```
+
+#### Context-Aware Routing
+```typescript
+// Educational platform specific decision tree
+Parent impact: High → Immediate specialist assignment
+Registration period: Active → Enhanced monitoring workflows
+Mobile usage: 60%+ → Mobile-first testing protocols
+Trust critical: Always → Security-first approach
+```
+
 ## Essential Commands
 
 ### Development
@@ -122,6 +230,22 @@ npm run typecheck    # TypeScript type checking (tsc --noEmit)
 5. **Deployment**: Firebase App Hosting via GitHub integration - push to main branch triggers automatic deployment (see DEPLOYMENT_METHOD.md)
 
 6. **Build Errors**: Next.js config ignores TypeScript/ESLint errors during build
+
+## ⚠️ CRITICAL: App Check OAuth Issue
+
+**Known Issue**: Firebase App Check in "Enforce" mode blocks Google OAuth authentication.
+
+**Current Solution**: App Check is set to **"Unenforced"** for:
+- Authentication API
+- Cloud Firestore API
+
+**Details**: See `APP_CHECK_OAUTH_ISSUE.md` for full documentation.
+
+**To Fix if OAuth Fails**:
+1. Firebase Console → App Check → Apps → Web App
+2. Set Authentication and Firestore to "Unenforced"
+3. Wait 1-2 minutes for propagation
+4. Test OAuth - should work immediately
 
 ## Design System
 
@@ -234,3 +358,73 @@ Instead, focus on:
 - Professional parent-friendly interface
 - Essential communication tools
 - Basic registration management for admins
+
+## Agentic Orchestration Configuration
+
+### Available Orchestration Patterns
+
+**Multi-Agent Workflows:**
+- Use **Task tool** for spawning specialized subagents
+- Prefix complex requests with **"think hard"** for deep analysis
+- Use **"/heh-feature-development"** for complete feature development
+- Use **"/heh-debug-issue"** for complex debugging workflows
+- Use **"/heh-deploy"** for deployment monitoring and validation
+
+**Subagent Specializations:**
+- **orchestrator**: Master coordinator (always start here for complex tasks)
+- **heh-architect**: Educational platform architecture and design
+- **auth-engineer**: Firebase Authentication + App Check specialist
+- **ui-craftsman**: Next.js + shadcn/ui + accessibility expert
+- **deployment-manager**: Firebase App Hosting deployment specialist
+- **firebase-specialist**: Firebase services integration expert
+- **security-guardian**: Educational platform security specialist
+- **test-engineer**: Comprehensive testing with Vitest and E2E
+
+### Orchestration Best Practices
+
+1. **Decomposition First**: Always break complex tasks into subtasks
+2. **Parallel When Possible**: Use parallel agents for independent work
+3. **Quality Gates**: Enforce validation between phases
+4. **Context Preservation**: Use TodoWrite for cross-agent progress tracking
+5. **Educational Platform Focus**: Remember this serves families and children
+
+### Performance Optimization
+
+- Use **claude-opus-4-1-20250805** for complex orchestration and planning
+- Use **claude-3-5-sonnet-20241022** for implementation work
+- Use **claude-3-5-haiku-20241022** for simple validation tasks
+- Enable prompt caching for repeated workflows
+
+### Project-Specific Orchestration
+
+This project includes specialized workflows for:
+- **Educational Platform Features**: Parent-centric, mobile-first design
+- **Authentication Systems**: Multi-provider Firebase Auth + App Check
+- **Firebase App Hosting Deployments**: Auto-deploy from main branch
+- **Family Data Security**: COPPA compliance and privacy protection
+
+**Orchestration Commands Available:**
+```bash
+/heh-feature-development "Build waitlist system"
+/heh-debug-issue "Fix authentication failures"  
+/heh-deploy "Monitor production deployment"
+```
+
+**Agent Coordination Patterns:**
+- **Feature Development**: heh-architect → ui-craftsman + auth-engineer → test-engineer → deployment-manager
+- **Bug Investigation**: orchestrator → appropriate specialists (parallel) → solution implementation
+- **Security Enhancement**: security-guardian → auth-engineer + firebase-specialist → test-engineer
+
+### Educational Platform Context
+
+**Core Philosophy**: Simple registration gateway for enrichment programs
+- **Target Users**: Busy parents, often on mobile devices
+- **NOT an LMS**: Avoid grade tracking, assignments, complex features
+- **Trust-Building**: Professional, reliable experience
+- **Accessibility-First**: WCAG 2.1 AA compliance minimum
+
+**Current Architecture Status**: 75% production ready
+- Authentication working (needs ToS modal fix)
+- Firebase App Hosting deployed and functional
+- reCAPTCHA Enterprise + App Check configured
+- Push to main → automatic deployment (3-5 minutes)

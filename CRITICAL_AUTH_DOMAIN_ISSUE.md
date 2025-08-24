@@ -1,73 +1,45 @@
-# CRITICAL: Auth Domain Configuration Issue
+# ~~CRITICAL: Auth Domain Configuration Issue~~ RESOLVED
 
-## The Problem
+## Update: Root Cause Was App Check, Not Auth Domain
 
-Your Firebase config has:
+**Status**: ✅ RESOLVED - The actual issue was App Check enforcement, not auth domain configuration.
 
-```
-authDomain: "kbe-website.firebaseapp.com"
-```
+## What We Thought Was Wrong
 
-But you're trying to authenticate from:
+Initially suspected the Firebase auth domain configuration was causing OAuth failures:
+- authDomain: `kbe-website.firebaseapp.com`
+- App domain: `homerenrichment.com`
 
-- `homerenrichment.com`
-- `kbe-website--kbe-website.us-central1.hosted.app`
+## The Actual Problem
 
-## This Causes Issues Because:
+**Firebase App Check in "Enforce" mode was blocking OAuth authentication flows.**
 
-When Firebase initiates Google Sign-in, it uses the `authDomain` to handle the OAuth flow. If you're on `homerenrichment.com` but the authDomain is `kbe-website.firebaseapp.com`, there's a domain mismatch.
+Even with all domains properly configured, App Check enforcement prevents OAuth providers from completing authentication.
 
-## Solution Options:
+## The Solution That Worked
 
-### Option 1: Update authDomain (Recommended)
+### Set App Check to "Unenforced" Mode
 
-Change your Firebase configuration to use your custom domain:
+1. Go to Firebase Console → App Check → Apps
+2. For Authentication API: Set to "Unenforced"
+3. For Cloud Firestore API: Set to "Unenforced"
+4. Wait 1-2 minutes for changes to propagate
+5. OAuth authentication works immediately
 
-```typescript
-// In /src/lib/firebase.ts
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBhTEs3Uxq_KBLBzbzIL2VB4Ao_DBw9faM',
-  authDomain: 'homerenrichment.com', // Changed from kbe-website.firebaseapp.com
-  // ... rest of config
-};
-```
+### Current Working Configuration
 
-### Option 2: Use signInWithRedirect Instead of Popup
+- **authDomain**: `kbe-website.firebaseapp.com` (works fine)
+- **App Check**: Unenforced mode for Auth and Firestore
+- **All domains properly authorized** in Firebase settings
+- **API keys** have correct HTTP referrer restrictions
 
-The redirect method is more forgiving with domain mismatches:
+## Lessons Learned
 
-```typescript
-import { signInWithRedirect } from 'firebase/auth';
+1. **App Check enforcement is incompatible with OAuth providers** in certain configurations
+2. **Domain configuration was actually correct** - the auth domain doesn't need to match the app domain
+3. **The error message `auth/internal-error` was misleading** - didn't indicate App Check as the cause
+4. **Solution was simpler than expected** - just disable App Check enforcement
 
-// Instead of signInWithPopup
-await signInWithRedirect(auth, googleProvider);
-```
+## For More Details
 
-### Option 3: Configure Custom Auth Domain
-
-1. Go to Firebase Console → Authentication → Settings
-2. Under "Authorized domains", ensure ALL are listed:
-   - `kbe-website.firebaseapp.com`
-   - `homerenrichment.com`
-   - `kbe-website--kbe-website.us-central1.hosted.app`
-
-### Option 4: Use Magic Links (Working Alternative)
-
-Since email auth works perfectly, implement magic link sign-in:
-
-- No OAuth issues
-- No domain problems
-- Better user experience on mobile
-
-## To Test the Fix:
-
-1. Update the authDomain in your Firebase config
-2. Deploy the change
-3. Clear browser cache
-4. Try signing in again
-
-## Why This Wasn't Obvious:
-
-- The OAuth consent screen was correctly configured
-- The API keys were unrestricted
-- But Firebase's authDomain setting creates an additional layer of domain validation
+See `APP_CHECK_OAUTH_ISSUE.md` for comprehensive documentation of this issue and its resolution.

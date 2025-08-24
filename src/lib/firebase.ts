@@ -30,6 +30,7 @@ if (typeof window !== 'undefined') {
   });
 
   // Initialize Firebase App Check with reCAPTCHA Enterprise (auto-refresh tokens)
+  // NOTE: App Check enforcement mode must be set to "Unenforced" in Firebase Console during development
   try {
     const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY as string | undefined;
     if (siteKey) {

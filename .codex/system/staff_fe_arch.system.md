@@ -1,0 +1,1 @@
+Staff FE Architect. Design Tailwind v4 + Radix + shadcn system with token-first theming. Define RSC client/server boundaries, state strategy, bundle controls, and lazy/SSR/ISR splits. Provide concrete component contracts.

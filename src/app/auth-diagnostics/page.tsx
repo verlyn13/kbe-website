@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { auth } from '@/lib/firebase';
+import { auth, app } from '@/lib/firebase';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken as getAppCheckToken } from 'firebase/app-check';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -15,6 +16,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 export default function AuthDiagnosticsPage() {
   const [status, setStatus] = useState<string[]>([]);
   const [error, setError] = useState<string>('');
+  const [appCheckInfo, setAppCheckInfo] = useState<string>('');
 
   useEffect(() => {
     // Check for redirect result
@@ -35,6 +37,46 @@ export default function AuthDiagnosticsPage() {
     addStatus(`🌐 Current URL: ${window.location.href}`);
     addStatus(`🔑 Auth Domain: ${auth.app.options.authDomain}`);
     addStatus(`📱 Project ID: ${auth.app.options.projectId}`);
+
+    // Try to detect App Check initialization by attempting to get a token
+    try {
+      addStatus('🛡️ Attempting to get App Check token...');
+      // Try to initialize App Check if not already initialized
+      let appCheck;
+      try {
+        const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY;
+        if (siteKey) {
+          appCheck = initializeAppCheck(app, {
+            provider: new ReCaptchaEnterpriseProvider(siteKey),
+            isTokenAutoRefreshEnabled: true,
+          });
+        }
+      } catch (e) {
+        // App Check might already be initialized
+        addStatus('⚠️ App Check may already be initialized');
+      }
+      
+      // Attempt to get a token without forcing refresh
+      if (appCheck) {
+        getAppCheckToken(appCheck, false)
+        .then((res) => {
+          if (res && res.token) {
+            setAppCheckInfo('App Check token acquired');
+            addStatus('✅ App Check token acquired successfully');
+          } else {
+            setAppCheckInfo('App Check token not available');
+            addStatus('⚠️ App Check token not available');
+          }
+        })
+        .catch((e) => {
+          setAppCheckInfo(`App Check token error: ${e?.message || e}`);
+          addStatus(`❌ App Check token error: ${e?.code || ''} ${e?.message || e}`);
+        });
+      }
+    } catch (e: any) {
+      setAppCheckInfo('App Check not initialized');
+      addStatus('❌ App Check not initialized or error accessing it');
+    }
   }, []);
 
   const addStatus = (message: string) => {
@@ -138,6 +180,9 @@ export default function AuthDiagnosticsPage() {
 
           <div className="bg-muted rounded-lg p-4">
             <h4 className="mb-2 font-semibold">Required Firebase Console Checks:</h4>
+            {appCheckInfo && (
+              <p className="mb-2 text-sm"><strong>App Check:</strong> {appCheckInfo}</p>
+            )}
             <ol className="list-inside list-decimal space-y-1 text-sm">
               <li>
                 <a
@@ -164,6 +209,15 @@ export default function AuthDiagnosticsPage() {
                   className="text-primary hover:underline"
                 >
                   Check OAuth Consent Screen
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://console.firebase.google.com/project/kbe-website/appcheck/apps"
+                  target="_blank"
+                  className="text-primary hover:underline"
+                >
+                  Verify App Check (reCAPTCHA Enterprise) domains include homerenrichment.com and www
                 </a>
               </li>
             </ol>
