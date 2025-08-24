@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { auth, app } from '@/lib/firebase';
-import { getToken as getAppCheckToken } from 'firebase/app-check';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken as getAppCheckToken } from 'firebase/app-check';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -41,8 +41,24 @@ export default function AuthDiagnosticsPage() {
     // Try to detect App Check initialization by attempting to get a token
     try {
       addStatus('🛡️ Attempting to get App Check token...');
+      // Try to initialize App Check if not already initialized
+      let appCheck;
+      try {
+        const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY;
+        if (siteKey) {
+          appCheck = initializeAppCheck(app, {
+            provider: new ReCaptchaEnterpriseProvider(siteKey),
+            isTokenAutoRefreshEnabled: true,
+          });
+        }
+      } catch (e) {
+        // App Check might already be initialized
+        addStatus('⚠️ App Check may already be initialized');
+      }
+      
       // Attempt to get a token without forcing refresh
-      getAppCheckToken(app, false)
+      if (appCheck) {
+        getAppCheckToken(appCheck, false)
         .then((res) => {
           if (res && res.token) {
             setAppCheckInfo('App Check token acquired');
@@ -56,6 +72,7 @@ export default function AuthDiagnosticsPage() {
           setAppCheckInfo(`App Check token error: ${e?.message || e}`);
           addStatus(`❌ App Check token error: ${e?.code || ''} ${e?.message || e}`);
         });
+      }
     } catch (e: any) {
       setAppCheckInfo('App Check not initialized');
       addStatus('❌ App Check not initialized or error accessing it');
