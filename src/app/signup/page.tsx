@@ -53,7 +53,7 @@ export default function SignUpPage() {
     emailPreferences: {
       announcements: true,
       programUpdates: true,
-      newsletters: true,
+      newsletters: false,
     },
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -242,7 +242,8 @@ export default function SignUpPage() {
             <CardTitle className="text-2xl">Welcome to Homer Enrichment Hub!</CardTitle>
           </div>
           <CardDescription>
-            Let's get you set up so you can register your children for MathCounts and other programs
+            Create your account with email and password. After signing up, you can also use Google
+            sign-in or magic links to access your account.
           </CardDescription>
         </CardHeader>
         <form id={signupFormId} onSubmit={handleSubmit}>
@@ -400,17 +401,18 @@ export default function SignUpPage() {
                         },
                       }))
                     }
-                    disabled={loading}
+                    disabled={true}
                   />
                   <div className="space-y-1">
                     <label
                       htmlFor={newslettersId}
-                      className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm leading-none font-medium text-muted-foreground"
                     >
-                      Community Newsletter
+                      Community Newsletter <span className="text-xs">(Coming Soon)</span>
                     </label>
                     <p className="text-muted-foreground text-xs">
-                      Monthly updates about student achievements and upcoming events
+                      Monthly updates about student achievements and upcoming events - will be
+                      available in the future
                     </p>
                   </div>
                 </div>
@@ -431,12 +433,18 @@ export default function SignUpPage() {
               {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Create Account
             </Button>
-            <p className="text-muted-foreground text-center text-sm">
-              Already have an account?{' '}
-              <Link href="/" className="text-primary hover:underline">
-                Sign in
-              </Link>
-            </p>
+            <div className="space-y-2 text-center">
+              <p className="text-muted-foreground text-sm">
+                Already have an account?{' '}
+                <Link href="/login" className="text-primary hover:underline">
+                  Sign in
+                </Link>
+              </p>
+              <p className="text-muted-foreground text-xs">
+                After creating your account, you can sign in using your password, Google, or magic
+                links
+              </p>
+            </div>
           </CardFooter>
         </form>
       </Card>
