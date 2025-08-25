@@ -1,6 +1,7 @@
 'use client';
 
-import { AlertCircle, Download, Printer } from 'lucide-react';
+import { AlertCircle, ArrowLeft, Download, Printer } from 'lucide-react';
+import Link from 'next/link';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +16,15 @@ export default function WaiverPage() {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
+      {/* Navigation */}
+      <div className="print-hidden mb-6 flex items-center justify-between">
+        <Button variant="ghost" asChild>
+          <Link href="/" className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Back to Home</span>
+          </Link>
+        </Button>
+      </div>
       {/* Screen Instructions */}
       <div className="print-hidden mb-8">
         <Card>

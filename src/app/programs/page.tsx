@@ -13,7 +13,7 @@ export default function ProgramsPage() {
         <div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild className="sm:hidden">
-              <Link href="/dashboard">
+              <Link href="/">
                 <ArrowLeft className="h-4 w-4" />
               </Link>
             </Button>
@@ -24,9 +24,9 @@ export default function ProgramsPage() {
           </p>
         </div>
         <Button variant="ghost" asChild className="hidden sm:flex">
-          <Link href="/dashboard">
+          <Link href="/">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
+            Back to Home
           </Link>
         </Button>
       </div>
