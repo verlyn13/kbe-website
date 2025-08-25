@@ -199,9 +199,9 @@ export function LoginForm() {
         // Check if user profile exists
         const { doc, getDoc } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
-        const userDoc = await getDoc(doc(db, 'users', result.user.uid));
+        const profileDoc = await getDoc(doc(db, 'profiles', result.user.uid));
 
-        if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
+        if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
           router.push('/welcome');
         } else {
           router.push('/dashboard');

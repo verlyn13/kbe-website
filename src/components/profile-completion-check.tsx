@@ -16,12 +16,12 @@ export function ProfileCompletionCheck({ children }: { children: React.ReactNode
       if (!user || authLoading) return;
 
       try {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userData = userDoc.data();
+        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
+        const profileData = profileDoc.data();
 
         // If profile is not completed, redirect to welcome
         // This applies to all users regardless of sign-in method
-        if (!userData?.profileCompleted) {
+        if (!profileData?.profileCompleted) {
           router.push('/welcome');
           return;
         }

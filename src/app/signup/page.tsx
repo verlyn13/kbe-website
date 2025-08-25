@@ -63,9 +63,9 @@ export default function SignUpPage() {
     if (user && !authLoading) {
       const checkProfileStatus = async () => {
         try {
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
 
-          if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
+          if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
             // Profile not complete, redirect to welcome
             router.push('/welcome');
           } else {
