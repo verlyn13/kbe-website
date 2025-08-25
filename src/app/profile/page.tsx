@@ -414,8 +414,8 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {formData.children.map((child, index) => (
-                <div key={index} className="space-y-4 rounded-lg border p-4">
+              {formData.children.map((child) => (
+                <div key={`child-${child.id || child.firstName}-${child.lastName}`} className="space-y-4 rounded-lg border p-4">
                   <div className="grid gap-4 md:grid-cols-3">
                     <div className="space-y-2">
                       <Label>

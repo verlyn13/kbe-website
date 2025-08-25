@@ -126,8 +126,8 @@ export default function SchedulePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {schedule.specialEvents.map((event, index) => (
-                      <div key={index} className="flex items-start gap-3 rounded-lg border p-3">
+                    {schedule.specialEvents.map((event) => (
+                      <div key={`event-${event.date}-${event.title}`} className="flex items-start gap-3 rounded-lg border p-3">
                         <div className="flex-1">
                           <div className="mb-1 flex items-center gap-2">
                             <p className="font-medium">{event.title}</p>

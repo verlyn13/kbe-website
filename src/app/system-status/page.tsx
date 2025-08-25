@@ -203,8 +203,8 @@ export default function SystemStatusPage() {
       <h1 className="mb-6 text-3xl font-bold">System Status Check</h1>
 
       <div className="space-y-4">
-        {checks.map((check, index) => (
-          <Card key={index}>
+        {checks.map((check) => (
+          <Card key={check.name}>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">

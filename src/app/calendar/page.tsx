@@ -242,15 +242,16 @@ function CalendarPageContent() {
             ))}
 
             {/* Calendar Days */}
-            {calendarDays.map((day, index) => {
+            {calendarDays.map((day) => {
               const dayEvents = getEventsForDay(day);
               const isCurrentMonth = isSameMonth(day, currentDate);
               const isSelectedDay = selectedDate && isSameDay(day, selectedDate);
               const isTodayDate = isToday(day);
+              const dayKey = format(day, 'yyyy-MM-dd');
 
               return (
                 <div
-                  key={index}
+                  key={dayKey}
                   onClick={() => setSelectedDate(day)}
                   className={cn(
                     'bg-background hover:bg-muted/50 min-h-[60px] cursor-pointer p-1 transition-colors sm:min-h-[100px] sm:p-2',

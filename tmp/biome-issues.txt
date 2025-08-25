@@ -1,0 +1,15 @@
+src/app/admin/communications/page.tsx:43:7 lint/correctness/useExhaustiveDependencies ━━━━━━━━━━━━━━
+src/app/admin/dashboard/page.tsx:272:17 lint/a11y/noStaticElementInteractions ━━━━━━━━━━━━━━━━━━━━━━
+src/app/admin/dashboard/page.tsx:272:17 lint/a11y/useKeyWithClickEvents ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+src/app/admin/dashboard/page.tsx:49:3 lint/correctness/noUnusedFunctionParameters ━━━━━━━━━━━━━━━━━━
+src/app/admin/layout.tsx:39:7 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+src/app/admin/reports/page.tsx:49:22 lint/correctness/useExhaustiveDependencies ━━━━━━━━━━━━━━━━━━━━
+src/app/admin/reports/page.tsx:330:33 lint/suspicious/noArrayIndexKey ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+src/app/auth-status/page.tsx:85:25 lint/suspicious/noArrayIndexKey ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+src/app/dashboard/layout.tsx:32:7 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+src/app/debug-announcements/page.tsx:14:7 lint/correctness/useExhaustiveDependencies ━━━━━━━━━━━━━━━
+src/app/admin/communications/compose/page.tsx:108:13 lint/correctness/useUniqueElementIds ━━━━━━━━━━
+src/app/admin/communications/compose/page.tsx:118:13 lint/correctness/useUniqueElementIds ━━━━━━━━━━
+src/app/admin/communications/compose/page.tsx:131:17 lint/correctness/useUniqueElementIds ━━━━━━━━━━
+src/app/admin/communications/compose/page.tsx:145:17 lint/correctness/useUniqueElementIds ━━━━━━━━━━
+src/app/admin/communications/compose/page.tsx:158:13 lint/correctness/useUniqueElementIds ━━━━━━━━━━
