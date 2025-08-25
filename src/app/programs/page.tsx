@@ -9,20 +9,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export default function ProgramsPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-6">
-        <Button variant="ghost" size="sm" asChild>
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild className="sm:hidden">
+              <Link href="/dashboard">
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            </Button>
+            <h1 className="text-2xl font-bold sm:text-3xl">Enrichment Programs</h1>
+          </div>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+            Explore our current and upcoming programs for students
+          </p>
+        </div>
+        <Button variant="ghost" asChild className="hidden sm:flex">
           <Link href="/dashboard">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Link>
         </Button>
-      </div>
-
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold">Enrichment Programs</h1>
-        <p className="text-muted-foreground">
-          Explore our current and upcoming programs for students
-        </p>
       </div>
 
       <div className="grid gap-6">

@@ -197,7 +197,8 @@ export default function AnnouncementsPage() {
       <div className="container mx-auto max-w-4xl p-6">
         <Button variant="ghost" onClick={() => setSelectedAnnouncement(null)} className="mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to all announcements
+          <span className="hidden sm:inline">Back to all announcements</span>
+          <span className="sm:hidden">Back</span>
         </Button>
 
         <Card>
@@ -266,14 +267,21 @@ export default function AnnouncementsPage() {
 
   return (
     <div className="container mx-auto max-w-6xl space-y-6 p-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Announcements</h1>
-          <p className="text-muted-foreground mt-1">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild className="sm:hidden">
+              <Link href="/dashboard">
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            </Button>
+            <h1 className="text-2xl font-bold sm:text-3xl">Announcements</h1>
+          </div>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
             Stay up to date with all program announcements
           </p>
         </div>
-        <Button variant="ghost" asChild>
+        <Button variant="ghost" asChild className="hidden sm:flex">
           <Link href="/dashboard">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
