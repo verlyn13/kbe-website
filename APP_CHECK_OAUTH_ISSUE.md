@@ -1,6 +1,7 @@
 # App Check OAuth Authentication Issue - RESOLVED
 
 ## Issue Summary
+
 **Problem**: Google OAuth authentication fails with `Firebase: Error (auth/internal-error)` when App Check is enabled in enforcement mode.
 
 **Root Cause**: Firebase App Check enforcement blocks OAuth authentication flows, even when all domains are properly configured.
@@ -10,12 +11,15 @@
 ## Current Configuration (Working)
 
 ### Firebase Console Settings
+
 - **Authentication API**: App Check set to **"Unenforced"**
 - **Cloud Firestore API**: App Check set to **"Unenforced"**
 - **reCAPTCHA Enterprise**: Properly configured with all domains
 
 ### Authorized Domains
+
 All domains are properly configured in Firebase Authentication settings:
+
 - `localhost`
 - `homerenrichment.com`
 - `www.homerenrichment.com`
@@ -24,7 +28,9 @@ All domains are properly configured in Firebase Authentication settings:
 - `kbe-website--kbe-website.us-central1.hosted.app`
 
 ### API Key Restrictions (Correctly Configured)
+
 Google Cloud API keys have proper HTTP referrer restrictions:
+
 - `https://homerenrichment.com/*`
 - `https://www.homerenrichment.com/*`
 - `https://kbe.homerenrichment.com/*`
@@ -44,6 +50,7 @@ Google Cloud API keys have proper HTTP referrer restrictions:
 ## Technical Details
 
 ### App Check Configuration in Code
+
 ```typescript
 // src/lib/firebase.ts
 // App Check is initialized but enforcement is controlled in Firebase Console
@@ -63,11 +70,13 @@ if (typeof window !== 'undefined') {
 ```
 
 ### Known Issue
+
 App Check enforcement mode is incompatible with Firebase OAuth providers (Google, Facebook, etc.) in certain configurations. Even with proper domain configuration, the OAuth flow gets blocked during the redirect/popup authentication process.
 
 ## Future Considerations
 
 ### For Production Deployment
+
 1. **Keep App Check in "Unenforced" mode** for Authentication and Firestore
 2. **Monitor for Firebase updates** that may resolve this incompatibility
 3. **Consider alternative security measures**:
@@ -76,6 +85,7 @@ App Check enforcement mode is incompatible with Firebase OAuth providers (Google
    - Enhanced logging and monitoring
 
 ### For Development
+
 1. **Always use "Unenforced" mode** in development environments
 2. **Document this requirement** in setup instructions
 3. **Test OAuth flows** after any App Check configuration changes
@@ -92,15 +102,18 @@ App Check enforcement mode is incompatible with Firebase OAuth providers (Google
 5. **Test Google OAuth** - should work immediately
 
 ## Related Files
+
 - `/src/lib/firebase.ts` - App Check initialization
 - `.env.local` - reCAPTCHA Enterprise site key
 - `apphosting.yaml` - Production environment configuration
 - `scripts/api-key-referrers.txt` - API key domain restrictions
 
 ## References
+
 - [Firebase App Check Documentation](https://firebase.google.com/docs/app-check)
 - [Known Issue: App Check with OAuth Providers](https://github.com/firebase/firebase-js-sdk/issues) (search for oauth app-check)
 - Project Issue: Domain migration from homerconnect.com to homerenrichment.com complicated debugging
 
 ## Status
+
 ✅ **RESOLVED** - App Check set to "Unenforced" mode for affected APIs

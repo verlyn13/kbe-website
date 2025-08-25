@@ -1,14 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/firebase';
 
 export default function DebugAuthPage() {
   const [authState, setAuthState] = useState<any>(null);
   const [indexedDBData, setIndexedDBData] = useState<string>('');
+
+  const checkIndexedDB = useCallback(async () => {
+    try {
+      const databases = await indexedDB.databases();
+      const firebaseDbs = databases.filter((db) => db.name?.includes('firebase'));
+      setIndexedDBData(JSON.stringify(firebaseDbs, null, 2));
+    } catch (error) {
+      setIndexedDBData(`Error checking IndexedDB: ${error}`);
+    }
+  }, []);
 
   useEffect(() => {
     // Check current auth state
@@ -35,17 +45,7 @@ export default function DebugAuthPage() {
     checkIndexedDB();
 
     return () => unsubscribe();
-  }, []);
-
-  const checkIndexedDB = async () => {
-    try {
-      const databases = await indexedDB.databases();
-      const firebaseDbs = databases.filter((db) => db.name?.includes('firebase'));
-      setIndexedDBData(JSON.stringify(firebaseDbs, null, 2));
-    } catch (error) {
-      setIndexedDBData('Error checking IndexedDB: ' + error);
-    }
-  };
+  }, [checkIndexedDB]);
 
   const clearAllAuth = async () => {
     try {
@@ -70,7 +70,7 @@ export default function DebugAuthPage() {
       window.location.href = '/';
     } catch (error) {
       console.error('Error clearing auth:', error);
-      alert('Error clearing auth: ' + error);
+      alert(`Error clearing auth: ${error}`);
     }
   };
 
@@ -116,10 +116,20 @@ export default function DebugAuthPage() {
         <Button onClick={clearAllAuth} variant="destructive">
           Clear All Auth Data & Sign Out
         </Button>
-        <Button onClick={() => (window.location.href = '/')} variant="outline">
+        <Button
+          onClick={() => {
+            window.location.href = '/';
+          }}
+          variant="outline"
+        >
           Go to Login Page
         </Button>
-        <Button onClick={() => (window.location.href = '/admin')} variant="outline">
+        <Button
+          onClick={() => {
+            window.location.href = '/admin';
+          }}
+          variant="outline"
+        >
           Try Admin Route
         </Button>
       </div>

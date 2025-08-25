@@ -1,44 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useAdmin } from '@/hooks/use-admin';
-import { useToast } from '@/hooks/use-toast';
-import { profileService, adminService, Profile, AdminUser } from '@/lib/firebase-admin';
 import {
+  AlertCircle,
+  Calendar,
+  Mail,
+  MoreVertical,
+  Phone,
   Search,
   Shield,
   ShieldOff,
   Trash2,
-  MoreVertical,
   User,
-  Mail,
-  Phone,
-  Calendar,
-  AlertCircle,
-  FileCheck,
-  Users,
 } from 'lucide-react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from '@/components/ui/dropdown-menu';
+import { useEffect, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -50,6 +24,30 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { useAdmin } from '@/hooks/use-admin';
+import { useToast } from '@/hooks/use-toast';
+import { type AdminUser, adminService, type Profile, profileService } from '@/lib/firebase-admin';
 import { formatPhoneNumber } from '@/lib/utils';
 
 interface UserWithProfile extends Profile {
@@ -71,7 +69,7 @@ export default function UserManagementPage() {
     if (hasPermission('manage_settings')) {
       loadUsers();
     }
-  }, [hasPermission]);
+  }, [hasPermission, loadUsers]);
 
   async function loadUsers() {
     try {

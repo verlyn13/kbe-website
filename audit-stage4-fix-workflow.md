@@ -1,6 +1,7 @@
 # Agent Directive: Stage 4 Bundle Optimization - Do It Right
 
 ## Current Status
+
 ✅ CI/CD test workflow deployed (informational mode)
 ✅ Vitest infrastructure ready  
 ✅ Stage 1-3 issues documented
@@ -18,9 +19,11 @@
 ---
 
 ## Phase 1: Deep Analysis (45 minutes)
-*Understand exactly what's causing the bloat*
+
+_Understand exactly what's causing the bloat_
 
 ### 1.1 Create Analysis Infrastructure
+
 ```bash
 # Create a dedicated optimization branch
 git checkout -b feature/stage4-bundle-optimization
@@ -34,6 +37,7 @@ npm run build 2>&1 | tee build-baseline.log
 ```
 
 ### 1.2 Analyze Each Heavy Page
+
 ```bash
 # Create detailed analysis of the calendar page
 cat > analyze-calendar.sh << 'EOF'
@@ -97,6 +101,7 @@ chmod +x analyze-admin-comms.sh
 ```
 
 ### 1.3 Identify Bundle Culprits
+
 ```bash
 # Use Next.js bundle analyzer if available
 ANALYZE=true npm run build 2>/dev/null || echo "Bundle analyzer not configured"
@@ -128,9 +133,11 @@ cd ../..
 ---
 
 ## Phase 2: Create Reusable Infrastructure (45 minutes)
-*Build the foundation for consistent lazy loading*
+
+_Build the foundation for consistent lazy loading_
 
 ### 2.1 Create Loading Components Library
+
 ```bash
 # Create a comprehensive loading components library
 mkdir -p src/components/loading
@@ -156,7 +163,7 @@ export function SkeletonWrapper({
   children,
 }: SkeletonWrapperProps) {
   if (children) return <>{children}</>;
-  
+
   return (
     <div className={cn('space-y-4', className)}>
       {Array.from({ length: count }).map((_, i) => (
@@ -182,7 +189,7 @@ export function CalendarSkeleton() {
           <Skeleton className="h-10 w-10 rounded-full" />
         </div>
       </div>
-      
+
       {/* Days of week */}
       <div className="grid grid-cols-7 gap-2">
         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day) => (
@@ -191,12 +198,12 @@ export function CalendarSkeleton() {
           </div>
         ))}
       </div>
-      
+
       {/* Calendar grid */}
       <div className="grid grid-cols-7 gap-2">
         {Array.from({ length: 35 }).map((_, i) => (
-          <Skeleton 
-            key={i} 
+          <Skeleton
+            key={i}
             className="h-20 w-full rounded-md"
             style={{
               animationDelay: `${i * 0.02}s`,
@@ -223,7 +230,7 @@ export function FormSkeleton({ fields = 4, showButtons = true }: FormSkeletonPro
     <div className="space-y-6">
       {/* Form title */}
       <Skeleton className="h-8 w-3/4" />
-      
+
       {/* Form fields */}
       {Array.from({ length: fields }).map((_, i) => (
         <div key={i} className="space-y-2">
@@ -232,7 +239,7 @@ export function FormSkeleton({ fields = 4, showButtons = true }: FormSkeletonPro
           {i === 0 && <Skeleton className="h-3 w-48 opacity-50" />}
         </div>
       ))}
-      
+
       {/* Buttons */}
       {showButtons && (
         <div className="flex gap-4 pt-4">
@@ -256,7 +263,7 @@ export function ChartSkeleton() {
         <Skeleton className="h-6 w-32" />
         <Skeleton className="h-8 w-24" />
       </div>
-      
+
       <div className="relative h-[300px] w-full">
         {/* Y-axis labels */}
         <div className="absolute left-0 flex h-full flex-col justify-between">
@@ -264,10 +271,10 @@ export function ChartSkeleton() {
             <Skeleton key={i} className="h-3 w-8" />
           ))}
         </div>
-        
+
         {/* Chart area */}
         <Skeleton className="ml-12 h-full w-[calc(100%-3rem)]" />
-        
+
         {/* X-axis labels */}
         <div className="ml-12 mt-2 flex justify-between">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -275,7 +282,7 @@ export function ChartSkeleton() {
           ))}
         </div>
       </div>
-      
+
       {/* Legend */}
       <div className="flex justify-center gap-6">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -310,14 +317,14 @@ export function TableSkeleton({ rows = 5, columns = 4 }: TableSkeletonProps) {
           ))}
         </div>
       </div>
-      
+
       {/* Table rows */}
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div key={rowIndex} className="border-b">
           <div className="flex gap-4 p-4">
             {Array.from({ length: columns }).map((_, colIndex) => (
-              <Skeleton 
-                key={colIndex} 
+              <Skeleton
+                key={colIndex}
                 className="h-4 flex-1"
                 style={{
                   width: colIndex === 0 ? '40%' : '20%',
@@ -334,6 +341,7 @@ EOF
 ```
 
 ### 2.2 Create Dynamic Import Utilities
+
 ```bash
 # Create a utility for consistent dynamic imports
 cat > src/lib/dynamic-import.ts << 'EOF'
@@ -435,9 +443,11 @@ EOF
 ---
 
 ## Phase 3: Implement Calendar Page Optimization (1 hour)
-*Careful implementation with proper testing*
+
+_Careful implementation with proper testing_
 
 ### 3.1 Analyze Current Calendar Implementation
+
 ```bash
 # First, understand the current structure
 echo "=== Current Calendar Page Structure ==="
@@ -451,6 +461,7 @@ grep -E "^'use client'|^'use server'" app/calendar/page.tsx
 ```
 
 ### 3.2 Implement Optimized Calendar Page
+
 ```bash
 # Create the optimized version
 cat > app/calendar/page.tsx << 'EOF'
@@ -466,17 +477,17 @@ import dynamic from 'next/dynamic';
 
 const EventDialog = dynamic(
   () => import('@/components/calendar/event-dialog'),
-  { 
+  {
     loading: () => null, // No loading for modals
-    ssr: false 
+    ssr: false
   }
 );
 
 const EventDetailsSheet = dynamic(
   () => import('@/components/calendar/event-details-sheet'),
-  { 
+  {
     loading: () => null,
-    ssr: false 
+    ssr: false
   }
 );
 
@@ -484,11 +495,11 @@ export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showEventDialog, setShowEventDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  
+
   const handleDateSelect = useCallback((date: Date | undefined) => {
     setSelectedDate(date);
   }, []);
-  
+
   const handleAddEvent = useCallback(() => {
     setShowEventDialog(true);
   }, []);
@@ -499,7 +510,7 @@ export default function CalendarPage() {
         <h1 className="text-3xl font-bold">Calendar</h1>
         <Button onClick={handleAddEvent}>Add Event</Button>
       </div>
-      
+
       <Suspense fallback={<CalendarSkeleton />}>
         <LazyCalendar
           mode="single"
@@ -508,17 +519,17 @@ export default function CalendarPage() {
           className="rounded-md border"
         />
       </Suspense>
-      
+
       {/* Only load dialogs when needed */}
       {showEventDialog && (
-        <EventDialog 
+        <EventDialog
           date={selectedDate}
           onClose={() => setShowEventDialog(false)}
         />
       )}
-      
+
       {selectedEvent && (
-        <EventDetailsSheet 
+        <EventDetailsSheet
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
         />
@@ -534,6 +545,7 @@ npm run build 2>&1 | grep -A 2 "app/calendar"
 ```
 
 ### 3.3 Verify Calendar Functionality
+
 ```bash
 # Start dev server and test
 npm run dev &
@@ -557,9 +569,11 @@ grep -i "error\|warning" calendar-dev-test.log || echo "✅ No console errors"
 ---
 
 ## Phase 4: Implement Register Page Optimization (1 hour)
-*Multi-step form with progressive loading*
+
+_Multi-step form with progressive loading_
 
 ### 4.1 Create Registration Step Components
+
 ```bash
 # Create modular step components
 mkdir -p src/components/register
@@ -604,7 +618,7 @@ export default function StudentInfoStep({ onNext, initialData }: Props) {
           <p className="text-sm text-destructive">{errors.firstName.message}</p>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="lastName">Last Name</Label>
         <Input {...register('lastName')} id="lastName" />
@@ -612,7 +626,7 @@ export default function StudentInfoStep({ onNext, initialData }: Props) {
           <p className="text-sm text-destructive">{errors.lastName.message}</p>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="dateOfBirth">Date of Birth</Label>
         <Input {...register('dateOfBirth')} id="dateOfBirth" type="date" />
@@ -620,7 +634,7 @@ export default function StudentInfoStep({ onNext, initialData }: Props) {
           <p className="text-sm text-destructive">{errors.dateOfBirth.message}</p>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="grade">Grade</Label>
         <Input {...register('grade')} id="grade" />
@@ -628,7 +642,7 @@ export default function StudentInfoStep({ onNext, initialData }: Props) {
           <p className="text-sm text-destructive">{errors.grade.message}</p>
         )}
       </div>
-      
+
       <Button type="submit" className="w-full">
         Next: Select Program
       </Button>
@@ -662,7 +676,7 @@ export default function ProgramSelectionStep({ onNext, onBack }: Props) {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Select a Program</h2>
-      
+
       <div className="space-y-2">
         {programs.map((program) => (
           <Card
@@ -679,12 +693,12 @@ export default function ProgramSelectionStep({ onNext, onBack }: Props) {
           </Card>
         ))}
       </div>
-      
+
       <div className="flex gap-4">
         <Button variant="outline" onClick={onBack}>
           Back
         </Button>
-        <Button 
+        <Button
           onClick={() => onNext({ programId: selectedProgram })}
           disabled={!selectedProgram}
         >
@@ -712,12 +726,12 @@ export default function PaymentStep({ onComplete, onBack, data }: Props) {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Payment Information</h2>
-      
+
       <div className="rounded-lg border p-4">
         <p>Review your registration:</p>
         <pre className="mt-2 text-sm">{JSON.stringify(data, null, 2)}</pre>
       </div>
-      
+
       <div className="flex gap-4">
         <Button variant="outline" onClick={onBack}>
           Back
@@ -733,6 +747,7 @@ EOF
 ```
 
 ### 4.2 Implement Optimized Register Page
+
 ```bash
 # Backup original
 cp app/register/page.tsx app/register/page.tsx.original
@@ -749,7 +764,7 @@ import { Progress } from '@/components/ui/progress';
 // Lazy load each registration step
 const StudentInfoStep = dynamic(
   () => import('@/components/register/student-info-step'),
-  { 
+  {
     loading: () => <FormSkeleton fields={4} />,
     ssr: true // Can be SSR'd for SEO
   }
@@ -757,7 +772,7 @@ const StudentInfoStep = dynamic(
 
 const ProgramSelectionStep = dynamic(
   () => import('@/components/register/program-selection-step'),
-  { 
+  {
     loading: () => <FormSkeleton fields={3} />,
     ssr: false // Has interactive state
   }
@@ -765,7 +780,7 @@ const ProgramSelectionStep = dynamic(
 
 const PaymentStep = dynamic(
   () => import('@/components/register/payment-step'),
-  { 
+  {
     loading: () => <FormSkeleton fields={5} />,
     ssr: false // Payment forms should be client-only
   }
@@ -774,19 +789,19 @@ const PaymentStep = dynamic(
 export default function RegisterPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
-  
+
   const totalSteps = 3;
   const progress = (currentStep / totalSteps) * 100;
-  
+
   const handleNext = useCallback((stepData: any) => {
     setFormData(prev => ({ ...prev, ...stepData }));
     setCurrentStep(prev => prev + 1);
   }, []);
-  
+
   const handleBack = useCallback(() => {
     setCurrentStep(prev => prev - 1);
   }, []);
-  
+
   const handleComplete = useCallback(() => {
     // Handle registration completion
     console.log('Registration complete:', formData);
@@ -797,7 +812,7 @@ export default function RegisterPage() {
     <div className="container mx-auto max-w-2xl p-4">
       <div className="mb-8">
         <h1 className="mb-4 text-3xl font-bold">Registration</h1>
-        
+
         {/* Progress indicator */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm text-muted-foreground">
@@ -806,7 +821,7 @@ export default function RegisterPage() {
           </div>
           <Progress value={progress} className="h-2" />
         </div>
-        
+
         {/* Step labels */}
         <div className="mt-4 flex justify-between text-sm">
           <span className={currentStep >= 1 ? 'text-primary' : 'text-muted-foreground'}>
@@ -824,21 +839,21 @@ export default function RegisterPage() {
       {/* Step content */}
       <div className="min-h-[400px]">
         {currentStep === 1 && (
-          <StudentInfoStep 
+          <StudentInfoStep
             onNext={handleNext}
             initialData={formData}
           />
         )}
-        
+
         {currentStep === 2 && (
-          <ProgramSelectionStep 
+          <ProgramSelectionStep
             onNext={handleNext}
             onBack={handleBack}
           />
         )}
-        
+
         {currentStep === 3 && (
-          <PaymentStep 
+          <PaymentStep
             onComplete={handleComplete}
             onBack={handleBack}
             data={formData}
@@ -858,9 +873,11 @@ npm run build 2>&1 | grep -A 2 "app/register"
 ---
 
 ## Phase 5: Verification & Metrics (30 minutes)
-*Ensure everything works and document improvements*
+
+_Ensure everything works and document improvements_
 
 ### 5.1 Run Comprehensive Build Test
+
 ```bash
 # Clean build
 rm -rf .next
@@ -878,6 +895,7 @@ echo "Register: 296KB → $(grep 'register' optimization/build-final.log | grep 
 ```
 
 ### 5.2 Test in Development
+
 ```bash
 # Run full dev test
 npm run dev &
@@ -892,6 +910,7 @@ kill $DEV_PID
 ```
 
 ### 5.3 Check for Hydration Issues
+
 ```bash
 # Build and run production
 npm run build && npm start &
@@ -909,6 +928,7 @@ kill $PROD_PID
 ```
 
 ### 5.4 Create Final Report
+
 ```bash
 cat > optimization/STAGE4_COMPLETE.md << 'EOF'
 # Stage 4 Bundle Optimization - Complete
@@ -958,6 +978,7 @@ sed -i "s/\[ACTUAL\]/$REGISTER_SIZE/g" optimization/STAGE4_COMPLETE.md
 ## Phase 6: Commit and Push (15 minutes)
 
 ### 6.1 Stage Changes
+
 ```bash
 # Review all changes
 git status
@@ -977,7 +998,7 @@ Bundle Size Improvements:
 
 Implementation:
 - Created comprehensive loading skeleton components
-- Implemented dynamic import utility functions  
+- Implemented dynamic import utility functions
 - Lazy loaded heavy UI libraries (calendar, charts, carousel)
 - Split registration into progressively loaded steps
 - Deferred modal/dialog loading until user interaction
@@ -998,6 +1019,7 @@ Files Changed:
 ```
 
 ### 6.2 Push and Create PR
+
 ```bash
 # Push to feature branch
 git push origin feature/stage4-bundle-optimization
@@ -1015,7 +1037,7 @@ echo "✅ Check PR for test results"
 Before considering this complete:
 
 - [ ] Calendar page < 160KB (from 301KB)
-- [ ] Register page < 160KB (from 296KB)  
+- [ ] Register page < 160KB (from 296KB)
 - [ ] No console errors in development
 - [ ] No console errors in production
 - [ ] No hydration warnings
@@ -1030,18 +1052,21 @@ Before considering this complete:
 ## Troubleshooting Guide
 
 ### If bundle sizes don't decrease:
+
 1. Check that dynamic imports are actually being used
 2. Verify with `npm run build -- --analyze`
 3. Ensure heavy libraries aren't imported elsewhere
 4. Check for barrel imports pulling in everything
 
 ### If hydration errors occur:
+
 1. Ensure `ssr: false` for client-only components
 2. Check for date/time rendering differences
 3. Add `suppressHydrationWarning` if needed
 4. Verify consistent initial state
 
 ### If loading is janky:
+
 1. Improve skeleton accuracy
 2. Add minimum display time for skeletons
 3. Consider prefetching critical components

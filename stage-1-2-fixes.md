@@ -1,9 +1,11 @@
 # Parallel Agent Directive: Stage 1-2 Remediation
 
 ## Mission
+
 Fix Stage 1-2 issues without interfering with Stage 3 build/runtime testing. Work only on configuration files, type definitions, and non-runtime code.
 
 ## Constraints
+
 - ❌ **DO NOT** run `npm install` or modify dependencies
 - ❌ **DO NOT** run `npm run build` or start any servers
 - ❌ **DO NOT** modify any files in `app/` directory routes
@@ -13,9 +15,11 @@ Fix Stage 1-2 issues without interfering with Stage 3 build/runtime testing. Wor
 ---
 
 ## Task 1: Configuration Fixes (Stage 1 Issues)
+
 **Safe to do in parallel - won't affect Stage 3**
 
 ### 1.1 Create Version Control Files
+
 ```bash
 # Create .nvmrc for Node version consistency
 echo "22" > .nvmrc
@@ -50,7 +54,8 @@ echo "✅ Created .env.example"
 ```
 
 ### 1.2 Update package.json (Manual Edit Required)
-```bash
+
+````bash
 # Create a patch file for package.json
 cat > package-json-updates.md << 'EOF'
 # Manual Update Required for package.json
@@ -62,13 +67,14 @@ Add the following "engines" field after "version":
     "node": ">=22.0.0",
     "npm": ">=11.0.0"
   },
-```
+````
 
 This ensures consistent runtime versions across environments.
 EOF
 
 echo "📝 Created package-json-updates.md - requires manual edit"
-```
+
+````
 
 ### 1.3 Document Firebase Config Security
 ```bash
@@ -88,21 +94,24 @@ apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBhTEs3...',
 
 // Use:
 apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
-```
+````
 
 ## Why This Matters
+
 - Prevents accidental use of wrong project config
 - Forces proper environment setup
 - Reduces git diff noise
 - Follows security best practices
 
 ## Note
-NEXT_PUBLIC_* variables are safe to expose (they're client-side).
+
+NEXT*PUBLIC*\* variables are safe to expose (they're client-side).
 However, hardcoding them reduces configuration flexibility.
 EOF
 
 echo "📚 Created FIREBASE_CONFIG_SECURITY.md"
-```
+
+````
 
 ---
 
@@ -179,7 +188,7 @@ export interface Registration extends FirestoreDocument {
 }
 
 // Error types
-export type FirebaseErrorCode = 
+export type FirebaseErrorCode =
   | 'auth/user-not-found'
   | 'auth/wrong-password'
   | 'auth/email-already-in-use'
@@ -196,9 +205,10 @@ export interface FirebaseError extends Error {
 EOF
 
 echo "✅ Created src/types/firebase.ts"
-```
+````
 
 ### 2.2 Create Event Type Definitions
+
 ```bash
 cat > src/types/events.ts << 'EOF'
 // Event Handler Types - Replace (e: any) throughout codebase
@@ -236,6 +246,7 @@ echo "✅ Created src/types/events.ts"
 ```
 
 ### 2.3 Create API Validation Schema
+
 ```bash
 cat > src/lib/validations/api.ts << 'EOF'
 // API Validation Schemas - For SendGrid webhook and other APIs
@@ -248,7 +259,7 @@ export const sendGridEventSchema = z.object({
   timestamp: z.number(),
   event: z.enum([
     'processed',
-    'dropped', 
+    'dropped',
     'delivered',
     'deferred',
     'bounce',
@@ -299,7 +310,8 @@ echo "✅ Created src/lib/validations/api.ts"
 ```
 
 ### 2.4 Generate Type Migration Guide
-```bash
+
+````bash
 # Create a guide for replacing 'any' types
 cat > TYPE_MIGRATION_GUIDE.md << 'EOF'
 # Type Migration Guide - Fixing 'any' Types
@@ -326,23 +338,25 @@ catch (error) {
     // Handle as Error
   }
 }
-```
+````
 
 ### 2. Event Handlers
+
 ```typescript
 // ❌ Before:
 const handleClick = (e: any) => {
   e.preventDefault();
-}
+};
 
 // ✅ After:
 import { ButtonClickEvent } from '@/types/events';
 const handleClick = (e: ButtonClickEvent) => {
   e.preventDefault();
-}
+};
 ```
 
 ### 3. Firebase Data
+
 ```typescript
 // ❌ Before:
 const userData: any = doc.data();
@@ -353,6 +367,7 @@ const userData = doc.data() as UserProfile;
 ```
 
 ### 4. Component Props
+
 ```typescript
 // ❌ Before:
 interface Props {
@@ -368,22 +383,26 @@ interface Props<T = unknown> {
 ```
 
 ## Files to Update (Top Priority)
+
 Based on Stage 2 audit, focus on:
+
 1. `src/lib/firebase-admin.ts` (666 lines - has many 'any')
 2. `src/components/ui/sidebar.tsx` (748 lines)
 3. API route handlers in `app/api/`
 4. Form components with event handlers
 
 ## Safe Update Strategy
+
 1. Start with type definition files (this task)
 2. Update one file at a time
 3. Use TypeScript's strict mode locally to find issues
 4. Run `npx tsc --noEmit` after each file
 5. Commit after each successful file update
-EOF
+   EOF
 
 echo "📋 Created TYPE_MIGRATION_GUIDE.md"
-```
+
+````
 
 ---
 
@@ -437,9 +456,10 @@ vi.mock('next/navigation', () => ({
 EOF
 
 echo "✅ Created test configuration files"
-```
+````
 
 ### 3.2 Create First Test File (Example)
+
 ```bash
 cat > src/lib/validations/__tests__/api.test.ts << 'EOF'
 import { describe, it, expect } from 'vitest';
@@ -521,7 +541,8 @@ echo "✅ Created example test file"
 ## Task 4: Documentation Updates
 
 ### 4.1 Update README with Setup Instructions
-```bash
+
+````bash
 cat > SETUP_INSTRUCTIONS.md << 'EOF'
 # Development Setup Instructions
 
@@ -545,23 +566,27 @@ See `.env.example` for all required variables.
 npm run test          # Run tests once
 npm run test:watch    # Run tests in watch mode
 npm run test:coverage # Generate coverage report
-```
+````
 
 ## Type Checking
+
 ```bash
 npx tsc --noEmit           # Check types
 npx tsc --noEmit --watch   # Watch mode
 ```
 
 ## Code Quality
+
 ```bash
 npm run lint      # Run ESLint
 npm run format    # Format with Prettier
 ```
+
 EOF
 
 echo "📚 Created SETUP_INSTRUCTIONS.md"
-```
+
+````
 
 ---
 
@@ -579,7 +604,7 @@ echo "📁 Task 1: Creating configuration files..."
 echo "22" > .nvmrc
 # Create .env.example (code above)
 
-# Task 2: Type Definitions  
+# Task 2: Type Definitions
 echo "📝 Task 2: Creating type definition files..."
 mkdir -p src/types
 mkdir -p src/lib/validations
@@ -614,11 +639,12 @@ echo "  1. Add 'engines' field to package.json"
 echo "  2. Remove Firebase config fallbacks from src/lib/firebase-config.ts"
 echo "  3. Update imports to use new type definitions"
 echo "  4. Run 'npm install --save-dev vitest @testing-library/react' when Stage 3 is done"
-```
+````
 
 ---
 
 ## What This Does NOT Touch
+
 - ✅ No npm install commands
 - ✅ No build or server processes
 - ✅ No changes to app routes
@@ -627,6 +653,7 @@ echo "  4. Run 'npm install --save-dev vitest @testing-library/react' when Stage
 - ✅ Pure configuration and type definitions
 
 ## Coordination with Stage 3 Agent
+
 - This agent works on `/src/types/` and config files
 - Stage 3 agent works on build/runtime testing
 - No file conflicts possible

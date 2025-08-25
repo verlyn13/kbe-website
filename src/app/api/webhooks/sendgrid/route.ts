@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { type NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
-import { collection, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { sendGridWebhookSchema, type SendGridEvent } from '@/lib/validations/api';
+import { type SendGridEvent, sendGridWebhookSchema } from '@/lib/validations/api';
 
 /**
  * Handle SendGrid webhook events
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     // Parse and validate the webhook payload
     const body = await request.json();
     const validationResult = sendGridWebhookSchema.safeParse(body);
-    
+
     if (!validationResult.success) {
       console.error('Invalid SendGrid webhook payload:', validationResult.error);
       return NextResponse.json(
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     const events = validationResult.data;
 
     // Process each event
@@ -141,10 +141,10 @@ async function logActivity(type: string, data: Record<string, unknown>) {
 // Verify webhook signature (optional but recommended)
 // SendGrid uses signed webhooks for security
 async function verifyWebhookSignature(
-  publicKey: string,
-  payload: string,
-  signature: string,
-  timestamp: string
+  _publicKey: string,
+  _payload: string,
+  _signature: string,
+  _timestamp: string
 ): Promise<boolean> {
   // Implementation depends on SendGrid's webhook verification setup
   // See: https://docs.sendgrid.com/for-developers/tracking-events/getting-started-event-webhook-security-features

@@ -1,8 +1,8 @@
 'use client';
 
+import { AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 
 export default function AuthStatusPage() {
   const [checks, setChecks] = useState<any[]>([]);
@@ -81,8 +81,11 @@ export default function AuthStatusPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {checks.map((check, index) => (
-              <div key={index} className="flex items-center justify-between rounded-lg border p-3">
+            {checks.map((check) => (
+              <div
+                key={check.name}
+                className="flex items-center justify-between rounded-lg border p-3"
+              >
                 <div className="flex items-center gap-3">
                   {getIcon(check.status)}
                   <div>

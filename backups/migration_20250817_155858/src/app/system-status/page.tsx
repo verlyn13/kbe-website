@@ -1,21 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Database,
-  Users,
-  Mail,
-  FileText,
-  Shield,
-} from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db, auth } from '@/lib/firebase';
+import {
+  AlertCircle,
+  CheckCircle,
+  Database,
+  FileText,
+  Mail,
+  Shield,
+  Users,
+  XCircle,
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
+import { auth, db } from '@/lib/firebase';
 
 interface SystemCheck {
   name: string;
@@ -31,7 +31,7 @@ export default function SystemStatusPage() {
 
   useEffect(() => {
     runSystemChecks();
-  }, []);
+  }, [runSystemChecks]);
 
   async function runSystemChecks() {
     const systemChecks: SystemCheck[] = [];

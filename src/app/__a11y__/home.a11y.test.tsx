@@ -1,11 +1,10 @@
-import React from 'react';
 vi.mock('@/hooks/use-auth', () => ({
   useAuth: () => ({ user: null, loading: false }),
 }));
 
-import { render } from '@/test/test-utils';
-import LandingPage from '@/app/page';
 import axeCore from 'axe-core';
+import LandingPage from '@/app/page';
+import { render } from '@/test/test-utils';
 
 describe('Accessibility: Home page', () => {
   it('has no obvious accessibility violations', async () => {

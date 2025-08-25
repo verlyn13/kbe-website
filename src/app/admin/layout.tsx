@@ -1,37 +1,35 @@
 'use client';
 
-import Link from 'next/link';
 import {
-  Shield,
+  Calendar,
+  FileCheck,
+  FileSpreadsheet,
   FileText,
   Home,
-  Users,
-  Mail,
-  Calendar,
-  FileSpreadsheet,
-  Settings,
   LayoutDashboard,
-  FileCheck,
+  Mail,
+  Settings,
+  Users,
 } from 'lucide-react';
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarInset,
-  useSidebar,
-  SidebarGroupLabel,
-  SidebarGroup,
-} from '@/components/ui/sidebar';
-import { DashboardHeader } from '@/components/dashboard-header';
-import { AdminProvider } from '@/hooks/use-admin';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useAdmin } from '@/hooks/use-admin';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { DashboardHeader } from '@/components/dashboard-header';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AdminProvider, useAdmin } from '@/hooks/use-admin';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 function HehLogo() {
@@ -48,6 +46,7 @@ function HehLogo() {
         strokeLinejoin="round"
         className="text-sidebar-primary h-8 w-8"
       >
+        <title>HEH Admin Logo</title>
         <path d="M12 2L2 7l10 5 10-5-10-5z" />
         <path d="M2 17l10 5 10-5" />
         <path d="M2 12l10 5 10-5" />

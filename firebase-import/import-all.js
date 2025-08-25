@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const fs = require('fs');
+const fs = require('node:fs');
 
 // IMPORTANT: You need to download your service account key from Firebase Console
 // Place it in this directory and name it serviceAccountKey.json

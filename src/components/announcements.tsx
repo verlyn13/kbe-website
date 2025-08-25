@@ -1,24 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/use-auth';
+import { formatDistanceToNow } from 'date-fns';
+import { AlertCircle, ArrowRight, Info, Pin } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { Button } from './ui/button';
-import { ArrowRight, Pin, AlertCircle, Info } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { announcementService, Announcement } from '@/lib/firebase-admin';
 import { Skeleton } from '@/components/ui/skeleton';
-import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { useAuth } from '@/hooks/use-auth';
+import { type Announcement, announcementService } from '@/lib/firebase-admin';
+import { Button } from './ui/button';
 
 export function Announcements() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -26,13 +26,7 @@ export function Announcements() {
   const { user } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      loadAnnouncements();
-    }
-  }, [user]);
-
-  async function loadAnnouncements() {
+  const loadAnnouncements = useCallback(async () => {
     try {
       const data = await announcementService.getAll({
         status: 'published',
@@ -46,7 +40,13 @@ export function Announcements() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadAnnouncements();
+    }
+  }, [user, loadAnnouncements]);
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
@@ -107,6 +107,14 @@ export function Announcements() {
                   key={item.id}
                   className="hover:bg-muted/50 -m-2 flex cursor-pointer gap-4 rounded-lg p-2 transition-colors"
                   onClick={() => router.push('/announcements')}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      router.push('/announcements');
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div className={`w-1.5 rounded-full ${getPriorityColor(item.priority)}`}></div>
                   <div className="flex-1">

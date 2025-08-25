@@ -1,19 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { ParentAccountForm } from './parent-account';
-import { AddStudentsForm } from './add-students';
-import { SelectProgramForm } from './select-program';
-import { Progress } from '@/components/ui/progress';
-import { CheckCircle } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/use-auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { auth, db } from '@/lib/firebase';
+import { AddStudentsForm } from './add-students';
+import { ParentAccountForm } from './parent-account';
+import { SelectProgramForm } from './select-program';
 
 type RegistrationStep = 'parent' | 'students' | 'program' | 'complete';
 

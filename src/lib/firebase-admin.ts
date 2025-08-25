@@ -1,24 +1,23 @@
+import type { DocumentData, UpdateData } from 'firebase/firestore';
 import {
+  addDoc,
+  arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  QueryConstraint,
-  Timestamp,
-  serverTimestamp,
-  addDoc,
-  arrayUnion,
   increment,
+  orderBy,
+  type QueryConstraint,
+  query,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+  updateDoc,
+  where,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { DocumentData, UpdateData } from 'firebase/firestore';
 
 // Types
 export interface Registration {
@@ -600,7 +599,7 @@ export const profileService = {
 // Calendar Event Service
 export const calendarService = {
   async getEvents(startDate?: Date, endDate?: Date): Promise<CalendarEvent[]> {
-    let q = collection(db, 'events');
+    const q = collection(db, 'events');
 
     // Note: For simplicity, we'll fetch all events and filter in memory
     // In production, you'd want to use proper date range queries
@@ -718,7 +717,13 @@ export const activityService = {
     // No-op or replace with real logging integration
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
-      console.debug('[activity]', entry.action, entry.resourceType, entry.resourceId, entry.details);
+      console.debug(
+        '[activity]',
+        entry.action,
+        entry.resourceType,
+        entry.resourceId,
+        entry.details
+      );
     }
   },
 };

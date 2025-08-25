@@ -1,29 +1,29 @@
 'use client';
 
+import { doc, getDoc } from 'firebase/firestore';
+import { Bell, Calendar, Home, Settings, Shield } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Bell, Calendar, Home, Puzzle, Settings, Shield } from 'lucide-react';
+import { DashboardHeader } from '@/components/dashboard-header';
+import { ProfileCompletionCheck } from '@/components/profile-completion-check';
 import {
-  SidebarProvider,
   Sidebar,
-  SidebarHeader,
   SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
   SidebarFooter,
-  SidebarRail,
+  SidebarHeader,
   SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarRail,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { DashboardHeader } from '@/components/dashboard-header';
-import { useAuth } from '@/hooks/use-auth';
-import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { ProfileCompletionCheck } from '@/components/profile-completion-check';
+import { useAuth } from '@/hooks/use-auth';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { db } from '@/lib/firebase';
 
 function HehLogo() {
   const { state } = useSidebar();
@@ -39,6 +39,7 @@ function HehLogo() {
         strokeLinejoin="round"
         className="text-sidebar-primary h-8 w-8 shrink-0"
       >
+        <title>Guardian Portal Logo</title>
         <path d="M12 2L2 7l10 5 10-5-10-5z" />
         <path d="M2 17l10 5 10-5" />
         <path d="M2 12l10 5 10-5" />

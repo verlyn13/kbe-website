@@ -1,0 +1,118 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "src/**",
+      "scripts/**",
+      ".vscode/**",
+      "public/**",
+      "next.config.js",
+      "tailwind.config.ts",
+      "postcss.config.mjs",
+      "vitest.config.ts",
+      "tsconfig.json",
+      "package.json"
+    ],
+    "experimentalScannerIgnores": [
+      "backups/**",
+      "migration/**",
+      ".next/**",
+      "dist/**",
+      "build/**",
+      "coverage/**",
+      ".turbo/**",
+      ".vercel/**",
+      "node_modules/**",
+      ".firebase/**",
+      "functions/lib/**",
+      "storage_export/**",
+      "*.min.js",
+      "*.min.css",
+      ".cspell.json",
+      "cspell.json"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentWidth": 2,
+    "indentStyle": "space",
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedVariables": "off",
+        "noUnusedImports": "warn",
+        "useExhaustiveDependencies": "warn",
+        "useUniqueElementIds": "warn",
+        "noInvalidPositionAtImportRule": "warn",
+        "noUnusedFunctionParameters": "off",
+        "noNestedComponentDefinitions": "warn"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useTemplate": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noImplicitAnyLet": "off",
+        "noArrayIndexKey": "warn",
+        "noAssignInExpressions": "warn",
+        "noUnknownAtRules": "off",
+        "noDocumentCookie": "off"
+      },
+      "a11y": {
+        "noLabelWithoutControl": "off",
+        "useKeyWithClickEvents": "warn",
+        "noStaticElementInteractions": "warn",
+        "noSvgWithoutTitle": "warn",
+        "useValidAnchor": "warn",
+        "useSemanticElements": "off"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "es5",
+      "arrowParentheses": "always",
+      "bracketSpacing": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUndeclaredVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/app/**", "app/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useExhaustiveDependencies": "warn"
+          }
+        }
+      }
+    }
+  ]
+}

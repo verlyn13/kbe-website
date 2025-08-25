@@ -7,6 +7,7 @@
 ## What We Thought Was Wrong
 
 Initially suspected the Firebase auth domain configuration was causing OAuth failures:
+
 - authDomain: `kbe-website.firebaseapp.com`
 - App domain: `homerenrichment.com`
 

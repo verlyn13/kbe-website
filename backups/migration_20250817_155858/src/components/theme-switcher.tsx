@@ -1,21 +1,17 @@
 'use client';
 
+import { Monitor, Moon, Palette, Sun } from 'lucide-react';
 import * as React from 'react';
-import { Moon, Sun, Monitor, Palette } from 'lucide-react';
-import { useTheme } from '@/providers/theme-provider';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
   DropdownMenuLabel,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTheme } from '@/providers/theme-provider';
 
 const themes = [
   { id: 'default', name: 'Default', description: 'Classic HEH theme' },

@@ -1,52 +1,50 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { AdminProvider } from '@/hooks/use-admin';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { calendarService, CalendarEvent } from '@/lib/firebase-admin';
-import { useAuth } from '@/hooks/use-auth';
-import { useAdmin } from '@/hooks/use-admin';
-import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
-import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
-import { LazyEventDialog } from '@/components/lazy';
+import { addMonths } from 'date-fns/addMonths';
+import { eachDayOfInterval } from 'date-fns/eachDayOfInterval';
+import { endOfMonth } from 'date-fns/endOfMonth';
+import { endOfWeek } from 'date-fns/endOfWeek';
+// Optimize date-fns imports by importing only what we need
+import { format } from 'date-fns/format';
+import { isSameDay } from 'date-fns/isSameDay';
+import { isSameMonth } from 'date-fns/isSameMonth';
+import { isToday } from 'date-fns/isToday';
+import { startOfMonth } from 'date-fns/startOfMonth';
+import { startOfWeek } from 'date-fns/startOfWeek';
+import { subMonths } from 'date-fns/subMonths';
 import {
+  ArrowLeft,
+  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
-  Plus,
-  Calendar as CalendarIcon,
-  MapPin,
   Clock,
-  Users,
-  Trophy,
   Coffee,
-  Palmtree,
+  MapPin,
   MoreVertical,
-  ArrowLeft,
+  Palmtree,
+  Plus,
+  Trophy,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-// Optimize date-fns imports by importing only what we need
-import { format } from 'date-fns/format';
-import { startOfMonth } from 'date-fns/startOfMonth';
-import { endOfMonth } from 'date-fns/endOfMonth';
-import { startOfWeek } from 'date-fns/startOfWeek';
-import { endOfWeek } from 'date-fns/endOfWeek';
-import { eachDayOfInterval } from 'date-fns/eachDayOfInterval';
-import { isSameMonth } from 'date-fns/isSameMonth';
-import { isSameDay } from 'date-fns/isSameDay';
-import { isToday } from 'date-fns/isToday';
-import { addMonths } from 'date-fns/addMonths';
-import { subMonths } from 'date-fns/subMonths';
-import { cn } from '@/lib/utils';
+import { useCallback, useEffect, useId, useState } from 'react';
+import { LazyEventDialog } from '@/components/lazy';
+import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AdminProvider, useAdmin } from '@/hooks/use-admin';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { type CalendarEvent, calendarService } from '@/lib/firebase-admin';
+import { cn } from '@/lib/utils';
 
 const eventTypeConfig = {
   class: { icon: Users, color: 'bg-blue-500', label: 'Class' },
@@ -58,6 +56,7 @@ const eventTypeConfig = {
 
 function CalendarPageContent() {
   const searchParams = useSearchParams();
+  const selectedDateEventsId = useId();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -69,9 +68,22 @@ function CalendarPageContent() {
   const { isAdmin } = useAdmin();
   const { toast } = useToast();
 
+  const loadEvents = useCallback(async () => {
+    try {
+      const start = startOfMonth(currentDate);
+      const end = endOfMonth(currentDate);
+      const data = await calendarService.getEvents(start, end);
+      setEvents(data);
+    } catch (error) {
+      console.error('Error loading events:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentDate]);
+
   useEffect(() => {
     loadEvents();
-  }, [currentDate]);
+  }, [loadEvents]);
 
   useEffect(() => {
     // Handle navigation from upcoming events
@@ -92,19 +104,6 @@ function CalendarPageContent() {
       }, 500);
     }
   }, [searchParams]);
-
-  async function loadEvents() {
-    try {
-      const start = startOfMonth(currentDate);
-      const end = endOfMonth(currentDate);
-      const data = await calendarService.getEvents(start, end);
-      setEvents(data);
-    } catch (error) {
-      console.error('Error loading events:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -244,16 +243,25 @@ function CalendarPageContent() {
             ))}
 
             {/* Calendar Days */}
-            {calendarDays.map((day, index) => {
+            {calendarDays.map((day) => {
               const dayEvents = getEventsForDay(day);
               const isCurrentMonth = isSameMonth(day, currentDate);
               const isSelectedDay = selectedDate && isSameDay(day, selectedDate);
               const isTodayDate = isToday(day);
+              const dayKey = format(day, 'yyyy-MM-dd');
 
               return (
                 <div
-                  key={index}
+                  key={dayKey}
                   onClick={() => setSelectedDate(day)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedDate(day);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
                   className={cn(
                     'bg-background hover:bg-muted/50 min-h-[60px] cursor-pointer p-1 transition-colors sm:min-h-[100px] sm:p-2',
                     !isCurrentMonth && 'text-muted-foreground bg-muted/30',
@@ -277,11 +285,11 @@ function CalendarPageContent() {
                   <div className="sm:hidden">
                     {dayEvents.length > 0 && (
                       <div className="flex gap-0.5">
-                        {dayEvents.slice(0, 3).map((event, idx) => {
+                        {dayEvents.slice(0, 3).map((event) => {
                           const config = eventTypeConfig[event.type];
                           return (
                             <div
-                              key={idx}
+                              key={event.id}
                               className={cn('h-1.5 w-1.5 rounded-full', config.color)}
                             />
                           );
@@ -300,7 +308,7 @@ function CalendarPageContent() {
                     {dayEvents.slice(0, 3).map((event, eventIndex) => {
                       const config = eventTypeConfig[event.type];
                       return (
-                        <div key={eventIndex} className="flex items-center gap-1">
+                        <div key={event.id} className="flex items-center gap-1">
                           <div className={cn('h-2 w-2 flex-shrink-0 rounded-full', config.color)} />
                           <span className="truncate text-xs">{event.title}</span>
                         </div>
@@ -321,7 +329,7 @@ function CalendarPageContent() {
 
       {/* Selected Day Events */}
       {selectedDate && (
-        <Card id="selected-date-events">
+        <Card id={selectedDateEventsId}>
           <CardHeader>
             <CardTitle>Events on {format(selectedDate, 'MMMM d, yyyy')}</CardTitle>
           </CardHeader>

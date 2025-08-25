@@ -12,11 +12,11 @@ Conclusion: The custom domain is mapped at Google’s edge but not correctly con
 
 ## Fastest Fix Path (Console)
 
-1) Open Firebase Console → App Hosting → Backends → `kbe-website`.
-2) Open Domains tab.
-3) Ensure `homerenrichment.com` (and `www.homerenrichment.com` if used) are connected to the `kbe-website` backend.
-4) Access settings: set access to Public (unauthenticated). If it’s set to “Require authentication,” switch it to Public.
-5) If the domain is attached to a different backend (e.g., `studio`) or Hosting-only, detach there and attach to `kbe-website`.
+1. Open Firebase Console → App Hosting → Backends → `kbe-website`.
+2. Open Domains tab.
+3. Ensure `homerenrichment.com` (and `www.homerenrichment.com` if used) are connected to the `kbe-website` backend.
+4. Access settings: set access to Public (unauthenticated). If it’s set to “Require authentication,” switch it to Public.
+5. If the domain is attached to a different backend (e.g., `studio`) or Hosting-only, detach there and attach to `kbe-website`.
 
 ## Verification (CLI and curl)
 

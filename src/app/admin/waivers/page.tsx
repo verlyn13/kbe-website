@@ -1,26 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useAdmin } from '@/hooks/use-admin';
-import { useToast } from '@/hooks/use-toast';
-import { collection, query, getDocs, doc, updateDoc, where } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import {
-  Search,
-  FileCheck,
-  FileX,
-  User,
-  Calendar,
   AlertCircle,
+  Calendar,
   CheckCircle,
   Clock,
+  FileCheck,
+  FileX,
+  Search,
+  User,
   XCircle,
 } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -29,14 +34,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useAdmin } from '@/hooks/use-admin';
+import { useToast } from '@/hooks/use-toast';
+import { db } from '@/lib/firebase';
 
 interface Student {
   id: string;
@@ -62,11 +62,7 @@ export default function WaiversPage() {
   );
   const [updating, setUpdating] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadStudents();
-  }, []);
-
-  async function loadStudents() {
+  const loadStudents = useCallback(async () => {
     try {
       // Get all students
       const studentsSnapshot = await getDocs(collection(db, 'students'));
@@ -125,7 +121,11 @@ export default function WaiversPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    loadStudents();
+  }, [loadStudents]);
 
   async function updateWaiverStatus(
     studentId: string,

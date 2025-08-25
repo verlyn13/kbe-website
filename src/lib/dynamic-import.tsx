@@ -25,7 +25,7 @@ export function createDynamicComponent<P extends object>(
         // Return a fallback component
         return {
           default: () => (
-            <div className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive">
+            <div className="border-destructive/50 bg-destructive/10 text-destructive rounded-md border p-4">
               Failed to load component. Please refresh the page.
             </div>
           ),
@@ -43,9 +43,7 @@ export function createDynamicComponent<P extends object>(
 /**
  * Preload a dynamic component (for critical components)
  */
-export function preloadComponent(
-  importFn: () => Promise<any>
-) {
+export function preloadComponent(importFn: () => Promise<any>) {
   // Trigger the import but don't wait for it
   importFn().catch(console.error);
 }

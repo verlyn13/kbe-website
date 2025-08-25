@@ -1,4 +1,3 @@
-import React from 'react';
 vi.mock('@/hooks/use-auth', () => ({
   useAuth: () => ({ user: null, loading: false }),
 }));
@@ -13,10 +12,10 @@ vi.mock('@/lib/firebase-admin', () => ({
   },
 }));
 
-import { render, screen } from '@/test/test-utils';
-import LandingPage from '@/app/page';
 import AdminDashboardPage from '@/app/admin/dashboard/page';
+import LandingPage from '@/app/page';
 import RegisterPage from '@/app/register/page';
+import { render, screen } from '@/test/test-utils';
 
 describe('Smoke: critical routes render', () => {
   it('renders home page without errors and shows headline', () => {

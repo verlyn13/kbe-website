@@ -1,24 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { ArrowRight, BookOpen, Calendar, Info, Mail, Phone, User, UserPlus } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useId, useState } from 'react';
+import { Icons } from '@/components/icons';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Icons } from '@/components/icons';
-import { formatPhoneNumber } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { profileService } from '@/lib/firebase-admin';
-import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Mail, Phone, User, ArrowRight, BookOpen, UserPlus, Calendar, Info } from 'lucide-react';
-import Link from 'next/link';
-import { Checkbox } from '@/components/ui/checkbox';
+import { profileService } from '@/lib/firebase-admin';
+import { formatPhoneNumber } from '@/lib/utils';
 
 export function GuardianInfoForm() {
+  const displayNameId = useId();
+  const emailId = useId();
+  const phoneId = useId();
+  const announcementsId = useId();
+  const programUpdatesId = useId();
+  const newslettersId = useId();
   const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
@@ -217,12 +223,12 @@ export function GuardianInfoForm() {
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="displayName">
+              <Label htmlFor={displayNameId}>
                 <User className="mr-1 inline h-4 w-4" />
                 Full Name
               </Label>
               <Input
-                id="displayName"
+                id={displayNameId}
                 placeholder="Your full name"
                 value={formData.displayName}
                 onChange={(e) => setFormData((prev) => ({ ...prev, displayName: e.target.value }))}
@@ -232,12 +238,12 @@ export function GuardianInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">
+              <Label htmlFor={emailId}>
                 <Mail className="mr-1 inline h-4 w-4" />
                 Email Address
               </Label>
               <Input
-                id="email"
+                id={emailId}
                 type="email"
                 placeholder="your@email.com"
                 value={formData.email}
@@ -248,12 +254,12 @@ export function GuardianInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">
+              <Label htmlFor={phoneId}>
                 <Phone className="mr-1 inline h-4 w-4" />
                 Phone Number
               </Label>
               <Input
-                id="phone"
+                id={phoneId}
                 type="tel"
                 placeholder="(555) 123-4567"
                 value={formData.phone}
@@ -275,7 +281,7 @@ export function GuardianInfoForm() {
             <div className="space-y-3">
               <div className="flex items-start space-x-3">
                 <Checkbox
-                  id="announcements"
+                  id={announcementsId}
                   checked={formData.emailPreferences.announcements}
                   onCheckedChange={(checked) =>
                     setFormData((prev) => ({
@@ -290,7 +296,7 @@ export function GuardianInfoForm() {
                 />
                 <div className="space-y-1">
                   <label
-                    htmlFor="announcements"
+                    htmlFor={announcementsId}
                     className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Important Announcements
@@ -303,7 +309,7 @@ export function GuardianInfoForm() {
 
               <div className="flex items-start space-x-3">
                 <Checkbox
-                  id="programUpdates"
+                  id={programUpdatesId}
                   checked={formData.emailPreferences.programUpdates}
                   onCheckedChange={(checked) =>
                     setFormData((prev) => ({
@@ -318,7 +324,7 @@ export function GuardianInfoForm() {
                 />
                 <div className="space-y-1">
                   <label
-                    htmlFor="programUpdates"
+                    htmlFor={programUpdatesId}
                     className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Program Updates
@@ -331,7 +337,7 @@ export function GuardianInfoForm() {
 
               <div className="flex items-start space-x-3">
                 <Checkbox
-                  id="newsletters"
+                  id={newslettersId}
                   checked={formData.emailPreferences.newsletters}
                   onCheckedChange={(checked) =>
                     setFormData((prev) => ({
@@ -346,7 +352,7 @@ export function GuardianInfoForm() {
                 />
                 <div className="space-y-1">
                   <label
-                    htmlFor="newsletters"
+                    htmlFor={newslettersId}
                     className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Community Newsletter

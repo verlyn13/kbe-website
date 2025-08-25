@@ -1,11 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, MapPin, Trophy, Users, Book, Target, Heart } from 'lucide-react';
+import { Book, Calendar, Clock, Heart, MapPin, Target, Trophy, Users } from 'lucide-react';
 import Link from 'next/link';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
 import { PublicHeader } from '@/components/public-header';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function MathCountsPage() {
   return (
@@ -24,7 +23,7 @@ export default function MathCountsPage() {
                 <Link href="/register">Register for 2025 Season</Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <a href="https://www.mathcounts.org/" target="_blank">
+                <a href="https://www.mathcounts.org/" target="_blank" rel="noopener">
                   Visit MathCounts.org
                 </a>
               </Button>
@@ -251,17 +250,26 @@ export default function MathCountsPage() {
                     <a
                       href="https://www.mathcounts.org/resources/problem-of-the-week"
                       target="_blank"
+                      rel="noopener"
                     >
                       Problem of the Week Archive
                     </a>
                   </Button>
                   <Button variant="outline" className="w-full justify-start" asChild>
-                    <a href="https://www.mathcounts.org/resources/parents" target="_blank">
+                    <a
+                      href="https://www.mathcounts.org/resources/parents"
+                      target="_blank"
+                      rel="noopener"
+                    >
                       Parent Resources
                     </a>
                   </Button>
                   <Button variant="outline" className="w-full justify-start" asChild>
-                    <a href="#" target="_blank">
+                    <a
+                      href="https://www.mathcounts.org/resources/handbook"
+                      target="_blank"
+                      rel="noopener"
+                    >
                       2024 Competition Handbook (PDF)
                     </a>
                   </Button>

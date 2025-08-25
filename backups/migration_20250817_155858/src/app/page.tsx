@@ -1,15 +1,13 @@
 'use client';
 
-import Image from 'next/image';
+import { ArrowRight, Calendar, GraduationCap, Heart, Menu, Users } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect } from 'react';
-import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useState } from 'react';
 import { ThemeBackgroundImage } from '@/components/theme-image';
-import { ArrowRight, GraduationCap, Users, Heart, Calendar, Menu } from 'lucide-react';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function LandingPage() {
   const { user, loading } = useAuth();

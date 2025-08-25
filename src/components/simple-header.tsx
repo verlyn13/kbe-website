@@ -1,8 +1,11 @@
 'use client';
 
+import { doc, getDoc } from 'firebase/firestore';
+import { Home, LogOut, Shield, User } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,9 +15,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
-import { LogOut, User, Home, Shield } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export function SimpleHeader() {
@@ -49,6 +49,7 @@ export function SimpleHeader() {
           strokeLinejoin="round"
           className="text-primary h-8 w-8"
         >
+          <title>Homer Enrichment Hub</title>
           <path d="M12 2L2 7l10 5 10-5-10-5z" />
           <path d="M2 17l10 5 10-5" />
           <path d="M2 12l10 5 10-5" />

@@ -1,4 +1,4 @@
-import { ThemeImage, ThemeBackgroundImage } from '@/components/theme-image';
+import { ThemeBackgroundImage, ThemeImage } from '@/components/theme-image';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 
 export default function ThemeShowcasePage() {

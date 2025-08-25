@@ -1,6 +1,6 @@
 // Event Handler Types - Replace (e: any) throughout codebase
 
-import { ChangeEvent, FormEvent, KeyboardEvent, MouseEvent } from 'react';
+import type { ChangeEvent, FormEvent, KeyboardEvent, MouseEvent } from 'react';
 
 // Form Events
 export type FormSubmitEvent = FormEvent<HTMLFormElement>;

@@ -1,18 +1,20 @@
 'use client';
 
-import { useState, Suspense } from 'react';
-import { LazyParentAccountForm, LazyAddStudentsForm, LazySelectProgramForm } from '@/components/lazy';
-import { FormSkeleton } from '@/components/loading/form-skeleton';
-import { Progress } from '@/components/ui/progress';
-import { CheckCircle } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/use-auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { CheckCircle } from 'lucide-react';
+import { Suspense, useState } from 'react';
+import {
+  LazyAddStudentsForm,
+  LazyParentAccountForm,
+  LazySelectProgramForm,
+} from '@/components/lazy';
+import { FormSkeleton } from '@/components/loading/form-skeleton';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { auth, db } from '@/lib/firebase';
 
 type RegistrationStep = 'parent' | 'students' | 'program' | 'complete';
 
@@ -112,7 +114,8 @@ export function RegistrationFlow() {
       setCurrentStep('complete');
     } catch (error) {
       console.error('Registration error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to complete registration';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to complete registration';
       toast({
         title: 'Registration Error',
         description: errorMessage,
@@ -155,7 +158,10 @@ export function RegistrationFlow() {
 
       {currentStep === 'students' && (
         <Suspense fallback={<FormSkeleton fields={4} />}>
-          <LazyAddStudentsForm onSubmit={handleStudentsSubmit} onBack={() => setCurrentStep('parent')} />
+          <LazyAddStudentsForm
+            onSubmit={handleStudentsSubmit}
+            onBack={() => setCurrentStep('parent')}
+          />
         </Suspense>
       )}
 

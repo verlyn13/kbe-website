@@ -1,22 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { auth, app } from '@/lib/firebase';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken as getAppCheckToken } from 'firebase/app-check';
+import {
+  getToken as getAppCheckToken,
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+} from 'firebase/app-check';
 import {
   GoogleAuthProvider,
+  getRedirectResult,
   signInWithPopup,
   signInWithRedirect,
-  getRedirectResult,
 } from 'firebase/auth';
+import { useCallback, useEffect, useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { app, auth } from '@/lib/firebase';
 
 export default function AuthDiagnosticsPage() {
   const [status, setStatus] = useState<string[]>([]);
   const [error, setError] = useState<string>('');
   const [appCheckInfo, setAppCheckInfo] = useState<string>('');
+
+  const addStatus = useCallback((message: string) => {
+    setStatus((prev) => [...prev, message]);
+  }, []);
 
   useEffect(() => {
     // Check for redirect result
@@ -55,33 +63,29 @@ export default function AuthDiagnosticsPage() {
         // App Check might already be initialized
         addStatus('⚠️ App Check may already be initialized');
       }
-      
+
       // Attempt to get a token without forcing refresh
       if (appCheck) {
         getAppCheckToken(appCheck, false)
-        .then((res) => {
-          if (res && res.token) {
-            setAppCheckInfo('App Check token acquired');
-            addStatus('✅ App Check token acquired successfully');
-          } else {
-            setAppCheckInfo('App Check token not available');
-            addStatus('⚠️ App Check token not available');
-          }
-        })
-        .catch((e) => {
-          setAppCheckInfo(`App Check token error: ${e?.message || e}`);
-          addStatus(`❌ App Check token error: ${e?.code || ''} ${e?.message || e}`);
-        });
+          .then((res) => {
+            if (res?.token) {
+              setAppCheckInfo('App Check token acquired');
+              addStatus('✅ App Check token acquired successfully');
+            } else {
+              setAppCheckInfo('App Check token not available');
+              addStatus('⚠️ App Check token not available');
+            }
+          })
+          .catch((e) => {
+            setAppCheckInfo(`App Check token error: ${e?.message || e}`);
+            addStatus(`❌ App Check token error: ${e?.code || ''} ${e?.message || e}`);
+          });
       }
     } catch (e: any) {
       setAppCheckInfo('App Check not initialized');
       addStatus('❌ App Check not initialized or error accessing it');
     }
-  }, []);
-
-  const addStatus = (message: string) => {
-    setStatus((prev) => [...prev, message]);
-  };
+  }, [addStatus]);
 
   const testGooglePopup = async () => {
     try {
@@ -158,8 +162,8 @@ export default function AuthDiagnosticsPage() {
           <div className="space-y-2">
             <h3 className="font-semibold">Status Log:</h3>
             <div className="bg-muted h-96 overflow-y-auto rounded-lg p-4">
-              {status.map((s, i) => (
-                <div key={i} className="py-1 font-mono text-sm">
+              {status.map((s) => (
+                <div key={s} className="py-1 font-mono text-sm">
                   {s}
                 </div>
               ))}
@@ -181,7 +185,9 @@ export default function AuthDiagnosticsPage() {
           <div className="bg-muted rounded-lg p-4">
             <h4 className="mb-2 font-semibold">Required Firebase Console Checks:</h4>
             {appCheckInfo && (
-              <p className="mb-2 text-sm"><strong>App Check:</strong> {appCheckInfo}</p>
+              <p className="mb-2 text-sm">
+                <strong>App Check:</strong> {appCheckInfo}
+              </p>
             )}
             <ol className="list-inside list-decimal space-y-1 text-sm">
               <li>
@@ -189,6 +195,7 @@ export default function AuthDiagnosticsPage() {
                   href="https://console.firebase.google.com/project/kbe-website/authentication/providers"
                   target="_blank"
                   className="text-primary hover:underline"
+                  rel="noopener"
                 >
                   Check Google Provider is Enabled
                 </a>
@@ -198,6 +205,7 @@ export default function AuthDiagnosticsPage() {
                   href="https://console.firebase.google.com/project/kbe-website/authentication/settings"
                   target="_blank"
                   className="text-primary hover:underline"
+                  rel="noopener"
                 >
                   Check Authorized Domains
                 </a>
@@ -207,6 +215,7 @@ export default function AuthDiagnosticsPage() {
                   href="https://console.cloud.google.com/apis/credentials/consent?project=kbe-website"
                   target="_blank"
                   className="text-primary hover:underline"
+                  rel="noopener"
                 >
                   Check OAuth Consent Screen
                 </a>
@@ -216,8 +225,10 @@ export default function AuthDiagnosticsPage() {
                   href="https://console.firebase.google.com/project/kbe-website/appcheck/apps"
                   target="_blank"
                   className="text-primary hover:underline"
+                  rel="noopener"
                 >
-                  Verify App Check (reCAPTCHA Enterprise) domains include homerenrichment.com and www
+                  Verify App Check (reCAPTCHA Enterprise) domains include homerenrichment.com and
+                  www
                 </a>
               </li>
             </ol>

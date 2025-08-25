@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/firebase';
 
 export default function DebugAuthClearPage() {
   const [status, setStatus] = useState<string[]>([]);
@@ -29,7 +29,7 @@ export default function DebugAuthClearPage() {
       document.cookie.split(';').forEach((c) => {
         document.cookie = c
           .replace(/^ +/, '')
-          .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
       });
       newStatus.push('✓ Cleared accessible cookies');
 
@@ -69,8 +69,8 @@ export default function DebugAuthClearPage() {
           {status.length > 0 && (
             <div className="mt-4 space-y-2">
               <h3 className="font-semibold">Status:</h3>
-              {status.map((s, i) => (
-                <div key={i} className="font-mono text-sm">
+              {status.map((s) => (
+                <div key={s} className="font-mono text-sm">
                   {s}
                 </div>
               ))}

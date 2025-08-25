@@ -1,5 +1,5 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
+import { getApp, getApps, initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBhTEs3Uxq_KBLBzbzIL2VB4Ao_DBw9faM',
@@ -12,7 +12,7 @@ const firebaseConfig = {
 };
 
 console.log('[Firebase] Config:', {
-  apiKey: firebaseConfig.apiKey.substring(0, 10) + '...',
+  apiKey: `${firebaseConfig.apiKey.substring(0, 10)}...`,
   authDomain: firebaseConfig.authDomain,
   projectId: firebaseConfig.projectId,
 });

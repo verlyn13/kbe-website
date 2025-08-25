@@ -2,9 +2,9 @@
 
 ## 0) Objectives (why these tests exist)
 
-* Catch **high-value breakage** fast: routes render, forms validate, APIs respond, emails generate.
-* Enforce **accessibility, env safety, and coverage gates** without human babysitting.
-* Keep **mocks stable** and **fixtures reusable** to minimize flake and rewrite cost.
+- Catch **high-value breakage** fast: routes render, forms validate, APIs respond, emails generate.
+- Enforce **accessibility, env safety, and coverage gates** without human babysitting.
+- Keep **mocks stable** and **fixtures reusable** to minimize flake and rewrite cost.
 
 ---
 
@@ -12,14 +12,14 @@
 
 **Create/ensure files:**
 
-* `src/test/setup.ts` (already present):
+- `src/test/setup.ts` (already present):
+  - keep `@testing-library/jest-dom`
+  - silence React/Next noisy logs in tests
+  - add MSW server lifecycle hooks
 
-  * keep `@testing-library/jest-dom`
-  * silence React/Next noisy logs in tests
-  * add MSW server lifecycle hooks
-* `src/test/test-utils.tsx`: custom `render` with providers (theme, RHF, etc.).
-* `src/test/msw/handlers.ts` + `src/test/msw/server.ts`: request stubs for Firebase/SendGrid/app APIs.
-* `src/test/factories/index.ts`: plain TS factories for common entities (User, Enrollment, EmailPayload). No extra libs required.
+- `src/test/test-utils.tsx`: custom `render` with providers (theme, RHF, etc.).
+- `src/test/msw/handlers.ts` + `src/test/msw/server.ts`: request stubs for Firebase/SendGrid/app APIs.
+- `src/test/factories/index.ts`: plain TS factories for common entities (User, Enrollment, EmailPayload). No extra libs required.
 
 **Add packages (dev) if missing:**
 
@@ -31,11 +31,11 @@ npm i -D msw @types/testing-library__jest-dom axe-core @axe-core/react
 
 **Update `vitest.config.ts`:**
 
-* Ensure `setupFiles: ['src/test/setup.ts']`
-* Coverage thresholds (raise later):
+- Ensure `setupFiles: ['src/test/setup.ts']`
+- Coverage thresholds (raise later):
   `coverage: { provider: 'v8', reporter: ['text','json','html'], lines: 70, functions: 70, branches: 60 }`
-* `test.include`: `['src/**/*.{test,spec}.{ts,tsx}']`
-* `environment: 'jsdom'`, `globals: true`.
+- `test.include`: `['src/**/*.{test,spec}.{ts,tsx}']`
+- `environment: 'jsdom'`, `globals: true`.
 
 **Add scripts:**
 
@@ -52,12 +52,12 @@ npm i -D msw @types/testing-library__jest-dom axe-core @axe-core/react
 
 **Create:** `src/app/__tests__/smoke.routes.test.tsx`
 
-* For each route (`/`, `/admin/dashboard`, main enrollment flow page):
+- For each route (`/`, `/admin/dashboard`, main enrollment flow page):
+  - `render(<Page />)` via `test-utils`
+  - assert `getByRole('main')` and a couple of unique headings/buttons
+  - **Fail test if `console.error` or `console.warn` is called** (spy in `setup.ts`)
 
-  * `render(<Page />)` via `test-utils`
-  * assert `getByRole('main')` and a couple of unique headings/buttons
-  * **Fail test if `console.error` or `console.warn` is called** (spy in `setup.ts`)
-* Mock Next’s `useRouter`/`next/navigation` as needed (you already have stubs).
+- Mock Next’s `useRouter`/`next/navigation` as needed (you already have stubs).
 
 ---
 
@@ -67,9 +67,9 @@ npm i -D msw @types/testing-library__jest-dom axe-core @axe-core/react
 
 **Create:** `src/components/forms/__tests__/enroll.form.test.tsx`
 
-* Unit test the **zod** schemas (valid, boundary, invalid).
-* Integration test: render form, type minimal valid data, submit → verify `onSubmit` called with **exact zod-parsed payload**.
-* Test error message mapping (a couple of representative fields).
+- Unit test the **zod** schemas (valid, boundary, invalid).
+- Integration test: render form, type minimal valid data, submit → verify `onSubmit` called with **exact zod-parsed payload**.
+- Test error message mapping (a couple of representative fields).
 
 Also add **pure unit tests** for every schema in `src/lib/validations/**/__tests__/*.test.ts` (you already have one suite; expand coverage).
 
@@ -82,10 +82,10 @@ Also add **pure unit tests** for every schema in `src/lib/validations/**/__tests
 **Create:** `src/app/api/**/__tests__/*.test.ts`
 Pattern per handler (e.g., `src/app/api/enroll/route.ts`):
 
-* Import `{ POST }` (or GET) and call with a **mock Request**.
-* Use **MSW** to intercept any outbound fetches (Firebase REST, internal APIs).
-* Assert `status`, `json()` shape, and **error branches** (400/401/500).
-* Keep handler logic isolated behind a small module (`src/server/services/*`) so you can unit-test the core without HTTP ceremony.
+- Import `{ POST }` (or GET) and call with a **mock Request**.
+- Use **MSW** to intercept any outbound fetches (Firebase REST, internal APIs).
+- Assert `status`, `json()` shape, and **error branches** (400/401/500).
+- Keep handler logic isolated behind a small module (`src/server/services/*`) so you can unit-test the core without HTTP ceremony.
 
 ---
 
@@ -95,10 +95,10 @@ Pattern per handler (e.g., `src/app/api/enroll/route.ts`):
 
 **Create:** `src/lib/email/__tests__/sendgrid.contract.test.ts`
 
-* Mock `@sendgrid/mail` completely.
-* Test `build*Email()` functions: assert exact **templateId**, **required dynamic data keys**, and that HTML text alternatives exist if you generate them.
-* Snapshot **rendered subject** and **minimal HTML** (small, trimmed snapshot; avoid flake).
-* Add a negative test: missing field → throws with clear message.
+- Mock `@sendgrid/mail` completely.
+- Test `build*Email()` functions: assert exact **templateId**, **required dynamic data keys**, and that HTML text alternatives exist if you generate them.
+- Snapshot **rendered subject** and **minimal HTML** (small, trimmed snapshot; avoid flake).
+- Add a negative test: missing field → throws with clear message.
 
 ---
 
@@ -108,9 +108,9 @@ Pattern per handler (e.g., `src/app/api/enroll/route.ts`):
 
 **Create:** `src/app/(admin)/**/__tests__/guards.test.tsx`
 
-* Stub `next/navigation` and your auth selector.
-* For `AdminRoute`/guarded components: unauthenticated/unauthorized cases → **redirect was called** with the right target (spy on `redirect`), and **no content** renders.
-* Happy path renders the first protected landmark.
+- Stub `next/navigation` and your auth selector.
+- For `AdminRoute`/guarded components: unauthenticated/unauthorized cases → **redirect was called** with the right target (spy on `redirect`), and **no content** renders.
+- Happy path renders the first protected landmark.
 
 ---
 
@@ -121,9 +121,9 @@ Pattern per handler (e.g., `src/app/api/enroll/route.ts`):
 **Create:** `src/components/**/__tests__/*.test.tsx`
 Focus on:
 
-* Dialog, DropdownMenu, Tabs, Select, Tooltip, Toast.
-* Assert **aria roles/labels**, keyboard interactions (open/close with `userEvent.keyboard`), and critical props (e.g., `onOpenChange`).
-* One or two tests each, not exhaustive—**contract style**.
+- Dialog, DropdownMenu, Tabs, Select, Tooltip, Toast.
+- Assert **aria roles/labels**, keyboard interactions (open/close with `userEvent.keyboard`), and critical props (e.g., `onOpenChange`).
+- One or two tests each, not exhaustive—**contract style**.
 
 ---
 
@@ -133,9 +133,9 @@ Focus on:
 
 **Create:** `src/app/__a11y__/home.a11y.test.tsx`
 
-* Render key pages/components.
-* Run `axe` and assert **no violations** except an allow-listed set (comment why if needed).
-* Scope to 2–3 critical surfaces to keep tests snappy.
+- Render key pages/components.
+- Run `axe` and assert **no violations** except an allow-listed set (comment why if needed).
+- Scope to 2–3 critical surfaces to keep tests snappy.
 
 ---
 
@@ -145,9 +145,9 @@ Focus on:
 
 **Create:** `src/lib/env/__tests__/env.safety.test.ts`
 
-* Unit test your env loader/validator (zod over `process.env`).
-* For required vars (e.g., `SENDGRID_API_KEY`, Firebase config), assert **throws** if missing and **parses** when present.
-* Add a test verifying **no real network** calls can occur when `NODE_ENV === 'test'` (e.g., a guard in your fetch wrapper; assert it’s mocked).
+- Unit test your env loader/validator (zod over `process.env`).
+- For required vars (e.g., `SENDGRID_API_KEY`, Firebase config), assert **throws** if missing and **parses** when present.
+- Add a test verifying **no real network** calls can occur when `NODE_ENV === 'test'` (e.g., a guard in your fetch wrapper; assert it’s mocked).
 
 ---
 
@@ -157,20 +157,20 @@ Focus on:
 
 **Create:** `src/lib/telemetry/__tests__/telemetry.guard.test.ts`
 
-* Ensure analytics exporters are **no-ops** in `test` and **respect an opt-out flag**.
-* If you wrap `console`, assert only info logs in dev and silent in test (except errors which fail).
+- Ensure analytics exporters are **no-ops** in `test` and **respect an opt-out flag**.
+- If you wrap `console`, assert only info logs in dev and silent in test (except errors which fail).
 
 ---
 
 ## 11) Coverage Gates & CI
 
-* Set initial thresholds (above) and plan to ratchet +5% per milestone.
-* **Fail CI** on:
+- Set initial thresholds (above) and plan to ratchet +5% per milestone.
+- **Fail CI** on:
+  - coverage below thresholds,
+  - any `console.error` in tests,
+  - unhandled promise rejections (set `vi.unhandledRejection` hook in `setup.ts`).
 
-  * coverage below thresholds,
-  * any `console.error` in tests,
-  * unhandled promise rejections (set `vi.unhandledRejection` hook in `setup.ts`).
-* Emit `junit` reporter for CI visibility.
+- Emit `junit` reporter for CI visibility.
 
 **Add a GitHub Action (example):**
 `.github/workflows/test.yml`
@@ -194,20 +194,20 @@ jobs:
 
 ## 12) Implementation Checklist (exact paths)
 
-* `src/test/setup.ts` → add console spies, MSW lifecycle, axe helper (optional).
-* `src/test/test-utils.tsx` → `render` with providers (Theme, RHF, etc.).
-* `src/test/msw/handlers.ts` & `src/test/msw/server.ts`
-* `src/test/factories/index.ts`
-* `src/app/__tests__/smoke.routes.test.tsx`
-* `src/components/forms/__tests__/enroll.form.test.tsx`
-* `src/lib/validations/**/__tests__/*.test.ts`
-* `src/app/api/**/__tests__/*.test.ts`
-* `src/lib/email/__tests__/sendgrid.contract.test.ts`
-* `src/app/(admin)/**/__tests__/guards.test.tsx`
-* `src/components/**/__tests__/*.test.tsx`
-* `src/app/__a11y__/*.a11y.test.tsx`
-* `src/lib/env/__tests__/env.safety.test.ts`
-* `src/lib/telemetry/__tests__/telemetry.guard.test.ts` (if applicable)
+- `src/test/setup.ts` → add console spies, MSW lifecycle, axe helper (optional).
+- `src/test/test-utils.tsx` → `render` with providers (Theme, RHF, etc.).
+- `src/test/msw/handlers.ts` & `src/test/msw/server.ts`
+- `src/test/factories/index.ts`
+- `src/app/__tests__/smoke.routes.test.tsx`
+- `src/components/forms/__tests__/enroll.form.test.tsx`
+- `src/lib/validations/**/__tests__/*.test.ts`
+- `src/app/api/**/__tests__/*.test.ts`
+- `src/lib/email/__tests__/sendgrid.contract.test.ts`
+- `src/app/(admin)/**/__tests__/guards.test.tsx`
+- `src/components/**/__tests__/*.test.tsx`
+- `src/app/__a11y__/*.a11y.test.tsx`
+- `src/lib/env/__tests__/env.safety.test.ts`
+- `src/lib/telemetry/__tests__/telemetry.guard.test.ts` (if applicable)
 
 ---
 
@@ -224,8 +224,14 @@ import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 const error = console.error;
 const warn = console.warn;
 beforeAll(() => {
-  console.error = (...args: any[]) => { error(...args); throw new Error(`console.error: ${args[0]}`); };
-  console.warn = (...args: any[]) => { warn(...args); throw new Error(`console.warn: ${args[0]}`); };
+  console.error = (...args: any[]) => {
+    error(...args);
+    throw new Error(`console.error: ${args[0]}`);
+  };
+  console.warn = (...args: any[]) => {
+    warn(...args);
+    throw new Error(`console.warn: ${args[0]}`);
+  };
   server.listen({ onUnhandledRequest: 'error' });
 });
 afterEach(() => {
@@ -274,7 +280,8 @@ export const handlers = [
   // App API example
   http.post('/api/enroll', async ({ request }) => {
     const body = await request.json();
-    if (!body?.email) return new HttpResponse(JSON.stringify({ error: 'email required' }), { status: 400 });
+    if (!body?.email)
+      return new HttpResponse(JSON.stringify({ error: 'email required' }), { status: 400 });
     return HttpResponse.json({ ok: true });
   }),
 ];
@@ -320,19 +327,18 @@ describe('SendGrid contract', () => {
 
 ## 14) Optional but Recommended
 
-* **Playwright** for a couple of true E2E journeys (enroll + admin view). Keep to 2–3 tests, run in nightly CI.
-* **Mutation testing** (stryker) later, once coverage stabilizes.
-* **Coverage ratchet**: +5% lines/branches per release.
+- **Playwright** for a couple of true E2E journeys (enroll + admin view). Keep to 2–3 tests, run in nightly CI.
+- **Mutation testing** (stryker) later, once coverage stabilizes.
+- **Coverage ratchet**: +5% lines/branches per release.
 
 ---
 
 ### Definition of Done
 
-* All files above created.
-* CI green with coverage artifacts uploaded.
-* Smoke routes, form+schema, API, email, guards, and a11y suites in place.
-* No real network in tests; MSW handles all HTTP.
-* Console errors/warnings fail tests.
+- All files above created.
+- CI green with coverage artifacts uploaded.
+- Smoke routes, form+schema, API, email, guards, and a11y suites in place.
+- No real network in tests; MSW handles all HTTP.
+- Console errors/warnings fail tests.
 
 If you want, I can generate the exact file contents for each test path based on your current modules (names/exports) so the agent can drop them in verbatim.
-

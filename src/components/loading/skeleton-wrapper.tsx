@@ -1,5 +1,6 @@
-import { cn } from '@/lib/utils';
+import { useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 
 interface SkeletonWrapperProps {
   className?: string;
@@ -16,12 +17,14 @@ export function SkeletonWrapper({
   count = 1,
   children,
 }: SkeletonWrapperProps) {
+  const itemKeys = useMemo(() => Array.from({ length: count }, (_, i) => `sk-${i}`), [count]);
+
   if (children) return <>{children}</>;
-  
+
   return (
     <div className={cn('space-y-4', className)}>
-      {Array.from({ length: count }).map((_, i) => (
-        <Skeleton key={i} className={cn(height, width)} />
+      {itemKeys.map((key) => (
+        <Skeleton key={key} className={cn(height, width)} />
       ))}
     </div>
   );

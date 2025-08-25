@@ -1,9 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -13,10 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
 const selectProgramSchema = z.object({
   programId: z.literal('mathcounts-2025'),

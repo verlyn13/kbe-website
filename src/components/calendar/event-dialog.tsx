@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { CalendarEvent, calendarService } from '@/lib/firebase-admin';
-import { useAuth } from '@/hooks/use-auth';
-import { useToast } from '@/hooks/use-toast';
+import { format, set } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { useEffect, useId, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogContent,
@@ -12,10 +13,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -24,10 +24,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Clock } from 'lucide-react';
-import { format, set } from 'date-fns';
+import { Textarea } from '@/components/ui/textarea';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { type CalendarEvent, calendarService } from '@/lib/firebase-admin';
 import { cn } from '@/lib/utils';
 
 interface EventDialogProps {
@@ -67,6 +67,11 @@ export function EventDialog({
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const titleId = useId();
+  const typeId = useId();
+  const allDayId = useId();
+  const locationId = useId();
+  const descriptionId = useId();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -183,9 +188,9 @@ export function EventDialog({
 
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor={titleId}>Title</Label>
               <Input
-                id="title"
+                id={titleId}
                 placeholder="Event title"
                 value={formData.title}
                 onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
@@ -194,12 +199,12 @@ export function EventDialog({
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="type">Type</Label>
+              <Label htmlFor={typeId}>Type</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) => setFormData((prev) => ({ ...prev, type: value as any }))}
               >
-                <SelectTrigger id="type">
+                <SelectTrigger id={typeId}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -214,11 +219,11 @@ export function EventDialog({
 
             <div className="flex items-center space-x-2">
               <Switch
-                id="all-day"
+                id={allDayId}
                 checked={formData.allDay}
                 onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, allDay: checked }))}
               />
-              <Label htmlFor="all-day">All day event</Label>
+              <Label htmlFor={allDayId}>All day event</Label>
             </div>
 
             <div className="grid gap-2 sm:grid-cols-2">
@@ -326,9 +331,9 @@ export function EventDialog({
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="location">Location (Optional)</Label>
+              <Label htmlFor={locationId}>Location (Optional)</Label>
               <Input
-                id="location"
+                id={locationId}
                 placeholder="Event location"
                 value={formData.location}
                 onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
@@ -336,9 +341,9 @@ export function EventDialog({
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="description">Description (Optional)</Label>
+              <Label htmlFor={descriptionId}>Description (Optional)</Label>
               <Textarea
-                id="description"
+                id={descriptionId}
                 placeholder="Event description"
                 value={formData.description}
                 onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}

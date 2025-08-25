@@ -1,14 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { AlertCircle, Clock, Download, UserCheck, Users } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { registrationService, Registration } from '@/lib/firebase-admin';
-import { useAdmin } from '@/hooks/use-admin';
-import { useToast } from '@/hooks/use-toast';
-import { Download, Users, UserCheck, Clock, AlertCircle, Calendar, Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -16,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -24,6 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useAdmin } from '@/hooks/use-admin';
+import { useToast } from '@/hooks/use-toast';
+import { type Registration, registrationService } from '@/lib/firebase-admin';
 
 interface RegistrationStats {
   total: number;
@@ -42,13 +42,7 @@ export default function AdminReportsPage() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [stats, setStats] = useState<RegistrationStats | null>(null);
 
-  useEffect(() => {
-    if (hasPermission('view_reports')) {
-      loadRegistrationData();
-    }
-  }, [selectedProgram, hasPermission]);
-
-  async function loadRegistrationData() {
+  const loadRegistrationData = useCallback(async () => {
     try {
       setLoading(true);
       const [regs, statsData] = await Promise.all([
@@ -92,7 +86,13 @@ export default function AdminReportsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [selectedProgram, toast]);
+
+  useEffect(() => {
+    if (hasPermission('view_reports')) {
+      loadRegistrationData();
+    }
+  }, [hasPermission, loadRegistrationData]);
 
   async function exportData() {
     try {
@@ -326,8 +326,11 @@ export default function AdminReportsPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {reg.students.map((student, i) => (
-                      <div key={i} className="text-sm">
+                    {reg.students.map((student) => (
+                      <div
+                        key={`${student.firstName}-${student.lastName}-${student.grade}`}
+                        className="text-sm"
+                      >
                         {`${student.firstName} ${student.lastName}`.trim()} (Grade {student.grade})
                       </div>
                     ))}

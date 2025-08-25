@@ -1,34 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { announcementService, Announcement } from '@/lib/firebase-admin';
-import { Skeleton } from '@/components/ui/skeleton';
-import { formatDistanceToNow, format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import {
-  Pin,
   AlertCircle,
-  Info,
-  Clock,
-  CheckCircle,
   ArrowLeft,
-  EyeOff,
+  CheckCircle,
+  Clock,
   Eye,
-  Trash2,
+  EyeOff,
+  Info,
   MoreVertical,
+  Pin,
+  Trash2,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';
-import { Separator } from '@/components/ui/separator';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
+import { useEffect, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,8 +25,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { type Announcement, announcementService } from '@/lib/firebase-admin';
 
 export default function AnnouncementsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -54,7 +54,7 @@ export default function AnnouncementsPage() {
 
   useEffect(() => {
     loadAnnouncements();
-  }, [user]);
+  }, [loadAnnouncements]);
 
   async function loadAnnouncements() {
     if (!user) return;

@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/use-auth';
+import { useEffect } from 'react';
 import { GuardianInfoForm } from '@/components/guardian-info-form';
-import { Skeleton } from '@/components/ui/skeleton';
 import { SimpleHeader } from '@/components/simple-header';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function WelcomePage() {
   const { user, loading } = useAuth();

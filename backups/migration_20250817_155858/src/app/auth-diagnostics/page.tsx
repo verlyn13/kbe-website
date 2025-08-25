@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { auth } from '@/lib/firebase';
 import {
   GoogleAuthProvider,
+  getRedirectResult,
   signInWithPopup,
   signInWithRedirect,
-  getRedirectResult,
 } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { auth } from '@/lib/firebase';
 
 export default function AuthDiagnosticsPage() {
   const [status, setStatus] = useState<string[]>([]);
@@ -35,7 +35,7 @@ export default function AuthDiagnosticsPage() {
     addStatus(`🌐 Current URL: ${window.location.href}`);
     addStatus(`🔑 Auth Domain: ${auth.app.options.authDomain}`);
     addStatus(`📱 Project ID: ${auth.app.options.projectId}`);
-  }, []);
+  }, [addStatus]);
 
   const addStatus = (message: string) => {
     setStatus((prev) => [...prev, message]);
@@ -143,6 +143,7 @@ export default function AuthDiagnosticsPage() {
                   href="https://console.firebase.google.com/project/kbe-website/authentication/providers"
                   target="_blank"
                   className="text-primary hover:underline"
+                  rel="noopener"
                 >
                   Check Google Provider is Enabled
                 </a>
@@ -152,6 +153,7 @@ export default function AuthDiagnosticsPage() {
                   href="https://console.firebase.google.com/project/kbe-website/authentication/settings"
                   target="_blank"
                   className="text-primary hover:underline"
+                  rel="noopener"
                 >
                   Check Authorized Domains
                 </a>
@@ -161,6 +163,7 @@ export default function AuthDiagnosticsPage() {
                   href="https://console.cloud.google.com/apis/credentials/consent?project=kbe-website"
                   target="_blank"
                   className="text-primary hover:underline"
+                  rel="noopener"
                 >
                   Check OAuth Consent Screen
                 </a>

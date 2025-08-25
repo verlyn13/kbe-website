@@ -1,6 +1,10 @@
 'use client';
 
+import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -10,10 +14,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
 
 interface EULADialogProps {
   open: boolean;
@@ -125,7 +125,12 @@ export function EULADialog({ open, onAccept, onDecline }: EULADialogProps) {
             <div className="bg-muted mt-6 rounded-lg p-4">
               <p className="text-xs">
                 For the complete Terms of Service, please visit{' '}
-                <a href="/terms" target="_blank" className="text-primary hover:underline">
+                <a
+                  href="/terms"
+                  target="_blank"
+                  className="text-primary hover:underline"
+                  rel="noopener"
+                >
                   our full terms page
                 </a>
                 .

@@ -7,7 +7,7 @@
  */
 
 import * as dotenv from 'dotenv';
-import { testEmailTemplate, previewTemplate } from '../src/lib/sendgrid-email-service';
+import { previewTemplate, testEmailTemplate } from '../src/lib/sendgrid-email-service';
 import { sendGridTemplates } from '../src/lib/sendgrid-templates';
 
 // Load environment variables
@@ -51,8 +51,8 @@ async function main() {
     const preview = previewTemplate(templateKey as keyof typeof sendGridTemplates);
 
     // Create HTML preview file
-    const fs = await import('fs');
-    const path = await import('path');
+    const fs = await import('node:fs');
+    const path = await import('node:path');
     const previewPath = path.join(process.cwd(), `preview-${templateKey}.html`);
 
     await fs.promises.writeFile(previewPath, preview.html);

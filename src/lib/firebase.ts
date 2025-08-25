@@ -1,6 +1,6 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
-import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { browserSessionPersistence, getAuth, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 // Firebase configuration (env-only; no hardcoded defaults)

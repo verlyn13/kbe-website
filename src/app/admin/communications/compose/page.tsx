@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { ArrowLeft, Save, Send } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useId, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -14,17 +16,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { announcementService } from '@/lib/firebase-admin';
+import { Textarea } from '@/components/ui/textarea';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Send, Save } from 'lucide-react';
-import Link from 'next/link';
+import { announcementService } from '@/lib/firebase-admin';
 
 export default function ComposeAnnouncementPage() {
   const router = useRouter();
   const { admin } = useAdmin();
   const { toast } = useToast();
+  const titleId = useId();
+  const contentId = useId();
+  const recipientsId = useId();
+  const priorityId = useId();
+  const pinnedId = useId();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -104,9 +109,9 @@ export default function ComposeAnnouncementPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor={titleId}>Title</Label>
             <Input
-              id="title"
+              id={titleId}
               placeholder="Announcement title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -114,9 +119,9 @@ export default function ComposeAnnouncementPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="content">Content</Label>
+            <Label htmlFor={contentId}>Content</Label>
             <Textarea
-              id="content"
+              id={contentId}
               placeholder="Write your announcement here..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -126,9 +131,9 @@ export default function ComposeAnnouncementPage() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="recipients">Recipients</Label>
+              <Label htmlFor={recipientsId}>Recipients</Label>
               <Select value={recipients} onValueChange={(value: any) => setRecipients(value)}>
-                <SelectTrigger id="recipients">
+                <SelectTrigger id={recipientsId}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -140,9 +145,9 @@ export default function ComposeAnnouncementPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
+              <Label htmlFor={priorityId}>Priority</Label>
               <Select value={priority} onValueChange={(value: any) => setPriority(value)}>
-                <SelectTrigger id="priority">
+                <SelectTrigger id={priorityId}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -156,11 +161,11 @@ export default function ComposeAnnouncementPage() {
 
           <div className="flex items-center space-x-2">
             <Checkbox
-              id="pinned"
+              id={pinnedId}
               checked={pinned}
               onCheckedChange={(checked) => setPinned(checked as boolean)}
             />
-            <Label htmlFor="pinned" className="font-normal">
+            <Label htmlFor={pinnedId} className="font-normal">
               Pin this announcement to the top
             </Label>
           </div>

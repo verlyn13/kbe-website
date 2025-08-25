@@ -1,6 +1,7 @@
 # Stage 4: Framework Compatibility & Modern Stack Verification
 
 ## Context from Previous Stages
+
 - **Build**: ✅ Success in 13s, 45/46 static routes
 - **Bundle Issues**: 3 pages > 290KB (calendar, register, admin/communications)
 - **Missing**: Code splitting, error boundaries, Suspense
@@ -12,6 +13,7 @@
 ## 4.1 React 19 Compatibility Deep Dive
 
 ### Check React Version and Features
+
 ```bash
 # Verify React 19 installation
 cat package.json | grep -E '"react":|"react-dom":'
@@ -30,6 +32,7 @@ grep -r 'ref="' src/ app/ --include="*.tsx"
 ```
 
 ### React 19 New Features Usage
+
 ```bash
 # Check for use() hook usage (new in React 19)
 grep -r "use(" src/ app/ --include="*.tsx" | grep -v "useState\|useEffect\|useCallback\|useMemo\|useRef"
@@ -48,6 +51,7 @@ grep -r "useOptimistic" src/ app/ --include="*.tsx"
 ```
 
 ### Hydration and Streaming
+
 ```bash
 # Check for Suspense usage with SSR
 grep -r "<Suspense" src/ app/ --include="*.tsx"
@@ -64,14 +68,15 @@ grep -r "generateMetadata" app/ --include="*.tsx"
 ## 4.2 Next.js 15 Specific Features
 
 ### App Router Patterns
+
 ```bash
 # Check for route groups
-find app -type d -name "(*)" 
+find app -type d -name "(*)"
 
 # Check for parallel routes
 find app -type d -name "@*"
 
-# Check for intercepting routes  
+# Check for intercepting routes
 find app -type d -name "(.)*"
 
 # Look for route handlers
@@ -82,6 +87,7 @@ grep -r "export const metadata\|export async function generateMetadata" app/ --i
 ```
 
 ### Next.js 15 Optimizations
+
 ```bash
 # Check for Partial Prerendering config
 cat next.config.mjs | grep -E "experimental:|ppr:"
@@ -97,6 +103,7 @@ grep -r "export const fetchCache" app/ --include="*.tsx" --include="*.ts"
 ```
 
 ### Server Actions Analysis
+
 ```bash
 # Find all server actions
 grep -r "^'use server'" app/ lib/ src/ --include="*.ts" --include="*.tsx"
@@ -113,6 +120,7 @@ grep -r "action={" app/ --include="*.tsx" | grep -v "action=\""
 ## 4.3 Tailwind 4 Migration Status
 
 ### Tailwind Configuration
+
 ```bash
 # Check Tailwind version
 cat package.json | grep tailwindcss
@@ -131,6 +139,7 @@ grep -r "theme(\|screen(" src/ app/ --include="*.css"
 ```
 
 ### Deprecated Tailwind 3 Patterns
+
 ```bash
 # Check for @apply with complex utilities
 grep -r "@apply" src/ app/ --include="*.css" | head -20
@@ -150,6 +159,7 @@ grep -rE "w-\[|h-\[|m-\[|p-\[" src/ app/ --include="*.tsx" | head -10
 ## 4.4 UI Library Compatibility (Radix/shadcn)
 
 ### Radix UI React 19 Compatibility
+
 ```bash
 # Check Radix versions
 cat package.json | grep "@radix-ui"
@@ -165,6 +175,7 @@ grep -r "displayName" src/components/ui --include="*.tsx" | wc -l
 ```
 
 ### shadcn/ui Pattern Verification
+
 ```bash
 # Check cn utility usage
 grep -r "cn(" src/ --include="*.tsx" | wc -l
@@ -184,6 +195,7 @@ grep -r "hsl(var(" src/ --include="*.css"
 ## 4.5 Heavy Component Analysis (Bundle Size Focus)
 
 ### Identify Heavy Dependencies
+
 ```bash
 # Find recharts usage (heavy library)
 grep -r "recharts" src/ app/ --include="*.tsx" | cut -d: -f1 | sort -u
@@ -200,6 +212,7 @@ grep -rE "recharts|embla|day-picker" src/ app/ --include="*.tsx" | cut -d: -f1 |
 ```
 
 ### Code Splitting Opportunities
+
 ```bash
 # Check if dynamic imports are used for heavy components
 grep -r "dynamic(" src/ app/ --include="*.tsx"
@@ -223,6 +236,7 @@ grep -E "import.*from|require\(" app/admin/communications/page.tsx 2>/dev/null |
 ## 4.6 Database & Firebase Integration
 
 ### Firebase Client Usage
+
 ```bash
 # Check Firebase SDK version
 cat package.json | grep "firebase"
@@ -238,6 +252,7 @@ grep -r "onSnapshot" src/ --include="*.tsx"
 ```
 
 ### Firebase Admin SDK
+
 ```bash
 # Check admin SDK usage
 grep -r "firebase-admin" src/lib --include="*.ts"
@@ -254,6 +269,7 @@ grep -A 2 -B 2 "catch" src/lib/firebase-admin.ts | head -30
 ## 4.7 Performance Patterns
 
 ### Check for Performance Anti-patterns
+
 ```bash
 # Look for useEffect with missing dependencies
 npx eslint src/ app/ --rule 'react-hooks/exhaustive-deps: error' --no-eslintrc 2>&1 | grep -c "error"
@@ -273,6 +289,7 @@ grep -r "style={{" src/ app/ --include="*.tsx" | wc -l
 ## 4.8 Production Readiness Checks
 
 ### Security Headers (Next.js 15)
+
 ```bash
 # Check security headers configuration
 cat next.config.mjs | grep -A 30 "headers"
@@ -285,6 +302,7 @@ grep -r "rate.*limit\|throttle" src/ app/api --include="*.ts"
 ```
 
 ### SEO and Metadata
+
 ```bash
 # Check sitemap
 ls -la app/sitemap.ts app/sitemap.xml 2>/dev/null
@@ -305,53 +323,66 @@ find app -name "opengraph-image.*" -o -name "twitter-image.*"
 
 ```markdown
 # Stage 4 Audit Report: Framework Compatibility
+
 **Date**: [DATE]
 **React Version**: [VERSION]
 **Next.js Version**: [VERSION]
 **Tailwind Version**: [VERSION]
 
 ## 4.1 React 19 Compatibility
+
 - **Deprecated Features Found**: [COUNT]
 - **New Features Used**: [LIST]
 - **Hydration Issues**: [YES/NO]
 - **Server Components**: [COUNT]
 
 ## 4.2 Next.js 15 Features
+
 - **App Router**: ✅
 - **Server Actions**: [COUNT]
 - **Metadata API**: [USAGE]
 - **Route Types**: [BREAKDOWN]
 
 ## 4.3 Tailwind 4 Status
+
 - **Version**: [VERSION]
 - **Deprecated Patterns**: [COUNT]
 - **Migration Complete**: [YES/NO]
 
 ## 4.4 Bundle Optimization Opportunities
+
 ### Heavy Components Found:
+
 - [COMPONENT]: [SIZE/LOCATION]
 
 ### Code Splitting Candidates:
+
 1. /calendar - Uses: [LIBRARIES]
 2. /register - Uses: [LIBRARIES]
 3. /admin/communications - Uses: [LIBRARIES]
 
 ## 4.5 Performance Issues
+
 - **Missing Dependencies**: [COUNT]
 - **Anti-patterns**: [LIST]
 - **Optimization Opportunities**: [LIST]
 
 ## Critical Compatibility Issues
+
 [Any breaking changes or incompatibilities]
 
 ## Recommendations
+
 ### Immediate Actions:
+
 1. [Action with specific command/code]
 
 ### Performance Optimizations:
+
 1. [Specific optimization with code example]
 
 ### Framework Updates:
+
 1. [Any needed version updates]
 ```
 
@@ -360,11 +391,13 @@ find app -name "opengraph-image.*" -o -name "twitter-image.*"
 ## Decision Gate for Stage 5
 
 **Proceed to Stage 5 (Security & Firebase) if:**
+
 - ✅ No React 19 breaking changes
 - ✅ Tailwind 4 working properly
 - ✅ UI libraries compatible
 
 **Stop and fix if:**
+
 - ❌ React 19 incompatibilities found
 - ❌ Tailwind 4 migration incomplete
 - ❌ Critical performance anti-patterns
@@ -387,9 +420,9 @@ import dynamic from 'next/dynamic';
 
 const DynamicChart = dynamic(
   () => import('@/components/CalendarChart'),
-  { 
+  {
     loading: () => <div>Loading calendar...</div>,
-    ssr: false 
+    ssr: false
   }
 );
 \`\`\`

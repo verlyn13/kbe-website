@@ -1,32 +1,13 @@
 'use client';
 
+import { ArrowLeft, Camera, Mail, Phone, Save, User, Users } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/hooks/use-auth';
-import { profileService, UserProfile } from '@/lib/firebase-admin';
-import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Camera,
-  Save,
-  User,
-  Phone,
-  Mail,
-  Users,
-  Brain,
-  Sparkles,
-  AlertCircle,
-  Info,
-  ArrowLeft,
-} from 'lucide-react';
-import Link from 'next/link';
 import {
   Select,
   SelectContent,
@@ -34,7 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { profileService, type UserProfile } from '@/lib/firebase-admin';
 
 // Format phone number as user types
 function formatPhoneNumber(value: string): string {
@@ -105,7 +91,7 @@ export default function ProfilePage() {
     if (user) {
       loadProfile();
     }
-  }, [user]);
+  }, [user, loadProfile]);
 
   async function loadProfile() {
     if (!user) return;

@@ -1,14 +1,17 @@
 # Stage 1-3 Remediation Workflow
 
 ## Overview
+
 Parallel-safe tasks that won't interfere with Stage 4 audit. Split into immediate fixes, testing setup, and optimization tasks.
 
 ---
 
 ## Phase A: Immediate Fixes (30 mins)
-*No build/runtime impact - safe during Stage 4*
+
+_No build/runtime impact - safe during Stage 4_
 
 ### A1: Complete Stage 1 Configuration
+
 ```bash
 # 1. Update package.json engines (manual edit required)
 cat > UPDATE_PACKAGE_JSON.md << 'EOF'
@@ -57,6 +60,7 @@ echo "✅ Stage 1 fixes prepared (requires manual migration)"
 ```
 
 ### A2: Add Missing Error Boundaries (Stage 3)
+
 ```bash
 # Root error boundary
 cat > app/error.tsx << 'EOF'
@@ -165,9 +169,11 @@ echo "✅ Error boundaries and loading states created"
 ---
 
 ## Phase B: Testing Infrastructure (45 mins)
-*Set up Vitest 3.2.4 with modern configuration*
+
+_Set up Vitest 3.2.4 with modern configuration_
 
 ### B1: Install Vitest 3.2.4
+
 ```bash
 # Install Vitest 3.2.4 and testing dependencies
 npm install --save-dev vitest@3.2.4 @vitejs/plugin-react@4.3.4 \
@@ -179,6 +185,7 @@ echo "✅ Vitest 3.2.4 installed"
 ```
 
 ### B2: Configure Vitest for Next.js 15
+
 ```bash
 # Create Vitest config for Next.js 15 + React 19
 cat > vitest.config.ts << 'EOF'
@@ -281,6 +288,7 @@ echo "✅ Vitest configured for Next.js 15 + React 19"
 ```
 
 ### B3: Create Initial Test Suite
+
 ```bash
 # Test for SendGrid webhook validation (Stage 2 issue)
 mkdir -p src/lib/validations/__tests__
@@ -361,7 +369,7 @@ describe('Button Component', () => {
   it('handles click events', () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     fireEvent.click(screen.getByText('Click me'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
@@ -386,9 +394,11 @@ echo "✅ Initial test suite created"
 ---
 
 ## Phase C: Code Splitting Implementation (1 hour)
-*Addresses Stage 3 bundle size issues*
+
+_Addresses Stage 3 bundle size issues_
 
 ### C1: Implement Dynamic Imports for Heavy Pages
+
 ```bash
 # Create wrapper components with lazy loading
 
@@ -509,6 +519,7 @@ echo "✅ Code splitting implemented for heavy pages"
 ```
 
 ### C2: Add API Route Validation (Stage 2 issue)
+
 ```bash
 # Fix the SendGrid webhook validation
 cat > app/api/webhooks/sendgrid/route.ts << 'EOF'
@@ -543,7 +554,7 @@ export async function POST(request: NextRequest) {
     // Process each event
     for (const event of validatedEvents) {
       console.log(`Processing ${event.event} for ${event.email}`);
-      
+
       // Add your event processing logic here
       switch (event.event) {
         case 'bounce':
@@ -585,9 +596,11 @@ echo "✅ API validation added to SendGrid webhook"
 ---
 
 ## Phase D: Performance Quick Wins (30 mins)
-*Immediate optimizations*
+
+_Immediate optimizations_
 
 ### D1: Optimize Large Files (Stage 2)
+
 ```bash
 # Split firebase-admin.ts into smaller modules
 cat > REFACTOR_FIREBASE_ADMIN.md << 'EOF'
@@ -595,7 +608,7 @@ cat > REFACTOR_FIREBASE_ADMIN.md << 'EOF'
 
 Split into:
 1. src/lib/firebase-admin/auth.ts - Authentication functions
-2. src/lib/firebase-admin/firestore.ts - Database operations  
+2. src/lib/firebase-admin/firestore.ts - Database operations
 3. src/lib/firebase-admin/storage.ts - File operations
 4. src/lib/firebase-admin/utils.ts - Shared utilities
 5. src/lib/firebase-admin/index.ts - Re-exports
@@ -639,6 +652,7 @@ echo "✅ Refactoring guides created"
 ```
 
 ### D2: Add Suspense Boundaries
+
 ```bash
 # Add Suspense to main layout
 cat > app/layout-with-suspense.tsx << 'EOF'
@@ -687,3 +701,4 @@ echo "🧪 Phase B: Installing Vitest 3.2.4..."
 npm install --save-dev vitest@3.2.4 @vitejs/plugin-react@4.3.4 \
   @testing-library/react@16.1.0 @testing-library/user-event@14.6.0 \
   @testing-library/jest-dom@6
+```

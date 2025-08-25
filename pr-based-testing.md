@@ -1,6 +1,7 @@
 # Safe CI Test Workflow Strategy
 
 ## Core Principle: Don't Touch Main Push Events
+
 Firebase owns push-to-main. We'll test BEFORE code reaches main.
 
 ---
@@ -8,6 +9,7 @@ Firebase owns push-to-main. We'll test BEFORE code reaches main.
 ## Recommended Approach: PR-Based Testing
 
 ### Strategy Overview
+
 ```
 Feature Branch → PR → Tests Run → Review → Merge to Main → Firebase Deploys
 ```
@@ -44,7 +46,7 @@ on:
       - '**.backup'
       - 'docs/**'
       - 'audit/**'
-      
+
   # Optional: Test on feature branches (not main)
   push:
     branches:
@@ -55,7 +57,7 @@ on:
     # Explicitly exclude main
     branches-ignore:
       - main
-      
+
   # Manual trigger for debugging
   workflow_dispatch:
     inputs:
@@ -76,17 +78,17 @@ jobs:
     runs-on: ubuntu-latest
     # Don't run on main branch pushes
     if: github.ref != 'refs/heads/main'
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
-          
+
       - name: Cache Dependencies
         uses: actions/cache@v4
         with:
@@ -96,19 +98,19 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-            
+
       - name: Install Dependencies
         run: npm ci --prefer-offline --no-audit
-        
+
       - name: Type Check
         run: npm run typecheck
         continue-on-error: false
-        
+
       - name: Run Tests
         run: npm run test:ci
         env:
           CI: true
-          
+
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -117,7 +119,7 @@ jobs:
           path: |
             coverage/
             test-results/
-            
+
       - name: Comment PR with Results
         if: github.event_name == 'pull_request' && always()
         uses: actions/github-script@v7
@@ -125,7 +127,7 @@ jobs:
           script: |
             const fs = require('fs');
             let comment = '## Test Results\n\n';
-            
+
             // Add test summary if available
             if (fs.existsSync('test-results/summary.txt')) {
               const summary = fs.readFileSync('test-results/summary.txt', 'utf8');
@@ -133,7 +135,7 @@ jobs:
             } else {
               comment += '✅ Tests completed';
             }
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -178,28 +180,20 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
-    
+
     // CI-specific settings
-    reporters: process.env.CI 
-      ? ['default', 'junit', 'json'] 
-      : ['default'],
+    reporters: process.env.CI ? ['default', 'junit', 'json'] : ['default'],
     outputFile: {
       junit: './test-results/junit.xml',
       json: './test-results/results.json',
     },
-    
+
     coverage: {
       enabled: process.env.CI === 'true',
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
       reportsDirectory: './coverage',
-      exclude: [
-        'node_modules/',
-        '.next/',
-        'test/',
-        '*.config.*',
-        '**/types/**',
-      ],
+      exclude: ['node_modules/', '.next/', 'test/', '*.config.*', '**/types/**'],
       thresholds: {
         // Start low, increase over time
         statements: 20,
@@ -208,14 +202,14 @@ export default defineConfig({
         lines: 20,
       },
     },
-    
+
     // Fail fast in CI
     bail: process.env.CI ? 1 : 0,
-    
+
     // Timeout for CI
     testTimeout: process.env.CI ? 10000 : 5000,
   },
-  
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -246,6 +240,7 @@ To ensure tests run before merging to main:
 ## Safe Development Workflow
 
 ### For Developers:
+
 ```bash
 # 1. Create feature branch
 git checkout -b feature/add-new-component
@@ -267,6 +262,7 @@ git push origin feature/add-new-component
 ```
 
 ### For Hotfixes:
+
 ```bash
 # 1. Create hotfix branch
 git checkout -b hotfix/critical-bug
@@ -286,16 +282,19 @@ git push origin hotfix/critical-bug
 ## Gradual Rollout Strategy
 
 ### Phase 1: Information Only (Week 1)
+
 - Tests run but don't block
 - Add `continue-on-error: true` to test step
 - Monitor test reliability
 
 ### Phase 2: Soft Enforcement (Week 2)
+
 - Remove `continue-on-error`
 - Tests block merge but can be overridden
 - Fix any flaky tests
 
 ### Phase 3: Full Enforcement (Week 3+)
+
 - Tests must pass to merge
 - No overrides except emergencies
 - Coverage requirements increase
@@ -305,6 +304,7 @@ git push origin hotfix/critical-bug
 ## Emergency Procedures
 
 ### If Tests Block Critical Fix:
+
 ```yaml
 # In PR description, add:
 [EMERGENCY] Skip Tests
@@ -314,6 +314,7 @@ if: github.event.pull_request.title != '[EMERGENCY]'
 ```
 
 ### If Firebase Build Fails:
+
 ```bash
 # Tests don't interfere since they're separate
 # Revert main branch commit
@@ -328,6 +329,7 @@ git push origin main
 ## Monitoring & Alerts
 
 ### Add Slack/Discord Notification (Optional):
+
 ```yaml
 - name: Notify on Failure
   if: failure() && github.event_name == 'pull_request'
@@ -343,11 +345,13 @@ git push origin main
 ## Cost Considerations
 
 ### GitHub Actions Minutes (Free Tier):
+
 - 2,000 minutes/month for private repos
 - ~5 minutes per test run
 - ~400 test runs per month possible
 
 ### Optimization Tips:
+
 1. Cache dependencies aggressively
 2. Run only affected tests
 3. Skip tests on documentation changes
@@ -358,17 +362,20 @@ git push origin main
 ## Implementation Checklist
 
 ### Immediate (Safe):
+
 - [ ] Create `.github/workflows/test.yml`
 - [ ] Add test scripts to package.json
 - [ ] Update vitest.config.ts for CI
 - [ ] Test on a feature branch first
 
 ### After Verification:
+
 - [ ] Enable branch protection for main
 - [ ] Add required status checks
 - [ ] Document workflow in README
 
 ### Later:
+
 - [ ] Add coverage badges
 - [ ] Increase coverage thresholds
 - [ ] Add performance benchmarks

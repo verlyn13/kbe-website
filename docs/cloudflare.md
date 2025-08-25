@@ -20,16 +20,19 @@ ZONE=homerenrichment.com
 ## gopass Layout
 
 Global account (shared across projects):
+
 - `cloudflare/account/id` → 13eb584192d9cefb730fde0cfd271328
 - `cloudflare/account/name` → Account display name
 - `cloudflare/account/email` → Account email
 - `cloudflare/accounts/<account-id>/global-api-key` → Global API Key
 
 Per-zone entries (for `homerenrichment.com` → `homerenrichment-com`):
+
 - `cloudflare/zones/homerenrichment-com/zone-id`
 - `cloudflare/zones/homerenrichment-com/account-id`
 
 Optional per-project token (if needed):
+
 - `cloudflare/tokens/projects/kbe-website/terraform`
 
 ## Commands

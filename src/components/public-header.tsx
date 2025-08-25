@@ -1,11 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/use-auth';
 import { Menu } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useAuth } from '@/hooks/use-auth';
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -32,6 +32,7 @@ export function PublicHeader() {
             strokeLinejoin="round"
             className="text-primary h-6 w-6"
           >
+            <title>Homer Enrichment Hub</title>
             <path d="M12 2L2 7l10 5 10-5-10-5z" />
             <path d="M2 17l10 5 10-5" />
             <path d="M2 12l10 5 10-5" />

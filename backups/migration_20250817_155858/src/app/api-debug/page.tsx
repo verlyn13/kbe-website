@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function ApiDebugPage() {
   const [info, setInfo] = useState<any>({});
@@ -15,7 +15,7 @@ export default function ApiDebugPage() {
       userAgent: navigator.userAgent,
       timestamp: new Date().toISOString(),
       firebaseConfig: {
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.substring(0, 10) + '...',
+        apiKey: `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.substring(0, 10)}...`,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
       },

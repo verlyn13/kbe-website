@@ -5,8 +5,8 @@
  * Verifies that MCP servers can be started and communicate properly
  */
 
-const { spawn } = require('child_process');
-const path = require('path');
+const { spawn } = require('node:child_process');
+const path = require('node:path');
 
 console.log('🔍 Testing MCP Server Connections...\n');
 

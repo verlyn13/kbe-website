@@ -1,21 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Database,
-  Users,
-  Mail,
-  FileText,
-  Shield,
-} from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db, auth } from '@/lib/firebase';
+import {
+  AlertCircle,
+  CheckCircle,
+  Database,
+  FileText,
+  Mail,
+  Shield,
+  Users,
+  XCircle,
+} from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
+import { auth, db } from '@/lib/firebase';
 
 interface SystemCheck {
   name: string;
@@ -29,11 +29,7 @@ export default function SystemStatusPage() {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
-  useEffect(() => {
-    runSystemChecks();
-  }, []);
-
-  async function runSystemChecks() {
+  const runSystemChecks = useCallback(async () => {
     const systemChecks: SystemCheck[] = [];
 
     // 1. Check Authentication
@@ -166,7 +162,11 @@ export default function SystemStatusPage() {
 
     setChecks(systemChecks);
     setLoading(false);
-  }
+  }, [user]);
+
+  useEffect(() => {
+    runSystemChecks();
+  }, [runSystemChecks]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -203,8 +203,8 @@ export default function SystemStatusPage() {
       <h1 className="mb-6 text-3xl font-bold">System Status Check</h1>
 
       <div className="space-y-4">
-        {checks.map((check, index) => (
-          <Card key={index}>
+        {checks.map((check) => (
+          <Card key={check.name}>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">

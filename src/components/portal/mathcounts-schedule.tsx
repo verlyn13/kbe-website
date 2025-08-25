@@ -1,12 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, Clock, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MapPin, Plus } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function MathCountsSchedule() {
   const nextSession = new Date('2025-09-09T16:00:00');
-  const daysUntil = Math.ceil(
-    (nextSession.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-  );
+  const daysUntil = Math.ceil((nextSession.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 
   return (
     <Card>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
 import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { auth } from '@/lib/firebase';
 
 export default function SignOutPage() {
   const router = useRouter();

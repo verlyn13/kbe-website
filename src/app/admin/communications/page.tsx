@@ -1,22 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { LazyDataTable } from '@/components/lazy';
-import { Announcement, announcementService } from '@/lib/firebase-admin';
-import { ColumnDef } from '@tanstack/react-table';
-import { Plus, Send, Clock, Check, Pin, Eye, Trash2, Edit } from 'lucide-react';
+import type { ColumnDef } from '@tanstack/react-table';
+import { format } from 'date-fns';
+import { Check, Clock, Eye, Plus, Send, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { useCallback, useEffect, useState } from 'react';
+import { LazyDataTable } from '@/components/lazy';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,8 +16,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { formatDistanceToNow, format } from 'date-fns';
+import { type Announcement, announcementService } from '@/lib/firebase-admin';
 
 export default function AdminCommunicationsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -38,11 +38,7 @@ export default function AdminCommunicationsPage() {
   const [announcementToDelete, setAnnouncementToDelete] = useState<Announcement | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadAnnouncements();
-  }, []);
-
-  async function loadAnnouncements() {
+  const loadAnnouncements = useCallback(async () => {
     try {
       const data = await announcementService.getAll();
       setAnnouncements(data);
@@ -51,7 +47,11 @@ export default function AdminCommunicationsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    loadAnnouncements();
+  }, [loadAnnouncements]);
 
   const columns: ColumnDef<Announcement>[] = [
     {

@@ -1,9 +1,11 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus, Trash2 } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,7 +16,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -22,14 +23,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Trash2 } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 
 const studentSchema = z.object({
   firstName: z.string().min(2, 'Please enter first name'),
   lastName: z.string().min(2, 'Please enter last name'),
   grade: z.string().refine((val) => {
-    const grade = parseInt(val);
+    const grade = parseInt(val, 10);
     return grade >= 4 && grade <= 8;
   }, 'MathCounts is for grades 4-8'),
   school: z.string().min(1, 'Please select a school'),

@@ -1,9 +1,9 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { adminService, AdminUser } from '@/lib/firebase-admin';
-import { useRouter } from 'next/navigation';
+import { type AdminUser, adminService } from '@/lib/firebase-admin';
 
 interface AdminContextType {
   admin: AdminUser | null;

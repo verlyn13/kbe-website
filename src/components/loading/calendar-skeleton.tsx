@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function CalendarSkeleton() {
+  const gridKeys = useMemo(() => Array.from({ length: 35 }, (_, i) => `cell-${i}`), []);
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -11,7 +13,7 @@ export function CalendarSkeleton() {
           <Skeleton className="h-10 w-10 rounded-full" />
         </div>
       </div>
-      
+
       {/* Days of week */}
       <div className="grid grid-cols-7 gap-2">
         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day) => (
@@ -20,12 +22,12 @@ export function CalendarSkeleton() {
           </div>
         ))}
       </div>
-      
+
       {/* Calendar grid */}
       <div className="grid grid-cols-7 gap-2">
-        {Array.from({ length: 35 }).map((_, i) => (
-          <Skeleton 
-            key={i} 
+        {gridKeys.map((key, i) => (
+          <Skeleton
+            key={key}
             className="h-20 w-full rounded-md"
             style={{
               animationDelay: `${i * 0.02}s`,

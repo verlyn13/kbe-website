@@ -1,9 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { AlertCircle, ArrowLeft, User } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useId, useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -13,13 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ArrowLeft, AlertCircle, User } from 'lucide-react';
-import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 interface StudentFormData {
@@ -35,6 +35,15 @@ interface StudentFormData {
 }
 
 export default function AddStudentPage() {
+  const firstNameId = useId();
+  const lastNameId = useId();
+  const gradeId = useId();
+  const schoolId = useId();
+  const dateOfBirthId = useId();
+  const emergencyContactId = useId();
+  const emergencyPhoneId = useId();
+  const medicalNotesId = useId();
+  const mathcountsId = useId();
   const router = useRouter();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -99,7 +108,7 @@ export default function AddStudentPage() {
         displayName: `${formData.firstName} ${formData.lastName}`,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        grade: parseInt(formData.grade),
+        grade: parseInt(formData.grade, 10),
         school: formData.school,
         dateOfBirth: formData.dateOfBirth,
         medicalNotes: formData.medicalNotes,
@@ -186,11 +195,11 @@ export default function AddStudentPage() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName">
+                  <Label htmlFor={firstNameId}>
                     First Name <span className="text-destructive">*</span>
                   </Label>
                   <Input
-                    id="firstName"
+                    id={firstNameId}
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     placeholder="John"
@@ -200,11 +209,11 @@ export default function AddStudentPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="lastName">
+                  <Label htmlFor={lastNameId}>
                     Last Name <span className="text-destructive">*</span>
                   </Label>
                   <Input
-                    id="lastName"
+                    id={lastNameId}
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     placeholder="Doe"
@@ -216,7 +225,7 @@ export default function AddStudentPage() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="grade">
+                  <Label htmlFor={gradeId}>
                     Grade Level <span className="text-destructive">*</span>
                   </Label>
                   <Select
@@ -224,7 +233,7 @@ export default function AddStudentPage() {
                     onValueChange={(value) => setFormData({ ...formData, grade: value })}
                     disabled={loading}
                   >
-                    <SelectTrigger id="grade">
+                    <SelectTrigger id={gradeId}>
                       <SelectValue placeholder="Select grade" />
                     </SelectTrigger>
                     <SelectContent>
@@ -237,7 +246,7 @@ export default function AddStudentPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="school">
+                  <Label htmlFor={schoolId}>
                     School <span className="text-destructive">*</span>
                   </Label>
                   <Select
@@ -245,7 +254,7 @@ export default function AddStudentPage() {
                     onValueChange={(value) => setFormData({ ...formData, school: value })}
                     disabled={loading}
                   >
-                    <SelectTrigger id="school">
+                    <SelectTrigger id={schoolId}>
                       <SelectValue placeholder="Select school" />
                     </SelectTrigger>
                     <SelectContent>
@@ -260,11 +269,11 @@ export default function AddStudentPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dateOfBirth">
+                <Label htmlFor={dateOfBirthId}>
                   Date of Birth <span className="text-destructive">*</span>
                 </Label>
                 <Input
-                  id="dateOfBirth"
+                  id={dateOfBirthId}
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
@@ -284,9 +293,9 @@ export default function AddStudentPage() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="emergencyContact">Emergency Contact Name</Label>
+                  <Label htmlFor={emergencyContactId}>Emergency Contact Name</Label>
                   <Input
-                    id="emergencyContact"
+                    id={emergencyContactId}
                     value={formData.emergencyContact}
                     onChange={(e) => setFormData({ ...formData, emergencyContact: e.target.value })}
                     placeholder="Jane Doe"
@@ -295,9 +304,9 @@ export default function AddStudentPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="emergencyPhone">Emergency Phone</Label>
+                  <Label htmlFor={emergencyPhoneId}>Emergency Phone</Label>
                   <Input
-                    id="emergencyPhone"
+                    id={emergencyPhoneId}
                     type="tel"
                     value={formData.emergencyPhone}
                     onChange={(e) => setFormData({ ...formData, emergencyPhone: e.target.value })}
@@ -308,9 +317,9 @@ export default function AddStudentPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="medicalNotes">Medical Notes / Allergies (Optional)</Label>
+                <Label htmlFor={medicalNotesId}>Medical Notes / Allergies (Optional)</Label>
                 <Input
-                  id="medicalNotes"
+                  id={medicalNotesId}
                   value={formData.medicalNotes}
                   onChange={(e) => setFormData({ ...formData, medicalNotes: e.target.value })}
                   placeholder="Any allergies, medications, or medical conditions we should know about"
@@ -326,7 +335,7 @@ export default function AddStudentPage() {
               <div className="space-y-3 rounded-lg border p-4">
                 <div className="flex items-start space-x-3">
                   <Checkbox
-                    id="mathcounts"
+                    id={mathcountsId}
                     checked={formData.registerForMathCounts}
                     onCheckedChange={(checked) =>
                       setFormData({ ...formData, registerForMathCounts: checked as boolean })
@@ -335,7 +344,7 @@ export default function AddStudentPage() {
                   />
                   <div className="space-y-1">
                     <label
-                      htmlFor="mathcounts"
+                      htmlFor={mathcountsId}
                       className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Register for MathCounts 2025

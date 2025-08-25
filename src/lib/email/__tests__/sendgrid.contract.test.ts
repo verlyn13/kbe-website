@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as sg from '@sendgrid/mail';
-import { sendWelcomeEmail, sendTemplatedEmail } from '@/lib/sendgrid-email-service';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { sendWelcomeEmail } from '@/lib/sendgrid-email-service';
 
 vi.mock('@sendgrid/mail', () => ({
   default: { setApiKey: vi.fn(), send: vi.fn(async () => [{ statusCode: 202 }]) },
@@ -30,4 +30,3 @@ describe('SendGrid email contract', () => {
     );
   });
 });
-

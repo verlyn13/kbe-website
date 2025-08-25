@@ -46,7 +46,7 @@ let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
 
 beforeEach(() => {
-  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation((...args) => {
+  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation((..._args) => {
     // Allow known benign warnings here if needed
     // For now, record and continue; assertion runs after each test
     // eslint-disable-next-line no-console
@@ -64,10 +64,14 @@ afterEach(() => {
   consoleWarnSpy.mockRestore();
 
   if (errorCalls.length > 0) {
-    throw new Error(`console.error called ${errorCalls.length} time(s):\n` + JSON.stringify(errorCalls[0]));
+    throw new Error(
+      `console.error called ${errorCalls.length} time(s):\n${JSON.stringify(errorCalls[0])}`
+    );
   }
   if (warnCalls.length > 0) {
-    throw new Error(`console.warn called ${warnCalls.length} time(s):\n` + JSON.stringify(warnCalls[0]));
+    throw new Error(
+      `console.warn called ${warnCalls.length} time(s):\n${JSON.stringify(warnCalls[0])}`
+    );
   }
 });
 
@@ -78,7 +82,6 @@ process.on('unhandledRejection', (reason) => {
 
 // Polyfill matchMedia for next-themes and components relying on it
 if (typeof window !== 'undefined' && !window.matchMedia) {
-  // @ts-ignore
   window.matchMedia = () => ({
     matches: false,
     media: '',
