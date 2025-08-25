@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Camera, Mail, Phone, Save, User, Users } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState, useId } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -93,13 +93,7 @@ export default function ProfilePage() {
     children: [] as { name: string; preferredName?: string; grade: string }[],
   });
 
-  useEffect(() => {
-    if (user) {
-      loadProfile();
-    }
-  }, [user, loadProfile]);
-
-  async function loadProfile() {
+  const loadProfile = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -131,7 +125,13 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [user, toast]);
+
+  useEffect(() => {
+    if (user) {
+      loadProfile();
+    }
+  }, [user, loadProfile]);
 
   async function handleSave() {
     if (!user) return;
@@ -415,7 +415,10 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {formData.children.map((child) => (
-                <div key={`child-${child.id || child.firstName}-${child.lastName}`} className="space-y-4 rounded-lg border p-4">
+                <div
+                  key={`child-${child.id || child.firstName}-${child.lastName}`}
+                  className="space-y-4 rounded-lg border p-4"
+                >
                   <div className="grid gap-4 md:grid-cols-3">
                     <div className="space-y-2">
                       <Label>

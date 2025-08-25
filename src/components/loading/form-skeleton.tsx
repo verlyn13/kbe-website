@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface FormSkeletonProps {
@@ -6,14 +7,15 @@ interface FormSkeletonProps {
 }
 
 export function FormSkeleton({ fields = 4, showButtons = true }: FormSkeletonProps) {
+  const fieldKeys = useMemo(() => Array.from({ length: fields }, (_, i) => `field-${i}`), [fields]);
   return (
     <div className="space-y-6">
       {/* Form title */}
       <Skeleton className="h-8 w-3/4" />
 
       {/* Form fields */}
-      {Array.from({ length: fields }).map((_, i) => (
-        <div key={i} className="space-y-2">
+      {fieldKeys.map((key, i) => (
+        <div key={key} className="space-y-2">
           <Skeleton className="h-4 w-24" />
           <Skeleton className="h-10 w-full" />
           {i === 0 && <Skeleton className="h-3 w-48 opacity-50" />}

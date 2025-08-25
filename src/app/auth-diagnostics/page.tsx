@@ -11,7 +11,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
 } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,9 +22,9 @@ export default function AuthDiagnosticsPage() {
   const [error, setError] = useState<string>('');
   const [appCheckInfo, setAppCheckInfo] = useState<string>('');
 
-  const addStatus = (message: string) => {
+  const addStatus = useCallback((message: string) => {
     setStatus((prev) => [...prev, message]);
-  };
+  }, []);
 
   useEffect(() => {
     // Check for redirect result
@@ -162,8 +162,8 @@ export default function AuthDiagnosticsPage() {
           <div className="space-y-2">
             <h3 className="font-semibold">Status Log:</h3>
             <div className="bg-muted h-96 overflow-y-auto rounded-lg p-4">
-              {status.map((s, i) => (
-                <div key={i} className="py-1 font-mono text-sm">
+              {status.map((s) => (
+                <div key={s} className="py-1 font-mono text-sm">
                   {s}
                 </div>
               ))}

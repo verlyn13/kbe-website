@@ -8,6 +8,13 @@ import { cn } from '@/lib/utils';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
+function CalendarChevron({ orientation }: { orientation: 'left' | 'right' }) {
+  if (orientation === 'left') {
+    return <ChevronLeft className="h-4 w-4" />;
+  }
+  return <ChevronRight className="h-4 w-4" />;
+}
+
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
@@ -46,12 +53,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         ...classNames,
       }}
       components={{
-        Chevron: ({ orientation }) => {
-          if (orientation === 'left') {
-            return <ChevronLeft className="h-4 w-4" />;
-          }
-          return <ChevronRight className="h-4 w-4" />;
-        },
+        Chevron: CalendarChevron,
       }}
       {...props}
     />

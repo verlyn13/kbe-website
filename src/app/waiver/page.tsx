@@ -349,13 +349,17 @@ export default function WaiverPage() {
             <div className="flex gap-8">
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 border border-gray-400"></div>
-                <span><span className="font-semibold">YES</span> - I grant permission for my child to be
-                photographed/recorded for program documentation and promotion</span>
+                <span>
+                  <span className="font-semibold">YES</span> - I grant permission for my child to be
+                  photographed/recorded for program documentation and promotion
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 border border-gray-400"></div>
-                <span><span className="font-semibold">NO</span> - I do not grant permission for
-                photography/recording</span>
+                <span>
+                  <span className="font-semibold">NO</span> - I do not grant permission for
+                  photography/recording
+                </span>
               </div>
             </div>
           </section>

@@ -1,7 +1,7 @@
 'use client';
 
 import { collection, getDocs } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/lib/firebase';
 
@@ -9,11 +9,7 @@ export default function DebugAnnouncementsPage() {
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadAllAnnouncements();
-  }, [loadAllAnnouncements]);
-
-  async function loadAllAnnouncements() {
+  const loadAllAnnouncements = useCallback(async () => {
     try {
       // Get ALL announcements without any filters
       const snapshot = await getDocs(collection(db, 'announcements'));
@@ -29,7 +25,11 @@ export default function DebugAnnouncementsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    loadAllAnnouncements();
+  }, [loadAllAnnouncements]);
 
   if (loading) return <div>Loading...</div>;
 

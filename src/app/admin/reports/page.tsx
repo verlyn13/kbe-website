@@ -1,7 +1,7 @@
 'use client';
 
 import { AlertCircle, Clock, Download, UserCheck, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,13 +42,7 @@ export default function AdminReportsPage() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [stats, setStats] = useState<RegistrationStats | null>(null);
 
-  useEffect(() => {
-    if (hasPermission('view_reports')) {
-      loadRegistrationData();
-    }
-  }, [hasPermission, loadRegistrationData]);
-
-  async function loadRegistrationData() {
+  const loadRegistrationData = useCallback(async () => {
     try {
       setLoading(true);
       const [regs, statsData] = await Promise.all([
@@ -92,7 +86,13 @@ export default function AdminReportsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [selectedProgram, toast]);
+
+  useEffect(() => {
+    if (hasPermission('view_reports')) {
+      loadRegistrationData();
+    }
+  }, [hasPermission, loadRegistrationData]);
 
   async function exportData() {
     try {
@@ -326,8 +326,11 @@ export default function AdminReportsPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {reg.students.map((student, i) => (
-                      <div key={i} className="text-sm">
+                    {reg.students.map((student) => (
+                      <div
+                        key={`${student.firstName}-${student.lastName}-${student.grade}`}
+                        className="text-sm"
+                      >
                         {`${student.firstName} ${student.lastName}`.trim()} (Grade {student.grade})
                       </div>
                     ))}

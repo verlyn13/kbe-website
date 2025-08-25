@@ -4,7 +4,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Check, Clock, Eye, Plus, Send, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { LazyDataTable } from '@/components/lazy';
 import {
   AlertDialog,
@@ -38,11 +38,7 @@ export default function AdminCommunicationsPage() {
   const [announcementToDelete, setAnnouncementToDelete] = useState<Announcement | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadAnnouncements();
-  }, [loadAnnouncements]);
-
-  async function loadAnnouncements() {
+  const loadAnnouncements = useCallback(async () => {
     try {
       const data = await announcementService.getAll();
       setAnnouncements(data);
@@ -51,7 +47,11 @@ export default function AdminCommunicationsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    loadAnnouncements();
+  }, [loadAnnouncements]);
 
   const columns: ColumnDef<Announcement>[] = [
     {

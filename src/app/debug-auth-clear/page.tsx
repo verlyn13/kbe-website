@@ -69,8 +69,8 @@ export default function DebugAuthClearPage() {
           {status.length > 0 && (
             <div className="mt-4 space-y-2">
               <h3 className="font-semibold">Status:</h3>
-              {status.map((s, i) => (
-                <div key={i} className="font-mono text-sm">
+              {status.map((s) => (
+                <div key={s} className="font-mono text-sm">
                   {s}
                 </div>
               ))}

@@ -11,7 +11,7 @@ import {
   Users,
   XCircle,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
@@ -29,11 +29,7 @@ export default function SystemStatusPage() {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
-  useEffect(() => {
-    runSystemChecks();
-  }, [runSystemChecks]);
-
-  async function runSystemChecks() {
+  const runSystemChecks = useCallback(async () => {
     const systemChecks: SystemCheck[] = [];
 
     // 1. Check Authentication
@@ -166,7 +162,11 @@ export default function SystemStatusPage() {
 
     setChecks(systemChecks);
     setLoading(false);
-  }
+  }, [user]);
+
+  useEffect(() => {
+    runSystemChecks();
+  }, [runSystemChecks]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

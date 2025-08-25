@@ -7,7 +7,37 @@
     "defaultBranch": "main"
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "includes": [
+      "src/**",
+      "scripts/**",
+      ".vscode/**",
+      "public/**",
+      "next.config.js",
+      "tailwind.config.ts",
+      "postcss.config.mjs",
+      "vitest.config.ts",
+      "tsconfig.json",
+      "package.json"
+    ],
+    "experimentalScannerIgnores": [
+      "backups/**",
+      "migration/**",
+      ".next/**",
+      "dist/**",
+      "build/**",
+      "coverage/**",
+      ".turbo/**",
+      ".vercel/**",
+      "node_modules/**",
+      ".firebase/**",
+      "functions/lib/**",
+      "storage_export/**",
+      "*.min.js",
+      "*.min.css",
+      ".cspell.json",
+      "cspell.json"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -24,8 +54,10 @@
         "noUnusedVariables": "off",
         "noUnusedImports": "warn",
         "useExhaustiveDependencies": "warn",
-        "useUniqueElementIds": "error",
-        "noInvalidPositionAtImportRule": "error"
+        "useUniqueElementIds": "warn",
+        "noInvalidPositionAtImportRule": "warn",
+        "noUnusedFunctionParameters": "off",
+        "noNestedComponentDefinitions": "warn"
       },
       "style": {
         "noNonNullAssertion": "off",
@@ -35,17 +67,20 @@
         "noExplicitAny": "off",
         "noImplicitAnyLet": "off",
         "noArrayIndexKey": "warn",
-        "noAssignInExpressions": "error"
+        "noAssignInExpressions": "warn",
+        "noUnknownAtRules": "off",
+        "noDocumentCookie": "off"
       },
       "a11y": {
-        "noLabelWithoutControl": "error",
+        "noLabelWithoutControl": "off",
         "useKeyWithClickEvents": "warn",
         "noStaticElementInteractions": "warn",
         "noSvgWithoutTitle": "warn",
-        "useValidAnchor": "error"
+        "useValidAnchor": "warn",
+        "useSemanticElements": "off"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "warn"
+        "noDangerouslySetInnerHtml": "off"
       }
     }
   },

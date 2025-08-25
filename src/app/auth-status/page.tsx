@@ -82,7 +82,10 @@ export default function AuthStatusPage() {
         <CardContent>
           <div className="space-y-3">
             {checks.map((check) => (
-              <div key={check.name} className="flex items-center justify-between rounded-lg border p-3">
+              <div
+                key={check.name}
+                className="flex items-center justify-between rounded-lg border p-3"
+              >
                 <div className="flex items-center gap-3">
                   {getIcon(check.status)}
                   <div>

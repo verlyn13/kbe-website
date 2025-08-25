@@ -2,7 +2,6 @@
   "version": "0.2",
   "language": "en",
   "words": [
-    // Framework and Libraries
     "Turbopack",
     "GenKit",
     "genkit",
@@ -11,8 +10,6 @@
     "shadcn",
     "firebase",
     "nextjs",
-
-    // Technical Terms
     "localhost",
     "typecheck",
     "linting",
@@ -29,24 +26,18 @@
     "apphosting",
     "grantaccess",
     "modelcontextprotocol",
-
-    // VS Code Extensions
     "GitLens",
     "gitlens",
     "vscode",
     "eslint",
     "prettier",
     "intellicode",
-
-    // Configuration Files
     "eslintrc",
     "prettierrc",
     "tsconfig",
     "tsbuildinfo",
     "gitignore",
     "dockerignore",
-
-    // Package/Build Tools
     "npm",
     "yarn",
     "pnpm",
@@ -55,16 +46,12 @@
     "rollup",
     "esbuild",
     "swc",
-
-    // CSS/Styling
     "flexbox",
     "gridbox",
     "viewport",
     "breakpoint",
     "responsive",
     "theming",
-
-    // Git/Development
     "repo",
     "repos",
     "github",
@@ -78,8 +65,6 @@
     "merging",
     "changelog",
     "semver",
-
-    // File Extensions
     "tsx",
     "jsx",
     "mjs",
@@ -92,8 +77,6 @@
     "yml",
     "toml",
     "env",
-
-    // Technical Concepts
     "serverless",
     "fullstack",
     "frontend",
@@ -110,8 +93,6 @@
     "xss",
     "https",
     "http",
-
-    // Development Terms
     "refactor",
     "refactoring",
     "linter",
@@ -126,8 +107,6 @@
     "polyfills",
     "shim",
     "shims",
-
-    // Project-specific terms
     "Kachemak",
     "Passwordless",
     "placehold",
@@ -167,17 +146,7 @@
   "overrides": [
     {
       "filename": "**/*.md",
-      "words": [
-        // Additional markdown-specific terms
-        "KBE",
-        "Auth",
-        "login",
-        "logout",
-        "signin",
-        "signup",
-        "admin",
-        "dashboard"
-      ]
+      "words": ["KBE", "Auth", "login", "logout", "signin", "signup", "admin", "dashboard"]
     },
     {
       "filename": "**/README.md",

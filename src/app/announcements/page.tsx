@@ -1,20 +1,10 @@
 'use client';
 
 import { format, formatDistanceToNow } from 'date-fns';
-import {
-  AlertCircle,
-  ArrowLeft,
-  CheckCircle,
-  Clock,
-  Eye,
-  EyeOff,
-  Info,
-  MoreVertical,
-  Pin,
-  Trash2,
-} from 'lucide-react';
+import { AlertCircle, ArrowLeft, Info } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { AnnouncementCard } from '@/components/announcement-card';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,14 +17,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -52,11 +34,7 @@ export default function AnnouncementsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadAnnouncements();
-  }, [loadAnnouncements]);
-
-  async function loadAnnouncements() {
+  const loadAnnouncements = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -95,7 +73,11 @@ export default function AnnouncementsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [user, toast]);
+
+  useEffect(() => {
+    loadAnnouncements();
+  }, [loadAnnouncements]);
 
   async function handleHide(announcement: Announcement) {
     if (!user) return;
@@ -180,95 +162,10 @@ export default function AnnouncementsPage() {
     }
   };
 
-  const AnnouncementCard = ({
-    announcement,
-    isHidden = false,
-  }: {
-    announcement: Announcement;
-    isHidden?: boolean;
-  }) => (
-    <Card
-      className={`cursor-pointer transition-shadow hover:shadow-lg ${isHidden ? 'opacity-60' : ''}`}
-      onClick={() => setSelectedAnnouncement(announcement)}
-    >
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2">
-            {getPriorityIcon(announcement.priority)}
-            {announcement.pinned && <Pin className="text-muted-foreground h-4 w-4" />}
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs">
-              {announcement.recipients === 'all' ? 'All' : announcement.recipients}
-            </Badge>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {isHidden ? (
-                  <DropdownMenuItem
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleUnhide(announcement);
-                    }}
-                  >
-                    <Eye className="mr-2 h-4 w-4" />
-                    Unhide
-                  </DropdownMenuItem>
-                ) : (
-                  <DropdownMenuItem
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleHide(announcement);
-                    }}
-                  >
-                    <EyeOff className="mr-2 h-4 w-4" />
-                    Hide
-                  </DropdownMenuItem>
-                )}
-                {user && announcement.createdBy === user.uid && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-destructive"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setAnnouncementToDelete(announcement);
-                        setDeleteDialogOpen(true);
-                      }}
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-        <CardTitle className="line-clamp-1">{announcement.title}</CardTitle>
-        <CardDescription className="text-xs">
-          {announcement.publishedAt &&
-            formatDistanceToNow(new Date(announcement.publishedAt), { addSuffix: true })}{' '}
-          by {announcement.createdByName}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground line-clamp-3 text-sm">{announcement.content}</p>
-        <div className="text-muted-foreground mt-4 flex items-center gap-4 text-xs">
-          <span>{announcement.viewCount} views</span>
-          {announcement.acknowledgedBy.includes(user?.uid || '') && (
-            <span className="flex items-center gap-1">
-              <CheckCircle className="h-3 w-3" /> Read
-            </span>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
+  const handleAnnouncementDelete = (announcement: Announcement) => {
+    setAnnouncementToDelete(announcement);
+    setDeleteDialogOpen(true);
+  };
 
   if (loading) {
     return (
@@ -394,7 +291,16 @@ export default function AnnouncementsPage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               {announcements.map((announcement) => (
-                <AnnouncementCard key={announcement.id} announcement={announcement} />
+                <AnnouncementCard
+                  key={announcement.id}
+                  announcement={announcement}
+                  user={user}
+                  getPriorityIcon={getPriorityIcon}
+                  onSelect={setSelectedAnnouncement}
+                  onHide={handleHide}
+                  onUnhide={handleUnhide}
+                  onDelete={handleAnnouncementDelete}
+                />
               ))}
             </div>
           )}
@@ -411,7 +317,17 @@ export default function AnnouncementsPage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               {hiddenAnnouncements.map((announcement) => (
-                <AnnouncementCard key={announcement.id} announcement={announcement} isHidden />
+                <AnnouncementCard
+                  key={announcement.id}
+                  announcement={announcement}
+                  isHidden
+                  user={user}
+                  getPriorityIcon={getPriorityIcon}
+                  onSelect={setSelectedAnnouncement}
+                  onHide={handleHide}
+                  onUnhide={handleUnhide}
+                  onDelete={handleAnnouncementDelete}
+                />
               ))}
             </div>
           )}

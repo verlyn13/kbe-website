@@ -12,7 +12,7 @@ import {
   User,
   XCircle,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -62,11 +62,7 @@ export default function WaiversPage() {
   );
   const [updating, setUpdating] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadStudents();
-  }, [loadStudents]);
-
-  async function loadStudents() {
+  const loadStudents = useCallback(async () => {
     try {
       // Get all students
       const studentsSnapshot = await getDocs(collection(db, 'students'));
@@ -125,7 +121,11 @@ export default function WaiversPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    loadStudents();
+  }, [loadStudents]);
 
   async function updateWaiverStatus(
     studentId: string,

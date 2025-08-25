@@ -59,9 +59,7 @@ export function FormSelect({ label, error, required, children, ...props }: FormS
       <Label htmlFor={id}>
         {label} {required && <span className="text-destructive">*</span>}
       </Label>
-      <Select {...props}>
-        {children}
-      </Select>
+      <Select {...props}>{children}</Select>
       {error && <p className="text-sm text-destructive mt-1">{error}</p>}
     </div>
   );

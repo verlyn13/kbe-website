@@ -4,7 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { ArrowRight, BookOpen, Calendar, Info, Mail, Phone, User, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useId } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { Icons } from '@/components/icons';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';

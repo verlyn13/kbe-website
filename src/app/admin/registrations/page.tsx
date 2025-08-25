@@ -2,7 +2,7 @@
 
 import type { ColumnDef } from '@tanstack/react-table';
 import { Check, Clock, Eye, Mail, MoreHorizontal, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DataTable } from '@/components/admin/data-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,11 +29,7 @@ export default function AdminRegistrationsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'active' | 'waitlist'>('all');
 
-  useEffect(() => {
-    loadRegistrations();
-  }, [loadRegistrations]);
-
-  async function loadRegistrations() {
+  const loadRegistrations = useCallback(async () => {
     try {
       const data = await registrationService.getAll();
       setRegistrations(data);
@@ -47,7 +43,11 @@ export default function AdminRegistrationsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    loadRegistrations();
+  }, [loadRegistrations]);
 
   async function handleStatusUpdate(id: string, status: Registration['status']) {
     try {
@@ -102,8 +102,11 @@ export default function AdminRegistrationsPage() {
         const students = row.getValue('students') as Registration['students'];
         return (
           <div className="space-y-1">
-            {students.map((student, idx) => (
-              <div key={idx} className="text-sm">
+            {students.map((student) => (
+              <div
+                key={`${student.firstName}-${student.lastName}-${student.grade}`}
+                className="text-sm"
+              >
                 {student.firstName} {student.lastName} ({student.grade}th)
               </div>
             ))}

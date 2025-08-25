@@ -265,7 +265,11 @@ export default function MathCountsPage() {
                     </a>
                   </Button>
                   <Button variant="outline" className="w-full justify-start" asChild>
-                    <a href="#" target="_blank" rel="noopener">
+                    <a
+                      href="https://www.mathcounts.org/resources/handbook"
+                      target="_blank"
+                      rel="noopener"
+                    >
                       2024 Competition Handbook (PDF)
                     </a>
                   </Button>

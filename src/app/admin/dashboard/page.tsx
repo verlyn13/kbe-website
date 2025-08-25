@@ -275,6 +275,14 @@ export default function AdminDashboardPage() {
                   onClick={() =>
                     router.push(`/calendar?eventId=${event.id}&date=${event.date.toISOString()}`)
                   }
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      router.push(`/calendar?eventId=${event.id}&date=${event.date.toISOString()}`);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div
                     className={`rounded-full p-2 ${

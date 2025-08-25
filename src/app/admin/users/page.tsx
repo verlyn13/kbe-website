@@ -12,7 +12,7 @@ import {
   Trash2,
   User,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,13 +65,7 @@ export default function UserManagementPage() {
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
   const [deleteUserName, setDeleteUserName] = useState<string>('');
 
-  useEffect(() => {
-    if (hasPermission('manage_settings')) {
-      loadUsers();
-    }
-  }, [hasPermission, loadUsers]);
-
-  async function loadUsers() {
+  const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -103,7 +97,13 @@ export default function UserManagementPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
+
+  useEffect(() => {
+    if (hasPermission('manage_settings')) {
+      loadUsers();
+    }
+  }, [hasPermission, loadUsers]);
 
   async function handleDeleteUser(userId: string) {
     try {

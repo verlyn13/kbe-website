@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { LazyEventDialog } from '@/components/lazy';
 import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
 import { Button } from '@/components/ui/button';
@@ -56,6 +56,7 @@ const eventTypeConfig = {
 
 function CalendarPageContent() {
   const searchParams = useSearchParams();
+  const selectedDateEventsId = useId();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -66,6 +67,19 @@ function CalendarPageContent() {
   const { user } = useAuth();
   const { isAdmin } = useAdmin();
   const { toast } = useToast();
+
+  const loadEvents = useCallback(async () => {
+    try {
+      const start = startOfMonth(currentDate);
+      const end = endOfMonth(currentDate);
+      const data = await calendarService.getEvents(start, end);
+      setEvents(data);
+    } catch (error) {
+      console.error('Error loading events:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentDate]);
 
   useEffect(() => {
     loadEvents();
@@ -90,19 +104,6 @@ function CalendarPageContent() {
       }, 500);
     }
   }, [searchParams]);
-
-  async function loadEvents() {
-    try {
-      const start = startOfMonth(currentDate);
-      const end = endOfMonth(currentDate);
-      const data = await calendarService.getEvents(start, end);
-      setEvents(data);
-    } catch (error) {
-      console.error('Error loading events:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -253,6 +254,14 @@ function CalendarPageContent() {
                 <div
                   key={dayKey}
                   onClick={() => setSelectedDate(day)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedDate(day);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
                   className={cn(
                     'bg-background hover:bg-muted/50 min-h-[60px] cursor-pointer p-1 transition-colors sm:min-h-[100px] sm:p-2',
                     !isCurrentMonth && 'text-muted-foreground bg-muted/30',
@@ -276,11 +285,11 @@ function CalendarPageContent() {
                   <div className="sm:hidden">
                     {dayEvents.length > 0 && (
                       <div className="flex gap-0.5">
-                        {dayEvents.slice(0, 3).map((event, idx) => {
+                        {dayEvents.slice(0, 3).map((event) => {
                           const config = eventTypeConfig[event.type];
                           return (
                             <div
-                              key={idx}
+                              key={event.id}
                               className={cn('h-1.5 w-1.5 rounded-full', config.color)}
                             />
                           );
@@ -299,7 +308,7 @@ function CalendarPageContent() {
                     {dayEvents.slice(0, 3).map((event, eventIndex) => {
                       const config = eventTypeConfig[event.type];
                       return (
-                        <div key={eventIndex} className="flex items-center gap-1">
+                        <div key={event.id} className="flex items-center gap-1">
                           <div className={cn('h-2 w-2 flex-shrink-0 rounded-full', config.color)} />
                           <span className="truncate text-xs">{event.title}</span>
                         </div>
@@ -320,7 +329,7 @@ function CalendarPageContent() {
 
       {/* Selected Day Events */}
       {selectedDate && (
-        <Card id="selected-date-events">
+        <Card id={selectedDateEventsId}>
           <CardHeader>
             <CardTitle>Events on {format(selectedDate, 'MMMM d, yyyy')}</CardTitle>
           </CardHeader>

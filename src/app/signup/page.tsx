@@ -5,7 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { ArrowLeft, Info } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useId } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { sendWelcomeEmailAction } from '@/app/actions/send-welcome-email';
 import { EULADialog } from '@/components/eula-dialog';
 import { Icons } from '@/components/icons';

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface TableSkeletonProps {
@@ -6,24 +7,29 @@ interface TableSkeletonProps {
 }
 
 export function TableSkeleton({ rows = 5, columns = 4 }: TableSkeletonProps) {
+  const headerKeys = useMemo(
+    () => Array.from({ length: columns }, (_, i) => `col-${i}`),
+    [columns]
+  );
+  const rowKeys = useMemo(() => Array.from({ length: rows }, (_, i) => `row-${i}`), [rows]);
   return (
     <div className="w-full">
       {/* Table header */}
       <div className="border-b">
         <div className="flex gap-4 p-4">
-          {Array.from({ length: columns }).map((_, i) => (
-            <Skeleton key={i} className="h-4 flex-1" />
+          {headerKeys.map((key) => (
+            <Skeleton key={key} className="h-4 flex-1" />
           ))}
         </div>
       </div>
 
       {/* Table rows */}
-      {Array.from({ length: rows }).map((_, rowIndex) => (
-        <div key={rowIndex} className="border-b">
+      {rowKeys.map((rowKey, rowIndex) => (
+        <div key={rowKey} className="border-b">
           <div className="flex gap-4 p-4">
-            {Array.from({ length: columns }).map((_, colIndex) => (
+            {headerKeys.map((colKey, colIndex) => (
               <Skeleton
-                key={colIndex}
+                key={`${rowKey}-${colKey}`}
                 className="h-4 flex-1"
                 style={{
                   width: colIndex === 0 ? '40%' : '20%',
