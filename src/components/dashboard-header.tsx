@@ -1,7 +1,9 @@
 'use client';
 
-import { Bell, Home, LogOut, Repeat, Shield, User } from 'lucide-react';
+import { doc, getDoc } from 'firebase/firestore';
+import { Bell, Home, LogOut, Shield, User } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -10,15 +12,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/use-auth';
+import { db } from '@/lib/firebase';
 
 /**
  * DashboardHeader component provides the top navigation bar for the dashboard layout.
@@ -47,10 +46,22 @@ import { useAuth } from '@/hooks/use-auth';
  */
 export function DashboardHeader() {
   const { user, signOut } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check if user is admin
-  const isAdmin =
-    user?.email === 'jeffreyverlynjohnson@gmail.com' || user?.email === 'admin@example.com';
+  useEffect(() => {
+    async function checkAdmin() {
+      if (user) {
+        try {
+          const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+          setIsAdmin(adminDoc.exists());
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          setIsAdmin(false);
+        }
+      }
+    }
+    checkAdmin();
+  }, [user]);
 
   return (
     <header className="bg-card sticky top-0 z-20 flex h-16 shrink-0 items-center gap-4 border-b px-4 lg:px-6">
@@ -58,10 +69,10 @@ export function DashboardHeader() {
       <div className="flex w-full flex-1 items-center gap-4">
         <h2 className="text-lg font-semibold">Dashboard</h2>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="hidden sm:flex" asChild>
+          <Button variant="ghost" size="sm" asChild>
             <Link href="/announcements">
-              <Bell className="mr-2 h-4 w-4" />
-              <span className="hidden lg:inline">Announcements</span>
+              <Bell className="mr-1 h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Announcements</span>
             </Link>
           </Button>
           <ThemeSwitcher />
@@ -87,19 +98,6 @@ export function DashboardHeader() {
             <p>{user?.displayName || 'User'}</p>
             <p className="text-muted-foreground text-xs font-normal">{user?.email}</p>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <Repeat className="mr-2 h-4 w-4" />
-              <span>Quick Switch</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Alex Doe</DropdownMenuItem>
-                <DropdownMenuItem>Sam Doe</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/profile">

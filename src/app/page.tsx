@@ -23,9 +23,9 @@ export default function LandingPage() {
       try {
         const { doc, getDoc } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
 
-        if (!userDoc.exists() || !userDoc.data()?.profileCompleted) {
+        if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
           // Profile not complete, redirect to welcome
           router.push('/welcome');
         } else {

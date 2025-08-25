@@ -52,20 +52,26 @@ export default function SettingsPage() {
 
   return (
     <div className="container mx-auto max-w-4xl space-y-6 p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <Button variant="ghost" asChild>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild className="sm:hidden">
+              <Link href="/dashboard">
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            </Button>
+            <h1 className="text-2xl font-bold sm:text-3xl">Settings</h1>
+          </div>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+            Customize your experience with themes and preferences
+          </p>
+        </div>
+        <Button variant="ghost" asChild className="hidden sm:flex">
           <Link href="/dashboard">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Link>
         </Button>
-      </div>
-
-      <div>
-        <h1 className="text-3xl font-bold">Settings</h1>
-        <p className="text-muted-foreground">
-          Customize your experience with themes and preferences
-        </p>
       </div>
 
       {/* Theme Selection */}

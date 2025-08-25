@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import React, { useId } from 'react';
 import { Input } from './input';
 import { Label } from './label';
 import { Select } from './select';
@@ -8,7 +8,7 @@ interface FormFieldProps {
   label: string;
   required?: boolean;
   error?: string;
-  children?: React.ReactNode;
+  children?: React.ReactElement<any>;
   className?: string;
 }
 
@@ -20,7 +20,7 @@ export function FormField({ label, required, error, children, className }: FormF
       <Label htmlFor={id}>
         {label} {required && <span className="text-destructive">*</span>}
       </Label>
-      {children && React.cloneElement(children as React.ReactElement, { id })}
+      {children && React.cloneElement(children as any, { id } as any)}
       {error && <p className="text-sm text-destructive mt-1">{error}</p>}
     </div>
   );

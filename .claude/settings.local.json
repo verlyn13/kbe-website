@@ -99,7 +99,8 @@
       "Bash(echo:*)",
       "Bash(gcloud beta run domain-mappings describe:*)",
       "Bash(npx:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(PORT=9002 npm run dev)"
     ],
     "deny": []
   }

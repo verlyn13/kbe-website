@@ -20,11 +20,11 @@ export function WelcomeGuide() {
       if (!user) return;
 
       try {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userData = userDoc.data();
+        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
+        const profileData = profileDoc.data();
 
         // Show guide if user hasn't dismissed it and has no students registered
-        if (!userData?.hasSeenWelcomeGuide) {
+        if (!profileData?.hasSeenWelcomeGuide) {
           setShowGuide(true);
         }
       } catch (error) {
@@ -41,7 +41,7 @@ export function WelcomeGuide() {
     if (!user) return;
 
     try {
-      await updateDoc(doc(db, 'users', user.uid), {
+      await updateDoc(doc(db, 'profiles', user.uid), {
         hasSeenWelcomeGuide: true,
       });
       setShowGuide(false);
@@ -59,7 +59,8 @@ export function WelcomeGuide() {
           <div>
             <CardTitle className="text-xl">Welcome to Homer Enrichment Hub! 🎉</CardTitle>
             <CardDescription className="mt-1">
-              Let's get you started with registering your children for programs
+              Your profile is complete! Here's what to do next to get your children enrolled in
+              programs.
             </CardDescription>
           </div>
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={dismissGuide}>
@@ -136,16 +137,19 @@ export function WelcomeGuide() {
 
         <Alert>
           <AlertDescription>
-            <strong>MathCounts registration is now open!</strong> Add your children and enroll them
-            in the program to secure their spot.
+            <strong>MathCounts 2025 registration is now open!</strong> Complete steps 1 and 2 above
+            to secure your child's spot for this year's competition season.
           </AlertDescription>
         </Alert>
 
         <div className="flex items-center justify-between pt-2">
           <p className="text-muted-foreground text-sm">
-            Need help? Contact us at{' '}
-            <a href="mailto:info@homerenrichment.com" className="text-primary hover:underline">
-              info@homerenrichment.com
+            Need help? Contact Jeffrey at{' '}
+            <a
+              href="mailto:jeffreyverlynjohnson@gmail.com"
+              className="text-primary hover:underline"
+            >
+              jeffreyverlynjohnson@gmail.com
             </a>
           </p>
           <Button variant="outline" size="sm" onClick={dismissGuide}>
