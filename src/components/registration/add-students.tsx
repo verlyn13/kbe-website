@@ -99,7 +99,7 @@ export function AddStudentsForm({ onSubmit, onBack }: AddStudentsFormProps) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {fields.map((field) => (
+            {fields.map((field, index) => (
               <div key={field.id} className="rounded-lg border p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-lg font-medium">Student {index + 1}</h3>
