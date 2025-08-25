@@ -94,6 +94,12 @@ export function GuardianInfoForm() {
 
       // Mark as complete
       setIsProfileComplete(true);
+
+      // Force reload to ensure all auth state is refreshed
+      // This is necessary because ProfileCompletionCheck caches the initial state
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 500);
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({
@@ -129,7 +135,13 @@ export function GuardianInfoForm() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="mb-6 text-center">
-            <Button onClick={() => router.push('/dashboard')} size="lg" className="px-8">
+            <Button
+              onClick={() => {
+                window.location.href = '/dashboard';
+              }}
+              size="lg"
+              className="px-8"
+            >
               Go to Dashboard
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
