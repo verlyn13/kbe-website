@@ -21,6 +21,7 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
+import { formatPhoneNumber } from '@/lib/utils';
 
 interface StudentFormData {
   firstName: string;
@@ -113,7 +114,7 @@ export default function AddStudentPage() {
         dateOfBirth: formData.dateOfBirth,
         medicalNotes: formData.medicalNotes,
         emergencyContact: formData.emergencyContact,
-        emergencyPhone: formData.emergencyPhone,
+        emergencyPhone: formData.emergencyPhone.replace(/\D/g, ''), // Store as numbers only
         waiverStatus: 'pending',
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -309,7 +310,10 @@ export default function AddStudentPage() {
                     id={emergencyPhoneId}
                     type="tel"
                     value={formData.emergencyPhone}
-                    onChange={(e) => setFormData({ ...formData, emergencyPhone: e.target.value })}
+                    onChange={(e) => {
+                      const formatted = formatPhoneNumber(e.target.value);
+                      setFormData({ ...formData, emergencyPhone: formatted });
+                    }}
                     placeholder="(907) 555-1234"
                     disabled={loading}
                   />
