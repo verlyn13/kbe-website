@@ -24,7 +24,6 @@ export function GuardianInfoForm() {
   const phoneId = useId();
   const announcementsId = useId();
   const programUpdatesId = useId();
-  const newslettersId = useId();
   const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
@@ -37,7 +36,6 @@ export function GuardianInfoForm() {
     emailPreferences: {
       announcements: true,
       programUpdates: true,
-      newsletters: true,
     },
   });
 
@@ -47,10 +45,10 @@ export function GuardianInfoForm() {
 
       try {
         // Check if profile is already complete
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userData = userDoc.data();
+        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
+        const profileData = profileDoc.data();
 
-        if (userData?.profileCompleted) {
+        if (profileData?.profileCompleted) {
           setIsProfileComplete(true);
           return;
         }
@@ -64,7 +62,6 @@ export function GuardianInfoForm() {
           emailPreferences: {
             announcements: true,
             programUpdates: true,
-            newsletters: true,
           },
         });
       } catch (error) {
@@ -87,7 +84,6 @@ export function GuardianInfoForm() {
         displayName: formData.displayName,
         email: formData.email,
         phone: formData.phone.replace(/\D/g, ''),
-        emailPreferences: formData.emailPreferences,
         profileCompleted: true,
       });
 
@@ -128,70 +124,68 @@ export function GuardianInfoForm() {
         <CardHeader>
           <CardTitle className="text-2xl">Welcome to Homer Enrichment Hub! 🎉</CardTitle>
           <CardDescription>
-            Your guardian profile is all set. Here's what to do next:
+            Your guardian profile has been saved successfully. Ready to explore?
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Link href="/students/add" className="block">
-              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <UserPlus className="text-primary h-5 w-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="group-hover:text-primary font-medium">Add Your Children</h3>
-                    <p className="text-muted-foreground text-sm">
-                      Register your children in the system
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
+          <div className="mb-6 text-center">
+            <Button onClick={() => router.push('/dashboard')} size="lg" className="px-8">
+              Go to Dashboard
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
 
-            <Link href="/programs" className="block">
-              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <BookOpen className="text-primary h-5 w-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="group-hover:text-primary font-medium">Browse Programs</h3>
-                    <p className="text-muted-foreground text-sm">
-                      Explore MathCounts and other activities
-                    </p>
+          <div className="border-t pt-6">
+            <p className="text-muted-foreground text-center text-sm mb-4">
+              Or explore other areas:
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Link href="/students/add" className="block">
+                <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-primary/10 rounded-lg p-2">
+                      <UserPlus className="text-primary h-5 w-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="group-hover:text-primary font-medium">Add Your Children</h3>
+                      <p className="text-muted-foreground text-sm">
+                        Register your children in the system
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
 
-            <Link href="/calendar" className="block">
-              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Calendar className="text-primary h-5 w-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="group-hover:text-primary font-medium">View Schedule</h3>
-                    <p className="text-muted-foreground text-sm">Check dates and deadlines</p>
+              <Link href="/programs" className="block">
+                <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-primary/10 rounded-lg p-2">
+                      <BookOpen className="text-primary h-5 w-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="group-hover:text-primary font-medium">Browse Programs</h3>
+                      <p className="text-muted-foreground text-sm">
+                        Explore MathCounts and other activities
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
 
-            <Link href="/dashboard" className="block">
-              <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <ArrowRight className="text-primary h-5 w-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="group-hover:text-primary font-medium">Go to Dashboard</h3>
-                    <p className="text-muted-foreground text-sm">Access all features</p>
+              <Link href="/calendar" className="block">
+                <div className="group bg-card hover:bg-accent cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-primary/10 rounded-lg p-2">
+                      <Calendar className="text-primary h-5 w-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="group-hover:text-primary font-medium">View Schedule</h3>
+                      <p className="text-muted-foreground text-sm">Check dates and deadlines</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           </div>
 
           <Alert>
@@ -256,7 +250,7 @@ export function GuardianInfoForm() {
             <div className="space-y-2">
               <Label htmlFor={phoneId}>
                 <Phone className="mr-1 inline h-4 w-4" />
-                Phone Number
+                Phone Number <span className="text-destructive">*</span>
               </Label>
               <Input
                 id={phoneId}
@@ -267,14 +261,17 @@ export function GuardianInfoForm() {
                 required
                 disabled={loading}
               />
+              <p className="text-muted-foreground text-xs">
+                Required for program communications and emergency contact
+              </p>
             </div>
           </div>
 
           <div className="space-y-4 border-t pt-4">
             <div className="space-y-2">
-              <Label className="text-base font-semibold">Email Preferences</Label>
+              <Label className="text-base font-semibold">Email Notifications</Label>
               <p className="text-muted-foreground text-sm">
-                Stay connected with updates about programs and activities
+                Choose what you'd like to receive via email (recommended)
               </p>
             </div>
 
@@ -330,35 +327,7 @@ export function GuardianInfoForm() {
                     Program Updates
                   </label>
                   <p className="text-muted-foreground text-xs">
-                    Information about MathCounts, new programs, and registration openings
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <Checkbox
-                  id={newslettersId}
-                  checked={formData.emailPreferences.newsletters}
-                  onCheckedChange={(checked) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      emailPreferences: {
-                        ...prev.emailPreferences,
-                        newsletters: checked as boolean,
-                      },
-                    }))
-                  }
-                  disabled={loading}
-                />
-                <div className="space-y-1">
-                  <label
-                    htmlFor={newslettersId}
-                    className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Community Newsletter
-                  </label>
-                  <p className="text-muted-foreground text-xs">
-                    Monthly updates about student achievements and upcoming events
+                    Updates about MathCounts, new programs, and registration openings
                   </p>
                 </div>
               </div>
