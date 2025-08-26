@@ -171,7 +171,7 @@ export function LoginForm() {
             router.push('/dashboard');
           }
         } catch (error) {
-          console.error('Magic link sign in failed:', error);
+          logger.error('Magic link sign in failed', error);
           toast({
             variant: 'destructive',
             title: 'Magic link sign in failed',
