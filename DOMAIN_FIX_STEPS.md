@@ -61,6 +61,17 @@ gcloud run services add-iam-policy-binding kbe-website \
 - `curl -I https://homerenrichment.com` should return 200 and `server: envoy` (or similar) via App Hosting.
 - App still uses App Check and Firestore/Auth enforcement as configured; those do not block GET `/`.
 
+## OAuth Fix: Firebase Auth Domain Update
+
+**Issue**: Mobile OAuth redirect was failing because Firebase authDomain was set to `kbe-website.firebaseapp.com` but the app runs on `homerenrichment.com`.
+
+**Fix Applied**: Updated `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` secret from `kbe-website.firebaseapp.com` to `homerenrichment.com`.
+
+**Next Steps**:
+1. Ensure `homerenrichment.com` is listed as an authorized domain in Firebase Console
+2. Redeploy to pick up the new authDomain configuration
+3. Test OAuth redirect flow on mobile devices
+
 ## Notes and Corrections
 
 - Previous guidance mentioned removing A records like `151.101.x.x`. For Firebase/Google-managed apex domains you should use Google anycast A records like `216.239.32.21/34.21/36.21/38.21` (already in place).
