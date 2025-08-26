@@ -241,6 +241,14 @@ export function LoginForm() {
 
       if (isMobile) {
         console.log('Using redirect flow for mobile');
+        console.log('Auth object:', auth);
+        console.log('Auth app:', auth.app);
+        console.log('Auth config:', auth.app.options);
+        console.log('Window location before redirect:', window.location.href);
+        // Check auth internals
+        if ((auth as any)._delegate) {
+          console.log('Auth._delegate:', (auth as any)._delegate);
+        }
         await signInWithRedirect(auth, provider);
         return; // Result is handled by getRedirectResult on mount
       }
