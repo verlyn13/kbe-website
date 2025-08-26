@@ -175,11 +175,23 @@ Trust critical: Always → Security-first approach
 ### Development
 
 ```bash
-npm run dev          # Start dev server on port 9002 with Turbopack
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run typecheck    # TypeScript type checking (tsc --noEmit)
+bun run dev          # Start dev server on port 9002 with Turbopack
+bun run build        # Build for production
+bun run start        # Start production server
+bun run lint         # Run ESLint
+bun run typecheck    # TypeScript type checking (tsc --noEmit)
+```
+
+### Package Management
+
+This project uses **Bun** (v1.2.21+) as the package manager:
+
+```bash
+bun install          # Install dependencies
+bun add <package>    # Add a dependency
+bun add -D <package> # Add a dev dependency
+bun ci               # Install with frozen lockfile (for CI)
+bunx <command>       # Execute package binaries (replaces npx)
 ```
 
 ## Architecture Overview

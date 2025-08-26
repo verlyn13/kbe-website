@@ -109,7 +109,10 @@
       "Bash(npm ls:*)",
       "Bash(env)",
       "Bash(~/google-cloud-sdk/bin/gcloud projects describe kbe-website --format=\"value(projectNumber)\")",
-      "Bash(git rev-parse:*)"
+      "Bash(git rev-parse:*)",
+      "Bash(bun:*)",
+      "Bash(git rm:*)",
+      "Bash(timeout:*)"
     ],
     "deny": []
   }

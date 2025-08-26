@@ -4,7 +4,8 @@
   "private": true,
   "engines": {
     "node": ">=22.0.0",
-    "npm": ">=11.0.0"
+    "npm": ">=11.0.0",
+    "bun": ">=1.2.21"
   },
   "scripts": {
     "dev": "next dev --turbopack -p 9002",

@@ -15,11 +15,23 @@ To get started with development, take a look at src/app/page.tsx.
 ## Development
 
 ```bash
-npm run dev          # Start dev server on port 9002
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run typecheck    # TypeScript type checking
+bun run dev          # Start dev server on port 9002
+bun run build        # Build for production
+bun run start        # Start production server
+bun run lint         # Run ESLint
+bun run typecheck    # TypeScript type checking
+```
+
+### Package Management
+
+This project uses [Bun](https://bun.sh) as the package manager and runtime:
+
+```bash
+bun install          # Install dependencies
+bun add <package>    # Add a new dependency
+bun add -D <package> # Add a dev dependency
+bun ci               # Install with frozen lockfile (CI)
+bunx <command>       # Execute package binaries
 ```
 
 ### ⚠️ Known Issue: App Check & OAuth
