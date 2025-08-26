@@ -20,6 +20,14 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   Form,
   FormControl,
   FormField,
@@ -29,14 +37,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { getErrorMessage } from '@/lib/error-utils';
 import { auth } from '@/lib/firebase';
@@ -125,7 +125,7 @@ export function LoginForm() {
         const result = await getRedirectResult(auth);
         if (result?.user) {
           logger.info('[OAuth] User found from redirect', { email: result.user.email });
-          const isNewUser = 
+          const isNewUser =
             result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
           await routeAfterGoogleSignIn(result.user.uid, isNewUser);
           return true; // Signal that OAuth was handled
@@ -152,7 +152,7 @@ export function LoginForm() {
 
       if (isSignInWithEmailLink(auth, window.location.href)) {
         setIsLoading(true);
-        let email = window.localStorage.getItem('emailForSignIn');
+        const email = window.localStorage.getItem('emailForSignIn');
 
         logger.info('Magic link detected, attempting sign in', {
           emailFromStorage: email ? 'found' : 'not found',
@@ -171,7 +171,8 @@ export function LoginForm() {
           logger.info('Magic link sign in successful');
 
           const isNewUser =
-            userCredential.user.metadata.creationTime === userCredential.user.metadata.lastSignInTime;
+            userCredential.user.metadata.creationTime ===
+            userCredential.user.metadata.lastSignInTime;
           await routeAfterGoogleSignIn(userCredential.user.uid, isNewUser);
         } catch (error) {
           logger.error('Magic link sign in failed', {
@@ -204,7 +205,7 @@ export function LoginForm() {
     const initializeAuth = async () => {
       // First check OAuth redirect (critical for mobile)
       const oauthHandled = await handleOAuthRedirect();
-      
+
       // Only check magic links if OAuth wasn't handled
       if (!oauthHandled) {
         await completeMagicLinkSignIn();
@@ -251,13 +252,13 @@ export function LoginForm() {
     try {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       logger.info('[OAuth] Google sign-in initiated', { isMobile, userAgent: navigator.userAgent });
-      
+
       if (isMobile) {
         logger.info('[OAuth] Using redirect flow for mobile');
         await signInWithRedirect(auth, provider);
         return; // Result is handled by getRedirectResult on mount
       }
-      
+
       logger.info('[OAuth] Using popup flow for desktop');
 
       const result = await signInWithPopup(auth, provider);

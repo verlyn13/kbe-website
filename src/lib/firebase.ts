@@ -1,6 +1,11 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
-import { browserLocalPersistence, browserSessionPersistence, getAuth, setPersistence } from 'firebase/auth';
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  getAuth,
+  setPersistence,
+} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 // Firebase configuration (env-only; no hardcoded defaults)
@@ -25,7 +30,7 @@ if (typeof window !== 'undefined') {
   // Use session persistence for desktop (more secure on shared devices)
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const persistence = isMobile ? browserLocalPersistence : browserSessionPersistence;
-  
+
   setPersistence(auth, persistence).catch((error) => {
     // Keep silent in production, surface in dev
     if (process.env.NODE_ENV !== 'production') {

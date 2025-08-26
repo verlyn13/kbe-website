@@ -5,7 +5,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth } from '@/lib/firebase';
-import { logger } from '@/lib/logger';
 
 interface AuthContextType {
   user: User | null;
