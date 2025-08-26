@@ -61,16 +61,21 @@ gcloud run services add-iam-policy-binding kbe-website \
 - `curl -I https://homerenrichment.com` should return 200 and `server: envoy` (or similar) via App Hosting.
 - App still uses App Check and Firestore/Auth enforcement as configured; those do not block GET `/`.
 
-## OAuth Fix: Firebase Auth Domain Update
+## OAuth Fix: Firebase Auth Configuration
 
-**Issue**: Mobile OAuth redirect was failing because Firebase authDomain was set to `kbe-website.firebaseapp.com` but the app runs on `homerenrichment.com`.
+**Issue**: Mobile OAuth redirect was failing - users authenticated successfully but remained on login page.
 
-**Fix Applied**: Updated `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` secret from `kbe-website.firebaseapp.com` to `homerenrichment.com`.
+**Root Cause**: OAuth redirect result not being properly retrieved after authentication completes.
 
-**Next Steps**:
-1. Ensure `homerenrichment.com` is listed as an authorized domain in Firebase Console
-2. Redeploy to pick up the new authDomain configuration
-3. Test OAuth redirect flow on mobile devices
+**Important**: The authDomain MUST remain as `kbe-website.firebaseapp.com` because that's where Firebase's auth handler infrastructure (`/__/auth/handler`) exists. Changing it to `homerenrichment.com` causes 404 errors.
+
+**Required Configuration**:
+1. Keep `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` as `kbe-website.firebaseapp.com` 
+2. Add these domains to Firebase Console authorized domains:
+   - `homerenrichment.com`
+   - `kbe.homerenrichment.com`
+   - `kbe-website.firebaseapp.com` (should already be there)
+3. Ensure OAuth redirect URIs include `https://homerenrichment.com/login`
 
 ## Notes and Corrections
 
