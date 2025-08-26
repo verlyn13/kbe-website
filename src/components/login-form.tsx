@@ -80,13 +80,6 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
  * <LoginForm />
  */
 export function LoginForm() {
-  // DIAGNOSTIC: Debug page load and auth state
-  if (typeof window !== 'undefined') {
-    console.log('Login page loaded, URL:', window.location.href);
-    console.log('URL params:', window.location.search);
-    console.log('Auth state:', auth.currentUser?.email || 'not authenticated');
-  }
-
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -107,16 +100,12 @@ export function LoginForm() {
     },
   });
 
-  // CRITICAL: OAuth redirect handler MUST run first and unconditionally
+  // OAuth redirect handler - runs unconditionally on mount
   useEffect(() => {
     const checkRedirectResult = async () => {
-      console.log('Checking redirect result...');
       try {
         const result = await getRedirectResult(auth);
-        console.log('getRedirectResult returned:', result);
         if (result?.user) {
-          console.log('Redirect successful:', result.user.email);
-
           // Check if this is a new user
           const isNewUser =
             result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
@@ -136,25 +125,21 @@ export function LoginForm() {
           router.push('/dashboard');
           return;
         } else {
-          console.log('No redirect result found');
           // Check if user is already signed in
           if (auth.currentUser) {
-            console.log('User already signed in:', auth.currentUser.email);
             router.push('/dashboard');
           }
         }
       } catch (error: any) {
-        // Only log errors that aren't cancellations
+        // Silently handle popup cancellation errors
         if (error.code !== 'auth/popup-closed-by-user') {
-          console.error('Redirect error:', error);
-          console.error('Error code:', error.code);
-          console.error('Error message:', error.message);
+          logger.error('OAuth redirect error', error);
         }
       }
     };
 
     checkRedirectResult();
-  }, [router]); // This runs on EVERY mount, not conditionally
+  }, [router]); // Runs on every mount
 
   // SECONDARY: Handle magic links (only if not redirected above)
   useEffect(() => {
@@ -237,23 +222,11 @@ export function LoginForm() {
     const provider = new GoogleAuthProvider();
     try {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      console.log('Google sign-in initiated, isMobile:', isMobile);
 
       if (isMobile) {
-        console.log('Using redirect flow for mobile');
-        console.log('Auth object:', auth);
-        console.log('Auth app:', auth.app);
-        console.log('Auth config:', auth.app.options);
-        console.log('Window location before redirect:', window.location.href);
-        // Check auth internals
-        if ((auth as any)._delegate) {
-          console.log('Auth._delegate:', (auth as any)._delegate);
-        }
         await signInWithRedirect(auth, provider);
         return; // Result is handled by getRedirectResult on mount
       }
-
-      console.log('Using popup flow for desktop');
 
       const result = await signInWithPopup(auth, provider);
       const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
@@ -282,12 +255,9 @@ export function LoginForm() {
   };
 
   const handleMagicLink = async (e?: React.FormEvent) => {
-    console.log('Magic link handler triggered'); // ADD DIAGNOSTIC
     if (e) e.preventDefault();
 
     const email = form.getValues('email');
-    console.log('Email value:', email); // ADD DIAGNOSTIC
-    console.log('Email valid:', emailSchema.safeParse(email).success); // ADD DIAGNOSTIC
     if (!email || !z.string().email().safeParse(email).success) {
       form.setError('email', { type: 'manual', message: 'Please enter a valid email.' });
       return;
