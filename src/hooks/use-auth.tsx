@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth } from '@/lib/firebase';
+import { logger } from '@/lib/logger';
 
 interface AuthContextType {
   user: User | null;
@@ -19,21 +20,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const isDev = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
-    console.log('[AuthProvider] Setting up auth listener');
-    console.time('[AuthProvider] First auth state change');
+    if (isDev) {
+      console.log('[AuthProvider] Setting up auth listener');
+      console.time('[AuthProvider] First auth state change');
+    }
 
     // Add a timeout to detect if auth is hanging
     const timeoutId = setTimeout(() => {
-      console.error('[AuthProvider] WARNING: Auth state change is taking too long (>5s)');
-      console.log('[AuthProvider] Current auth instance:', auth);
+      if (isDev) {
+        console.error('[AuthProvider] WARNING: Auth state change is taking too long (>5s)');
+        console.log('[AuthProvider] Current auth instance:', auth);
+      }
     }, 5000);
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       clearTimeout(timeoutId);
-      console.timeEnd('[AuthProvider] First auth state change');
-      console.log('[AuthProvider] Auth state changed:', { user: !!user });
+      if (isDev) {
+        console.timeEnd('[AuthProvider] First auth state change');
+        console.log('[AuthProvider] Auth state changed:', { user: !!user });
+      }
       setUser(user);
       setLoading(false);
     });
@@ -42,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       clearTimeout(timeoutId);
       unsubscribe();
     };
-  }, []);
+  }, [isDev]);
 
   // Remove automatic redirects - let individual pages handle their own routing
   // This prevents conflicts with the signup flow
