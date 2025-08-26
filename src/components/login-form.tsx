@@ -3,11 +3,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   GoogleAuthProvider,
+  getRedirectResult,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailAndPassword,
   signInWithEmailLink,
   signInWithPopup,
+  signInWithRedirect,
 } from 'firebase/auth';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -27,6 +29,14 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { getErrorMessage } from '@/lib/error-utils';
 import { auth } from '@/lib/firebase';
@@ -76,6 +86,10 @@ export function LoginForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
   const [authMethod, setAuthMethod] = useState<'password' | 'magic'>('password');
+  // Magic-link email confirmation modal state (replaces window.prompt on iOS)
+  const [showEmailConfirm, setShowEmailConfirm] = useState(false);
+  const [emailForMagicLink, setEmailForMagicLink] = useState('');
+  const [pendingMagicLinkUrl, setPendingMagicLinkUrl] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -87,6 +101,20 @@ export function LoginForm() {
   });
 
   useEffect(() => {
+    // Helper: route based on whether the user is new and profile completion
+    const routeAfterGoogleSignIn = async (uid: string, isNewUser: boolean) => {
+      if (isNewUser) {
+        const { doc, getDoc } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase');
+        const profileDoc = await getDoc(doc(db, 'profiles', uid));
+        if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
+          router.push('/welcome');
+          return;
+        }
+      }
+      router.push('/dashboard');
+    };
+
     const completeMagicLinkSignIn = async () => {
       // Log current URL for debugging
       logger.info('Checking if URL is magic link', {
@@ -103,25 +131,20 @@ export function LoginForm() {
         });
 
         if (!email) {
-          email = window.prompt('Please provide your email for confirmation');
+          // Store URL and request email via modal to avoid window.prompt (iOS restrictions)
+          setPendingMagicLinkUrl(window.location.href);
+          setShowEmailConfirm(true);
+          setIsLoading(false);
+          return;
         }
         try {
-          if (email) {
-            const userCredential = await signInWithEmailLink(auth, email, window.location.href);
-            window.localStorage.removeItem('emailForSignIn');
-            logger.info('Magic link sign in successful');
+          const userCredential = await signInWithEmailLink(auth, email, window.location.href);
+          window.localStorage.removeItem('emailForSignIn');
+          logger.info('Magic link sign in successful');
 
-            // Check if this is a new user (first time sign in)
-            const isNewUser =
-              userCredential.user.metadata.creationTime ===
-              userCredential.user.metadata.lastSignInTime;
-
-            if (isNewUser) {
-              router.push('/welcome');
-            } else {
-              router.push('/dashboard');
-            }
-          }
+          const isNewUser =
+            userCredential.user.metadata.creationTime === userCredential.user.metadata.lastSignInTime;
+          await routeAfterGoogleSignIn(userCredential.user.uid, isNewUser);
         } catch (error) {
           logger.error('Magic link sign in failed', {
             error,
@@ -132,8 +155,6 @@ export function LoginForm() {
           });
 
           let errorMessage = getErrorMessage(error);
-
-          // Provide more specific error messages for sign-in
           if ((error as { code?: string })?.code === 'auth/invalid-action-code') {
             errorMessage = 'This sign-in link is invalid, expired, or has already been used.';
           } else if ((error as { code?: string })?.code === 'auth/user-disabled') {
@@ -151,8 +172,28 @@ export function LoginForm() {
       }
     };
 
+    const completeGoogleRedirectIfPresent = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (!result) return;
+
+        const isNewUser =
+          result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
+        await routeAfterGoogleSignIn(result.user.uid, isNewUser);
+      } catch (error) {
+        // Popup-blocked errors are not expected here; surface others to user
+        logger.error('Google redirect sign in failed', error as any);
+        toast({
+          variant: 'destructive',
+          title: 'Google sign in failed',
+          description: getErrorMessage(error),
+        });
+      }
+    };
+
     // Only run once on mount
     completeMagicLinkSignIn();
+    completeGoogleRedirectIfPresent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, toast]); // Add router and toast to dependencies
 
@@ -190,25 +231,26 @@ export function LoginForm() {
     setIsGoogleLoading(true);
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-
-      // Check if this is a new user (first time sign in)
-      const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-
-      if (isNewUser) {
-        // Check if user profile exists
-        const { doc, getDoc } = await import('firebase/firestore');
-        const { db } = await import('@/lib/firebase');
-        const profileDoc = await getDoc(doc(db, 'profiles', result.user.uid));
-
-        if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
-          router.push('/welcome');
-        } else {
-          router.push('/dashboard');
-        }
-      } else {
-        router.push('/dashboard');
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        await signInWithRedirect(auth, provider);
+        return; // Result is handled by getRedirectResult on mount
       }
+
+      const result = await signInWithPopup(auth, provider);
+      const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
+      await (async () => {
+        if (isNewUser) {
+          const { doc, getDoc } = await import('firebase/firestore');
+          const { db } = await import('@/lib/firebase');
+          const profileDoc = await getDoc(doc(db, 'profiles', result.user.uid));
+          if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
+            router.push('/welcome');
+            return;
+          }
+        }
+        router.push('/dashboard');
+      })();
     } catch (error) {
       logger.error('Google sign in failed', error);
       toast({
@@ -231,7 +273,7 @@ export function LoginForm() {
     setIsMagicLinkLoading(true);
     const actionCodeSettings = {
       // URL where the user will complete sign-in (must be authorized in Firebase Console)
-      url: `${window.location.origin}/`,
+      url: `${window.location.origin}/login`,
       // This must be true for email link sign-in
       handleCodeInApp: true,
     };
@@ -274,6 +316,72 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
+      {/* Email confirmation dialog for magic-link completion (iOS-safe) */}
+      <Dialog open={showEmailConfirm} onOpenChange={setShowEmailConfirm}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm your email</DialogTitle>
+            <DialogDescription>
+              To complete sign-in, please confirm the email address where you received the link.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Input
+              type="email"
+              placeholder="name@example.com"
+              value={emailForMagicLink}
+              onChange={(e) => setEmailForMagicLink(e.target.value)}
+              aria-label="Email address for magic link"
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              onClick={async () => {
+                const email = emailForMagicLink.trim();
+                if (!z.string().email().safeParse(email).success || !pendingMagicLinkUrl) {
+                  toast({
+                    variant: 'destructive',
+                    title: 'Invalid email',
+                    description: 'Please enter a valid email address.',
+                  });
+                  return;
+                }
+                try {
+                  setIsLoading(true);
+                  const cred = await signInWithEmailLink(auth, email, pendingMagicLinkUrl);
+                  window.localStorage.removeItem('emailForSignIn');
+                  setShowEmailConfirm(false);
+                  const isNewUser =
+                    cred.user.metadata.creationTime === cred.user.metadata.lastSignInTime;
+                  await (async () => {
+                    if (isNewUser) {
+                      const { doc, getDoc } = await import('firebase/firestore');
+                      const { db } = await import('@/lib/firebase');
+                      const profileDoc = await getDoc(doc(db, 'profiles', cred.user.uid));
+                      if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
+                        router.push('/welcome');
+                        return;
+                      }
+                    }
+                    router.push('/dashboard');
+                  })();
+                } catch (error) {
+                  logger.error('Magic link sign in failed (modal)', error as any);
+                  toast({
+                    variant: 'destructive',
+                    title: 'Magic link sign in failed',
+                    description: getErrorMessage(error),
+                  });
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+            >
+              Continue
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       {/* Google Sign-in - Most prominent */}
       <Button
         variant="outline"
