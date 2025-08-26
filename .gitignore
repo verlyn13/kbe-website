@@ -10,6 +10,14 @@
 !.yarn/releases
 !.yarn/versions
 
+# bun
+bun.lockb
+# Keep the text-based lockfile
+# bun.lock is committed
+
+# npm (no longer used)
+package-lock.json
+
 # testing
 /coverage
 /test-results

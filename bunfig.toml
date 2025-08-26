@@ -1,0 +1,32 @@
+# Bun configuration for Homer Enrichment Hub
+
+[install]
+# Use exact versions when adding dependencies
+exact = true
+
+# Auto-install peer dependencies (default behavior)
+auto = "auto"
+
+# Use hoisted mode (npm-style) for compatibility
+linker = "hoisted"
+
+# Production mode settings
+production = false
+
+# Frozen lockfile for CI
+frozenLockfile = false
+
+[install.cache]
+# Disable global cache if needed for CI
+disable = false
+
+[test]
+# Enable coverage reporting
+coverage = true
+
+# Test runner settings
+root = "./src"
+
+[run]
+# Bun runtime settings for development
+# Automatically load .env.local
