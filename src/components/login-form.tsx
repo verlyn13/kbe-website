@@ -80,6 +80,13 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
  * <LoginForm />
  */
 export function LoginForm() {
+  // DIAGNOSTIC: Debug page load and auth state
+  if (typeof window !== 'undefined') {
+    console.log('Login page loaded, URL:', window.location.href);
+    console.log('URL params:', window.location.search);
+    console.log('Auth state:', auth.currentUser?.email || 'not authenticated');
+  }
+
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -100,63 +107,50 @@ export function LoginForm() {
     },
   });
 
+  // CRITICAL: OAuth redirect handler MUST run first and unconditionally
   useEffect(() => {
-    // Helper: route based on whether the user is new and profile completion
-    const routeAfterGoogleSignIn = async (uid: string, isNewUser: boolean) => {
-      logger.info('[OAuth] Routing user after Google sign-in', { uid, isNewUser });
-      if (isNewUser) {
-        const { doc, getDoc } = await import('firebase/firestore');
-        const { db } = await import('@/lib/firebase');
-        const profileDoc = await getDoc(doc(db, 'profiles', uid));
-        if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
-          logger.info('[OAuth] New user, redirecting to welcome');
-          router.push('/welcome');
-          return;
-        }
-      }
-      logger.info('[OAuth] Redirecting to dashboard');
-      router.push('/dashboard');
-    };
-
-    // PRIORITY 1: Handle OAuth redirect first (critical for mobile)
-    const handleOAuthRedirect = async () => {
-      logger.info('[OAuth] Checking for redirect result...');
+    const checkRedirectResult = async () => {
       try {
         const result = await getRedirectResult(auth);
         if (result?.user) {
-          logger.info('[OAuth] User found from redirect', { email: result.user.email });
+          console.log('Redirect successful:', result.user.email);
+
+          // Check if this is a new user
           const isNewUser =
             result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-          await routeAfterGoogleSignIn(result.user.uid, isNewUser);
-          return true; // Signal that OAuth was handled
+
+          if (isNewUser) {
+            // Check if profile is completed
+            const { doc, getDoc } = await import('firebase/firestore');
+            const { db } = await import('@/lib/firebase');
+            const profileDoc = await getDoc(doc(db, 'profiles', result.user.uid));
+            if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
+              router.push('/welcome');
+              return;
+            }
+          }
+
+          // Immediately leave the login page
+          router.push('/dashboard');
+          return;
         }
-        logger.info('[OAuth] No redirect result found');
-        return false;
-      } catch (error) {
-        logger.error('[OAuth] Redirect error', error as any);
-        toast({
-          variant: 'destructive',
-          title: 'Google sign in failed',
-          description: getErrorMessage(error),
-        });
-        return false;
+      } catch (error: any) {
+        // Only log errors that aren't cancellations
+        if (error.code !== 'auth/popup-closed-by-user') {
+          console.error('Redirect error:', error);
+        }
       }
     };
 
-    const completeMagicLinkSignIn = async () => {
-      // Log current URL for debugging
-      logger.info('Checking if URL is magic link', {
-        url: window.location.href,
-        isMagicLink: isSignInWithEmailLink(auth, window.location.href),
-      });
+    checkRedirectResult();
+  }, [router]); // This runs on EVERY mount, not conditionally
 
+  // SECONDARY: Handle magic links (only if not redirected above)
+  useEffect(() => {
+    const completeMagicLinkSignIn = async () => {
       if (isSignInWithEmailLink(auth, window.location.href)) {
         setIsLoading(true);
         const email = window.localStorage.getItem('emailForSignIn');
-
-        logger.info('Magic link detected, attempting sign in', {
-          emailFromStorage: email ? 'found' : 'not found',
-        });
 
         if (!email) {
           // Store URL and request email via modal to avoid window.prompt (iOS restrictions)
@@ -165,35 +159,27 @@ export function LoginForm() {
           setIsLoading(false);
           return;
         }
+
         try {
           const userCredential = await signInWithEmailLink(auth, email, window.location.href);
           window.localStorage.removeItem('emailForSignIn');
-          logger.info('Magic link sign in successful');
 
+          // Check if new user needs welcome flow
           const isNewUser =
             userCredential.user.metadata.creationTime ===
             userCredential.user.metadata.lastSignInTime;
-          await routeAfterGoogleSignIn(userCredential.user.uid, isNewUser);
-        } catch (error) {
-          logger.error('Magic link sign in failed', {
-            error,
-            code: (error as { code?: string })?.code,
-            message: (error as { message?: string })?.message,
-            email,
-            url: window.location.href,
-          });
 
-          let errorMessage = getErrorMessage(error);
-          if ((error as { code?: string })?.code === 'auth/invalid-action-code') {
-            errorMessage = 'This sign-in link is invalid, expired, or has already been used.';
-          } else if ((error as { code?: string })?.code === 'auth/user-disabled') {
-            errorMessage = 'This account has been disabled.';
+          if (isNewUser) {
+            router.push('/welcome');
+          } else {
+            router.push('/dashboard');
           }
-
+        } catch (error) {
+          console.error('Magic link sign in failed:', error);
           toast({
             variant: 'destructive',
             title: 'Magic link sign in failed',
-            description: errorMessage,
+            description: getErrorMessage(error),
           });
         } finally {
           setIsLoading(false);
@@ -201,18 +187,7 @@ export function LoginForm() {
       }
     };
 
-    // Execute auth checks in priority order
-    const initializeAuth = async () => {
-      // First check OAuth redirect (critical for mobile)
-      const oauthHandled = await handleOAuthRedirect();
-
-      // Only check magic links if OAuth wasn't handled
-      if (!oauthHandled) {
-        await completeMagicLinkSignIn();
-      }
-    };
-
-    initializeAuth();
+    completeMagicLinkSignIn();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, toast]); // Add router and toast to dependencies
 
@@ -251,15 +226,15 @@ export function LoginForm() {
     const provider = new GoogleAuthProvider();
     try {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      logger.info('[OAuth] Google sign-in initiated', { isMobile, userAgent: navigator.userAgent });
+      console.log('Google sign-in initiated, isMobile:', isMobile);
 
       if (isMobile) {
-        logger.info('[OAuth] Using redirect flow for mobile');
+        console.log('Using redirect flow for mobile');
         await signInWithRedirect(auth, provider);
         return; // Result is handled by getRedirectResult on mount
       }
 
-      logger.info('[OAuth] Using popup flow for desktop');
+      console.log('Using popup flow for desktop');
 
       const result = await signInWithPopup(auth, provider);
       const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
@@ -287,8 +262,13 @@ export function LoginForm() {
     }
   };
 
-  const handleMagicLink = async () => {
+  const handleMagicLink = async (e?: React.FormEvent) => {
+    console.log('Magic link handler triggered'); // ADD DIAGNOSTIC
+    if (e) e.preventDefault();
+
     const email = form.getValues('email');
+    console.log('Email value:', email); // ADD DIAGNOSTIC
+    console.log('Email valid:', emailSchema.safeParse(email).success); // ADD DIAGNOSTIC
     if (!email || !z.string().email().safeParse(email).success) {
       form.setError('email', { type: 'manual', message: 'Please enter a valid email.' });
       return;
@@ -507,7 +487,12 @@ export function LoginForm() {
             </TabsContent>
           </Tabs>
 
-          <Button type="submit" className="h-11 w-full" disabled={isLoading || isMagicLinkLoading}>
+          <Button
+            type={authMethod === 'password' ? 'submit' : 'button'}
+            className="h-11 w-full"
+            disabled={isLoading || isMagicLinkLoading}
+            onClick={authMethod === 'magic' ? () => handleMagicLink() : undefined}
+          >
             {(isLoading || isMagicLinkLoading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {authMethod === 'password' ? 'Sign In' : 'Send Magic Link'}
           </Button>
