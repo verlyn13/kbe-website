@@ -102,7 +102,10 @@
       "Bash(sed:*)",
       "Bash(PORT=9002 npm run dev)",
       "Bash(npm run lint:*)",
-      "Bash(npm run format:check:*)"
+      "Bash(npm run format:check:*)",
+      "Bash(~/google-cloud-sdk/bin/gcloud secrets versions access latest --secret=NEXT_PUBLIC_FIREBASE_PROJECT_ID --project=kbe-website)",
+      "Bash(~/google-cloud-sdk/bin/gcloud secrets versions add NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN --project=kbe-website --data-file=-)",
+      "WebFetch(domain:firebase.google.com)"
     ],
     "deny": []
   }

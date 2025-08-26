@@ -110,8 +110,10 @@ export function LoginForm() {
   // CRITICAL: OAuth redirect handler MUST run first and unconditionally
   useEffect(() => {
     const checkRedirectResult = async () => {
+      console.log('Checking redirect result...');
       try {
         const result = await getRedirectResult(auth);
+        console.log('getRedirectResult returned:', result);
         if (result?.user) {
           console.log('Redirect successful:', result.user.email);
 
@@ -133,11 +135,20 @@ export function LoginForm() {
           // Immediately leave the login page
           router.push('/dashboard');
           return;
+        } else {
+          console.log('No redirect result found');
+          // Check if user is already signed in
+          if (auth.currentUser) {
+            console.log('User already signed in:', auth.currentUser.email);
+            router.push('/dashboard');
+          }
         }
       } catch (error: any) {
         // Only log errors that aren't cancellations
         if (error.code !== 'auth/popup-closed-by-user') {
           console.error('Redirect error:', error);
+          console.error('Error code:', error.code);
+          console.error('Error message:', error.message);
         }
       }
     };
