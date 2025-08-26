@@ -103,16 +103,44 @@ export function LoginForm() {
   useEffect(() => {
     // Helper: route based on whether the user is new and profile completion
     const routeAfterGoogleSignIn = async (uid: string, isNewUser: boolean) => {
+      logger.info('[OAuth] Routing user after Google sign-in', { uid, isNewUser });
       if (isNewUser) {
         const { doc, getDoc } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
         const profileDoc = await getDoc(doc(db, 'profiles', uid));
         if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
+          logger.info('[OAuth] New user, redirecting to welcome');
           router.push('/welcome');
           return;
         }
       }
+      logger.info('[OAuth] Redirecting to dashboard');
       router.push('/dashboard');
+    };
+
+    // PRIORITY 1: Handle OAuth redirect first (critical for mobile)
+    const handleOAuthRedirect = async () => {
+      logger.info('[OAuth] Checking for redirect result...');
+      try {
+        const result = await getRedirectResult(auth);
+        if (result?.user) {
+          logger.info('[OAuth] User found from redirect', { email: result.user.email });
+          const isNewUser = 
+            result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
+          await routeAfterGoogleSignIn(result.user.uid, isNewUser);
+          return true; // Signal that OAuth was handled
+        }
+        logger.info('[OAuth] No redirect result found');
+        return false;
+      } catch (error) {
+        logger.error('[OAuth] Redirect error', error as any);
+        toast({
+          variant: 'destructive',
+          title: 'Google sign in failed',
+          description: getErrorMessage(error),
+        });
+        return false;
+      }
     };
 
     const completeMagicLinkSignIn = async () => {
@@ -172,28 +200,18 @@ export function LoginForm() {
       }
     };
 
-    const completeGoogleRedirectIfPresent = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (!result) return;
-
-        const isNewUser =
-          result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-        await routeAfterGoogleSignIn(result.user.uid, isNewUser);
-      } catch (error) {
-        // Popup-blocked errors are not expected here; surface others to user
-        logger.error('Google redirect sign in failed', error as any);
-        toast({
-          variant: 'destructive',
-          title: 'Google sign in failed',
-          description: getErrorMessage(error),
-        });
+    // Execute auth checks in priority order
+    const initializeAuth = async () => {
+      // First check OAuth redirect (critical for mobile)
+      const oauthHandled = await handleOAuthRedirect();
+      
+      // Only check magic links if OAuth wasn't handled
+      if (!oauthHandled) {
+        await completeMagicLinkSignIn();
       }
     };
 
-    // Only run once on mount
-    completeMagicLinkSignIn();
-    completeGoogleRedirectIfPresent();
+    initializeAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, toast]); // Add router and toast to dependencies
 
@@ -232,10 +250,15 @@ export function LoginForm() {
     const provider = new GoogleAuthProvider();
     try {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      logger.info('[OAuth] Google sign-in initiated', { isMobile, userAgent: navigator.userAgent });
+      
       if (isMobile) {
+        logger.info('[OAuth] Using redirect flow for mobile');
         await signInWithRedirect(auth, provider);
         return; // Result is handled by getRedirectResult on mount
       }
+      
+      logger.info('[OAuth] Using popup flow for desktop');
 
       const result = await signInWithPopup(auth, provider);
       const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;

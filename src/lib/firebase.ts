@@ -1,6 +1,6 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
-import { browserSessionPersistence, getAuth, setPersistence } from 'firebase/auth';
+import { browserLocalPersistence, browserSessionPersistence, getAuth, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 // Firebase configuration (env-only; no hardcoded defaults)
@@ -19,9 +19,14 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Set session-only persistence on client to reduce risk on shared devices
+// Set persistence based on device type - critical for mobile OAuth redirect
 if (typeof window !== 'undefined') {
-  setPersistence(auth, browserSessionPersistence).catch((error) => {
+  // Use local persistence for mobile (required for OAuth redirect flow)
+  // Use session persistence for desktop (more secure on shared devices)
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const persistence = isMobile ? browserLocalPersistence : browserSessionPersistence;
+  
+  setPersistence(auth, persistence).catch((error) => {
     // Keep silent in production, surface in dev
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
