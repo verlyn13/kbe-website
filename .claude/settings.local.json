@@ -115,7 +115,16 @@
       "Bash(timeout:*)",
       "Bash(git branch:*)",
       "Bash(git remote:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(vercel:*)",
+      "Bash(gcloud secrets versions access:*)",
+      "Bash(./scripts/migrate-env.sh:*)",
+      "Bash(./scripts/test-oauth-flow.sh:*)",
+      "Bash(gcloud services api-keys get-key-string:*)",
+      "Bash(ds cd cloudflare-management)",
+      "Read(/home/verlyn13/bin/**)",
+      "Bash(gcloud services api-keys get-key:*)",
+      "Bash(git log:*)"
     ],
     "deny": []
   }
