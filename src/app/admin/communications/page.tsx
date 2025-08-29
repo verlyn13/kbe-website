@@ -28,7 +28,8 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { type Announcement, announcementService } from '@/lib/firebase-admin';
+import { type Announcement, announcementService } from '@/lib/services';
+import { mapAnnouncementStatusEnumToLC, mapPriorityEnumToLC } from '@/types/enum-mappings';
 
 export default function AdminCommunicationsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -96,7 +97,9 @@ export default function AdminCommunicationsPage() {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => {
-        const status = row.getValue('status') as Announcement['status'];
+        const status = mapAnnouncementStatusEnumToLC(
+          row.getValue('status') as Announcement['status']
+        );
         const icon =
           status === 'published' ? (
             <Check className="h-3 w-3" />
@@ -198,7 +201,10 @@ export default function AdminCommunicationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {announcements.filter((a) => a.status === 'published').length}
+              {
+                announcements.filter((a) => mapAnnouncementStatusEnumToLC(a.status) === 'published')
+                  .length
+              }
             </div>
             <p className="text-muted-foreground text-xs">This month</p>
           </CardContent>
@@ -209,7 +215,10 @@ export default function AdminCommunicationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {announcements.filter((a) => a.status === 'archived').length}
+              {
+                announcements.filter((a) => mapAnnouncementStatusEnumToLC(a.status) === 'archived')
+                  .length
+              }
             </div>
             <p className="text-muted-foreground text-xs">Upcoming</p>
           </CardContent>
@@ -220,7 +229,10 @@ export default function AdminCommunicationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {announcements.filter((a) => a.status === 'draft').length}
+              {
+                announcements.filter((a) => mapAnnouncementStatusEnumToLC(a.status) === 'draft')
+                  .length
+              }
             </div>
             <p className="text-muted-foreground text-xs">Saved</p>
           </CardContent>
@@ -250,9 +262,15 @@ export default function AdminCommunicationsPage() {
           <div className="space-y-4">
             <div className="flex gap-2">
               <Badge
-                variant={selectedAnnouncement?.priority === 'high' ? 'destructive' : 'default'}
+                variant={
+                  selectedAnnouncement &&
+                  mapPriorityEnumToLC(selectedAnnouncement.priority) === 'high'
+                    ? 'destructive'
+                    : 'default'
+                }
               >
-                {selectedAnnouncement?.priority} priority
+                {selectedAnnouncement && mapPriorityEnumToLC(selectedAnnouncement.priority)}{' '}
+                priority
               </Badge>
               <Badge variant="outline">
                 {selectedAnnouncement?.recipients === 'all'

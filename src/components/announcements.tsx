@@ -17,7 +17,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';
-import { type Announcement, announcementService } from '@/lib/firebase-admin';
+import { type Announcement, announcementService } from '@/lib/services';
+import { mapAnnouncementStatusEnumToLC, mapPriorityEnumToLC } from '@/types/enum-mappings';
 import { Button } from './ui/button';
 
 export function Announcements() {
@@ -28,19 +29,18 @@ export function Announcements() {
 
   const loadAnnouncements = useCallback(async () => {
     try {
-      const data = await announcementService.getAll({
-        status: 'published',
-        limitCount: 5,
-        userId: user?.uid,
-        showHidden: false,
-      });
-      setAnnouncements(data);
+      const data = await announcementService.getAll();
+      // Filter for published announcements and limit to 5
+      const filtered = data
+        .filter((a) => mapAnnouncementStatusEnumToLC(a.status) === 'published')
+        .slice(0, 5);
+      setAnnouncements(filtered);
     } catch (error) {
       console.error('Error loading announcements:', error);
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -116,7 +116,9 @@ export function Announcements() {
                   role="button"
                   tabIndex={0}
                 >
-                  <div className={`w-1.5 rounded-full ${getPriorityColor(item.priority)}`}></div>
+                  <div
+                    className={`w-1.5 rounded-full ${getPriorityColor(mapPriorityEnumToLC(item.priority))}`}
+                  ></div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -129,7 +131,7 @@ export function Announcements() {
                       </p>
                     </div>
                     <div className="mt-1 flex items-center gap-2">
-                      {getPriorityIcon(item.priority)}
+                      {getPriorityIcon(mapPriorityEnumToLC(item.priority))}
                       <Badge variant="secondary" className="text-xs">
                         {item.recipients === 'all' ? 'All Families' : item.recipients}
                       </Badge>

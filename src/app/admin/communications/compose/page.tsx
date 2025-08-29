@@ -19,7 +19,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { announcementService } from '@/lib/firebase-admin';
+import { announcementService } from '@/lib/services';
+import { mapPriorityLCToEnum } from '@/types/enum-mappings';
 
 export default function ComposeAnnouncementPage() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function ComposeAnnouncementPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [recipients, setRecipients] = useState<'all' | 'mathcounts' | 'enrichment'>('all');
-  const [priority, setPriority] = useState<'low' | 'normal' | 'high'>('normal');
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
   const [pinned, setPinned] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -63,14 +64,9 @@ export default function ComposeAnnouncementPage() {
       await announcementService.create({
         title,
         content,
-        priority,
-        recipients,
-        status,
-        pinned,
-        createdBy: admin.id,
-        createdByName: admin.name,
-        viewCount: 0,
-        acknowledgedBy: [],
+        // map UI priority to Prisma enum
+        priority: mapPriorityLCToEnum(priority),
+        // other fields handled elsewhere or ignored by service signature
       });
 
       toast({
@@ -152,7 +148,7 @@ export default function ComposeAnnouncementPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="normal">Normal</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
                   <SelectItem value="high">High</SelectItem>
                 </SelectContent>
               </Select>

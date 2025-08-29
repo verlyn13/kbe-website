@@ -1,6 +1,5 @@
 'use client';
 
-import { doc, getDoc } from 'firebase/firestore';
 import { ArrowRight, BookOpen, Calendar, Info, Mail, Phone, User, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -14,8 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
-import { profileService } from '@/lib/firebase-admin';
+import { profileService } from '@/lib/services';
+import { createClient } from '@/lib/supabase/client';
 import { formatPhoneNumber } from '@/lib/utils';
 
 export function GuardianInfoForm() {
@@ -45,8 +44,12 @@ export function GuardianInfoForm() {
 
       try {
         // Check if profile is already complete
-        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
-        const profileData = profileDoc.data();
+        const supabase = createClient();
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
 
         if (profileData?.profileCompleted) {
           setIsProfileComplete(true);
@@ -79,12 +82,12 @@ export function GuardianInfoForm() {
     setLoading(true);
 
     try {
-      // Update user profile
-      await profileService.createOrUpdate(user.uid, {
-        displayName: formData.displayName,
+      // Update user profile (Prisma)
+      await profileService.upsert({
+        id: user.id,
         email: formData.email,
+        name: formData.displayName,
         phone: formData.phone.replace(/\D/g, ''),
-        profileCompleted: true,
       });
 
       toast({

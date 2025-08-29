@@ -2,7 +2,7 @@
 
 import { format, set } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -27,7 +27,7 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { type CalendarEvent, calendarService } from '@/lib/firebase-admin';
+import { type CalendarEvent, calendarService } from '@/lib/services';
 import { cn } from '@/lib/utils';
 
 interface EventDialogProps {
@@ -57,6 +57,13 @@ const timeOptions = Array.from({ length: 48 }, (_, i) => {
   };
 });
 
+// Helper function to copy time from one date to another
+function copyTime(from: Date, to: Date) {
+  const d = new Date(to);
+  d.setHours(from.getHours(), from.getMinutes(), from.getSeconds(), from.getMilliseconds());
+  return d;
+}
+
 export function EventDialog({
   open,
   onOpenChange,
@@ -73,10 +80,17 @@ export function EventDialog({
   const locationId = useId();
   const descriptionId = useId();
 
+  // Control popovers explicitly so we can close on select
+  const [startDateOpen, setStartDateOpen] = useState(false);
+  const [endDateOpen, setEndDateOpen] = useState(false);
+
+  // Track whether user has manually adjusted end after auto-sync
+  const userAdjustedEndRef = useRef(false);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    type: 'class' as CalendarEvent['type'],
+    type: 'class' as 'class' | 'competition' | 'meeting' | 'holiday' | 'other',
     location: '',
     allDay: false,
     startDate: initialDate || new Date(),
@@ -87,26 +101,36 @@ export function EventDialog({
 
   useEffect(() => {
     if (event) {
-      const startDate = new Date(event.startDate);
-      const endDate = new Date(event.endDate);
+      const startDate = new Date(event.start);
+      const endDate = event.end ? new Date(event.end) : new Date(event.start);
 
       setFormData({
         title: event.title,
         description: event.description || '',
-        type: event.type,
+        // Map service event type to a default category for editing
+        type: 'class',
         location: event.location || '',
-        allDay: event.allDay,
+        allDay: false,
         startDate,
         startTime: format(startDate, 'HH:mm'),
         endDate,
         endTime: format(endDate, 'HH:mm'),
       });
+
+      // When editing existing event, user has already set end date
+      userAdjustedEndRef.current = true;
     } else if (initialDate) {
       setFormData((prev) => ({
         ...prev,
         startDate: initialDate,
         endDate: initialDate,
       }));
+
+      // Reset for new events
+      userAdjustedEndRef.current = false;
+    } else {
+      // Reset for completely new events
+      userAdjustedEndRef.current = false;
     }
   }, [event, initialDate]);
 
@@ -135,16 +159,13 @@ export function EventDialog({
         milliseconds: 0,
       });
 
-      const eventData: Omit<CalendarEvent, 'id' | 'createdAt' | 'updatedAt'> = {
+      const eventData = {
         title: formData.title,
-        description: formData.description || undefined,
-        type: formData.type,
+        description: formData.description,
+        start: startDateTime,
+        end: endDateTime,
+        category: formData.type,
         location: formData.location || undefined,
-        allDay: formData.allDay,
-        startDate: startDateTime,
-        endDate: endDateTime,
-        createdBy: user.uid,
-        createdByName: user.displayName || user.email || 'Unknown',
       };
 
       if (event) {
@@ -229,26 +250,44 @@ export function EventDialog({
             <div className="grid gap-2 sm:grid-cols-2">
               <div className="grid gap-2">
                 <Label>Start Date</Label>
-                <Popover>
+                <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        'justify-start text-left font-normal',
+                        'justify-between text-left font-normal',
                         !formData.startDate && 'text-muted-foreground'
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {format(formData.startDate, 'PPP')}
+                      <span>{format(formData.startDate, 'PPP')}</span>
+                      <CalendarIcon className="h-4 w-4 opacity-70" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
+                  <PopoverContent className="w-auto p-2" align="start" sideOffset={6}>
                     <Calendar
                       mode="single"
                       selected={formData.startDate}
-                      onSelect={(date) =>
-                        date && setFormData((prev) => ({ ...prev, startDate: date }))
-                      }
+                      onSelect={(date) => {
+                        if (date) {
+                          // Preserve existing time if available, else default to 9:00 AM
+                          const withTime = formData.startDate
+                            ? copyTime(formData.startDate, date)
+                            : set(date, { hours: 9, minutes: 0, seconds: 0, milliseconds: 0 });
+
+                          setFormData((prev) => ({
+                            ...prev,
+                            startDate: withTime,
+                            // Auto-sync end date only if user hasn't manually adjusted it
+                            endDate: !userAdjustedEndRef.current
+                              ? copyTime(withTime, withTime)
+                              : prev.endDate,
+                          }));
+                        }
+                        setStartDateOpen(false); // Close on select
+                      }}
+                      weekStartsOn={1}
+                      showOutsideDays
+                      captionLayout="dropdown"
                       initialFocus
                     />
                   </PopoverContent>
@@ -282,26 +321,45 @@ export function EventDialog({
             <div className="grid gap-2 sm:grid-cols-2">
               <div className="grid gap-2">
                 <Label>End Date</Label>
-                <Popover>
+                <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        'justify-start text-left font-normal',
+                        'justify-between text-left font-normal',
                         !formData.endDate && 'text-muted-foreground'
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {format(formData.endDate, 'PPP')}
+                      <span>{format(formData.endDate, 'PPP')}</span>
+                      <CalendarIcon className="h-4 w-4 opacity-70" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
+                  <PopoverContent className="w-auto p-2" align="start" sideOffset={6}>
                     <Calendar
                       mode="single"
                       selected={formData.endDate}
-                      onSelect={(date) =>
-                        date && setFormData((prev) => ({ ...prev, endDate: date }))
-                      }
+                      onSelect={(date) => {
+                        if (date) {
+                          // Preserve existing time if available, else default to 10:00 AM
+                          const withTime = formData.endDate
+                            ? copyTime(formData.endDate, date)
+                            : set(date, { hours: 10, minutes: 0, seconds: 0, milliseconds: 0 });
+
+                          // Ensure end >= start
+                          const finalDate =
+                            formData.startDate && withTime < formData.startDate
+                              ? copyTime(formData.startDate, formData.startDate)
+                              : withTime;
+
+                          setFormData((prev) => ({ ...prev, endDate: finalDate }));
+                          userAdjustedEndRef.current = true; // User has manually adjusted end date
+                        }
+                        setEndDateOpen(false); // Close on select
+                      }}
+                      weekStartsOn={1}
+                      showOutsideDays
+                      captionLayout="dropdown"
+                      fromDate={formData.startDate} // Constrain end date to be >= start date
                       initialFocus
                     />
                   </PopoverContent>

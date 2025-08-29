@@ -1,7 +1,7 @@
 'use client';
 
 import { formatDistanceToNow } from 'date-fns';
-import { CheckCircle, Eye, EyeOff, MoreVertical, Pin, Trash2 } from 'lucide-react';
+import { CheckCircle, Eye, EyeOff, MoreVertical, Pin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,10 +9,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { Announcement } from '@/lib/firebase-admin';
+import type { Announcement } from '@/lib/services';
 
 interface AnnouncementCardProps {
   announcement: Announcement;
@@ -78,21 +77,6 @@ export function AnnouncementCard({
                     Hide
                   </DropdownMenuItem>
                 )}
-                {user && announcement.createdBy === user.uid && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-destructive"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(announcement);
-                      }}
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  </>
-                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -107,8 +91,8 @@ export function AnnouncementCard({
       <CardContent>
         <p className="text-muted-foreground line-clamp-3 text-sm">{announcement.content}</p>
         <div className="text-muted-foreground mt-4 flex items-center gap-4 text-xs">
-          <span>{announcement.viewCount} views</span>
-          {announcement.acknowledgedBy.includes(user?.uid || '') && (
+          <span>{announcement.viewCount || 0} views</span>
+          {announcement.acknowledgedBy?.includes(user?.id || '') && (
             <span className="flex items-center gap-1">
               <CheckCircle className="h-3 w-3" /> Read
             </span>
