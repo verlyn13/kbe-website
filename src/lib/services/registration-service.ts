@@ -241,4 +241,3 @@ export const registrationService = {
 };
 
 export default registrationService;
-

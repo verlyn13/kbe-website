@@ -97,7 +97,7 @@ export default function ProfilePage() {
     if (!user) return;
 
     try {
-      const data = await profileService.getById(user.id);
+      const data = await profileService.getById(user.uid);
       if (data) {
         setProfile(data);
         setFormData({
@@ -164,10 +164,10 @@ export default function ProfilePage() {
       const name = formData.displayName || formData.guardianName;
 
       if (profile) {
-        await profileService.update(user.id, { name, phone: formData.phone });
+        await profileService.update(user.uid, { name, phone: formData.phone });
       } else {
         await profileService.upsert({
-          id: user.id,
+          id: user.uid,
           email: formData.email,
           name,
           phone: formData.phone,

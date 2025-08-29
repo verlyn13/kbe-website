@@ -45,12 +45,12 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
         console.log('[AdminCheck] Checking admin status for:', user.email);
 
-        if (TEMP_ADMIN_EMAILS.includes(user.email)) {
+        if (TEMP_ADMIN_EMAILS.includes(user.email || '')) {
           // Create temporary admin object
           const tempAdmin: AdminUser = {
-            id: user.id,
-            email: user.email,
-            name: user.displayName || user.guardianName || user.email || 'Admin',
+            id: user.uid,
+            email: user.email || '',
+            name: user.displayName || user.email || 'Admin',
             role: 'ADMIN',
             permissions: adminService.getPermissionsByRole('ADMIN'),
             createdAt: new Date(),
@@ -60,9 +60,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
           setAdmin(tempAdmin);
         } else {
           // Check via Prisma
-          const isAdmin = await adminService.isAdmin(user.id);
+          const isAdmin = await adminService.isAdmin(user.uid);
           if (isAdmin) {
-            const adminData = await adminService.getById(user.id);
+            const adminData = await adminService.getById(user.uid);
             setAdmin(adminData);
           } else {
             setAdmin(null);

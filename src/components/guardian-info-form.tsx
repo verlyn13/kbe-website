@@ -14,7 +14,6 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/lib/services';
-import { createClient } from '@/lib/supabase/client';
 import { formatPhoneNumber } from '@/lib/utils';
 
 export function GuardianInfoForm() {
@@ -43,21 +42,7 @@ export function GuardianInfoForm() {
       if (!user) return;
 
       try {
-        // Check if profile is already complete
-        const supabase = createClient();
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-
-        if (profileData?.profileCompleted) {
-          setIsProfileComplete(true);
-          return;
-        }
-
-        // Only pre-fill with auth provider data, not database data
-        // This ensures new users get a clean form
+        // Pre-fill with auth provider data; DB check handled elsewhere
         setFormData({
           displayName: user.displayName || '',
           email: user.email || '',
@@ -84,7 +69,7 @@ export function GuardianInfoForm() {
     try {
       // Update user profile (Prisma)
       await profileService.upsert({
-        id: user.id,
+        id: user.uid,
         email: formData.email,
         name: formData.displayName,
         phone: formData.phone.replace(/\D/g, ''),

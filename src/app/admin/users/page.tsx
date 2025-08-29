@@ -47,7 +47,7 @@ import {
 } from '@/components/ui/table';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { type AdminUser, adminService, type Profile, profileService } from '@/lib/firebase-admin';
+import { type AdminUser, adminService, type Profile, profileService } from '@/lib/services';
 import { formatPhoneNumber } from '@/lib/utils';
 
 interface UserWithAdminFlag extends Profile {

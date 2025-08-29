@@ -54,7 +54,7 @@ export default function AdminCommunicationsPage() {
     loadAnnouncements();
   }, [loadAnnouncements]);
 
-  const columns: ColumnDef<Announcement>[] = [
+  const columns: ColumnDef<Announcement, unknown>[] = [
     {
       accessorKey: 'title',
       header: 'Title',

@@ -20,4 +20,3 @@ export {
   type RegistrationWithDetails,
   registrationService,
 } from './registration-service';
-
