@@ -123,7 +123,7 @@ export default function EmailSettingsPage() {
 
           <div className="flex gap-2">
             <Button variant="outline" asChild>
-              <Link href="/docs/sendgrid-email-setup.md">View Setup Guide</Link>
+              <Link href={'/docs/sendgrid-email-setup.md' as any}>View Setup Guide</Link>
             </Button>
             <Button variant="outline" asChild>
               <Link href="https://sendgrid.com" target="_blank">

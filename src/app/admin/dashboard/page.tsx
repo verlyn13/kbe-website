@@ -91,7 +91,7 @@ function QuickActionCard({
 
   if (href) {
     return (
-      <Link href={href}>
+      <Link href={href as any}>
         <Card className="hover:bg-accent h-full cursor-pointer transition-colors">
           <CardContent className="pt-6">{content}</CardContent>
         </Card>

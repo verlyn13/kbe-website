@@ -80,7 +80,7 @@ function MobileAwareSidebarMenuButton({
 
   return (
     <SidebarMenuButton asChild isActive={isActive} tooltip={tooltip}>
-      <Link href={href} onClick={handleClick}>
+      <Link href={href as any} onClick={handleClick}>
         {children}
       </Link>
     </SidebarMenuButton>
