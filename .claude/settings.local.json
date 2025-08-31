@@ -8,7 +8,16 @@
       "Bash(bun run:*)",
       "Bash(bun prisma migrate:*)",
       "Bash(bun prisma db pull:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(vercel domains:*)",
+      "Bash(vercel ls:*)",
+      "Bash(vercel alias:*)",
+      "Bash(vercel inspect:*)",
+      "Bash(vercel env:*)",
+      "Bash(vercel:*)",
+      "Bash(git log:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []

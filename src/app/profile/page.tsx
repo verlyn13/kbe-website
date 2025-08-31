@@ -97,7 +97,20 @@ export default function ProfilePage() {
     if (!user) return;
 
     try {
-      const data = await profileService.getById(user.id);
+      let data = await profileService.getById(user.id);
+      
+      if (!data) {
+        // Try to sync with Supabase auth user (handles migration case)
+        data = await profileService.syncWithAuth({
+          id: user.id,
+          email: user.email || '',
+          user_metadata: {
+            name: user.user_metadata?.name || user.user_metadata?.full_name,
+            phone: user.user_metadata?.phone,
+          },
+        });
+      }
+      
       if (data) {
         setProfile(data);
         setFormData({

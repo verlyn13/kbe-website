@@ -1,13 +1,16 @@
 'use client';
 
-import { ArrowRight, Calendar, GraduationCap, Heart, Menu, Users } from 'lucide-react';
+import { Calendar, GraduationCap, Heart, Menu, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
+import { FormSkeleton } from '@/components/loading/form-skeleton';
 import { ThemeBackgroundImage } from '@/components/theme-image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
+
+const LazyUnifiedAuthForm = lazy(() => import('@/components/unified-auth-form').then(mod => ({ default: mod.UnifiedAuthForm })));
 
 export default function LandingPage() {
   const { user, loading } = useSupabaseAuth();
@@ -193,24 +196,23 @@ export default function LandingPage() {
             </CardContent>
           </Card>
 
-          {/* CTA Section */}
-          <div className="mt-16 text-center">
-            <h3 className="mb-4 text-2xl font-semibold">Ready to get started?</h3>
-            <p className="text-muted-foreground mx-auto mb-8 max-w-2xl">
-              Create your guardian account to register your children for MathCounts and stay
-              informed about future enrichment opportunities.
-            </p>
-            <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <Button size="lg" asChild>
-                <Link href="/signup">
-                  Create Account
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/login">Sign In</Link>
-              </Button>
+          {/* Streamlined Auth Section */}
+          <div className="mt-16">
+            <div className="text-center mb-8">
+              <h3 className="mb-4 text-2xl font-semibold">Ready to get started?</h3>
+              <p className="text-muted-foreground mx-auto mb-8 max-w-2xl">
+                Sign in or create your guardian account to register your children for MathCounts and stay
+                informed about future enrichment opportunities.
+              </p>
             </div>
+            
+            <Card className="mx-auto max-w-md shadow-lg">
+              <CardContent className="pt-6">
+                <Suspense fallback={<FormSkeleton fields={3} />}>
+                  <LazyUnifiedAuthForm />
+                </Suspense>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

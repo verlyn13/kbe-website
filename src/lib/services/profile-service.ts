@@ -22,12 +22,21 @@ export const profileService = {
     });
   },
   /**
-   * Get user profile by ID
+   * Get user profile by ID (with fallback to email lookup for migration)
    */
   async getById(id: string): Promise<User | null> {
-    return prisma.user.findUnique({
+    // First try to find by ID
+    const userById = await prisma.user.findUnique({
       where: { id },
     });
+    
+    if (userById) {
+      return userById;
+    }
+
+    // If not found, this might be a Supabase user ID that needs sync
+    // Return null to trigger upsert logic in calling code
+    return null;
   },
 
   /**
@@ -217,7 +226,7 @@ export const profileService = {
   },
 
   /**
-   * Sync with Supabase Auth user
+   * Sync with Supabase Auth user (with migration support)
    */
   async syncWithAuth(authUser: {
     id: string;
@@ -234,12 +243,31 @@ export const profileService = {
     const name =
       metadata.guardian_name || metadata.display_name || metadata.full_name || metadata.name;
 
+    // First check if there's an existing user by email that needs to be migrated
+    const existingByEmail = await this.getByEmail(authUser.email);
+    
+    if (existingByEmail && existingByEmail.id !== authUser.id) {
+      // Delete the old record and create a new one with the Supabase user ID
+      // but preserve the existing data (including role)
+      await prisma.user.delete({ where: { id: existingByEmail.id } });
+      
+      return prisma.user.create({
+        data: {
+          id: authUser.id,
+          email: authUser.email,
+          name: name || existingByEmail.name,
+          phone: metadata.phone || existingByEmail.phone,
+          role: existingByEmail.role, // Preserve existing role (like ADMIN)
+        },
+      });
+    }
+
     return this.upsert({
       id: authUser.id,
       email: authUser.email,
       name: name,
       phone: metadata.phone,
-      role: 'GUARDIAN', // Default role, can be updated later
+      role: existingByEmail?.role || 'GUARDIAN', // Preserve existing role
     });
   },
 };
