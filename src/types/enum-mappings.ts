@@ -65,6 +65,8 @@ export function mapAnnouncementStatusEnumToLC(s: AnnouncementStatus): Announceme
       return 'published';
     case 'ARCHIVED':
       return 'archived';
+    default:
+      return 'published'; // Default fallback
   }
 }
 

@@ -1,6 +1,5 @@
-import { PrismaClient, type Program } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import type { Program } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
 // Calendar event type based on Program data
 export interface CalendarEvent {

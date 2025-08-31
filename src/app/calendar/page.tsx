@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useState, Suspense } from 'react';
 import { LazyEventDialog } from '@/components/lazy';
 import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
 import { Button } from '@/components/ui/button';
@@ -41,7 +41,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AdminProvider, useAdmin } from '@/hooks/use-admin';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
 import { type CalendarEvent, calendarService } from '@/lib/services';
 import { cn } from '@/lib/utils';
@@ -443,7 +443,9 @@ function CalendarPageContent() {
 export default function CalendarPage() {
   return (
     <AdminProvider>
-      <CalendarPageContent />
+      <Suspense fallback={<CalendarSkeleton />}>
+        <CalendarPageContent />
+      </Suspense>
     </AdminProvider>
   );
 }

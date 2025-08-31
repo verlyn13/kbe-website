@@ -1,7 +1,5 @@
 'use client';
 
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 import { CheckCircle } from 'lucide-react';
 import { Suspense, useState } from 'react';
 import {
@@ -13,8 +11,8 @@ import { FormSkeleton } from '@/components/loading/form-skeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { auth, db } from '@/lib/firebase';
 
 type RegistrationStep = 'parent' | 'students' | 'program' | 'complete';
 
@@ -42,6 +40,7 @@ export function RegistrationFlow() {
   const [currentStep, setCurrentStep] = useState<RegistrationStep>('parent');
   const [registrationData, setRegistrationData] = useState<RegistrationData>({});
   const { toast } = useToast();
+  const { signUp } = useAuth();
 
   const getProgress = () => {
     switch (currentStep) {
@@ -79,37 +78,19 @@ export function RegistrationFlow() {
         throw new Error('Missing registration data');
       }
 
-      // Create auth account
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        parent.email,
-        parent.password
-      );
+      // Create auth account with Supabase
+      const authResult = await signUp(parent.email, parent.password);
+      if (authResult.error) {
+        throw authResult.error;
+      }
 
-      // Save parent profile
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
-        fullName: parent.fullName,
-        email: parent.email,
-        phone: parent.phone,
-        zipCode: parent.zipCode,
-        role: 'parent',
-        createdAt: new Date(),
+      // Note: User will receive email confirmation, then they can log in
+      // For now, just show success message
+      toast({
+        title: 'Account created successfully!',
+        description:
+          'Please check your email to confirm your account, then sign in to complete registration.',
       });
-
-      // Create registration record
-      const registrationRecord = {
-        parentId: userCredential.user.uid,
-        parentName: parent.fullName,
-        parentEmail: parent.email,
-        parentPhone: parent.phone,
-        students: students,
-        programId: data.programId,
-        status: 'pending',
-        paymentStatus: 'pending',
-        registrationDate: new Date(),
-      };
-
-      await setDoc(doc(db, 'registrations', userCredential.user.uid), registrationRecord);
 
       setCurrentStep('complete');
     } catch (error) {

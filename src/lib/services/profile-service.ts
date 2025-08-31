@@ -1,6 +1,5 @@
-import { type Prisma, PrismaClient, type Role, type User } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import type { Prisma, Role, User } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
 export type { User as UserProfile, Role };
 

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { type AdminUser, adminService } from '@/lib/services';
 
 interface AdminContextType {
@@ -48,9 +48,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         if (TEMP_ADMIN_EMAILS.includes(user.email || '')) {
           // Create temporary admin object
           const tempAdmin: AdminUser = {
-            id: user.uid,
+            id: user.id,
             email: user.email || '',
-            name: user.displayName || user.email || 'Admin',
+            name: user.user_metadata?.name || user.email || 'Admin',
             role: 'ADMIN',
             permissions: adminService.getPermissionsByRole('ADMIN'),
             createdAt: new Date(),
@@ -60,9 +60,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
           setAdmin(tempAdmin);
         } else {
           // Check via Prisma
-          const isAdmin = await adminService.isAdmin(user.uid);
+          const isAdmin = await adminService.isAdmin(user.id);
           if (isAdmin) {
-            const adminData = await adminService.getById(user.uid);
+            const adminData = await adminService.getById(user.id);
             setAdmin(adminData);
           } else {
             setAdmin(null);

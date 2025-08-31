@@ -1,6 +1,5 @@
-import { type Announcement, type Priority, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import type { Announcement, Priority } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
 export type { Announcement, Priority };
 

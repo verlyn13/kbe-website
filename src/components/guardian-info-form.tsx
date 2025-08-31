@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/lib/services';
 import { formatPhoneNumber } from '@/lib/utils';
@@ -44,7 +44,7 @@ export function GuardianInfoForm() {
       try {
         // Pre-fill with auth provider data; DB check handled elsewhere
         setFormData({
-          displayName: user.displayName || '',
+          displayName: user.user_metadata?.name || '',
           email: user.email || '',
           phone: '',
           emailPreferences: {
@@ -69,7 +69,7 @@ export function GuardianInfoForm() {
     try {
       // Update user profile (Prisma)
       await profileService.upsert({
-        id: user.uid,
+        id: user.id,
         email: formData.email,
         name: formData.displayName,
         phone: formData.phone.replace(/\D/g, ''),

@@ -1,9 +1,6 @@
 'use client';
-
-import { doc, getDoc } from 'firebase/firestore';
 import { Bell, Home, LogOut, Shield, User } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -16,8 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { useAuth } from '@/hooks/use-auth';
-import { db } from '@/lib/firebase';
+import { useAdmin } from '@/hooks/use-admin';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 /**
  * DashboardHeader component provides the top navigation bar for the dashboard layout.
@@ -46,22 +43,7 @@ import { db } from '@/lib/firebase';
  */
 export function DashboardHeader() {
   const { user, signOut } = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    async function checkAdmin() {
-      if (user) {
-        try {
-          const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-          setIsAdmin(adminDoc.exists());
-        } catch (error) {
-          console.error('Error checking admin status:', error);
-          setIsAdmin(false);
-        }
-      }
-    }
-    checkAdmin();
-  }, [user]);
+  const { isAdmin } = useAdmin();
 
   return (
     <header className="bg-card sticky top-0 z-20 flex h-16 shrink-0 items-center gap-4 border-b px-4 lg:px-6">
@@ -83,19 +65,19 @@ export function DashboardHeader() {
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
             <Avatar className="h-10 w-10">
               <AvatarImage
-                src={user?.photoURL || 'https://placehold.co/100x100.png'}
-                alt={user?.displayName || 'User'}
+                src={user?.user_metadata?.avatar_url || 'https://placehold.co/100x100.png'}
+                alt={user?.user_metadata?.name || user?.email || 'User'}
                 data-ai-hint="person"
               />
               <AvatarFallback>
-                {user?.displayName?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
               </AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end">
           <DropdownMenuLabel>
-            <p>{user?.displayName || 'User'}</p>
+            <p>{user?.user_metadata?.name || user?.email || 'User'}</p>
             <p className="text-muted-foreground text-xs font-normal">{user?.email}</p>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />

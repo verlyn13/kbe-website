@@ -18,7 +18,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
 import { profileService, type UserProfile } from '@/lib/services';
 
@@ -97,7 +97,7 @@ export default function ProfilePage() {
     if (!user) return;
 
     try {
-      const data = await profileService.getById(user.uid);
+      const data = await profileService.getById(user.id);
       if (data) {
         setProfile(data);
         setFormData({
@@ -164,10 +164,10 @@ export default function ProfilePage() {
       const name = formData.displayName || formData.guardianName;
 
       if (profile) {
-        await profileService.update(user.uid, { name, phone: formData.phone });
+        await profileService.update(user.id, { name, phone: formData.phone });
       } else {
         await profileService.upsert({
-          id: user.uid,
+          id: user.id,
           email: formData.email,
           name,
           phone: formData.phone,

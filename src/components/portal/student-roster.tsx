@@ -1,6 +1,5 @@
 'use client';
 
-import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { Plus, Trash2, User } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -17,9 +16,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
 
 interface Student {
   id: string;
@@ -48,45 +46,11 @@ export function StudentRoster() {
       }
 
       try {
-        // Fetch students for this guardian
-        const studentsQuery = query(
-          collection(db, 'students'),
-          where('guardianId', '==', user.uid)
-        );
-        const studentsSnapshot = await getDocs(studentsQuery);
+        // Fetch students via API
+        const response = await fetch('/api/students');
+        if (!response.ok) throw new Error('Failed to fetch students');
 
-        console.log('Found students:', studentsSnapshot.size);
-
-        const studentsData: Student[] = [];
-
-        for (const doc of studentsSnapshot.docs) {
-          const studentData = doc.data();
-
-          // Fetch registrations for this student
-          const registrationsQuery = query(
-            collection(db, 'registrations'),
-            where('studentId', '==', doc.id),
-            where('status', '==', 'registered')
-          );
-          const registrationsSnapshot = await getDocs(registrationsQuery);
-
-          const enrolledPrograms = registrationsSnapshot.docs.map((regDoc) => ({
-            id: regDoc.data().programId,
-            name: regDoc.data().programName,
-          }));
-
-          studentsData.push({
-            id: doc.id,
-            displayName: studentData.displayName,
-            firstName: studentData.firstName,
-            lastName: studentData.lastName,
-            grade: studentData.grade,
-            school: studentData.school,
-            waiverStatus: studentData.waiverStatus || 'pending',
-            enrolledPrograms,
-          });
-        }
-
+        const studentsData = await response.json();
         setStudents(studentsData);
       } catch (error) {
         console.error('Error fetching students:', error);
@@ -104,19 +68,12 @@ export function StudentRoster() {
     if (!studentToDelete || !user) return;
 
     try {
-      // Delete the student document
-      await deleteDoc(doc(db, 'students', studentToDelete.id));
+      // Delete the student via API
+      const response = await fetch(`/api/students/${studentToDelete.id}`, {
+        method: 'DELETE',
+      });
 
-      // Also delete all registrations for this student
-      const registrationsQuery = query(
-        collection(db, 'registrations'),
-        where('studentId', '==', studentToDelete.id)
-      );
-      const registrationsSnapshot = await getDocs(registrationsQuery);
-
-      // Delete each registration
-      const deletePromises = registrationsSnapshot.docs.map((doc) => deleteDoc(doc.ref));
-      await Promise.all(deletePromises);
+      if (!response.ok) throw new Error('Failed to delete student');
 
       // Update local state
       setStudents(students.filter((s) => s.id !== studentToDelete.id));

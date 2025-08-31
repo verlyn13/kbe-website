@@ -1,11 +1,5 @@
-import {
-  type Prisma,
-  PrismaClient,
-  type Registration,
-  type RegistrationStatus,
-} from '@prisma/client';
-
-const prisma = new PrismaClient();
+import type { Prisma, Registration, RegistrationStatus } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
 export type { Registration, RegistrationStatus };
 

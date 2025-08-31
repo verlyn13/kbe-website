@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 import { ThemeBackgroundImage } from '@/components/theme-image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 
 export default function LandingPage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useSupabaseAuth();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -21,17 +21,10 @@ export default function LandingPage() {
     // Check if user has completed their profile
     const checkProfileAndRedirect = async () => {
       try {
-        const { doc, getDoc } = await import('firebase/firestore');
-        const { db } = await import('@/lib/firebase');
-        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
-
-        if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
-          // Profile not complete, redirect to welcome
-          router.push('/welcome');
-        } else {
-          // Profile complete, redirect to dashboard
-          router.push('/dashboard');
-        }
+        const res = await fetch('/api/profile-status', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Profile status fetch failed');
+        const data = (await res.json()) as { complete: boolean };
+        router.push(data.complete ? '/dashboard' : '/welcome');
       } catch (error) {
         console.error('Error checking profile:', error);
         // On error, default to dashboard

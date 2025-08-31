@@ -1,9 +1,8 @@
 'use client';
 
-import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { auth } from '@/lib/firebase';
+import { createClient } from '@/lib/supabase/client';
 
 export default function SignOutPage() {
   const router = useRouter();
@@ -11,7 +10,8 @@ export default function SignOutPage() {
   useEffect(() => {
     async function handleSignOut() {
       try {
-        await signOut(auth);
+        const supabase = createClient();
+        await supabase.auth.signOut();
         console.log('Signed out successfully');
         router.push('/');
       } catch (error) {
