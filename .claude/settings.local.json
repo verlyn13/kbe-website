@@ -17,7 +17,9 @@
       "Bash(vercel env:*)",
       "Bash(vercel:*)",
       "Bash(git log:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Bash(git stash:*)",
+      "Read(/tmp/**)"
     ],
     "deny": [],
     "ask": []

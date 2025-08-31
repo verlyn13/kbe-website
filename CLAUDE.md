@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Homer Enrichment Hub (HEH) is a registration and information gateway for enrichment programs in Homer, Alaska. Built with Next.js 15, TypeScript, Supabase Auth, and Prisma.
 
-**MIGRATION COMPLETE**: Successfully migrated from Firebase to Supabase + Prisma stack. See `docs/migration/migration-completed.md` for details.
+**MIGRATION COMPLETE**: Successfully migrated from Firebase to Supabase + Prisma stack. See `docs/migration/CONSOLIDATION_COMPLETE.md` for details.
 
 ## Infrastructure Management
 
@@ -267,7 +267,7 @@ bunx <command>       # Execute package binaries (replaces npx)
 
 **Database**: PostgreSQL via Supabase with Prisma ORM and Row Level Security (RLS) policies.
 
-**Details**: See `docs/migration/migration-completed.md` for full migration details.
+**Details**: See `docs/migration/CONSOLIDATION_COMPLETE.md` for full migration details.
 
 ## Design System
 
