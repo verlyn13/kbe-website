@@ -3,8 +3,12 @@ import { waiverService } from '@/lib/services/waiver-service';
 
 export const runtime = 'nodejs';
 
-export async function PATCH(req: NextRequest, { params }: { params: { studentId: string } }) {
+export async function PATCH(
+  req: NextRequest,
+  context: { params: Promise<{ studentId: string }> }
+) {
   try {
+    const params = await context.params;
     // TODO: enforce admin auth using Supabase and role claims
     const body = (await req.json()) as { status: 'pending' | 'received' | 'rejected' };
     if (!body?.status) return NextResponse.json({ error: 'Bad Request' }, { status: 400 });

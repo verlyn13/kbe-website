@@ -19,7 +19,10 @@
       "Bash(git log:*)",
       "Bash(git merge:*)",
       "Bash(git stash:*)",
-      "Read(/tmp/**)"
+      "Read(/tmp/**)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": []
