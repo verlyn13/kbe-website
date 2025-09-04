@@ -1,4 +1,7 @@
 import { Book, Calculator, ExternalLink, FileText, Globe, Users, Video } from 'lucide-react';
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 

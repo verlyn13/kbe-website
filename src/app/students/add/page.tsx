@@ -1,4 +1,6 @@
 'use client';
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 import { AlertCircle, ArrowLeft, User } from 'lucide-react';
 import Link from 'next/link';
