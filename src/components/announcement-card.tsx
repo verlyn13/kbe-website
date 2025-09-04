@@ -1,7 +1,7 @@
 'use client';
 
 import { formatDistanceToNow } from 'date-fns';
-import { CheckCircle, Eye, EyeOff, MoreVertical, Pin } from 'lucide-react';
+import { CheckCircle, Eye, EyeOff, MoreVertical } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,7 +43,11 @@ export function AnnouncementCard({
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
             {getPriorityIcon(announcement.priority)}
-            {announcement.pinned && <Pin className="text-muted-foreground h-4 w-4" />}
+            {announcement.pinned && (
+              <Badge variant="secondary" className="h-5 px-1.5 text-[10px] uppercase">
+                Pinned
+              </Badge>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs">
