@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Homer Enrichment Hub (HEH) is a registration and information gateway for enrichment programs in Homer, Alaska. Built with Next.js 15, TypeScript, and Firebase Auth.
+Homer Enrichment Hub (HEH) is a registration and information gateway for enrichment programs in Homer, Alaska. Built with Next.js 15, TypeScript, Supabase Auth, and Prisma.
 
-**IMPORTANT MIGRATION**: This project is migrating from homerenrichment.com to homerenrichment.com. See CLOUDFLARE_MIGRATION.md for details.
+**MIGRATION COMPLETE**: Successfully migrated from Firebase to Supabase + Prisma stack. See `docs/migration/CONSOLIDATION_COMPLETE.md` for details.
 
 ## Infrastructure Management
 
@@ -198,17 +198,21 @@ bunx <command>       # Execute package binaries (replaces npx)
 
 ### Tech Stack
 
-- **Frontend**: Next.js 15.4.5 with App Router, React 19.0.0, TypeScript 5.7.3
+- **Frontend**: Next.js 15.4.5 with App Router, React 19.0.0, TypeScript 5.8.3
 - **Styling**: Tailwind CSS 4.0.0 with shadcn/ui components (Radix UI primitives)
-- **Backend**: Firebase Auth with multiple providers (Email, Google, Magic Link)
+- **Backend**: Supabase Auth with multiple providers (Email, Google, Magic Link)
+- **Database**: PostgreSQL via Supabase with Prisma 6.15.0 ORM
 - **Forms**: React Hook Form with Zod validation
 
 ### Key Directories
 
 - `/src/app/` - Next.js App Router pages
 - `/src/components/` - Reusable React components (shadcn/ui based)
-- `/src/hooks/` - Custom React hooks (auth, mobile, toast)
-- `/src/lib/` - Utilities and configurations
+- `/src/hooks/` - Custom React hooks (Supabase auth, mobile, toast)
+- `/src/lib/` - Utilities, configurations, and services
+- `/src/lib/services/` - Prisma-based data services
+- `/src/lib/supabase/` - Supabase client and server utilities
+- `/prisma/` - Database schema and migrations
 
 ### Route Structure
 
@@ -223,10 +227,10 @@ bunx <command>       # Execute package binaries (replaces npx)
 
 ### Authentication Flow
 
-- `AuthProvider` wraps the app with Firebase Auth context
-- `use-auth` hook provides authentication state
+- `SupabaseAuthProvider` wraps the app with Supabase Auth context
+- `useSupabaseAuth` hook provides authentication state
 - Protected routes automatically redirect to login
-- 30-day session persistence with "Remember me" option
+- Session persistence handled by Supabase Auth cookies
 
 ### Component Architecture
 
@@ -237,35 +241,33 @@ bunx <command>       # Execute package binaries (replaces npx)
 
 ## Important Notes
 
-1. **Firebase Configuration**: Environment variables stored in Google Cloud Secret Manager. Local development uses `.env.local` (not in repo).
+1. **Supabase Configuration**: Environment variables for Supabase and PostgreSQL. Local development uses `.env.local` (not in repo).
 
 2. **Port Configuration**: Dev server runs on port 9002 (not default 3000)
 
 3. **TypeScript Path Alias**: Use `@/` for imports from `/src/`
 
-4. **No Test Setup**: No testing framework configured yet
+4. **Database**: Prisma with PostgreSQL via Supabase. Use `runtime = 'nodejs'` for Prisma routes.
 
-5. **Deployment**: Firebase App Hosting via GitHub integration - push to main branch triggers automatic deployment (see DEPLOYMENT_METHOD.md)
+5. **Testing**: Vitest configured with test utilities. Run `bun run test` for unit tests.
+
+6. **Deployment**: Vercel deployment ready. Push to main branch for automatic deployment.
 
 6. **Build Errors**: Next.js config ignores TypeScript/ESLint errors during build
 
-## ⚠️ CRITICAL: App Check OAuth Issue
+## ✅ Migration Complete: Firebase to Supabase
 
-**Known Issue**: Firebase App Check in "Enforce" mode blocks Google OAuth authentication.
+**Status**: Successfully migrated from Firebase to Supabase + Prisma stack.
 
-**Current Solution**: App Check is set to **"Unenforced"** for:
+**New Authentication**: Supabase Auth handles all authentication flows including:
+- Email/password authentication
+- Google OAuth
+- Magic link sign-in
+- Password reset flows
 
-- Authentication API
-- Cloud Firestore API
+**Database**: PostgreSQL via Supabase with Prisma ORM and Row Level Security (RLS) policies.
 
-**Details**: See `APP_CHECK_OAUTH_ISSUE.md` for full documentation.
-
-**To Fix if OAuth Fails**:
-
-1. Firebase Console → App Check → Apps → Web App
-2. Set Authentication and Firestore to "Unenforced"
-3. Wait 1-2 minutes for propagation
-4. Test OAuth - should work immediately
+**Details**: See `docs/migration/CONSOLIDATION_COMPLETE.md` for full migration details.
 
 ## Design System
 
@@ -275,42 +277,38 @@ bunx <command>       # Execute package binaries (replaces npx)
 - **Font**: Inter for all typography
 - CSS variables support theme switching
 
-## Firebase App Hosting Deployment
+## Vercel Deployment
 
 ### Critical Requirements
 
-1. **Dependencies**: ALL production dependencies must be in `dependencies`, NOT `devDependencies`. Firebase runs `npm ci --omit=dev` which skips devDependencies.
-2. **TypeScript Path Aliases**: Firebase's buildpack automatically handles `@/*` imports via Next.js's built-in resolution. Do NOT add custom webpack configs.
-3. **Global .gitignore**: Check `~/.gitignore_global` - files ignored globally won't be in the repo and will cause build failures.
-4. **Environment Variables**: All secrets must be configured in Google Cloud Secret Manager and referenced in `apphosting.yaml`.
+1. **Dependencies**: ALL production dependencies must be in `dependencies`, NOT `devDependencies`. Vercel installs production deps for serverless functions.
+2. **TypeScript Path Aliases**: Next.js automatically handles `@/*` imports. No custom webpack config needed.
+3. **Database Runtime**: Use `export const runtime = 'nodejs'` for Prisma API routes.
+4. **Environment Variables**: Configure in Vercel dashboard or use `.env.local` for development.
 
-### Common Build Issues and Solutions
+### Database Connection
 
-1. **"Module not found" errors**: Usually means files are missing from Git. Check both local and global .gitignore files.
-2. **PostCSS/Tailwind errors**: Move @tailwindcss/postcss and related packages to `dependencies`.
-3. **Firebase overwriting config**: This is expected behavior. Don't fight the buildpack - it needs to configure Next.js for serverless deployment.
+- **Connection Pooling**: Use pooled connection URLs for serverless compatibility
+- **Prisma Client**: Singleton pattern prevents connection exhaustion
+- **Runtime**: Prisma requires Node.js runtime (not Edge)
 
-### Build Script
+### Build Configuration
 
-The project uses a simple `next build` command. Firebase App Hosting automatically:
+The project uses standard Next.js build with Vercel's optimizations:
 
-- Installs production dependencies only (`npm ci --omit=dev`)
-- Configures Next.js for serverless deployment
-- Handles TypeScript path resolution
-- Manages Node.js version (currently 22)
+- Automatic serverless function creation for API routes
+- Static page generation where possible
+- TypeScript compilation and path resolution
+- Bun as package manager (configured in Vercel)
 
-### Secrets Configuration
+### Environment Variables
 
-All secrets are stored in Google Cloud Secret Manager and must be granted access:
+Required environment variables:
 
-```bash
-firebase apphosting:secrets:grantaccess
-```
-
-Required secrets include:
-
-- Firebase configuration (API keys, auth domain, etc.)
-- Any third-party service credentials
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `DATABASE_URL` (pooled connection)
+- `DIRECT_URL` (for migrations)
 
 ## AI Assistant Guidelines (Copilot, Cursor, etc.)
 
@@ -320,13 +318,14 @@ Required secrets include:
 - `@tailwindcss/postcss`
 - `postcss`
 - `tailwindcss`
+- `@prisma/client`
 
-These MUST remain in `dependencies` because Firebase App Hosting only installs production dependencies (`npm ci --omit=dev`). Moving them will break deployment.
+These MUST remain in `dependencies` for Vercel deployment compatibility.
 
 ### Other Important Rules
 
 - Use Tailwind CSS v4 import syntax: `@import 'tailwindcss/base'`
-- Don't add custom webpack configs to next.config.js
+- Add `export const runtime = 'nodejs'` for Prisma API routes
 - Development server runs on port 9002
 
 ## Domain Migration: homerenrichment.com → homerenrichment.com

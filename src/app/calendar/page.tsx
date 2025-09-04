@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useState, Suspense } from 'react';
 import { LazyEventDialog } from '@/components/lazy';
 import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
 import { Button } from '@/components/ui/button';
@@ -41,9 +41,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AdminProvider, useAdmin } from '@/hooks/use-admin';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { type CalendarEvent, calendarService } from '@/lib/firebase-admin';
+import { type CalendarEvent, calendarService } from '@/lib/services';
 import { cn } from '@/lib/utils';
 
 const eventTypeConfig = {
@@ -52,7 +52,10 @@ const eventTypeConfig = {
   meeting: { icon: Coffee, color: 'bg-green-500', label: 'Meeting' },
   holiday: { icon: Palmtree, color: 'bg-orange-500', label: 'Holiday' },
   other: { icon: CalendarIcon, color: 'bg-gray-500', label: 'Other' },
-};
+  // Mappings for service event types
+  program: { icon: Users, color: 'bg-blue-500', label: 'Program' },
+  event: { icon: CalendarIcon, color: 'bg-gray-500', label: 'Event' },
+} as const;
 
 function CalendarPageContent() {
   const searchParams = useSearchParams();
@@ -72,7 +75,7 @@ function CalendarPageContent() {
     try {
       const start = startOfMonth(currentDate);
       const end = endOfMonth(currentDate);
-      const data = await calendarService.getEvents(start, end);
+      const data = await calendarService.getByDateRange(start, end);
       setEvents(data);
     } catch (error) {
       console.error('Error loading events:', error);
@@ -117,7 +120,7 @@ function CalendarPageContent() {
 
   const getEventsForDay = (day: Date) => {
     return events.filter((event) => {
-      const eventDate = new Date(event.startDate);
+      const eventDate = new Date(event.start);
       return isSameDay(eventDate, day);
     });
   };
@@ -136,7 +139,7 @@ function CalendarPageContent() {
     if (!user || !window.confirm('Are you sure you want to delete this event?')) return;
 
     try {
-      await calendarService.delete(eventId, user.uid, user.displayName || user.email || 'Unknown');
+      await calendarService.delete(eventId);
       toast({
         title: 'Event deleted',
         description: 'The event has been removed from the calendar.',
@@ -232,9 +235,9 @@ function CalendarPageContent() {
           {/* Calendar Grid */}
           <div className="bg-muted grid grid-cols-7 gap-px overflow-hidden rounded-lg">
             {/* Day Headers */}
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
               <div
-                key={day}
+                key={`day-header-${index}-${day}`}
                 className="bg-background text-muted-foreground p-1 text-center text-xs font-medium sm:p-2 sm:text-sm"
               >
                 <span className="sm:hidden">{day.slice(0, 1)}</span>
@@ -354,14 +357,11 @@ function CalendarPageContent() {
                           <div>
                             <h3 className="font-semibold">{event.title}</h3>
                             <div className="text-muted-foreground mt-1 flex items-center gap-4 text-sm">
-                              {!event.allDay && (
-                                <span className="flex items-center gap-1">
-                                  <Clock className="h-3 w-3" />
-                                  {format(new Date(event.startDate), 'h:mm a')}
-                                  {event.endDate &&
-                                    ` - ${format(new Date(event.endDate), 'h:mm a')}`}
-                                </span>
-                              )}
+                              <span className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {format(new Date(event.start), 'h:mm a')}
+                                {event.end && ` - ${format(new Date(event.end), 'h:mm a')}`}
+                              </span>
                               {event.location && (
                                 <span className="flex items-center gap-1">
                                   <MapPin className="h-3 w-3" />
@@ -443,7 +443,9 @@ function CalendarPageContent() {
 export default function CalendarPage() {
   return (
     <AdminProvider>
-      <CalendarPageContent />
+      <Suspense fallback={<CalendarSkeleton />}>
+        <CalendarPageContent />
+      </Suspense>
     </AdminProvider>
   );
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import { doc, getDoc } from 'firebase/firestore';
 import { ArrowRight, BookOpen, Calendar, Info, Mail, Phone, User, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -12,10 +11,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
-import { profileService } from '@/lib/firebase-admin';
+import { profileService } from '@/lib/services';
 import { formatPhoneNumber } from '@/lib/utils';
 
 export function GuardianInfoForm() {
@@ -44,19 +42,9 @@ export function GuardianInfoForm() {
       if (!user) return;
 
       try {
-        // Check if profile is already complete
-        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
-        const profileData = profileDoc.data();
-
-        if (profileData?.profileCompleted) {
-          setIsProfileComplete(true);
-          return;
-        }
-
-        // Only pre-fill with auth provider data, not database data
-        // This ensures new users get a clean form
+        // Pre-fill with auth provider data; DB check handled elsewhere
         setFormData({
-          displayName: user.displayName || '',
+          displayName: user.user_metadata?.name || '',
           email: user.email || '',
           phone: '',
           emailPreferences: {
@@ -79,12 +67,12 @@ export function GuardianInfoForm() {
     setLoading(true);
 
     try {
-      // Update user profile
-      await profileService.createOrUpdate(user.uid, {
-        displayName: formData.displayName,
+      // Update user profile (Prisma)
+      await profileService.upsert({
+        id: user.id,
         email: formData.email,
+        name: formData.displayName,
         phone: formData.phone.replace(/\D/g, ''),
-        profileCompleted: true,
       });
 
       toast({

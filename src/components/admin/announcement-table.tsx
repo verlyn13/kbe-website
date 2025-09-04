@@ -2,7 +2,7 @@
 // Keeps strong typing when consumed through dynamic imports.
 
 import type { ColumnDef } from '@tanstack/react-table';
-import type { Announcement } from '@/lib/firebase-admin';
+import type { Announcement } from '@/lib/services';
 import { DataTable } from './data-table';
 
 export interface AnnouncementTableProps {

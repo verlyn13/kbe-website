@@ -47,19 +47,18 @@ import {
 } from '@/components/ui/table';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { type AdminUser, adminService, type Profile, profileService } from '@/lib/firebase-admin';
+import { type AdminUser, adminService, type Profile, profileService } from '@/lib/services';
 import { formatPhoneNumber } from '@/lib/utils';
 
-interface UserWithProfile extends Profile {
-  isAdmin?: boolean;
-  adminRole?: 'admin' | 'superAdmin';
+interface UserWithAdminFlag extends Profile {
+  isAdmin: boolean;
 }
 
 export default function UserManagementPage() {
   const { hasPermission, admin: currentAdmin } = useAdmin();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<UserWithProfile[]>([]);
+  const [users, setUsers] = useState<UserWithAdminFlag[]>([]);
   const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
@@ -69,7 +68,7 @@ export default function UserManagementPage() {
     try {
       setLoading(true);
 
-      // Load all user profiles
+      // Load all user profiles and admins
       const [profiles, adminList] = await Promise.all([
         profileService.getAll(),
         adminService.getAll(),
@@ -77,12 +76,10 @@ export default function UserManagementPage() {
 
       // Merge admin status with user profiles
       const adminIds = new Set(adminList.map((a) => a.id));
-      const adminRoles = Object.fromEntries(adminList.map((a) => [a.id, a.role]));
 
-      const usersWithAdminStatus = profiles.map((profile) => ({
+      const usersWithAdminStatus: UserWithAdminFlag[] = profiles.map((profile) => ({
         ...profile,
-        isAdmin: adminIds.has(profile.userId),
-        adminRole: adminRoles[profile.userId] as 'admin' | 'superAdmin' | undefined,
+        isAdmin: adminIds.has(profile.id),
       }));
 
       setUsers(usersWithAdminStatus);
@@ -112,7 +109,7 @@ export default function UserManagementPage() {
 
       // If user is admin, remove admin access
       if (admins.some((a) => a.id === userId)) {
-        await adminService.delete(userId);
+        await adminService.removeAdmin(userId);
       }
 
       toast({
@@ -134,34 +131,21 @@ export default function UserManagementPage() {
     }
   }
 
-  async function handleToggleAdmin(user: UserWithProfile) {
+  async function handleToggleAdmin(user: UserWithAdminFlag) {
     try {
       if (user.isAdmin) {
         // Remove admin access
-        await adminService.delete(user.userId);
+        await adminService.removeAdmin(user.id);
         toast({
           title: 'Admin access removed',
-          description: `${user.displayName} is no longer an admin`,
+          description: `${user.name || user.email} is no longer an admin`,
         });
       } else {
-        // Grant admin access
-        const newAdmin: Omit<AdminUser, 'id' | 'createdAt'> = {
-          email: user.email,
-          name: user.displayName || user.email,
-          role: 'admin',
-          permissions: [
-            'view_dashboard',
-            'manage_registrations',
-            'send_announcements',
-            'manage_programs',
-            'view_reports',
-          ],
-        };
-
-        await adminService.create(user.userId, newAdmin);
+        // Grant admin access (default to ADMIN role)
+        await adminService.makeAdmin(user.id, 'ADMIN');
         toast({
           title: 'Admin access granted',
-          description: `${user.displayName} is now an admin`,
+          description: `${user.name || user.email} is now an admin`,
         });
       }
 
@@ -177,42 +161,11 @@ export default function UserManagementPage() {
     }
   }
 
-  async function handleToggleSuperAdmin(user: UserWithProfile) {
-    try {
-      if (user.adminRole === 'superAdmin') {
-        // Demote to regular admin
-        await adminService.update(user.userId, { role: 'admin' });
-        toast({
-          title: 'Super admin access removed',
-          description: `${user.displayName} is now a regular admin`,
-        });
-      } else {
-        // Promote to super admin
-        await adminService.update(user.userId, {
-          role: 'superAdmin',
-          permissions: ['all'],
-        });
-        toast({
-          title: 'Super admin access granted',
-          description: `${user.displayName} is now a super admin`,
-        });
-      }
-
-      // Reload users
-      loadUsers();
-    } catch (error) {
-      console.error('Error toggling super admin status:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to update super admin status',
-        variant: 'destructive',
-      });
-    }
-  }
+  // Super admin role not supported in Prisma Role enum; feature removed during migration.
 
   const filteredUsers = users.filter(
     (user) =>
-      user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.phone?.includes(searchQuery.replace(/\D/g, ''))
   );
@@ -261,7 +214,7 @@ export default function UserManagementPage() {
           <CardContent>
             <div className="text-2xl font-bold">{admins.length}</div>
             <p className="text-muted-foreground text-xs">
-              {admins.filter((a) => a.role === 'superAdmin').length} super admins
+              {admins.filter((a) => a.role === 'ADMIN').length} admins
             </p>
           </CardContent>
         </Card>
@@ -316,17 +269,17 @@ export default function UserManagementPage() {
                   </TableRow>
                 ) : (
                   filteredUsers.map((user) => (
-                    <TableRow key={user.userId}>
+                    <TableRow key={user.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <Avatar className="h-8 w-8">
-                            <AvatarImage src={user.avatarUrl} />
+                            <AvatarImage src={undefined} />
                             <AvatarFallback>
-                              {user.displayName?.charAt(0) || user.email.charAt(0)}
+                              {user.name?.charAt(0) || user.email.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-medium">{user.displayName || 'No name'}</p>
+                            <p className="font-medium">{user.name || 'No name'}</p>
                             <p className="text-muted-foreground text-sm">{user.email}</p>
                           </div>
                         </div>
@@ -347,11 +300,9 @@ export default function UserManagementPage() {
                       </TableCell>
                       <TableCell>
                         {user.isAdmin ? (
-                          <Badge
-                            variant={user.adminRole === 'superAdmin' ? 'default' : 'secondary'}
-                          >
+                          <Badge variant={'default'}>
                             <Shield className="mr-1 h-3 w-3" />
-                            {user.adminRole === 'superAdmin' ? 'Super Admin' : 'Admin'}
+                            Admin
                           </Badge>
                         ) : (
                           <Badge variant="outline">Guardian</Badge>
@@ -377,32 +328,13 @@ export default function UserManagementPage() {
                             <DropdownMenuSeparator />
 
                             {/* Don't allow users to modify their own admin status */}
-                            {user.userId !== currentAdmin?.id && (
+                            {user.id !== currentAdmin?.id && (
                               <>
                                 {user.isAdmin ? (
-                                  <>
-                                    <DropdownMenuItem onClick={() => handleToggleAdmin(user)}>
-                                      <ShieldOff className="mr-2 h-4 w-4" />
-                                      Remove Admin Access
-                                    </DropdownMenuItem>
-                                    {user.adminRole === 'admin' && (
-                                      <DropdownMenuItem
-                                        onClick={() => handleToggleSuperAdmin(user)}
-                                      >
-                                        <Shield className="mr-2 h-4 w-4" />
-                                        Promote to Super Admin
-                                      </DropdownMenuItem>
-                                    )}
-                                    {user.adminRole === 'superAdmin' &&
-                                      currentAdmin?.role === 'superAdmin' && (
-                                        <DropdownMenuItem
-                                          onClick={() => handleToggleSuperAdmin(user)}
-                                        >
-                                          <ShieldOff className="mr-2 h-4 w-4" />
-                                          Demote to Admin
-                                        </DropdownMenuItem>
-                                      )}
-                                  </>
+                                  <DropdownMenuItem onClick={() => handleToggleAdmin(user)}>
+                                    <ShieldOff className="mr-2 h-4 w-4" />
+                                    Remove Admin Access
+                                  </DropdownMenuItem>
                                 ) : (
                                   <DropdownMenuItem onClick={() => handleToggleAdmin(user)}>
                                     <Shield className="mr-2 h-4 w-4" />
@@ -416,10 +348,10 @@ export default function UserManagementPage() {
                             <DropdownMenuItem
                               className="text-destructive"
                               onClick={() => {
-                                setDeleteUserId(user.userId);
-                                setDeleteUserName(user.displayName || user.email);
+                                setDeleteUserId(user.id);
+                                setDeleteUserName(user.name || user.email);
                               }}
-                              disabled={user.userId === currentAdmin?.id}
+                              disabled={user.id === currentAdmin?.id}
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
                               Delete User

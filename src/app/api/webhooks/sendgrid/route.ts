@@ -1,6 +1,4 @@
-import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { type NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
 import { type SendGridEvent, sendGridWebhookSchema } from '@/lib/validations/api';
 
 /**
@@ -37,15 +35,10 @@ export async function POST(request: NextRequest) {
 }
 
 async function processEvent(event: SendGridEvent) {
-  const { email, event: eventType, timestamp, sg_event_id } = event;
-
-  // Log event to Firestore for tracking
-  const eventDoc = doc(collection(db, 'emailEvents'), sg_event_id);
-  await setDoc(eventDoc, {
-    ...event,
-    processedAt: serverTimestamp(),
-    date: new Date(timestamp * 1000),
-  });
+  const { email, event: eventType } = event;
+  // Persisting webhook events now handled by backend DB (Prisma)
+  // For now, we emit structured logs; a DB-backed implementation can be wired later
+  console.log('[SendGrid] Event received:', JSON.stringify(event));
 
   // Update user email status based on event type
   switch (eventType) {
@@ -79,9 +72,7 @@ async function handleBounce(email: string, reason?: string, type?: string) {
   console.log(`Email bounced: ${email}, Type: ${type}, Reason: ${reason}`);
 
   // Update user's email status
-  const usersRef = collection(db, 'users');
-  // Note: In production, you'd query for the user by email
-  // and update their email status
+  // TODO: Update user email status in DB via Prisma when schema is ready
 
   await logActivity('email_bounce', {
     email,
@@ -109,14 +100,12 @@ async function handleUnsubscribe(email: string) {
 }
 
 async function updateEmailStatus(email: string, status: string) {
-  // Update the user's email delivery status
-  // This helps track deliverability
-
+  // TODO: Update the user's email delivery status via Prisma
   await logActivity('email_status', { email, status });
 }
 
 async function trackEngagement(email: string, action: string, url?: string) {
-  // Track user engagement with emails
+  // Track user engagement with emails (log only for now)
   const data: Record<string, string> = { email, action };
   if (url) data.url = url;
 
@@ -124,18 +113,8 @@ async function trackEngagement(email: string, action: string, url?: string) {
 }
 
 async function logActivity(type: string, data: Record<string, unknown>) {
-  // Log activity for admin dashboard
-  try {
-    const activityDoc = doc(collection(db, 'activities'));
-    await setDoc(activityDoc, {
-      type: `email_${type}`,
-      data,
-      timestamp: serverTimestamp(),
-      source: 'sendgrid_webhook',
-    });
-  } catch (error) {
-    console.error('Failed to log activity:', error);
-  }
+  // Log activity for admin dashboard (no-op DB write until Prisma schema is defined)
+  console.log('[Activity]', { type: `email_${type}`, data, source: 'sendgrid_webhook' });
 }
 
 // Verify webhook signature (optional but recommended)

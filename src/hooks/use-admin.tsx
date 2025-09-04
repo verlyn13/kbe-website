@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/use-auth';
-import { type AdminUser, adminService } from '@/lib/firebase-admin';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
+import { type AdminUser, adminService } from '@/lib/services';
 
 interface AdminContextType {
   admin: AdminUser | null;
@@ -48,21 +48,22 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         if (TEMP_ADMIN_EMAILS.includes(user.email || '')) {
           // Create temporary admin object
           const tempAdmin: AdminUser = {
-            id: user.uid,
+            id: user.id,
             email: user.email || '',
-            name: user.displayName || user.email || 'Admin',
-            role: 'superAdmin',
-            permissions: ['all'],
+            name: user.user_metadata?.name || user.email || 'Admin',
+            role: 'ADMIN',
+            permissions: adminService.getPermissionsByRole('ADMIN'),
             createdAt: new Date(),
+            updatedAt: new Date(),
+            phone: null,
           };
           setAdmin(tempAdmin);
         } else {
-          // Try to get from Firebase
-          const adminData = await adminService.checkAdminRole(user.uid);
-
-          if (adminData) {
+          // Check via Prisma
+          const isAdmin = await adminService.isAdmin(user.id);
+          if (isAdmin) {
+            const adminData = await adminService.getById(user.id);
             setAdmin(adminData);
-            await adminService.updateLastLogin(user.uid);
           } else {
             setAdmin(null);
             // Not an admin, redirect to parent portal
@@ -83,15 +84,14 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const hasPermission = (permission: string): boolean => {
     if (!admin) return false;
-    if (admin.role === 'superAdmin') return true;
-    return admin.permissions.includes(permission);
+    return admin.permissions?.includes(permission) || false;
   };
 
   const value = {
     admin,
     loading,
     isAdmin: !!admin,
-    isSuperAdmin: admin?.role === 'superAdmin',
+    isSuperAdmin: admin?.role === 'ADMIN',
     hasPermission,
   };
 

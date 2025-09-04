@@ -1,6 +1,5 @@
 'use client';
 
-import { collection, getDocs } from 'firebase/firestore';
 import {
   AlertCircle,
   CheckCircle,
@@ -14,8 +13,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/use-auth';
-import { auth, db } from '@/lib/firebase';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 interface SystemCheck {
   name: string;
@@ -34,11 +32,10 @@ export default function SystemStatusPage() {
 
     // 1. Check Authentication
     try {
-      const currentUser = auth.currentUser;
       systemChecks.push({
         name: 'Authentication',
-        status: currentUser ? 'ok' : 'warning',
-        message: currentUser ? `Logged in as ${currentUser.email}` : 'Not logged in',
+        status: user ? 'ok' : 'warning',
+        message: user ? `Logged in as ${user.email}` : 'Not logged in',
         icon: Shield,
       });
     } catch (error) {
@@ -50,46 +47,40 @@ export default function SystemStatusPage() {
       });
     }
 
-    // 2. Check Firestore Connection
+    // 2. Check Database Connection
     try {
-      const testCollection = collection(db, 'test-connection');
+      const response = await fetch('/api/system/health');
+      const health = await response.json();
       systemChecks.push({
-        name: 'Firestore Connection',
-        status: 'ok',
-        message: 'Connected to Firestore',
+        name: 'Database Connection',
+        status: health.database ? 'ok' : 'error',
+        message: health.database ? 'Connected to Supabase' : 'Database connection failed',
         icon: Database,
       });
     } catch (error) {
       systemChecks.push({
-        name: 'Firestore Connection',
+        name: 'Database Connection',
         status: 'error',
         message: `Error: ${error}`,
         icon: Database,
       });
     }
 
-    // 3. Check Announcements Collection
+    // 3. Check Announcements
     try {
-      const announcementsSnapshot = await getDocs(collection(db, 'announcements'));
-      const count = announcementsSnapshot.size;
-      const publishedCount = announcementsSnapshot.docs.filter(
-        (doc) => doc.data().status === 'published'
-      ).length;
+      const response = await fetch('/api/announcements');
+      if (response.ok) {
+        const announcements = await response.json();
+        const publishedCount = announcements.filter((a: any) => a.status === 'PUBLISHED').length;
 
-      systemChecks.push({
-        name: 'Announcements',
-        status: count > 0 ? 'ok' : 'warning',
-        message: `${count} total announcements (${publishedCount} published)`,
-        icon: Mail,
-      });
-
-      // Show first announcement structure
-      if (announcementsSnapshot.docs.length > 0) {
-        const firstDoc = announcementsSnapshot.docs[0];
-        console.log('First announcement structure:', {
-          id: firstDoc.id,
-          data: firstDoc.data(),
+        systemChecks.push({
+          name: 'Announcements',
+          status: announcements.length > 0 ? 'ok' : 'warning',
+          message: `${announcements.length} total announcements (${publishedCount} published)`,
+          icon: Mail,
         });
+      } else {
+        throw new Error('Failed to fetch announcements');
       }
     } catch (error) {
       systemChecks.push({
@@ -100,16 +91,20 @@ export default function SystemStatusPage() {
       });
     }
 
-    // 4. Check Programs Collection
+    // 4. Check Programs
     try {
-      const programsSnapshot = await getDocs(collection(db, 'programs'));
-      const count = programsSnapshot.size;
-      systemChecks.push({
-        name: 'Programs',
-        status: count > 0 ? 'ok' : 'warning',
-        message: `${count} programs configured`,
-        icon: FileText,
-      });
+      const response = await fetch('/api/programs');
+      if (response.ok) {
+        const programs = await response.json();
+        systemChecks.push({
+          name: 'Programs',
+          status: programs.length > 0 ? 'ok' : 'warning',
+          message: `${programs.length} programs configured`,
+          icon: FileText,
+        });
+      } else {
+        throw new Error('Failed to fetch programs');
+      }
     } catch (error) {
       systemChecks.push({
         name: 'Programs',
@@ -119,16 +114,20 @@ export default function SystemStatusPage() {
       });
     }
 
-    // 5. Check Registrations Collection
+    // 5. Check Registrations
     try {
-      const registrationsSnapshot = await getDocs(collection(db, 'registrations'));
-      const count = registrationsSnapshot.size;
-      systemChecks.push({
-        name: 'Registrations',
-        status: 'ok',
-        message: `${count} registrations in system`,
-        icon: Users,
-      });
+      const response = await fetch('/api/admin/registrations');
+      if (response.ok) {
+        const registrations = await response.json();
+        systemChecks.push({
+          name: 'Registrations',
+          status: 'ok',
+          message: `${registrations.length} registrations in system`,
+          icon: Users,
+        });
+      } else {
+        throw new Error('Failed to fetch registrations');
+      }
     } catch (error) {
       systemChecks.push({
         name: 'Registrations',
@@ -140,16 +139,17 @@ export default function SystemStatusPage() {
 
     // 6. Check Admin Access
     try {
-      if (user?.email) {
-        const adminEmails = ['jeffreyverlynjohnson@gmail.com', 'admin@example.com'];
-        const isAdmin = adminEmails.includes(user.email);
-
+      const response = await fetch('/api/admin/check');
+      if (response.ok) {
+        const { isAdmin } = await response.json();
         systemChecks.push({
           name: 'Admin Access',
           status: isAdmin ? 'ok' : 'warning',
           message: isAdmin ? 'Admin access enabled' : 'No admin access',
           icon: Shield,
         });
+      } else {
+        throw new Error('Failed to check admin status');
       }
     } catch (error) {
       systemChecks.push({

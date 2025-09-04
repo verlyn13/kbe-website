@@ -1,7 +1,4 @@
 'use client';
-
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
 import { ArrowLeft, Info } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -22,10 +19,9 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { auth, db } from '@/lib/firebase';
-import { profileService } from '@/lib/firebase-admin';
+import { profileService } from '@/lib/services/profile-service';
 import { formatPhoneNumber } from '@/lib/utils';
 
 export default function SignUpPage() {
@@ -40,7 +36,7 @@ export default function SignUpPage() {
   const newslettersId = useId();
   const router = useRouter();
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signUp } = useSupabaseAuth();
   const [loading, setLoading] = useState(false);
   const [showEULA, setShowEULA] = useState(false);
   const [eulaAccepted, setEulaAccepted] = useState(false);
@@ -59,26 +55,8 @@ export default function SignUpPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    // If user is already authenticated, check their profile status
     if (user && !authLoading) {
-      const checkProfileStatus = async () => {
-        try {
-          const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
-
-          if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
-            // Profile not complete, redirect to welcome
-            router.push('/welcome');
-          } else {
-            // Profile complete, redirect to dashboard
-            router.push('/dashboard');
-          }
-        } catch (error) {
-          console.error('Error checking profile:', error);
-          router.push('/dashboard');
-        }
-      };
-
-      checkProfileStatus();
+      router.push('/dashboard');
     }
   }, [user, authLoading, router]);
 
@@ -129,27 +107,16 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      // Create user account
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
+      // Create user account via Supabase (will send confirmation email by default if configured)
+      const { error } = await signUp(formData.email, formData.password);
+      if (error) throw error;
 
-      // Update display name
-      await updateProfile(userCredential.user, {
-        displayName: formData.displayName,
-      });
-
-      // Create user profile with email preferences
-      await profileService.createOrUpdate(userCredential.user.uid, {
-        displayName: formData.displayName,
+      // Provision a basic user profile record (no auth id yet). Sync on first login.
+      await profileService.create({
         email: formData.email,
+        name: formData.displayName,
         phone: formData.phone.replace(/\D/g, ''),
-        role: 'guardian',
-        emailPreferences: formData.emailPreferences,
-        eulaAccepted: true,
-        eulaAcceptedDate: new Date(),
+        role: 'GUARDIAN',
       });
 
       // Send welcome email if they opted in for any emails
@@ -171,20 +138,14 @@ export default function SignUpPage() {
         description: 'Welcome to Homer Enrichment Hub! Check your email for next steps.',
       });
 
-      // Redirect to welcome page for profile completion
-      router.push('/welcome');
+      // Redirect to login so user can complete email verification/login
+      router.push('/login');
     } catch (error: any) {
       console.error('Sign up error:', error);
 
-      let errorMessage = 'Failed to create account. Please try again.';
+      const errorMessage = 'Failed to create account. Please try again.';
 
-      if (error.code === 'auth/email-already-in-use') {
-        errorMessage = 'This email is already registered. Please sign in instead.';
-      } else if (error.code === 'auth/weak-password') {
-        errorMessage = 'Password is too weak. Please use a stronger password.';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Invalid email address.';
-      }
+      // Supabase error messages are descriptive; keep generic fallback
 
       toast({
         title: 'Sign up failed',

@@ -35,7 +35,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 function HehLogo() {
   const { state } = useSidebar();
   return (
-    <Link href="/admin/dashboard" className="flex items-center gap-2">
+    <Link href={'/admin/dashboard' as any} className="flex items-center gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -80,7 +80,7 @@ function MobileAwareSidebarMenuButton({
 
   return (
     <SidebarMenuButton asChild isActive={isActive} tooltip={tooltip}>
-      <Link href={href} onClick={handleClick}>
+      <Link href={href as any} onClick={handleClick}>
         {children}
       </Link>
     </SidebarMenuButton>

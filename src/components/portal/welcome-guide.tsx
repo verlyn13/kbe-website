@@ -1,14 +1,12 @@
 'use client';
 
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { BookOpen, Calendar, Mail, UserPlus, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/use-auth';
-import { db } from '@/lib/firebase';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 export function WelcomeGuide() {
   const { user } = useAuth();
@@ -20,12 +18,13 @@ export function WelcomeGuide() {
       if (!user) return;
 
       try {
-        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
-        const profileData = profileDoc.data();
-
-        // Show guide if user hasn't dismissed it and has no students registered
-        if (!profileData?.hasSeenWelcomeGuide) {
-          setShowGuide(true);
+        const response = await fetch('/api/user/profile');
+        if (response.ok) {
+          const profileData = await response.json();
+          // Show guide if user hasn't dismissed it and has no students registered
+          if (!profileData?.hasSeenWelcomeGuide) {
+            setShowGuide(true);
+          }
         }
       } catch (error) {
         console.error('Error checking welcome guide status:', error);
@@ -41,10 +40,15 @@ export function WelcomeGuide() {
     if (!user) return;
 
     try {
-      await updateDoc(doc(db, 'profiles', user.uid), {
-        hasSeenWelcomeGuide: true,
+      const response = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hasSeenWelcomeGuide: true }),
       });
-      setShowGuide(false);
+
+      if (response.ok) {
+        setShowGuide(false);
+      }
     } catch (error) {
       console.error('Error dismissing guide:', error);
     }

@@ -7,7 +7,7 @@ import { LoginForm } from '@/components/login-form';
 import { ThemeBackgroundImage } from '@/components/theme-image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 export default function LoginPage() {
   const { user, loading } = useAuth();

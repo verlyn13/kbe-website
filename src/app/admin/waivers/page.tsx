@@ -1,6 +1,4 @@
 'use client';
-
-import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import {
   AlertCircle,
   Calendar,
@@ -36,19 +34,16 @@ import {
 } from '@/components/ui/table';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
 
 interface Student {
   id: string;
-  displayName: string;
-  grade: number;
-  school: string;
-  guardianId: string;
-  guardianName?: string;
-  guardianEmail?: string;
-  waiverStatus: 'pending' | 'received' | 'rejected';
+  studentName: string;
+  guardianId?: string;
+  guardianName?: string | null;
+  guardianEmail?: string | null;
+  waiverStatus: 'pending' | 'received' | 'rejected' | 'expired';
   waiverDate?: Date;
-  createdAt: Date;
+  expiresDate?: Date;
 }
 
 export default function WaiversPage() {
@@ -64,53 +59,15 @@ export default function WaiversPage() {
 
   const loadStudents = useCallback(async () => {
     try {
-      // Get all students
-      const studentsSnapshot = await getDocs(collection(db, 'students'));
-      const studentsData: Student[] = [];
-
-      for (const studentDoc of studentsSnapshot.docs) {
-        const data = studentDoc.data();
-
-        // Get guardian info
-        let guardianName = '';
-        let guardianEmail = '';
-
-        if (data.guardianId) {
-          const guardianQuery = query(
-            collection(db, 'profiles'),
-            where('__name__', '==', data.guardianId)
-          );
-          const guardianSnapshot = await getDocs(guardianQuery);
-
-          if (!guardianSnapshot.empty) {
-            const guardianData = guardianSnapshot.docs[0].data();
-            guardianName = guardianData.displayName || guardianData.guardianName || '';
-            guardianEmail = guardianData.email || '';
-          }
-        }
-
-        studentsData.push({
-          id: studentDoc.id,
-          displayName: data.displayName || `${data.firstName} ${data.lastName}`,
-          grade: data.grade,
-          school: data.school,
-          guardianId: data.guardianId,
-          guardianName,
-          guardianEmail,
-          waiverStatus: data.waiverStatus || 'pending',
-          waiverDate: data.waiverDate?.toDate(),
-          createdAt: data.createdAt?.toDate() || new Date(),
-        });
-      }
-
-      // Sort by waiver status (pending first) then by name
-      studentsData.sort((a, b) => {
+      const res = await fetch('/api/admin/waivers', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to load students');
+      const data = (await res.json()) as { students: Student[] };
+      const sorted = [...data.students].sort((a, b) => {
         if (a.waiverStatus === 'pending' && b.waiverStatus !== 'pending') return -1;
         if (a.waiverStatus !== 'pending' && b.waiverStatus === 'pending') return 1;
-        return a.displayName.localeCompare(b.displayName);
+        return a.studentName.localeCompare(b.studentName);
       });
-
-      setStudents(studentsData);
+      setStudents(sorted);
     } catch (error) {
       console.error('Error loading students:', error);
       toast({
@@ -134,31 +91,16 @@ export default function WaiversPage() {
     setUpdating(studentId);
 
     try {
-      const updateData: any = {
-        waiverStatus: newStatus,
-      };
-
-      // Add or remove waiver date based on status
-      if (newStatus === 'received') {
-        updateData.waiverDate = new Date();
-      } else {
-        updateData.waiverDate = null;
-      }
-
-      await updateDoc(doc(db, 'students', studentId), updateData);
+      const res = await fetch(`/api/admin/waivers/${studentId}`, {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) throw new Error('Failed to update');
+      const data = (await res.json()) as { student: Student };
 
       // Update local state
-      setStudents(
-        students.map((s) =>
-          s.id === studentId
-            ? {
-                ...s,
-                waiverStatus: newStatus,
-                waiverDate: newStatus === 'received' ? new Date() : undefined,
-              }
-            : s
-        )
-      );
+      setStudents(students.map((s) => (s.id === studentId ? { ...s, ...data.student } : s)));
 
       toast({
         title: 'Success',
@@ -178,10 +120,9 @@ export default function WaiversPage() {
 
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
-      student.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.guardianName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.guardianEmail?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.school.toLowerCase().includes(searchQuery.toLowerCase());
+      student.guardianEmail?.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesStatus = statusFilter === 'all' || student.waiverStatus === statusFilter;
 
@@ -315,7 +256,7 @@ export default function WaiversPage() {
                 <TableRow>
                   <TableHead>Student</TableHead>
                   <TableHead>Guardian</TableHead>
-                  <TableHead>Grade/School</TableHead>
+                  {/* Removed Grade/School to simplify and reflect current schema */}
                   <TableHead>Status</TableHead>
                   <TableHead>Waiver Date</TableHead>
                   <TableHead>Actions</TableHead>
@@ -332,7 +273,7 @@ export default function WaiversPage() {
                   filteredStudents.map((student) => (
                     <TableRow key={student.id}>
                       <TableCell>
-                        <div className="font-medium">{student.displayName}</div>
+                        <div className="font-medium">{student.studentName}</div>
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1">
@@ -340,12 +281,7 @@ export default function WaiversPage() {
                           <p className="text-muted-foreground text-xs">{student.guardianEmail}</p>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          <p>Grade {student.grade}</p>
-                          <p className="text-muted-foreground text-xs">{student.school}</p>
-                        </div>
-                      </TableCell>
+                      {/* No grade/school column in current Prisma model */}
                       <TableCell>
                         {student.waiverStatus === 'pending' && (
                           <Badge

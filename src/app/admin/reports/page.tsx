@@ -23,7 +23,8 @@ import {
 } from '@/components/ui/table';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { type Registration, registrationService } from '@/lib/firebase-admin';
+import { type RegistrationWithDetails, registrationService } from '@/lib/services';
+import { mapRegistrationStatusEnumToLC } from '@/types/enum-mappings';
 
 interface RegistrationStats {
   total: number;
@@ -39,7 +40,7 @@ export default function AdminReportsPage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [selectedProgram, setSelectedProgram] = useState('mathcounts-2025');
-  const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [registrations, setRegistrations] = useState<RegistrationWithDetails[]>([]);
   const [stats, setStats] = useState<RegistrationStats | null>(null);
 
   const loadRegistrationData = useCallback(async () => {
@@ -57,15 +58,13 @@ export default function AdminReportsPage() {
       const bySchool: Record<string, number> = {};
 
       regs.forEach((reg) => {
-        reg.students.forEach((student) => {
-          // Count by grade
-          const grade = student.grade.toString();
+        const student = reg.student;
+        if (student) {
+          const grade = String(student.grade);
           byGrade[grade] = (byGrade[grade] || 0) + 1;
-
-          // Count by school
           const school = student.school || 'Unknown';
           bySchool[school] = (bySchool[school] || 0) + 1;
-        });
+        }
       });
 
       setStats({
@@ -107,18 +106,16 @@ export default function AdminReportsPage() {
         'Registration Date',
       ];
 
-      const csvRows = registrations.flatMap((reg) =>
-        reg.students.map((student) => [
-          reg.parentName,
-          reg.parentEmail,
-          reg.parentPhone,
-          `${student.firstName} ${student.lastName}`.trim(),
-          student.grade,
-          student.school || '',
-          reg.status,
-          new Date(reg.registrationDate).toLocaleDateString(),
-        ])
-      );
+      const csvRows = registrations.map((reg) => [
+        reg.user?.name || '',
+        reg.user?.email || '',
+        reg.user?.phone || '',
+        reg.student?.name || '',
+        reg.student?.grade ?? '',
+        reg.student?.school || '',
+        mapRegistrationStatusEnumToLC(reg.status),
+        new Date(reg.createdAt).toLocaleDateString(),
+      ]);
 
       const csvContent = [
         csvHeaders.join(','),
@@ -311,7 +308,7 @@ export default function AdminReportsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Guardian</TableHead>
-                <TableHead>Students</TableHead>
+                <TableHead>Student</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
@@ -321,34 +318,29 @@ export default function AdminReportsPage() {
                 <TableRow key={reg.id}>
                   <TableCell>
                     <div>
-                      <p className="font-medium">{reg.parentName}</p>
-                      <p className="text-muted-foreground text-sm">{reg.parentEmail}</p>
+                      <p className="font-medium">{reg.user?.name || 'Unknown'}</p>
+                      <p className="text-muted-foreground text-sm">{reg.user?.email}</p>
                     </div>
                   </TableCell>
                   <TableCell>
-                    {reg.students.map((student) => (
-                      <div
-                        key={`${student.firstName}-${student.lastName}-${student.grade}`}
-                        className="text-sm"
-                      >
-                        {`${student.firstName} ${student.lastName}`.trim()} (Grade {student.grade})
-                      </div>
-                    ))}
+                    <div className="text-sm">
+                      {reg.student?.name} (Grade {reg.student?.grade})
+                    </div>
                   </TableCell>
                   <TableCell className="text-sm">
-                    {new Date(reg.registrationDate).toLocaleDateString()}
+                    {new Date(reg.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
                     <Badge
                       variant={
-                        reg.status === 'active'
+                        mapRegistrationStatusEnumToLC(reg.status) === 'active'
                           ? 'default'
-                          : reg.status === 'pending'
+                          : mapRegistrationStatusEnumToLC(reg.status) === 'pending'
                             ? 'secondary'
                             : 'outline'
                       }
                     >
-                      {reg.status}
+                      {mapRegistrationStatusEnumToLC(reg.status)}
                     </Badge>
                   </TableCell>
                 </TableRow>

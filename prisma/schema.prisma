@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String?
+  phone         String?
+  role          Role           @default(GUARDIAN)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
+  students      Student[]
+  waivers       Waiver[]
+}
+
+model Student {
+  id            String         @id @default(uuid())
+  userId        String
+  name          String
+  dateOfBirth   DateTime
+  grade         String
+  school        String?
+  medicalNotes  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
+  user          User           @relation(fields: [userId], references: [id])
+  waivers       Waiver[]
+}
+
+model Program {
+  id            String         @id @default(uuid())
+  name          String
+  description   String
+  category      String
+  startDate     DateTime
+  endDate       DateTime
+  schedule      Json
+  capacity      Int
+  price         Decimal
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
+}
+
+model Registration {
+  id            String             @id @default(uuid())
+  userId        String
+  studentId     String
+  programId     String
+  status        RegistrationStatus @default(PENDING)
+  paymentStatus String             @default("pending")
+  notes         String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  program       Program            @relation(fields: [programId], references: [id])
+  student       Student            @relation(fields: [studentId], references: [id])
+  user          User               @relation(fields: [userId], references: [id])
+
+  @@unique([studentId, programId])
+}
+
+model Waiver {
+  id          String    @id @default(uuid())
+  userId      String
+  studentId   String
+  documentUrl String?
+  signedAt    DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  student     Student   @relation(fields: [studentId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+model Announcement {
+  id             String             @id @default(uuid())
+  title          String
+  content        String
+  priority       Priority           @default(NORMAL)
+  status         AnnouncementStatus @default(PUBLISHED)
+  publishedAt    DateTime           @default(now())
+  expiresAt      DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  pinned         Boolean            @default(false)
+  recipients     String?
+  createdByName  String?
+  viewCount      Int                @default(0)
+  acknowledgedBy String[]           @default([])
+}
+
+enum Role {
+  ADMIN
+  GUARDIAN
+  INSTRUCTOR
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  WAITLIST
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum AnnouncementStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}

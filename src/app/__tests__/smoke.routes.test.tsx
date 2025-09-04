@@ -1,14 +1,20 @@
-vi.mock('@/hooks/use-auth', () => ({
-  useAuth: () => ({ user: null, loading: false }),
+vi.mock('@/hooks/use-supabase-auth', () => ({
+  useSupabaseAuth: () => ({ user: null, loading: false }),
 }));
 
 vi.mock('@/hooks/use-admin', () => ({
   useAdmin: () => ({ hasPermission: () => true, admin: { name: 'Admin' } }),
 }));
 
-vi.mock('@/lib/firebase-admin', () => ({
+// Mock Prisma-based services layer to avoid DB access and loading state
+vi.mock('@/lib/services', () => ({
   registrationService: {
-    getStats: vi.fn(async () => ({ pending: 0, active: 0, waitlist: 0, totalStudents: 0 })),
+    getStats: vi.fn(async () => ({
+      pending: 0,
+      active: 0,
+      waitlist: 0,
+      totalStudents: 0,
+    })),
   },
 }));
 
