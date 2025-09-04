@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { profileService } from '@/lib/services/profile-service';
+import { profileService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
 
 export const runtime = 'nodejs';
