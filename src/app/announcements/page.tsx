@@ -152,9 +152,12 @@ export default function AnnouncementsPage() {
                   <CardTitle className="text-2xl">{selectedAnnouncement.title}</CardTitle>
                 </div>
                 <CardDescription>
-                  By {selectedAnnouncement.createdByName} •{' '}
-                  {selectedAnnouncement.publishedAt &&
-                    format(new Date(selectedAnnouncement.publishedAt), 'MMMM d, yyyy at h:mm a')}
+                  Posted by {selectedAnnouncement.createdByName}{' '}
+                  {selectedAnnouncement.publishedAt && (
+                    <>
+                      on {format(new Date(selectedAnnouncement.publishedAt), 'MMMM d, yyyy h:mm a')}
+                    </>
+                  )}
                 </CardDescription>
               </div>
               <div className="flex flex-col items-end gap-2">
