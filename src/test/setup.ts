@@ -103,3 +103,12 @@ if (typeof window !== 'undefined' && !window.matchMedia) {
     dispatchEvent: () => false,
   });
 }
+
+// Polyfill ResizeObserver for Radix UI components in tests
+if (typeof window !== 'undefined' && !(window as any).ResizeObserver) {
+  (window as any).ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as any;
+}
