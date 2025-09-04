@@ -1,5 +1,5 @@
-vi.mock('@/hooks/use-auth', () => ({
-  useAuth: () => ({ user: null, loading: false }),
+vi.mock('@/hooks/use-supabase-auth', () => ({
+  useSupabaseAuth: () => ({ user: null, loading: false }),
 }));
 
 import axeCore from 'axe-core';
