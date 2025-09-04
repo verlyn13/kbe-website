@@ -48,6 +48,11 @@ Homer Enrichment Hub has migrated from Firebase to the Supabase + Prisma stack. 
 - Header CTAs: public CTAs route to `/login`
 - Docs: `docs/migration/README.md` index added; guide and artifacts restored
 - Cleanup: removed legacy `*.original` files; generalized auth error utils
+- UX: protected routes redirect to `/login`; MathCounts CTAs unified
+- UI: Announcements 'Hidden' tab when empty; 'Pinned' badges; pinned-only filter
+- UI: Calendar dialog auto-sets end time to +1h until user adjusts
+- UI: Admin dashboard/communications minor a11y and copy polish
+- Tests: time-utils unit tests and EventDialog render tests; ResizeObserver polyfill
 
 ## Recovery Slices (up next)
 - Services parity round 2: verify all pages use Prisma services and types
