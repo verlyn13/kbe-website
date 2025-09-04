@@ -46,24 +46,17 @@ const eventTypes = [
   { value: 'other', label: 'Other' },
 ];
 
-const timeOptions = Array.from({ length: 48 }, (_, i) => {
-  const hour = Math.floor(i / 2);
-  const minute = i % 2 === 0 ? '00' : '30';
+import { plusOneHour, TIME_SLOTS_30_MIN } from '@/components/calendar/time-utils';
+
+const timeOptions = TIME_SLOTS_30_MIN.map((value) => {
+  const [h, m] = value.split(':');
+  const hour = Number(h);
   const period = hour < 12 ? 'AM' : 'PM';
   const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-  return {
-    value: `${hour.toString().padStart(2, '0')}:${minute}`,
-    label: `${displayHour}:${minute} ${period}`,
-  };
+  return { value, label: `${displayHour}:${m} ${period}` };
 });
 
-function plusOneHour(time: string): string {
-  const idx = timeOptions.findIndex((t) => t.value === time);
-  if (idx === -1) return time;
-  // 2 slots = 1 hour in 30-minute increments
-  const next = Math.min(idx + 2, timeOptions.length - 1);
-  return timeOptions[next].value;
-}
+// plusOneHour imported from time-utils
 
 // Helper function to copy time from one date to another
 function copyTime(from: Date, to: Date) {

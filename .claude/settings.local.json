@@ -28,7 +28,14 @@
       "Bash(git remote set-url:*)",
       "Bash(gh auth:*)",
       "Bash(direnv allow:*)",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(gh:*)",
+      "Bash(for branch in remove-register-route service-imports ui-parity-calendar admin-dashboard-polish docs-triage)",
+      "Bash(do)",
+      "Bash(echo:*)",
+      "Bash(git rev-list:*)",
+      "Bash(done)",
+      "Bash(for branch in remove-register-route docs-triage)"
     ],
     "deny": [],
     "ask": []

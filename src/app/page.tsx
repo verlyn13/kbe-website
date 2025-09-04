@@ -60,7 +60,7 @@ export default function LandingPage() {
                 <Link href="/login">Sign In</Link>
               </Button>
               <Button asChild>
-                <Link href="/signup">Get Started</Link>
+                <Link href="/login">Get Started</Link>
               </Button>
             </div>
             {/* Mobile Menu Button */}
@@ -80,7 +80,7 @@ export default function LandingPage() {
                 <Link href="/login">Sign In</Link>
               </Button>
               <Button asChild className="w-full">
-                <Link href="/signup">Get Started</Link>
+                <Link href="/login">Get Started</Link>
               </Button>
             </div>
           )}

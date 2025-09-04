@@ -51,7 +51,12 @@ export function AnnouncementCard({
             </Badge>
             <DropdownMenu>
               <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                <Button
+                  aria-label={`More actions for ${announcement.title}`}
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                >
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
