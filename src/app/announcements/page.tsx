@@ -1,7 +1,7 @@
 'use client';
 
 import { format, formatDistanceToNow } from 'date-fns';
-import { AlertCircle, ArrowLeft, CheckCircle, Clock, EyeOff, Info, Pin } from 'lucide-react';
+import { AlertCircle, ArrowLeft, CheckCircle, Clock, Info, Pin } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { AnnouncementCard } from '@/components/announcement-card';
@@ -219,7 +219,9 @@ export default function AnnouncementsPage() {
       <Tabs defaultValue="visible" className="w-full">
         <TabsList>
           <TabsTrigger value="visible">Announcements ({announcements.length})</TabsTrigger>
-          <TabsTrigger value="hidden">Hidden ({hiddenAnnouncements.length})</TabsTrigger>
+          {hiddenAnnouncements.length > 0 && (
+            <TabsTrigger value="hidden">Hidden ({hiddenAnnouncements.length})</TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="visible" className="mt-6">
@@ -251,15 +253,8 @@ export default function AnnouncementsPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="hidden" className="mt-6">
-          {hiddenAnnouncements.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-16">
-                <EyeOff className="text-muted-foreground mb-4 h-12 w-12" />
-                <p className="text-muted-foreground text-lg">No hidden announcements</p>
-              </CardContent>
-            </Card>
-          ) : (
+        {hiddenAnnouncements.length > 0 && (
+          <TabsContent value="hidden" className="mt-6">
             <div className="grid gap-4 md:grid-cols-2">
               {hiddenAnnouncements.map((announcement) => (
                 <AnnouncementCard
@@ -275,8 +270,8 @@ export default function AnnouncementsPage() {
                 />
               ))}
             </div>
-          )}
-        </TabsContent>
+          </TabsContent>
+        )}
       </Tabs>
 
       {/* Delete Confirmation Dialog */}

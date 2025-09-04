@@ -19,8 +19,8 @@ vi.mock('@/lib/services', () => ({
 }));
 
 import AdminDashboardPage from '@/app/admin/dashboard/page';
+import LoginPage from '@/app/login/page';
 import LandingPage from '@/app/page';
-import RegisterPage from '@/app/register/page';
 import { render, screen } from '@/test/test-utils';
 
 describe('Smoke: critical routes render', () => {
@@ -37,8 +37,8 @@ describe('Smoke: critical routes render', () => {
     expect(await screen.findByText(/Admin Dashboard/i)).toBeInTheDocument();
   });
 
-  it('renders register page with main section', () => {
-    render(<RegisterPage />);
+  it('renders login page with main section', () => {
+    render(<LoginPage />);
     expect(screen.getByRole('main')).toBeInTheDocument();
   });
 });

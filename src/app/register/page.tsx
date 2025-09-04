@@ -1,19 +1,9 @@
-import { Suspense } from 'react';
-import { LazyRegistrationFlow } from '@/components/lazy';
-import { FormSkeleton } from '@/components/loading/form-skeleton';
-import { PublicHeader } from '@/components/public-header';
+import { redirect } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export default function RegisterPage() {
-  return (
-    <>
-      <PublicHeader />
-      <main className="bg-background min-h-screen">
-        <div className="container py-8">
-          <Suspense fallback={<FormSkeleton fields={6} />}>
-            <LazyRegistrationFlow />
-          </Suspense>
-        </div>
-      </main>
-    </>
-  );
+  // Canonicalize legacy /register to unified auth entry
+  redirect('/login');
 }
