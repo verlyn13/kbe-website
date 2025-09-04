@@ -1,5 +1,6 @@
 'use client';
 
+import { format } from 'date-fns';
 import {
   AlertCircle,
   Calendar,
@@ -100,7 +101,19 @@ function QuickActionCard({
   }
 
   return (
-    <Card className="hover:bg-accent h-full cursor-pointer transition-colors" onClick={onClick}>
+    <Card
+      className="hover:bg-accent h-full cursor-pointer transition-colors"
+      role="button"
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+      aria-label={`${title} – ${subtitle}`}
+    >
       <CardContent className="pt-6">{content}</CardContent>
     </Card>
   );
@@ -298,13 +311,7 @@ export default function AdminDashboardPage() {
                   <div className="flex-1">
                     <p className="font-medium">{event.title}</p>
                     <p className="text-muted-foreground text-sm">
-                      {event.date.toLocaleDateString('en-US', {
-                        weekday: 'short',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      })}
+                      {format(event.date, 'EEE, MMM d, h:mm a')}
                     </p>
                   </div>
                   <Badge
@@ -340,10 +347,7 @@ export default function AdminDashboardPage() {
                   <div className="flex-1">
                     <p className="text-sm">{activity.action}</p>
                     <p className="text-muted-foreground text-xs">
-                      {activity.timestamp.toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      })}
+                      {format(activity.timestamp, 'h:mm a')}
                       {activity.user && ` by ${activity.user}`}
                     </p>
                   </div>

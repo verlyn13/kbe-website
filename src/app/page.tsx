@@ -69,6 +69,7 @@ export default function LandingPage() {
               size="icon"
               className="sm:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
             >
               <Menu className="h-5 w-5" />
             </Button>
