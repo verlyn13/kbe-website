@@ -127,10 +127,16 @@ export default function AdminCommunicationsPage() {
         const announcement = row.original;
         return (
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setSelectedAnnouncement(announcement)}>
+            <Button
+              aria-label={`View announcement: ${announcement.title}`}
+              variant="ghost"
+              size="sm"
+              onClick={() => setSelectedAnnouncement(announcement)}
+            >
               <Eye className="h-4 w-4" />
             </Button>
             <Button
+              aria-label={`Delete announcement: ${announcement.title}`}
               variant="ghost"
               size="sm"
               onClick={() => {
