@@ -37,7 +37,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
       try {
         // Temporary: Check if user email is in admin list
-        // This allows testing while Firebase admin records are being set up
+        // Allows testing while admin records are being provisioned
         const TEMP_ADMIN_EMAILS = [
           'jeffreyverlynjohnson@gmail.com',
           'admin@example.com', // Replace with your actual admin emails

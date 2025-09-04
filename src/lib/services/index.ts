@@ -1,6 +1,5 @@
 /**
  * Central export for all Supabase/Prisma services
- * These replace the Firebase services during migration
  */
 
 // Also export Profile type for compatibility
