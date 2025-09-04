@@ -1,16 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  GoogleAuthProvider,
-  getRedirectResult,
-  isSignInWithEmailLink,
-  sendSignInLinkToEmail,
-  signInWithEmailAndPassword,
-  signInWithEmailLink,
-  signInWithPopup,
-  signInWithRedirect,
-} from 'firebase/auth';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -37,9 +27,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
 import { getErrorMessage } from '@/lib/error-utils';
-import { auth } from '@/lib/firebase';
 import { logger } from '@/lib/logger';
 import { emailSchema, passwordSchema } from '@/lib/validation';
 
@@ -82,6 +72,7 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const supabaseAuth = useSupabaseAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
@@ -89,7 +80,7 @@ export function LoginForm() {
   // Magic-link email confirmation modal state (replaces window.prompt on iOS)
   const [showEmailConfirm, setShowEmailConfirm] = useState(false);
   const [emailForMagicLink, setEmailForMagicLink] = useState('');
-  const [pendingMagicLinkUrl, setPendingMagicLinkUrl] = useState<string | null>(null);
+  const [pendingMagicLinkUrl] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -100,92 +91,13 @@ export function LoginForm() {
     },
   });
 
-  // OAuth redirect handler - runs unconditionally on mount
+  // With Supabase, redirects are handled via /auth/callback and middleware
   useEffect(() => {
-    const checkRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result?.user) {
-          // Check if this is a new user
-          const isNewUser =
-            result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-
-          if (isNewUser) {
-            // Check if profile is completed
-            const { doc, getDoc } = await import('firebase/firestore');
-            const { db } = await import('@/lib/firebase');
-            const profileDoc = await getDoc(doc(db, 'profiles', result.user.uid));
-            if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
-              router.push('/welcome');
-              return;
-            }
-          }
-
-          // Immediately leave the login page
-          router.push('/dashboard');
-          return;
-        } else {
-          // Check if user is already signed in
-          if (auth.currentUser) {
-            router.push('/dashboard');
-          }
-        }
-      } catch (error: any) {
-        // Silently handle popup cancellation errors
-        if (error.code !== 'auth/popup-closed-by-user') {
-          logger.error('OAuth redirect error', error);
-        }
-      }
-    };
-
-    checkRedirectResult();
-  }, [router]); // Runs on every mount
-
-  // SECONDARY: Handle magic links (only if not redirected above)
-  useEffect(() => {
-    const completeMagicLinkSignIn = async () => {
-      if (isSignInWithEmailLink(auth, window.location.href)) {
-        setIsLoading(true);
-        const email = window.localStorage.getItem('emailForSignIn');
-
-        if (!email) {
-          // Store URL and request email via modal to avoid window.prompt (iOS restrictions)
-          setPendingMagicLinkUrl(window.location.href);
-          setShowEmailConfirm(true);
-          setIsLoading(false);
-          return;
-        }
-
-        try {
-          const userCredential = await signInWithEmailLink(auth, email, window.location.href);
-          window.localStorage.removeItem('emailForSignIn');
-
-          // Check if new user needs welcome flow
-          const isNewUser =
-            userCredential.user.metadata.creationTime ===
-            userCredential.user.metadata.lastSignInTime;
-
-          if (isNewUser) {
-            router.push('/welcome');
-          } else {
-            router.push('/dashboard');
-          }
-        } catch (error) {
-          logger.error('Magic link sign in failed', error);
-          toast({
-            variant: 'destructive',
-            title: 'Magic link sign in failed',
-            description: getErrorMessage(error),
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    completeMagicLinkSignIn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, toast]); // Add router and toast to dependencies
+    // If already authenticated, leave the page
+    if (!supabaseAuth.loading && supabaseAuth.user) {
+      router.push('/dashboard');
+    }
+  }, [router, supabaseAuth.loading, supabaseAuth.user]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (authMethod === 'password') {
@@ -200,7 +112,8 @@ export function LoginForm() {
           setIsLoading(false);
           return;
         }
-        await signInWithEmailAndPassword(auth, values.email, values.password);
+        const { error } = await supabaseAuth.signIn(values.email, values.password);
+        if (error) throw error;
         router.push('/dashboard');
       } catch (error) {
         logger.error('Email/password sign in failed', error);
@@ -219,29 +132,10 @@ export function LoginForm() {
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
-    const provider = new GoogleAuthProvider();
     try {
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        await signInWithRedirect(auth, provider);
-        return; // Result is handled by getRedirectResult on mount
-      }
-
-      const result = await signInWithPopup(auth, provider);
-      const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
-      await (async () => {
-        if (isNewUser) {
-          const { doc, getDoc } = await import('firebase/firestore');
-          const { db } = await import('@/lib/firebase');
-          const profileDoc = await getDoc(doc(db, 'profiles', result.user.uid));
-          if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
-            router.push('/welcome');
-            return;
-          }
-        }
-        router.push('/dashboard');
-      })();
+      const { error } = await supabaseAuth.signInWithGoogle();
+      if (error) throw error;
+      // Redirect handled by Supabase OAuth flow
     } catch (error) {
       logger.error('Google sign in failed', error);
       toast({
@@ -264,16 +158,9 @@ export function LoginForm() {
     }
 
     setIsMagicLinkLoading(true);
-    const actionCodeSettings = {
-      // URL where the user will complete sign-in (must be authorized in Firebase Console)
-      url: `${window.location.origin}/login`,
-      // This must be true for email link sign-in
-      handleCodeInApp: true,
-    };
-
     try {
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      window.localStorage.setItem('emailForSignIn', email);
+      const { error } = await supabaseAuth.signInWithMagicLink(email);
+      if (error) throw error;
       toast({
         title: 'Check your email',
         description: `A sign-in link has been sent to ${email}.`,
@@ -281,21 +168,10 @@ export function LoginForm() {
     } catch (error: unknown) {
       logger.error('Magic link send failed', {
         error,
-        code: (error as { code?: string })?.code,
         message: (error as { message?: string })?.message,
-        url: actionCodeSettings.url,
       });
 
-      let errorMessage = getErrorMessage(error);
-
-      // Provide more specific error messages
-      if ((error as { code?: string })?.code === 'auth/invalid-continue-uri') {
-        errorMessage = 'The redirect URL is not authorized. Please contact support.';
-      } else if ((error as { code?: string })?.code === 'auth/unauthorized-continue-uri') {
-        errorMessage = 'The domain is not authorized for OAuth operations.';
-      } else if ((error as { code?: string })?.code === 'auth/operation-not-allowed') {
-        errorMessage = 'Email link sign-in is not enabled. Please contact support.';
-      }
+      const errorMessage = getErrorMessage(error);
 
       toast({
         variant: 'destructive',
@@ -341,23 +217,10 @@ export function LoginForm() {
                 }
                 try {
                   setIsLoading(true);
-                  const cred = await signInWithEmailLink(auth, email, pendingMagicLinkUrl);
-                  window.localStorage.removeItem('emailForSignIn');
+                  const { error } = await supabaseAuth.signInWithMagicLink(email);
+                  if (error) throw error;
                   setShowEmailConfirm(false);
-                  const isNewUser =
-                    cred.user.metadata.creationTime === cred.user.metadata.lastSignInTime;
-                  await (async () => {
-                    if (isNewUser) {
-                      const { doc, getDoc } = await import('firebase/firestore');
-                      const { db } = await import('@/lib/firebase');
-                      const profileDoc = await getDoc(doc(db, 'profiles', cred.user.uid));
-                      if (!profileDoc.exists() || !profileDoc.data()?.profileCompleted) {
-                        router.push('/welcome');
-                        return;
-                      }
-                    }
-                    router.push('/dashboard');
-                  })();
+                  toast({ title: 'Check your email', description: `Link sent to ${email}` });
                 } catch (error) {
                   logger.error('Magic link sign in failed (modal)', error as any);
                   toast({

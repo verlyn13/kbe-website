@@ -20,14 +20,14 @@ export default function EmailSettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Current Email Configuration</CardTitle>
-          <CardDescription>Emails are currently sent using Firebase Authentication</CardDescription>
+          <CardDescription>Emails are currently sent using Supabase Authentication</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <p className="mb-1 text-sm font-medium">From Address</p>
               <code className="bg-muted rounded px-2 py-1 text-sm">
-                noreply@kbe-website.firebaseapp.com
+                noreply@homerenrichment.com
               </code>
             </div>
             <div>
@@ -38,17 +38,17 @@ export default function EmailSettingsPage() {
 
           <Alert>
             <InfoIcon className="h-4 w-4" />
-            <AlertTitle>Email Templates Updated</AlertTitle>
+            <AlertTitle>Migration Complete</AlertTitle>
             <AlertDescription>
-              Firebase email templates have been customized with Homer Enrichment Hub branding.
-              Emails will show "Homer Enrichment Hub" as the sender name.
+              Email system has been migrated from Firebase to Supabase. All authentication emails
+              are now handled by Supabase Auth with custom branding.
             </AlertDescription>
           </Alert>
 
           <div className="flex gap-2">
             <Button variant="outline" asChild>
               <Link
-                href="https://console.firebase.google.com/project/kbe-website/authentication/emails"
+                href="https://supabase.com/dashboard/project/your-project-id/auth/templates"
                 target="_blank"
               >
                 <ExternalLink className="mr-2 h-4 w-4" />
@@ -91,18 +91,18 @@ export default function EmailSettingsPage() {
 
             <div className="space-y-2 rounded-lg border p-4">
               <div>
-                <h5 className="font-medium">Firebase Email Extension</h5>
+                <h5 className="font-medium">Supabase SMTP Configuration</h5>
                 <p className="text-muted-foreground text-sm">
-                  Use your existing email service (Gmail, Office 365) with SMTP.
+                  Configure SMTP settings in Supabase Dashboard for custom domain emails.
                 </p>
               </div>
             </div>
 
             <div className="space-y-2 rounded-lg border p-4">
               <div>
-                <h5 className="font-medium">Custom Email Function</h5>
+                <h5 className="font-medium">Edge Functions</h5>
                 <p className="text-muted-foreground text-sm">
-                  Build a custom Cloud Function for complete control.
+                  Use Supabase Edge Functions for custom email logic and templates.
                 </p>
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function EmailSettingsPage() {
 
           <div className="flex gap-2">
             <Button variant="outline" asChild>
-              <Link href="/docs/sendgrid-email-setup.md">View Setup Guide</Link>
+              <Link href={'/docs/sendgrid-email-setup.md' as any}>View Setup Guide</Link>
             </Button>
             <Button variant="outline" asChild>
               <Link href="https://sendgrid.com" target="_blank">

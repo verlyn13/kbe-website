@@ -20,12 +20,16 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
-import { type Registration, registrationService } from '@/lib/firebase-admin';
+import { type RegistrationWithDetails, registrationService } from '@/lib/services';
+import {
+  mapRegistrationStatusEnumToLC,
+  mapRegistrationStatusLCToEnum,
+} from '@/types/enum-mappings';
 
 export default function AdminRegistrationsPage() {
   const { admin } = useAdmin();
   const { toast } = useToast();
-  const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [registrations, setRegistrations] = useState<RegistrationWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'active' | 'waitlist'>('all');
 
@@ -49,9 +53,12 @@ export default function AdminRegistrationsPage() {
     loadRegistrations();
   }, [loadRegistrations]);
 
-  async function handleStatusUpdate(id: string, status: Registration['status']) {
+  async function handleStatusUpdate(
+    id: string,
+    status: 'pending' | 'active' | 'waitlist' | 'withdrawn'
+  ) {
     try {
-      await registrationService.updateStatus(id, status, admin!.id);
+      await registrationService.updateStatus(id, mapRegistrationStatusLCToEnum(status));
       await loadRegistrations();
       toast({
         title: 'Success',
@@ -67,7 +74,7 @@ export default function AdminRegistrationsPage() {
     }
   }
 
-  const columns: ColumnDef<Registration>[] = [
+  const columns: ColumnDef<RegistrationWithDetails>[] = [
     {
       id: 'select',
       header: ({ table }) => (
@@ -96,29 +103,18 @@ export default function AdminRegistrationsPage() {
       header: 'Email',
     },
     {
-      accessorKey: 'students',
+      accessorKey: 'student',
       header: 'Students',
       cell: ({ row }) => {
-        const students = row.getValue('students') as Registration['students'];
-        return (
-          <div className="space-y-1">
-            {students.map((student) => (
-              <div
-                key={`${student.firstName}-${student.lastName}-${student.grade}`}
-                className="text-sm"
-              >
-                {student.firstName} {student.lastName} ({student.grade}th)
-              </div>
-            ))}
-          </div>
-        );
+        const s = row.getValue('student') as RegistrationWithDetails['student'];
+        return <div className="text-sm">{s.name}</div>;
       },
     },
     {
-      accessorKey: 'registrationDate',
+      accessorKey: 'createdAt',
       header: 'Registration Date',
       cell: ({ row }) => {
-        const date = row.getValue('registrationDate') as Date;
+        const date = new Date(row.getValue('createdAt') as string | Date);
         return date.toLocaleDateString();
       },
     },
@@ -126,7 +122,9 @@ export default function AdminRegistrationsPage() {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => {
-        const status = row.getValue('status') as Registration['status'];
+        const status = mapRegistrationStatusEnumToLC(
+          row.getValue('status') as RegistrationWithDetails['status']
+        );
         const variant =
           status === 'active'
             ? 'default'
@@ -143,7 +141,7 @@ export default function AdminRegistrationsPage() {
       accessorKey: 'paymentStatus',
       header: 'Payment',
       cell: ({ row }) => {
-        const payment = row.getValue('paymentStatus') as Registration['paymentStatus'];
+        const payment = row.getValue('paymentStatus') as RegistrationWithDetails['paymentStatus'];
         const variant = payment === 'completed' ? 'default' : 'outline';
         return <Badge variant={variant}>{payment}</Badge>;
       },
@@ -172,7 +170,7 @@ export default function AdminRegistrationsPage() {
                 Email Parent
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              {registration.status === 'pending' && (
+              {mapRegistrationStatusEnumToLC(registration.status) === 'pending' && (
                 <>
                   <DropdownMenuItem onClick={() => handleStatusUpdate(registration.id, 'active')}>
                     <Check className="mr-2 h-4 w-4" />
@@ -184,7 +182,7 @@ export default function AdminRegistrationsPage() {
                   </DropdownMenuItem>
                 </>
               )}
-              {registration.status === 'waitlist' && (
+              {mapRegistrationStatusEnumToLC(registration.status) === 'waitlist' && (
                 <DropdownMenuItem onClick={() => handleStatusUpdate(registration.id, 'active')}>
                   <Check className="mr-2 h-4 w-4" />
                   Move to Active
@@ -205,7 +203,9 @@ export default function AdminRegistrationsPage() {
   ];
 
   const filteredRegistrations =
-    activeTab === 'all' ? registrations : registrations.filter((r) => r.status === activeTab);
+    activeTab === 'all'
+      ? registrations
+      : registrations.filter((r) => mapRegistrationStatusEnumToLC(r.status) === activeTab);
 
   if (loading) {
     return (
@@ -241,7 +241,10 @@ export default function AdminRegistrationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {registrations.filter((r) => r.status === 'pending').length}
+              {
+                registrations.filter((r) => mapRegistrationStatusEnumToLC(r.status) === 'pending')
+                  .length
+              }
             </div>
             <p className="text-muted-foreground text-xs">Awaiting review</p>
           </CardContent>
@@ -252,9 +255,10 @@ export default function AdminRegistrationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {registrations
-                .filter((r) => r.status === 'active')
-                .reduce((sum, r) => sum + r.students.length, 0)}
+              {
+                registrations.filter((r) => mapRegistrationStatusEnumToLC(r.status) === 'active')
+                  .length
+              }
             </div>
             <p className="text-muted-foreground text-xs">Currently enrolled</p>
           </CardContent>
@@ -265,7 +269,10 @@ export default function AdminRegistrationsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {registrations.filter((r) => r.status === 'waitlist').length}
+              {
+                registrations.filter((r) => mapRegistrationStatusEnumToLC(r.status) === 'waitlist')
+                  .length
+              }
             </div>
             <p className="text-muted-foreground text-xs">Waiting for space</p>
           </CardContent>

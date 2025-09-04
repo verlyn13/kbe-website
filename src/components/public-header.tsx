@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -45,7 +45,7 @@ export function PublicHeader() {
           {navItems.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              href={item.href as any}
               className="hover:text-foreground/80 text-foreground/60 transition-colors"
             >
               {item.label}
@@ -81,7 +81,7 @@ export function PublicHeader() {
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
-                    href={item.href}
+                    href={item.href as any}
                     className="text-lg font-medium"
                     onClick={() => setOpen(false)}
                   >
@@ -89,7 +89,11 @@ export function PublicHeader() {
                   </Link>
                 ))}
                 {!user && (
-                  <Link href="/" className="text-lg font-medium" onClick={() => setOpen(false)}>
+                  <Link
+                    href={'/' as any}
+                    className="text-lg font-medium"
+                    onClick={() => setOpen(false)}
+                  >
                     Sign In
                   </Link>
                 )}

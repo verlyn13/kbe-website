@@ -1,6 +1,5 @@
 'use client';
 
-import { doc, getDoc } from 'firebase/firestore';
 import { Bell, Calendar, Home, Settings, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -21,9 +20,8 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuth } from '@/hooks/use-auth';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { db } from '@/lib/firebase';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 function HehLogo() {
   const { state } = useSidebar();
@@ -72,7 +70,7 @@ function MobileAwareSidebarMenuButton({
 
   return (
     <SidebarMenuButton asChild {...props}>
-      <Link href={href} onClick={handleClick}>
+      <Link href={href as any} onClick={handleClick}>
         {children}
       </Link>
     </SidebarMenuButton>
@@ -95,8 +93,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     async function checkAdmin() {
       if (user) {
         try {
-          const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-          setIsAdmin(adminDoc.exists());
+          const response = await fetch('/api/admin/check');
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
         } catch (error) {
           console.error('Error checking admin status:', error);
           setIsAdmin(false);

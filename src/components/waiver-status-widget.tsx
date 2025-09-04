@@ -1,6 +1,4 @@
 'use client';
-
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { AlertCircle, Download, FileCheck, FileX } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -8,8 +6,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/use-auth';
-import { db } from '@/lib/firebase';
+import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 
 interface StudentWaiver {
   id: string;
@@ -20,33 +17,30 @@ interface StudentWaiver {
 }
 
 export function WaiverStatusWidget() {
-  const { user } = useAuth();
+  const { user } = useSupabaseAuth();
   const [students, setStudents] = useState<StudentWaiver[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
-
-    const studentsRef = collection(db, 'students');
-    const q = query(studentsRef, where('guardianId', '==', user.uid));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const studentData: StudentWaiver[] = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        studentData.push({
-          id: doc.id,
-          studentName: data.displayName || 'Unnamed Student',
-          waiverStatus: data.waiverStatus || 'pending',
-          waiverDate: data.waiverDate?.toDate(),
-          expiresDate: data.waiverExpiresDate?.toDate(),
-        });
-      });
-      setStudents(studentData);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    let active = true;
+    async function load() {
+      if (!user) return;
+      try {
+        const res = await fetch('/api/waivers/status', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to load waiver status');
+        const data = (await res.json()) as { students: StudentWaiver[] };
+        if (active) setStudents(data.students);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Waiver widget error:', err);
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      active = false;
+    };
   }, [user]);
 
   const pendingWaivers = students.filter((s) => s.waiverStatus === 'pending');

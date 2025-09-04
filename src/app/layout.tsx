@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { LayoutWithFooter } from '@/components/layout-with-footer';
 import { SkipNavigation } from '@/components/skip-navigation';
 import { Toaster } from '@/components/ui/toaster';
-import { AuthProvider } from '@/hooks/use-auth';
+import { SupabaseAuthProvider } from '@/hooks/use-supabase-auth';
 import { ThemeProvider } from '@/providers/theme-provider';
 import './globals.css';
 
@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Force dynamic rendering to avoid prerender-time auth/env issues in CI
+export const dynamic = 'force-dynamic';
+
 /**
  * Root layout component for the Homer Enrichment Hub application.
  * Provides global providers, styles, and error handling.
@@ -48,9 +51,9 @@ export default function RootLayout({
         <SkipNavigation />
         <ErrorBoundary>
           <ThemeProvider defaultTheme="compass-peak">
-            <AuthProvider>
+            <SupabaseAuthProvider>
               <LayoutWithFooter>{children}</LayoutWithFooter>
-            </AuthProvider>
+            </SupabaseAuthProvider>
           </ThemeProvider>
         </ErrorBoundary>
         <Toaster />

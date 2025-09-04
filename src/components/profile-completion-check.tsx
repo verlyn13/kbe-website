@@ -1,13 +1,11 @@
 'use client';
 
-import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/use-auth';
-import { db } from '@/lib/firebase';
+import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 
 export function ProfileCompletionCheck({ children }: { children: React.ReactNode }) {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading } = useSupabaseAuth();
   const router = useRouter();
   const [checking, setChecking] = useState(true);
 
@@ -16,15 +14,10 @@ export function ProfileCompletionCheck({ children }: { children: React.ReactNode
       if (!user || authLoading) return;
 
       try {
-        const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
-        const profileData = profileDoc.data();
-
-        // If profile is not completed, redirect to welcome
-        // This applies to all users regardless of sign-in method
-        if (!profileData?.profileCompleted) {
-          router.push('/welcome');
-          return;
-        }
+        const res = await fetch('/api/profile-status', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Profile status request failed');
+        const data = (await res.json()) as { complete: boolean };
+        if (!data.complete) router.push('/welcome');
       } catch (error) {
         console.error('Error checking profile completion:', error);
       } finally {

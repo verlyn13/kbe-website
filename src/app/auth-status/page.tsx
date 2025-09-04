@@ -23,34 +23,24 @@ export default function AuthStatusPage() {
         ],
       });
 
-      // Check Firebase config
+      // Check Supabase config
       const config = {
-        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+        supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
       };
 
       statusChecks.push({
-        name: 'Firebase Config',
-        status: config.apiKey ? 'success' : 'error',
-        value: config.projectId || 'Not configured',
-        expected: 'kbe-website',
+        name: 'Supabase URL',
+        status: config.supabaseUrl ? 'success' : 'error',
+        value: config.supabaseUrl ? '✓ Configured' : '✗ Missing',
+        expected: 'https://xxx.supabase.co',
       });
 
-      // Check auth domain
       statusChecks.push({
-        name: 'Auth Domain',
-        status: config.authDomain === 'kbe-website.firebaseapp.com' ? 'success' : 'warning',
-        value: config.authDomain || 'Not set',
-        expected: 'kbe-website.firebaseapp.com',
-      });
-
-      // Check API key format
-      statusChecks.push({
-        name: 'API Key',
-        status: config.apiKey?.startsWith('AIza') ? 'success' : 'error',
-        value: config.apiKey ? '✓ Configured' : '✗ Missing',
-        expected: 'AIzaSy...',
+        name: 'Supabase Anon Key',
+        status: config.supabaseAnonKey ? 'success' : 'error',
+        value: config.supabaseAnonKey ? '✓ Configured' : '✗ Missing',
+        expected: 'eyJhbGciOi...',
       });
 
       setChecks(statusChecks);
@@ -102,15 +92,15 @@ export default function AuthStatusPage() {
           </div>
 
           <div className="bg-muted mt-6 rounded-lg p-4">
-            <h3 className="mb-2 font-semibold">OAuth Configuration Updated ✓</h3>
-            <p className="text-muted-foreground mb-2 text-sm">You've successfully updated:</p>
+            <h3 className="mb-2 font-semibold">Supabase Configuration ✓</h3>
+            <p className="text-muted-foreground mb-2 text-sm">Migration status:</p>
             <ul className="list-inside list-disc space-y-1 text-sm">
-              <li>Added authorized domains</li>
-              <li>Set developer contact email</li>
-              <li>OAuth consent screen is in production</li>
+              <li>Migrated from Firebase to Supabase</li>
+              <li>Database connected with PostgreSQL</li>
+              <li>Authentication using Supabase Auth</li>
             </ul>
             <p className="text-muted-foreground mt-3 text-sm">
-              Google Sign-in should now be working. If not, wait a few more minutes for propagation.
+              All authentication flows are now powered by Supabase.
             </p>
           </div>
         </CardContent>

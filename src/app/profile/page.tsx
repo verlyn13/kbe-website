@@ -18,9 +18,9 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { profileService, type UserProfile } from '@/lib/firebase-admin';
+import { profileService, type UserProfile } from '@/lib/services';
 
 // Format phone number as user types
 function formatPhoneNumber(value: string): string {
@@ -97,16 +97,29 @@ export default function ProfilePage() {
     if (!user) return;
 
     try {
-      const data = await profileService.get(user.uid);
+      let data = await profileService.getById(user.id);
+
+      if (!data) {
+        // Try to sync with Supabase auth user (handles migration case)
+        data = await profileService.syncWithAuth({
+          id: user.id,
+          email: user.email || '',
+          user_metadata: {
+            name: user.user_metadata?.name || user.user_metadata?.full_name,
+            phone: user.user_metadata?.phone,
+          },
+        });
+      }
+
       if (data) {
         setProfile(data);
         setFormData({
-          guardianName: data.guardianName || '',
-          displayName: data.displayName || data.guardianName || '',
+          guardianName: data.name || '',
+          displayName: data.name || '',
           email: data.email || user.email || '',
           phone: data.phone || '',
-          bio: data.bio || '',
-          children: data.children || [],
+          bio: '',
+          children: [],
         });
       } else {
         // Initialize with user's email
@@ -161,19 +174,17 @@ export default function ProfilePage() {
     setSaving(true);
 
     try {
-      const profileData: any = {
-        guardianName: formData.guardianName,
-        displayName: formData.displayName || formData.guardianName,
-        email: formData.email,
-        phone: formData.phone,
-        bio: formData.bio || '',
-        children: formData.children,
-      };
+      const name = formData.displayName || formData.guardianName;
 
       if (profile) {
-        await profileService.update(user.uid, profileData);
+        await profileService.update(user.id, { name, phone: formData.phone });
       } else {
-        await profileService.create(user.uid, profileData);
+        await profileService.upsert({
+          id: user.id,
+          email: formData.email,
+          name,
+          phone: formData.phone,
+        });
       }
 
       toast({
@@ -196,23 +207,9 @@ export default function ProfilePage() {
 
   async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
+    // Avatar upload not supported in Prisma profile model yet
     if (!file || !user) return;
-
-    try {
-      const avatarUrl = await profileService.uploadAvatar(user.uid, file);
-      await profileService.update(user.uid, { avatarUrl });
-      toast({
-        title: 'Success',
-        description: 'Avatar uploaded successfully',
-      });
-      loadProfile();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to upload avatar',
-        variant: 'destructive',
-      });
-    }
+    toast({ title: 'Not available', description: 'Avatar upload coming soon.' });
   }
 
   function addChild() {
@@ -272,13 +269,7 @@ export default function ProfilePage() {
           <div className="flex items-center gap-6">
             <div className="relative">
               <Avatar className="h-24 w-24">
-                <AvatarImage
-                  src={
-                    profile?.avatarUrl ||
-                    `https://api.dicebear.com/7.x/initials/svg?seed=${user?.uid}`
-                  }
-                  alt={formData.guardianName}
-                />
+                <AvatarImage src={undefined} alt={formData.guardianName} />
                 <AvatarFallback>
                   {formData.guardianName?.charAt(0) || user?.email?.charAt(0) || 'U'}
                 </AvatarFallback>

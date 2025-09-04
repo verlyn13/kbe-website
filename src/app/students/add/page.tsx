@@ -1,6 +1,7 @@
 'use client';
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { AlertCircle, ArrowLeft, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -18,9 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
 import { formatPhoneNumber } from '@/lib/utils';
 
 interface StudentFormData {
@@ -103,36 +103,25 @@ export default function AddStudentPage() {
     setLoading(true);
 
     try {
-      // Add student to Firestore
-      const studentData = {
-        guardianId: user.uid,
-        displayName: `${formData.firstName} ${formData.lastName}`,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        grade: parseInt(formData.grade, 10),
-        school: formData.school,
-        dateOfBirth: formData.dateOfBirth,
-        medicalNotes: formData.medicalNotes,
-        emergencyContact: formData.emergencyContact,
-        emergencyPhone: formData.emergencyPhone.replace(/\D/g, ''), // Store as numbers only
-        waiverStatus: 'pending',
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      };
+      // Add student via API
+      const response = await fetch('/api/students', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          grade: parseInt(formData.grade, 10),
+          school: formData.school,
+          dateOfBirth: formData.dateOfBirth,
+          medicalNotes: formData.medicalNotes,
+          emergencyContact: formData.emergencyContact,
+          emergencyPhone: formData.emergencyPhone.replace(/\D/g, ''), // Store as numbers only
+          registerForMathCounts: formData.registerForMathCounts,
+        }),
+      });
 
-      const docRef = await addDoc(collection(db, 'students'), studentData);
-
-      // If registering for MathCounts, add program registration
-      if (formData.registerForMathCounts) {
-        await addDoc(collection(db, 'registrations'), {
-          studentId: docRef.id,
-          guardianId: user.uid,
-          programId: 'mathcounts-2025',
-          programName: 'MathCounts 2025',
-          status: 'registered',
-          registeredAt: serverTimestamp(),
-          notes: 'Initial registration',
-        });
+      if (!response.ok) {
+        throw new Error('Failed to add student');
       }
 
       toast({

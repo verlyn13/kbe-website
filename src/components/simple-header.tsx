@@ -1,6 +1,5 @@
 'use client';
 
-import { doc, getDoc } from 'firebase/firestore';
 import { Home, LogOut, Shield, User } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -14,8 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/hooks/use-auth';
-import { db } from '@/lib/firebase';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 export function SimpleHeader() {
   const { user, signOut } = useAuth();
@@ -25,8 +23,9 @@ export function SimpleHeader() {
     async function checkAdmin() {
       if (user) {
         try {
-          const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-          setIsAdmin(adminDoc.exists());
+          const response = await fetch('/api/admin/check');
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
         } catch (error) {
           console.error('Error checking admin status:', error);
           setIsAdmin(false);
@@ -64,18 +63,18 @@ export function SimpleHeader() {
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                 <Avatar className="h-10 w-10">
                   <AvatarImage
-                    src={user.photoURL || 'https://placehold.co/100x100.png'}
-                    alt={user.displayName || 'User'}
+                    src={user.user_metadata?.avatar_url || 'https://placehold.co/100x100.png'}
+                    alt={user.user_metadata?.name || user.email || 'User'}
                   />
                   <AvatarFallback>
-                    {user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}
+                    {user.user_metadata?.name?.charAt(0) || user.email?.charAt(0) || 'U'}
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end">
               <DropdownMenuLabel>
-                <p>{user.displayName || 'User'}</p>
+                <p>{user.user_metadata?.name || user.email || 'User'}</p>
                 <p className="text-muted-foreground text-xs font-normal">{user.email}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />

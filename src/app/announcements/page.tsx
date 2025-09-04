@@ -1,16 +1,7 @@
 'use client';
 
 import { format, formatDistanceToNow } from 'date-fns';
-import {
-  AlertCircle,
-  ArrowLeft,
-  CheckCircle,
-  Clock,
-  EyeOff,
-  Info,
-  Pin,
-  Trash2,
-} from 'lucide-react';
+import { AlertCircle, ArrowLeft, CheckCircle, Clock, EyeOff, Info, Pin } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { AnnouncementCard } from '@/components/announcement-card';
@@ -30,9 +21,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/hooks/use-auth';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { type Announcement, announcementService } from '@/lib/firebase-admin';
+import { type Announcement, announcementService } from '@/lib/services';
+import { mapPriorityEnumToLC } from '@/types/enum-mappings';
 
 export default function AnnouncementsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -49,30 +41,11 @@ export default function AnnouncementsPage() {
 
     try {
       // Load visible announcements
-      const visibleData = await announcementService.getAll({
-        status: 'published',
-        userId: user.uid,
-        showHidden: false,
-      });
+      const visibleData = await announcementService.getAll();
       setAnnouncements(visibleData);
 
-      // Load hidden announcements
-      const allData = await announcementService.getAll({
-        status: 'published',
-        userId: user.uid,
-        showHidden: true,
-      });
-      const hidden = allData.filter((a) => a.hiddenBy?.includes(user.uid));
-      setHiddenAnnouncements(hidden);
-
-      // Mark as viewed
-      if (visibleData.length > 0) {
-        visibleData.forEach(async (announcement) => {
-          if (!announcement.acknowledgedBy.includes(user.uid)) {
-            await announcementService.markAsRead(announcement.id, user.uid);
-          }
-        });
-      }
+      // Hidden announcements feature not supported in Prisma model; keep empty list
+      setHiddenAnnouncements([]);
     } catch (error) {
       console.error('Error loading announcements:', error);
       toast({
@@ -89,43 +62,9 @@ export default function AnnouncementsPage() {
     loadAnnouncements();
   }, [loadAnnouncements]);
 
-  async function handleHide(announcement: Announcement) {
-    if (!user) return;
-
-    try {
-      await announcementService.hide(announcement.id, user.uid);
-      toast({
-        title: 'Hidden',
-        description: 'Announcement hidden from your view',
-      });
-      loadAnnouncements();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to hide announcement',
-        variant: 'destructive',
-      });
-    }
-  }
-
-  async function handleUnhide(announcement: Announcement) {
-    if (!user) return;
-
-    try {
-      await announcementService.unhide(announcement.id, user.uid);
-      toast({
-        title: 'Restored',
-        description: 'Announcement restored to your view',
-      });
-      loadAnnouncements();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to restore announcement',
-        variant: 'destructive',
-      });
-    }
-  }
+  // Hide/Unhide not available post-migration; keep no-ops to satisfy UI handlers
+  async function handleHide(_announcement: Announcement) {}
+  async function handleUnhide(_announcement: Announcement) {}
 
   async function handleDelete() {
     if (!announcementToDelete) return;
@@ -191,7 +130,7 @@ export default function AnnouncementsPage() {
   }
 
   if (selectedAnnouncement) {
-    const isOwner = user && selectedAnnouncement.createdBy === user.uid;
+    // Owner concept not tracked in Prisma model post-migration
 
     return (
       <div className="container mx-auto max-w-4xl p-6">
@@ -216,25 +155,13 @@ export default function AnnouncementsPage() {
                 </CardDescription>
               </div>
               <div className="flex flex-col items-end gap-2">
-                {getPriorityBadge(selectedAnnouncement.priority)}
+                {getPriorityBadge(mapPriorityEnumToLC(selectedAnnouncement.priority))}
                 <Badge variant="outline">
                   {selectedAnnouncement.recipients === 'all'
                     ? 'All Families'
                     : selectedAnnouncement.recipients}
                 </Badge>
-                {isOwner && (
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => {
-                      setAnnouncementToDelete(selectedAnnouncement);
-                      setDeleteDialogOpen(true);
-                    }}
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
-                  </Button>
-                )}
+                {/* Delete button hidden: owner not tracked in Prisma model */}
               </div>
             </div>
           </CardHeader>
@@ -313,7 +240,7 @@ export default function AnnouncementsPage() {
                   key={announcement.id}
                   announcement={announcement}
                   user={user}
-                  getPriorityIcon={getPriorityIcon}
+                  getPriorityIcon={(p) => getPriorityIcon(mapPriorityEnumToLC(p as any))}
                   onSelect={setSelectedAnnouncement}
                   onHide={handleHide}
                   onUnhide={handleUnhide}
@@ -340,7 +267,7 @@ export default function AnnouncementsPage() {
                   announcement={announcement}
                   isHidden
                   user={user}
-                  getPriorityIcon={getPriorityIcon}
+                  getPriorityIcon={(p) => getPriorityIcon(mapPriorityEnumToLC(p as any))}
                   onSelect={setSelectedAnnouncement}
                   onHide={handleHide}
                   onUnhide={handleUnhide}
