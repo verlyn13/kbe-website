@@ -98,7 +98,7 @@ export default function ProfilePage() {
 
     try {
       let data = await profileService.getById(user.id);
-      
+
       if (!data) {
         // Try to sync with Supabase auth user (handles migration case)
         data = await profileService.syncWithAuth({
@@ -110,7 +110,7 @@ export default function ProfilePage() {
           },
         });
       }
-      
+
       if (data) {
         setProfile(data);
         setFormData({

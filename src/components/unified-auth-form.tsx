@@ -91,7 +91,7 @@ export function UnifiedAuthForm() {
     try {
       const { error } = await supabaseAuth.signInWithMagicLink(values.email);
       if (error) throw error;
-      
+
       toast({
         title: 'Check your email',
         description: `We sent a secure sign-in link to ${values.email}. Click it to sign in or create your account automatically.`,
@@ -164,11 +164,7 @@ export function UnifiedAuthForm() {
             )}
           />
 
-          <Button
-            type="submit"
-            className="h-11 w-full"
-            disabled={isMagicLinkLoading}
-          >
+          <Button type="submit" className="h-11 w-full" disabled={isMagicLinkLoading}>
             {isMagicLinkLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Send Magic Link
           </Button>
@@ -186,16 +182,18 @@ export function UnifiedAuthForm() {
 
       {/* Alternative auth methods */}
       <div className="border-t pt-4 text-center">
-        <p className="text-muted-foreground text-xs mb-2">
-          Need to use a password instead?
-        </p>
+        <p className="text-muted-foreground text-xs mb-2">Need to use a password instead?</p>
         <div className="flex gap-2 justify-center">
           <Button variant="ghost" size="sm" asChild>
-            <a href="/login" className="text-xs">Sign In</a>
+            <a href="/login" className="text-xs">
+              Sign In
+            </a>
           </Button>
           <span className="text-muted-foreground text-xs">•</span>
           <Button variant="ghost" size="sm" asChild>
-            <a href="/signup" className="text-xs">Create Account</a>
+            <a href="/signup" className="text-xs">
+              Create Account
+            </a>
           </Button>
         </div>
       </div>

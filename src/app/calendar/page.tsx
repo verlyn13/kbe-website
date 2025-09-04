@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useId, useState, Suspense } from 'react';
+import { Suspense, useCallback, useEffect, useId, useState } from 'react';
 import { LazyEventDialog } from '@/components/lazy';
 import { CalendarSkeleton } from '@/components/loading/calendar-skeleton';
 import { Button } from '@/components/ui/button';

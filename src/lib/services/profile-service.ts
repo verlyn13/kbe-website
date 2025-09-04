@@ -29,7 +29,7 @@ export const profileService = {
     const userById = await prisma.user.findUnique({
       where: { id },
     });
-    
+
     if (userById) {
       return userById;
     }
@@ -245,12 +245,12 @@ export const profileService = {
 
     // First check if there's an existing user by email that needs to be migrated
     const existingByEmail = await this.getByEmail(authUser.email);
-    
+
     if (existingByEmail && existingByEmail.id !== authUser.id) {
       // Delete the old record and create a new one with the Supabase user ID
       // but preserve the existing data (including role)
       await prisma.user.delete({ where: { id: existingByEmail.id } });
-      
+
       return prisma.user.create({
         data: {
           id: authUser.id,

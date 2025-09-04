@@ -10,7 +10,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 
-const LazyUnifiedAuthForm = lazy(() => import('@/components/unified-auth-form').then(mod => ({ default: mod.UnifiedAuthForm })));
+const LazyUnifiedAuthForm = lazy(() =>
+  import('@/components/unified-auth-form').then((mod) => ({ default: mod.UnifiedAuthForm }))
+);
 
 export default function LandingPage() {
   const { user, loading } = useSupabaseAuth();
@@ -201,11 +203,11 @@ export default function LandingPage() {
             <div className="text-center mb-8">
               <h3 className="mb-4 text-2xl font-semibold">Ready to get started?</h3>
               <p className="text-muted-foreground mx-auto mb-8 max-w-2xl">
-                Sign in or create your guardian account to register your children for MathCounts and stay
-                informed about future enrichment opportunities.
+                Sign in or create your guardian account to register your children for MathCounts and
+                stay informed about future enrichment opportunities.
               </p>
             </div>
-            
+
             <Card className="mx-auto max-w-md shadow-lg">
               <CardContent className="pt-6">
                 <Suspense fallback={<FormSkeleton fields={3} />}>
