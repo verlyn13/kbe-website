@@ -189,12 +189,6 @@ export function UnifiedAuthForm() {
               Sign In
             </a>
           </Button>
-          <span className="text-muted-foreground text-xs">•</span>
-          <Button variant="ghost" size="sm" asChild>
-            <a href="/signup" className="text-xs">
-              Create Account
-            </a>
-          </Button>
         </div>
       </div>
     </div>
