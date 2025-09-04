@@ -62,7 +62,11 @@ function StatCard({
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
-        {description && <p className="text-muted-foreground text-xs">{description}</p>}
+        {description && (
+          <p className="text-muted-foreground mt-1 text-xs" aria-live="polite">
+            {description}
+          </p>
+        )}
       </CardContent>
     </Card>
   );

@@ -49,7 +49,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }));
 
-// Remove legacy Firebase mocks; Supabase is the current stack
+// Supabase is the current stack
 
 // Fail tests on console.error/console.warn to catch regressions
 let consoleErrorSpy: ReturnType<typeof vi.spyOn>;

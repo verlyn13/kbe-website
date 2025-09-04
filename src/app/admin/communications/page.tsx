@@ -195,7 +195,7 @@ export default function AdminCommunicationsPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+        <Card aria-live="polite">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Total Sent</CardTitle>
           </CardHeader>
@@ -209,7 +209,7 @@ export default function AdminCommunicationsPage() {
             <p className="text-muted-foreground text-xs">This month</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card aria-live="polite">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Archived</CardTitle>
           </CardHeader>
@@ -223,7 +223,7 @@ export default function AdminCommunicationsPage() {
             <p className="text-muted-foreground text-xs">Upcoming</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card aria-live="polite">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Drafts</CardTitle>
           </CardHeader>

@@ -10,8 +10,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { parent, students, program } = body;
 
-    // For now, this only works with Supabase auth
-    // When Firebase auth is enabled, the registration flow component handles it directly
+    // Registration API uses Supabase auth
     const USE_SUPABASE_AUTH = process.env.NEXT_PUBLIC_USE_SUPABASE_AUTH === 'true';
 
     if (!USE_SUPABASE_AUTH) {
