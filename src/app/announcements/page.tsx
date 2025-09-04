@@ -18,6 +18,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -35,6 +36,7 @@ export default function AnnouncementsPage() {
   const [announcementToDelete, setAnnouncementToDelete] = useState<Announcement | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
+  const [showPinnedOnly, setShowPinnedOnly] = useState(false);
 
   const loadAnnouncements = useCallback(async () => {
     if (!user) return;
@@ -192,6 +194,10 @@ export default function AnnouncementsPage() {
     );
   }
 
+  const visibleAnnouncements = showPinnedOnly
+    ? announcements.filter((a) => a.pinned)
+    : announcements;
+
   return (
     <div className="container mx-auto max-w-6xl space-y-6 p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -208,36 +214,50 @@ export default function AnnouncementsPage() {
             Stay up to date with all program announcements
           </p>
         </div>
-        <Button variant="ghost" asChild className="hidden sm:flex">
-          <Link href="/dashboard">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
-          </Link>
-        </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="filter-pinned"
+              checked={showPinnedOnly}
+              onCheckedChange={(checked) => setShowPinnedOnly(Boolean(checked))}
+            />
+            <label htmlFor="filter-pinned" className="text-sm text-muted-foreground">
+              Show pinned only
+            </label>
+          </div>
+          <Button variant="ghost" asChild className="hidden sm:flex">
+            <Link href="/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue="visible" className="w-full">
         <TabsList>
-          <TabsTrigger value="visible">Announcements ({announcements.length})</TabsTrigger>
+          <TabsTrigger value="visible">Announcements ({visibleAnnouncements.length})</TabsTrigger>
           {hiddenAnnouncements.length > 0 && (
             <TabsTrigger value="hidden">Hidden ({hiddenAnnouncements.length})</TabsTrigger>
           )}
         </TabsList>
 
         <TabsContent value="visible" className="mt-6">
-          {announcements.length === 0 ? (
+          {visibleAnnouncements.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-16">
                 <Info className="text-muted-foreground mb-4 h-12 w-12" />
                 <p className="text-muted-foreground text-lg">No announcements to show</p>
                 <p className="text-muted-foreground mt-2 text-sm">
-                  Check the hidden tab if you've hidden any announcements
+                  {showPinnedOnly
+                    ? 'Try turning off the pinned filter to see all announcements.'
+                    : "Check the hidden tab if you've hidden any announcements"}
                 </p>
               </CardContent>
             </Card>
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
-              {announcements.map((announcement) => (
+              {visibleAnnouncements.map((announcement) => (
                 <AnnouncementCard
                   key={announcement.id}
                   announcement={announcement}
