@@ -70,7 +70,7 @@ function MobileAwareSidebarMenuButton({
 
   return (
     <SidebarMenuButton asChild {...props}>
-      <Link href={href} onClick={handleClick}>
+      <Link href={href as any} onClick={handleClick}>
         {children}
       </Link>
     </SidebarMenuButton>
