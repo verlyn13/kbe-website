@@ -1,12 +1,12 @@
 # Migration Status
 
-**Last Updated**: August 31, 2025  
-**Status**: COMPLETE ✅  
-**Branch**: `feature/consolidation-prisma-lc`
+**Last Updated**: September 3, 2025  
+**Status**: RECOVERY IN PROGRESS ✅  
+**Branch**: `main`
 
 ## Overview
 
-Homer Enrichment Hub has successfully migrated from Firebase to Supabase + Prisma stack. This document tracks the completion status of all migration phases.
+Homer Enrichment Hub has migrated from Firebase to the Supabase + Prisma stack. This document now tracks recovery/orthogonalization work as we fold in changes from historical branches.
 
 ## Migration Phases
 
@@ -38,10 +38,21 @@ Homer Enrichment Hub has successfully migrated from Firebase to Supabase + Prism
 - [x] Type safety preserved
 
 ### ✅ Phase 5: Documentation & Tooling
-- [x] Documentation reorganization
-- [x] Migration guides updated
-- [x] Development setup streamlined
-- [x] CI/CD updated for new stack
+- [x] Documentation reorganization (recovered)
+- [x] Migration guide + completed artifacts (recovered)
+- [x] Development setup streamlined (Bun + Biome)
+- [x] CI/CD updated for new stack (Supabase envs; build stabilized)
+
+## Recovery Slices (completed)
+- Unified auth UX: `/login` renders single auth form; `/signup` redirects
+- Header CTAs: public CTAs route to `/login`
+- Docs: `docs/migration/README.md` index added; guide and artifacts restored
+- Cleanup: removed legacy `*.original` files; generalized auth error utils
+
+## Recovery Slices (up next)
+- Services parity round 2: verify all pages use Prisma services and types
+- UI parity: restore improved admin/dashboard behaviors (announcements, calendar)
+- Tests/CI: stabilize vitest reporters, confirm mocks; prune legacy references
 
 ## Current Stack
 
