@@ -3,17 +3,14 @@
  */
 
 /**
- * Type guard to check if an error is a Firebase Auth error
- * @param error - The error to check
- * @returns True if the error is a Firebase Auth error
+ * Type guard for auth-like error objects (Firebase/Supabase/etc.)
+ * Accepts any object with a string `message` and optional string `code`.
  */
-export function isFirebaseError(error: unknown): error is { code: string; message: string } {
+export function isAuthLikeError(error: unknown): error is { code?: string; message: string } {
   return (
     typeof error === 'object' &&
     error !== null &&
-    'code' in error &&
     'message' in error &&
-    typeof (error as any).code === 'string' &&
     typeof (error as any).message === 'string'
   );
 }
@@ -37,28 +34,30 @@ export function getErrorMessage(
   error: unknown,
   defaultMessage = 'An unexpected error occurred'
 ): string {
-  if (isFirebaseError(error)) {
-    // Handle specific Firebase error codes
-    switch (error.code) {
-      case 'auth/invalid-email':
-        return 'Invalid email address';
-      case 'auth/user-disabled':
-        return 'This account has been disabled';
-      case 'auth/user-not-found':
-        return 'No account found with this email';
-      case 'auth/wrong-password':
-        return 'Incorrect password';
-      case 'auth/email-already-in-use':
-        return 'An account already exists with this email';
-      case 'auth/weak-password':
-        return 'Password should be at least 6 characters';
-      case 'auth/invalid-action-code':
-        return 'Invalid or expired magic link';
-      case 'auth/popup-closed-by-user':
-        return 'Sign-in popup was closed';
-      default:
-        return error.message;
+  if (isAuthLikeError(error)) {
+    // Map common Firebase-style codes when present; otherwise return message
+    const code = (error as any).code as string | undefined;
+    if (code?.startsWith('auth/')) {
+      switch (code) {
+        case 'auth/invalid-email':
+          return 'Invalid email address';
+        case 'auth/user-disabled':
+          return 'This account has been disabled';
+        case 'auth/user-not-found':
+          return 'No account found with this email';
+        case 'auth/wrong-password':
+          return 'Incorrect password';
+        case 'auth/email-already-in-use':
+          return 'An account already exists with this email';
+        case 'auth/weak-password':
+          return 'Password should be at least 6 characters';
+        case 'auth/invalid-action-code':
+          return 'Invalid or expired magic link';
+        case 'auth/popup-closed-by-user':
+          return 'Sign-in popup was closed';
+      }
     }
+    return error.message;
   }
 
   if (isError(error)) {
