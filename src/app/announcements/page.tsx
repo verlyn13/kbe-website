@@ -3,7 +3,7 @@
 import { format, formatDistanceToNow } from 'date-fns';
 import { AlertCircle, ArrowLeft, CheckCircle, Clock, Info, Pin } from 'lucide-react';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { AnnouncementCard } from '@/components/announcement-card';
 import {
   AlertDialog,
@@ -37,6 +37,7 @@ export default function AnnouncementsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
+  const filterPinnedId = useId();
 
   const loadAnnouncements = useCallback(async () => {
     if (!user) return;
@@ -217,11 +218,11 @@ export default function AnnouncementsPage() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Checkbox
-              id="filter-pinned"
+              id={filterPinnedId}
               checked={showPinnedOnly}
               onCheckedChange={(checked) => setShowPinnedOnly(Boolean(checked))}
             />
-            <label htmlFor="filter-pinned" className="text-sm text-muted-foreground">
+            <label htmlFor={filterPinnedId} className="text-sm text-muted-foreground">
               Show pinned only
             </label>
           </div>
