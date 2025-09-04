@@ -61,10 +61,10 @@ export function PublicHeader() {
           ) : (
             <>
               <Button asChild variant="ghost" size="sm" className="hidden sm:flex">
-                <Link href="/">Sign In</Link>
+                <Link href="/login">Sign In</Link>
               </Button>
               <Button asChild variant="default" size="sm">
-                <Link href="/register">Register</Link>
+                <Link href="/login">Get Started</Link>
               </Button>
             </>
           )}
@@ -89,13 +89,22 @@ export function PublicHeader() {
                   </Link>
                 ))}
                 {!user && (
-                  <Link
-                    href={'/' as any}
-                    className="text-lg font-medium"
-                    onClick={() => setOpen(false)}
-                  >
-                    Sign In
-                  </Link>
+                  <>
+                    <Link
+                      href={'/login' as any}
+                      className="text-lg font-medium"
+                      onClick={() => setOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href={'/login' as any}
+                      className="text-lg font-medium"
+                      onClick={() => setOpen(false)}
+                    >
+                      Get Started
+                    </Link>
+                  </>
                 )}
               </nav>
             </SheetContent>
