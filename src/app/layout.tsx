@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Force dynamic rendering to avoid prerender-time auth/env issues in CI
+export const dynamic = 'force-dynamic';
+
 /**
  * Root layout component for the Homer Enrichment Hub application.
  * Provides global providers, styles, and error handling.
