@@ -20,7 +20,7 @@ export default function MathCountsPage() {
             </p>
             <div className="mt-6 flex gap-4">
               <Button asChild size="lg">
-                <Link href="/register">Register for 2025 Season</Link>
+                <Link href="/login">Register for 2025 Season</Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
                 <a href="https://www.mathcounts.org/" target="_blank" rel="noopener">
@@ -285,7 +285,7 @@ export default function MathCountsPage() {
                     Registration is open for the 2025 season. Secure your spot today!
                   </p>
                   <Button variant="secondary" className="w-full" asChild>
-                    <Link href="/register">Register Now</Link>
+                    <Link href="/login">Register Now</Link>
                   </Button>
                 </CardContent>
               </Card>
