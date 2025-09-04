@@ -22,7 +22,13 @@
       "Read(/tmp/**)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(gh auth status:*)",
+      "Bash(gh auth login:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(gh auth:*)",
+      "Bash(direnv allow:*)",
+      "Bash(gh repo view:*)"
     ],
     "deny": [],
     "ask": []

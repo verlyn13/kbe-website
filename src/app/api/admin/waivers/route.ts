@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { waiverService } from '@/lib/services/waiver-service';
+import { waiverService } from '@/lib/services';
 
 export const runtime = 'nodejs';
 
