@@ -1,5 +1,9 @@
 'use client';
 
+// Disable prerendering and ensure Node.js runtime for auth sign-out flow
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
