@@ -198,9 +198,18 @@ export default function AnnouncementsPage() {
     );
   }
 
-  const visibleAnnouncements = showPinnedOnly
-    ? announcements.filter((a) => a.pinned)
-    : announcements;
+  const visibleAnnouncements = (
+    showPinnedOnly ? announcements.filter((a) => a.pinned) : announcements
+  )
+    .slice()
+    .sort((a, b) => {
+      // Pinned first, then newest first by publishedAt
+      const pinDelta = Number(b.pinned) - Number(a.pinned);
+      if (pinDelta !== 0) return pinDelta;
+      const aTime = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+      const bTime = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+      return bTime - aTime;
+    });
 
   return (
     <div className="container mx-auto max-w-6xl space-y-6 p-6">
