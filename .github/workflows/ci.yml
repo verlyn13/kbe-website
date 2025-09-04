@@ -56,6 +56,7 @@ jobs:
       - name: Build Application
         run: bun run build
         env:
+          NEXT_TELEMETRY_DISABLED: '1'
           NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY || 'dummy-api-key' }}
           NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: kbe-website.firebaseapp.com
           NEXT_PUBLIC_FIREBASE_PROJECT_ID: kbe-website
@@ -64,6 +65,8 @@ jobs:
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID || 'dummy-app-id' }}
           NEXT_PUBLIC_APP_URL: https://homerenrichment.com
           NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_SITE_KEY || 'dummy-site-key' }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy-anon-key' }}
 
   test:
     name: Test Suite
