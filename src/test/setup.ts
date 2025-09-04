@@ -7,13 +7,32 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-// Mock Next.js navigation and Firebase modules used in tests
+// Mock Next.js navigation and Supabase modules used in tests
 
-// Mock Firebase (to avoid initialization in tests)
-vi.mock('@/lib/firebase-config', () => ({
-  auth: {},
-  db: {},
-  storage: {},
+// Mock Supabase factories (avoid real initialization in tests)
+vi.mock('@/lib/supabase/client', () => ({
+  createClient: () => ({
+    auth: {
+      getSession: async () => ({ data: { session: null } }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+      signInWithPassword: async () => ({ error: null }),
+      signInWithOAuth: async () => ({ error: null }),
+      signInWithOtp: async () => ({ error: null }),
+      signUp: async () => ({ error: null }),
+      signOut: async () => ({}),
+      resetPasswordForEmail: async () => ({ error: null }),
+      exchangeCodeForSession: async () => ({ error: null }),
+      getUser: async () => ({ data: { user: null } }),
+    },
+  }),
+}));
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: async () => ({
+    auth: {
+      getUser: async () => ({ data: { user: null } }),
+      exchangeCodeForSession: async () => ({ error: null }),
+    },
+  }),
 }));
 
 // Mock next/navigation
@@ -30,16 +49,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }));
 
-// Mock firebase modules commonly imported in code
-vi.mock('@/lib/firebase', () => ({ db: {} }));
-vi.mock('firebase/firestore', () => ({
-  collection: vi.fn(() => ({})),
-  doc: vi.fn(() => ({})),
-  setDoc: vi.fn(async () => undefined),
-  updateDoc: vi.fn(async () => undefined),
-  getDoc: vi.fn(async () => ({ exists: () => false, data: () => ({}) })),
-  serverTimestamp: vi.fn(() => new Date()),
-}));
+// Remove legacy Firebase mocks; Supabase is the current stack
 
 // Fail tests on console.error/console.warn to catch regressions
 let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
