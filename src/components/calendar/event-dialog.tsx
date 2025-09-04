@@ -308,7 +308,7 @@ export function EventDialog({
                       }));
                     }}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="start-time">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -381,7 +381,7 @@ export function EventDialog({
                       setFormData((prev) => ({ ...prev, endTime: value }));
                     }}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="end-time">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
