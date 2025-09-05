@@ -115,7 +115,11 @@ export default function AdminRegistrationsPage() {
       header: 'Registration Date',
       cell: ({ row }) => {
         const date = new Date(row.getValue('createdAt') as string | Date);
-        return date.toLocaleDateString();
+        return new Intl.DateTimeFormat('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }).format(date);
       },
     },
     {
