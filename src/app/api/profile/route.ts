@@ -51,12 +51,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Update or create the profile using upsert
-    const profile = await profileService.upsert({
+    // First sync with auth to handle ID migration if needed
+    await profileService.syncWithAuth({
       id: user.id,
-      email: email,
+      email: user.email!,
+      user_metadata: {
+        name: name,
+        phone: phone ? phone.replace(/\D/g, '') : undefined,
+      }
+    });
+    
+    // Then update the profile with the form data
+    const profile = await profileService.update(user.id, {
       name: name,
-      phone: phone ? phone.replace(/\D/g, '') : undefined, // Strip non-digits from phone
+      phone: phone ? phone.replace(/\D/g, '') : undefined,
     });
 
     return NextResponse.json({ profile }, { status: 200 });
