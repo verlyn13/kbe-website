@@ -114,7 +114,11 @@ export default function AdminReportsPage() {
         reg.student?.grade ?? '',
         reg.student?.school || '',
         mapRegistrationStatusEnumToLC(reg.status),
-        new Date(reg.createdAt).toLocaleDateString(),
+        new Intl.DateTimeFormat('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }).format(new Date(reg.createdAt)),
       ]);
 
       const csvContent = [
