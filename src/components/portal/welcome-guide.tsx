@@ -67,7 +67,13 @@ export function WelcomeGuide() {
               programs.
             </CardDescription>
           </div>
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={dismissGuide}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={dismissGuide}
+            aria-label="Dismiss welcome guide"
+          >
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -156,7 +162,7 @@ export function WelcomeGuide() {
               jeffreyverlynjohnson@gmail.com
             </a>
           </p>
-          <Button variant="outline" size="sm" onClick={dismissGuide}>
+          <Button variant="outline" size="sm" onClick={dismissGuide} aria-label="Dismiss guide">
             Got it!
           </Button>
         </div>

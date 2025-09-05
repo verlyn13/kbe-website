@@ -20,7 +20,7 @@ export default function EmailSettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Current Email Configuration</CardTitle>
-          <CardDescription>Emails are currently sent using Supabase Authentication</CardDescription>
+          <CardDescription>Authentication emails are sent via Supabase Auth</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
@@ -38,10 +38,9 @@ export default function EmailSettingsPage() {
 
           <Alert>
             <InfoIcon className="h-4 w-4" />
-            <AlertTitle>Migration Complete</AlertTitle>
+            <AlertTitle>Supabase Auth</AlertTitle>
             <AlertDescription>
-              Email system has been migrated from Firebase to Supabase. All authentication emails
-              are now handled by Supabase Auth with custom branding.
+              Authentication emails are handled by Supabase Auth with project branding.
             </AlertDescription>
           </Alert>
 
