@@ -116,15 +116,22 @@ export function IntelligentAuthForm() {
 
   const checkEmailExists = async (email: string): Promise<boolean> => {
     try {
-      // Check if user exists by attempting password reset
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback`,
+      const response = await fetch('/api/auth/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim() }),
       });
       
-      // If no error, user exists
-      return !error;
-    } catch {
-      // If error, assume user doesn't exist
+      if (!response.ok) {
+        console.error('Email check failed:', response.statusText);
+        return false;
+      }
+      
+      const { exists } = await response.json();
+      return exists === true;
+    } catch (error) {
+      console.error('Email check error:', error);
+      // Fallback: assume email doesn't exist for security
       return false;
     }
   };
@@ -161,7 +168,7 @@ export function IntelligentAuthForm() {
   const handleSignUp = async (values: z.infer<typeof signUpFormSchema>) => {
     setIsLoading(true);
     try {
-      const { error } = await supabaseAuth.signUp(values.email, values.password);
+      const { error } = await supabaseAuth.signUp(values.email, values.password, values.name);
       if (error) throw error;
 
       toast({
