@@ -21,8 +21,8 @@ const AGENTS = {
   },
   'kbe-api': {
     name: '🔌 KBE API Developer',
-    expertise: ['Backend', 'API Routes', 'Server Components', 'Firebase'],
-    triggerKeywords: ['api', 'backend', 'server', 'database', 'firebase', 'auth'],
+    expertise: ['Backend', 'API Routes', 'Server Components', 'Supabase'],
+    triggerKeywords: ['api', 'backend', 'server', 'database', 'supabase', 'auth'],
   },
   'kbe-test': {
     name: '🧪 KBE Test Engineer',
@@ -43,7 +43,7 @@ const AGENTS = {
 
 // Project knowledge base
 const PROJECT_CONTEXT = {
-  stack: 'Next.js 15.4.5, React 19, Tailwind CSS 4, Firebase, TypeScript',
+  stack: 'Next.js 15.4.5, React 19, Tailwind CSS 4, Supabase, TypeScript',
   port: 9002,
   theme: {
     primary: '#008080',
@@ -57,11 +57,10 @@ const PROJECT_CONTEXT = {
     forms: 'React Hook Form + Zod',
     ai: 'GenKit with Gemini 2.0',
   },
-  firebaseRules: {
+  deploymentRules: {
     dependencies: 'ALL build deps must be in dependencies, NOT devDependencies',
     tailwindCSS: 'Use @config and @import syntax, not @tailwind directives',
-    apiKeys: 'Separate keys for Firebase Auth and GenKit',
-    buildConfig: 'output: standalone in next.config.ts',
+    buildConfig: 'Standard Next.js build for Vercel deployment',
     cssVariables: 'Properly scope sidebar variables with [data-sidebar]',
   },
 };
@@ -143,14 +142,14 @@ class KBEOrchestratorServer {
           },
         },
         {
-          name: 'validate_firebase_config',
-          description: 'Validate configuration for Firebase compatibility',
+          name: 'validate_vercel_config',
+          description: 'Validate configuration for Vercel deployment',
           inputSchema: {
             type: 'object',
             properties: {
               checkType: {
                 type: 'string',
-                enum: ['dependencies', 'tailwind', 'apikeys', 'all'],
+                enum: ['dependencies', 'tailwind', 'build', 'all'],
                 description: 'Type of validation to perform',
               },
             },
@@ -175,8 +174,8 @@ class KBEOrchestratorServer {
         case 'query_knowledge_base':
           return this.queryKnowledgeBase(request.params.arguments);
 
-        case 'validate_firebase_config':
-          return this.validateFirebaseConfig(request.params.arguments);
+        case 'validate_vercel_config':
+          return this.validateVercelConfig(request.params.arguments);
 
         default:
           throw new Error(`Unknown tool: ${request.params.name}`);
@@ -284,7 +283,7 @@ class KBEOrchestratorServer {
               activeAgents: Object.keys(AGENTS),
               environment: {
                 development: `http://localhost:${PROJECT_CONTEXT.port}`,
-                production: 'Firebase App Hosting',
+                production: 'Vercel (homerenrichment.com)',
               },
               health: {
                 build: 'passing',
@@ -310,8 +309,8 @@ class KBEOrchestratorServer {
       response = PROJECT_CONTEXT.theme;
     } else if (topicLower.includes('architecture')) {
       response = PROJECT_CONTEXT.architecture;
-    } else if (topicLower.includes('firebase') || topicLower.includes('deploy')) {
-      response = PROJECT_CONTEXT.firebaseRules;
+    } else if (topicLower.includes('deploy') || topicLower.includes('vercel')) {
+      response = PROJECT_CONTEXT.deploymentRules;
     } else if (topicLower.includes('port') || topicLower.includes('dev')) {
       response = {
         devPort: PROJECT_CONTEXT.port,
@@ -319,9 +318,9 @@ class KBEOrchestratorServer {
       };
     } else {
       response = {
-        availableTopics: ['stack', 'theme', 'architecture', 'firebase', 'development'],
+        availableTopics: ['stack', 'theme', 'architecture', 'deployment', 'development'],
         suggestion:
-          'Try querying about: tech stack, color theme, architecture, firebase rules, or development setup',
+          'Try querying about: tech stack, color theme, architecture, deployment rules, or development setup',
       };
     }
 
@@ -342,7 +341,7 @@ class KBEOrchestratorServer {
     };
   }
 
-  validateFirebaseConfig({ checkType }) {
+  validateVercelConfig({ checkType }) {
     const validations = {
       dependencies: {
         rule: 'All build dependencies must be in "dependencies", not "devDependencies"',
@@ -355,18 +354,18 @@ class KBEOrchestratorServer {
         incorrect: '@tailwind base;\n@tailwind components;\n@tailwind utilities;',
         files: ['src/app/globals.css'],
       },
-      apikeys: {
-        rule: 'Use separate API keys for different Google services',
+      build: {
+        rule: 'Standard Next.js build configuration for Vercel',
         required: {
-          FIREBASE_API_KEY: 'Identity Toolkit API',
-          GOOGLE_AI_API_KEY: 'Generative Language API',
+          NEXT_PUBLIC_SUPABASE_URL: 'Supabase project URL',
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: 'Supabase anonymous key',
         },
-        warning: 'Never use the same key for Firebase Auth and GenKit',
+        warning: 'Ensure environment variables are configured in Vercel dashboard',
       },
       all: {
-        checks: ['dependencies', 'tailwind', 'apikeys'],
+        checks: ['dependencies', 'tailwind', 'build'],
         additionalRules: [
-          'next.config.ts must have output: "standalone"',
+          'Standard Next.js configuration for Vercel deployment',
           'CSS variables must be properly scoped with [data-sidebar]',
           'Test with npm run build before deploying',
         ],

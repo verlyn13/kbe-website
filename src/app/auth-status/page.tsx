@@ -18,7 +18,7 @@ export default function AuthStatusPage() {
         value: window.location.hostname,
         expected: [
           'homerenrichment.com',
-          'kbe-website--kbe-website.us-central1.hosted.app',
+          'kbe-website-*.vercel.app',
           'localhost',
         ],
       });

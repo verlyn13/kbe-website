@@ -64,11 +64,11 @@ async function main() {
       description: 'SendGrid webhook (method not allowed for GET)',
     },
 
-    // Firebase OAuth rewrite test
+    // Legacy OAuth rewrite test
     {
       path: '/__/auth/handler',
       expected: 404,
-      description: 'Firebase auth rewrite (404 expected - no active auth flow)',
+      description: 'Legacy auth rewrite (404 expected - no active auth flow)',
     },
   ];
 

@@ -40,7 +40,9 @@
       "Bash(feature/prisma-lc-type-fixes )",
       "Bash(refactor/phase-1-auth)",
       "Bash(git checkout:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "WebFetch(domain:homerenrichment.com)",
+      "WebFetch(domain:kbe-website-7dr9a2h9g-jeffrey-johnsons-projects-4efd9acb.vercel.app)"
     ],
     "deny": [],
     "ask": []
