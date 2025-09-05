@@ -19,4 +19,5 @@ export {
   type RegistrationWithDetails,
   registrationService,
 } from './registration-service';
+export { type Student, studentService } from './student-service';
 export { type StudentWaiverStatus, type WaiverStatus, waiverService } from './waiver-service';
