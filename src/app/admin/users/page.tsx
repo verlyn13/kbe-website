@@ -1,5 +1,6 @@
 'use client';
 
+import { format } from 'date-fns';
 import {
   AlertCircle,
   Calendar,
@@ -312,7 +313,7 @@ export default function UserManagementPage() {
                         <div className="text-muted-foreground flex items-center gap-1 text-sm">
                           <Calendar className="h-3 w-3" />
                           {user.createdAt
-                            ? new Date(user.createdAt).toLocaleDateString()
+                            ? format(new Date(user.createdAt), 'MMM d, yyyy')
                             : 'Unknown'}
                         </div>
                       </TableCell>
