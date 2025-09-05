@@ -56,11 +56,8 @@ export default function LandingPage() {
             </div>
             {/* Desktop Navigation */}
             <div className="hidden items-center gap-4 sm:flex">
-              <Button variant="ghost" asChild>
+              <Button variant="ghost" asChild className="text-sm">
                 <Link href="/login">Sign In</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/login">Get Started</Link>
               </Button>
             </div>
             {/* Mobile Menu Button */}
@@ -80,9 +77,6 @@ export default function LandingPage() {
               <Button variant="ghost" asChild className="w-full justify-start">
                 <Link href="/login">Sign In</Link>
               </Button>
-              <Button asChild className="w-full">
-                <Link href="/login">Get Started</Link>
-              </Button>
             </div>
           )}
         </div>
@@ -93,11 +87,18 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
             <h2 className="from-primary to-accent mb-6 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent md:text-6xl">
-              Welcome to Homer Enrichment Hub
+              Enrichment Programs for Your Child, Made Easy
             </h2>
-            <p className="text-muted-foreground mx-auto max-w-3xl text-xl md:text-2xl">
-              Sign up here for MathCounts registration and other enrichment activities
+            <p className="text-muted-foreground mx-auto max-w-3xl text-xl md:text-2xl mb-8">
+              Discover, book, and manage after-school activities, sports, and camps in one simple place.
             </p>
+            
+            {/* Single Primary CTA */}
+            <div className="flex justify-center">
+              <Button asChild size="lg" className="h-16 px-12 text-lg font-semibold">
+                <Link href="/login">Get Started</Link>
+              </Button>
+            </div>
           </div>
 
           {/* Feature Cards */}

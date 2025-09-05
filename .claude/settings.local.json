@@ -35,7 +35,11 @@
       "Bash(echo:*)",
       "Bash(git rev-list:*)",
       "Bash(done)",
-      "Bash(for branch in remove-register-route docs-triage)"
+      "Bash(for branch in remove-register-route docs-triage)",
+      "Bash(feat/enum-lowercase/migrate )",
+      "Bash(feature/prisma-lc-type-fixes )",
+      "Bash(refactor/phase-1-auth)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
