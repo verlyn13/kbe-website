@@ -17,7 +17,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
-import { type Announcement, announcementService } from '@/lib/services';
+import { type Announcement } from '@/lib/services';
 import { mapAnnouncementStatusEnumToLC, mapPriorityEnumToLC } from '@/types/enum-mappings';
 import { Button } from './ui/button';
 
@@ -29,7 +29,11 @@ export function Announcements() {
 
   const loadAnnouncements = useCallback(async () => {
     try {
-      const data = await announcementService.getAll();
+      const response = await fetch('/api/announcements');
+      if (!response.ok) {
+        throw new Error('Failed to fetch announcements');
+      }
+      const data: Announcement[] = await response.json();
       // Filter for published announcements and limit to 5
       const filtered = data
         .filter((a) => mapAnnouncementStatusEnumToLC(a.status) === 'published')

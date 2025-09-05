@@ -28,13 +28,16 @@ export async function POST(request: NextRequest) {
     let exists = false;
     
     if (error) {
-      // "Invalid login credentials" means email exists
-      // "Invalid email" or similar means email doesn't exist
-      exists = error.message.includes('Invalid login credentials') || 
-               error.message.includes('Invalid password') ||
-               error.message.includes('Wrong password');
+      console.log('Email check error message:', error.message);
+      // Supabase returns "Invalid login credentials" for wrong password on existing user
+      // Other messages like "Invalid email" or no specific message for non-existent users
+      exists = error.message.toLowerCase().includes('invalid login credentials') || 
+               error.message.toLowerCase().includes('invalid password') ||
+               error.message.toLowerCase().includes('wrong password') ||
+               error.message.toLowerCase().includes('email not confirmed');
     }
 
+    console.log(`Email check for ${email}: exists=${exists}, error=${error?.message}`);
     return NextResponse.json({ exists });
   } catch (error) {
     console.error('Email check error:', error);

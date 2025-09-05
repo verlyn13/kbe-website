@@ -39,7 +39,8 @@
       "Bash(feat/enum-lowercase/migrate )",
       "Bash(feature/prisma-lc-type-fixes )",
       "Bash(refactor/phase-1-auth)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

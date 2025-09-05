@@ -83,10 +83,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
             <h2 className="from-primary to-accent mb-6 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent md:text-6xl">
-              Enrichment Programs for Your Child, Made Easy
+              Homer Enrichment Programs
             </h2>
             <p className="text-muted-foreground mx-auto max-w-3xl text-xl md:text-2xl mb-8">
-              Discover, book, and manage after-school activities, sports, and camps in one simple place.
+              Sign up for MathCounts and other enrichment activities for your kids.
             </p>
             
             {/* Single Primary CTA */}
