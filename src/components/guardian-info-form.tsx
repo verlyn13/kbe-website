@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { profileService } from '@/lib/services';
 import { formatPhoneNumber } from '@/lib/utils';
 
 export function GuardianInfoForm() {
@@ -67,13 +66,23 @@ export function GuardianInfoForm() {
     setLoading(true);
 
     try {
-      // Update user profile (Prisma)
-      await profileService.upsert({
-        id: user.id,
-        email: formData.email,
-        name: formData.displayName,
-        phone: formData.phone.replace(/\D/g, ''),
+      // Update user profile via API
+      const response = await fetch('/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.displayName,
+          email: formData.email,
+          phone: formData.phone,
+        }),
       });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update profile');
+      }
 
       toast({
         title: 'Profile updated successfully',

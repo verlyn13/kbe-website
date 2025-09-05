@@ -42,7 +42,13 @@
       "Bash(git checkout:*)",
       "Bash(pkill:*)",
       "WebFetch(domain:homerenrichment.com)",
-      "WebFetch(domain:kbe-website-7dr9a2h9g-jeffrey-johnsons-projects-4efd9acb.vercel.app)"
+      "WebFetch(domain:kbe-website-7dr9a2h9g-jeffrey-johnsons-projects-4efd9acb.vercel.app)",
+      "Bash(nslookup:*)",
+      "Bash(git restore:*)",
+      "Bash(bunx prisma migrate:*)",
+      "Bash(bunx prisma db pull:*)",
+      "Bash(bunx prisma:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
