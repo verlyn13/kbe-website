@@ -189,13 +189,15 @@ export const calendarService = {
 
     // If the program has a recurring schedule in the JSON field
     const schedule = program.schedule as any;
-    if (schedule?.recurring && schedule?.pattern) {
-      // This would generate multiple events based on the pattern
-      // For now, just return the base event
-      events.push(baseEvent);
-    } else {
-      events.push(baseEvent);
-    }
+    // TODO(recurring): interpret schedule.pattern (e.g., weekly, byWeekday, until)
+    // Proposed shape:
+    // {
+    //   recurring: true,
+    //   pattern: { type: 'weekly', weekdays: [2], startTime: '16:00', endTime: '17:30', until: '2025-03-11' },
+    //   location: 'Homer Middle School, Room 203'
+    // }
+    // To keep current behavior stable for users, we still surface the base event only.
+    events.push(baseEvent);
 
     return events;
   },
