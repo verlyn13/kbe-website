@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Bell,
   Calendar,
   FileCheck,
   FileSpreadsheet,
@@ -9,33 +10,34 @@ import {
   LayoutDashboard,
   Mail,
   Settings,
+  Shield,
   Users,
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { DashboardHeader } from '@/components/dashboard-header';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarRail,
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AdminProvider, useAdmin } from '@/hooks/use-admin';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 
 function HehLogo() {
   const { state } = useSidebar();
   return (
-    <Link href={'/admin/dashboard' as any} className="flex items-center gap-2">
+    <Link href="/admin/dashboard" className="flex items-center gap-2 px-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -44,15 +46,15 @@ function HehLogo() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-sidebar-primary h-8 w-8"
+        className="text-sidebar-primary h-8 w-8 shrink-0"
       >
-        <title>HEH Admin Logo</title>
+        <title>Admin Portal Logo</title>
         <path d="M12 2L2 7l10 5 10-5-10-5z" />
         <path d="M2 17l10 5 10-5" />
         <path d="M2 12l10 5 10-5" />
       </svg>
-      <h1 className="text-lg font-bold text-white transition-all duration-200 group-data-[collapsible=icon]:-translate-x-96 group-data-[collapsible=icon]:opacity-0">
-        HEH Admin
+      <h1 className="text-sidebar-foreground text-lg font-bold transition-opacity duration-200 group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:opacity-0">
+        Admin Portal
       </h1>
     </Link>
   );
@@ -61,8 +63,7 @@ function HehLogo() {
 function MobileAwareSidebarMenuButton({
   href,
   children,
-  isActive,
-  tooltip,
+  ...props
 }: {
   href: string;
   children: React.ReactNode;
@@ -79,7 +80,7 @@ function MobileAwareSidebarMenuButton({
   };
 
   return (
-    <SidebarMenuButton asChild isActive={isActive} tooltip={tooltip}>
+    <SidebarMenuButton asChild {...props}>
       <Link href={href as any} onClick={handleClick}>
         {children}
       </Link>
@@ -87,152 +88,33 @@ function MobileAwareSidebarMenuButton({
   );
 }
 
-function AdminSidebar() {
-  const pathname = usePathname();
-  const { hasPermission } = useAdmin();
-
-  const navItems = [
-    {
-      group: 'Overview',
-      items: [
-        {
-          href: '/admin/dashboard',
-          label: 'Dashboard',
-          icon: LayoutDashboard,
-          permission: 'view_dashboard',
-        },
-        {
-          href: '/dashboard',
-          label: 'Guardian Portal',
-          icon: Home,
-          permission: 'view_dashboard',
-        },
-      ],
-    },
-    {
-      group: 'Management',
-      items: [
-        {
-          href: '/admin/registrations',
-          label: 'Registrations',
-          icon: Users,
-          permission: 'manage_registrations',
-        },
-        {
-          href: '/admin/waivers',
-          label: 'Waivers',
-          icon: FileCheck,
-          permission: 'manage_users',
-        },
-        {
-          href: '/admin/communications',
-          label: 'Communications',
-          icon: Mail,
-          permission: 'send_announcements',
-        },
-        {
-          href: '/admin/programs',
-          label: 'Programs',
-          icon: Calendar,
-          permission: 'manage_programs',
-        },
-        {
-          href: '/calendar',
-          label: 'Calendar',
-          icon: Calendar,
-          permission: 'manage_programs',
-        },
-      ],
-    },
-    {
-      group: 'Reports',
-      items: [
-        {
-          href: '/admin/reports',
-          label: 'Reports',
-          icon: FileSpreadsheet,
-          permission: 'view_reports',
-        },
-      ],
-    },
-    {
-      group: 'System',
-      items: [
-        {
-          href: '/admin/activity',
-          label: 'Activity Log',
-          icon: FileText,
-          permission: 'view_reports',
-        },
-        {
-          href: '/admin/users',
-          label: 'Users',
-          icon: Users,
-          permission: 'manage_settings',
-        },
-        {
-          href: '/admin/email-settings',
-          label: 'Email Settings',
-          icon: Mail,
-          permission: 'manage_settings',
-        },
-        {
-          href: '/admin/settings',
-          label: 'Settings',
-          icon: Settings,
-          permission: 'manage_settings',
-        },
-      ],
-    },
-  ];
-
-  return (
-    <Sidebar variant="sidebar" collapsible="icon">
-      <SidebarHeader>
-        <HehLogo />
-      </SidebarHeader>
-      <SidebarContent>
-        {navItems.map((group) => (
-          <SidebarGroup key={group.group}>
-            <SidebarGroupLabel>{group.group}</SidebarGroupLabel>
-            <SidebarMenu>
-              {group.items.map((item) => {
-                if (!hasPermission(item.permission)) return null;
-
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <MobileAwareSidebarMenuButton
-                      href={item.href}
-                      isActive={pathname === item.href}
-                      tooltip={item.label}
-                    >
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </MobileAwareSidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroup>
-        ))}
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <MobileAwareSidebarMenuButton href="/dashboard" tooltip="Back to Portal">
-              <Home />
-              <span>Back to Portal</span>
-            </MobileAwareSidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
-  );
-}
-
-function AdminLayoutContent({ children }: { children: React.ReactNode }) {
-  const { loading, isAdmin } = useAdmin();
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    async function checkAdmin() {
+      if (user) {
+        try {
+          const response = await fetch('/api/admin/check');
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
+          if (!data.isAdmin) {
+            router.push('/dashboard');
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          setIsAdmin(false);
+          router.push('/dashboard');
+        }
+      } else if (!loading) {
+        router.push('/');
+      }
+    }
+    checkAdmin();
+  }, [user, loading, router]);
 
   if (loading) {
     return (
@@ -248,25 +130,104 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!isAdmin) {
-    return null; // Will redirect in useAdmin hook
+  if (!user || !isAdmin) {
+    return null;
   }
 
   return (
     <SidebarProvider defaultOpen={!isMobile}>
-      <AdminSidebar />
+      <Sidebar collapsible="icon">
+        <SidebarHeader>
+          <HehLogo />
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/dashboard" isActive tooltip="Dashboard">
+                <LayoutDashboard />
+                <span>Dashboard</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/registrations" tooltip="Registrations">
+                <Users />
+                <span>Registrations</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/waivers" tooltip="Waivers">
+                <FileCheck />
+                <span>Waivers</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/communications" tooltip="Communications">
+                <Mail />
+                <span>Communications</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/programs" tooltip="Programs">
+                <Calendar />
+                <span>Programs</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/calendar" tooltip="Calendar">
+                <Calendar />
+                <span>Calendar</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/announcements" tooltip="Announcements">
+                <Bell />
+                <span>Announcements</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/reports" tooltip="Reports">
+                <FileSpreadsheet />
+                <span>Reports</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/users" tooltip="Users">
+                <Users />
+                <span>Users</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/activity" tooltip="Activity Log">
+                <FileText />
+                <span>Activity Log</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/dashboard" tooltip="Guardian Portal">
+                <Home />
+                <span>Guardian Portal</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <MobileAwareSidebarMenuButton href="/admin/settings" tooltip="Settings">
+                <Settings />
+                <span>Settings</span>
+              </MobileAwareSidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
       <SidebarInset>
         <DashboardHeader />
-        <main className="h-[calc(100vh-4rem)] overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
-  );
-}
-
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <AdminProvider>
-      <AdminLayoutContent>{children}</AdminLayoutContent>
-    </AdminProvider>
   );
 }

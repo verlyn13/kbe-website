@@ -21,13 +21,14 @@ import { useToast } from '@/hooks/use-toast';
 
 interface Student {
   id: string;
-  displayName: string;
-  firstName: string;
-  lastName: string;
-  grade: number;
-  school: string;
-  waiverStatus: string;
-  enrolledPrograms: { id: string; name: string }[];
+  name: string;
+  dateOfBirth: string;
+  grade: string;
+  school: string | null;
+  medicalNotes: string | null;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
 }
 
 export function StudentRoster() {
@@ -69,7 +70,7 @@ export function StudentRoster() {
 
     try {
       // Delete the student via API
-      const response = await fetch(`/api/students/${studentToDelete.id}`, {
+      const response = await fetch(`/api/students?id=${studentToDelete.id}`, {
         method: 'DELETE',
       });
 
@@ -80,7 +81,7 @@ export function StudentRoster() {
 
       toast({
         title: 'Student removed',
-        description: `${studentToDelete.displayName} has been removed from your account.`,
+        description: `${studentToDelete.name} has been removed from your account.`,
       });
     } catch (error) {
       console.error('Error deleting student:', error);
@@ -134,22 +135,25 @@ export function StudentRoster() {
                 key={student.id}
                 className="flex flex-col gap-3 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4"
               >
-                <div className="flex items-center gap-3">
+                <Link 
+                  href={`/students/${student.id}/edit`}
+                  className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                >
                   <div className="bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
                     <User className="text-primary h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate font-medium">{student.displayName}</p>
+                    <p className="truncate font-medium text-primary hover:underline">{student.name}</p>
                     <p className="text-muted-foreground truncate text-sm">
-                      Grade {student.grade} • {student.school}
+                      Grade {student.grade} • {student.school || 'No school specified'}
                     </p>
                   </div>
-                </div>
+                </Link>
                 <div className="ml-13 flex items-center gap-2 sm:ml-0">
                   <div className="flex flex-col gap-1 sm:items-end">
-                    {student.enrolledPrograms.length > 0 ? (
+                    {false ? (
                       <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                        {student.enrolledPrograms.map((program) => (
+                        {[].map((program: any) => (
                           <Badge
                             key={program.id}
                             variant="secondary"
@@ -192,7 +196,7 @@ export function StudentRoster() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Student</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove <strong>{studentToDelete?.displayName}</strong> from
+              Are you sure you want to remove <strong>{studentToDelete?.name}</strong> from
               your account? This will also remove them from all enrolled programs. This action
               cannot be undone.
             </AlertDialogDescription>
