@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAdmin } from '@/hooks/use-admin';
 import { useToast } from '@/hooks/use-toast';
 import { type RegistrationWithDetails, registrationService } from '@/lib/services';
 import {
@@ -27,7 +26,6 @@ import {
 } from '@/types/enum-mappings';
 
 export default function AdminRegistrationsPage() {
-  const { admin } = useAdmin();
   const { toast } = useToast();
   const [registrations, setRegistrations] = useState<RegistrationWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +33,9 @@ export default function AdminRegistrationsPage() {
 
   const loadRegistrations = useCallback(async () => {
     try {
-      const data = await registrationService.getAll();
+      const response = await fetch('/api/admin/registrations');
+      if (!response.ok) throw new Error('Failed to fetch registrations');
+      const data = await response.json();
       setRegistrations(data);
     } catch (error) {
       console.error('Error loading registrations:', error);
@@ -58,7 +58,16 @@ export default function AdminRegistrationsPage() {
     status: 'pending' | 'active' | 'waitlist' | 'withdrawn'
   ) {
     try {
-      await registrationService.updateStatus(id, mapRegistrationStatusLCToEnum(status));
+      const response = await fetch('/api/admin/registrations', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          id, 
+          status: mapRegistrationStatusLCToEnum(status) 
+        }),
+      });
+      if (!response.ok) throw new Error('Failed to update registration');
+      
       await loadRegistrations();
       toast({
         title: 'Success',

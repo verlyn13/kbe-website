@@ -37,21 +37,40 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name } = body;
+    const { 
+      firstName, 
+      lastName, 
+      dateOfBirth, 
+      grade, 
+      school, 
+      medicalNotes,
+      emergencyContact,
+      emergencyPhone,
+      registerForMathCounts 
+    } = body;
 
     // Validate required fields
-    if (!name) {
+    if (!firstName || !lastName || !dateOfBirth || !grade || !school) {
       return NextResponse.json(
-        { error: 'Student name is required' },
+        { error: 'Required fields: firstName, lastName, dateOfBirth, grade, school' },
         { status: 400 }
       );
     }
 
     // Create new student
     const student = await studentService.create({
-      name: name.trim(),
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       userId: user.id,
+      dateOfBirth,
+      grade,
+      school,
+      medicalNotes,
+      emergencyContact,
+      emergencyPhone,
     });
+
+    // TODO: If registerForMathCounts is true, create a registration for MathCounts program
 
     return NextResponse.json(student, { status: 201 });
   } catch (error) {

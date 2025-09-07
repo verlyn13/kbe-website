@@ -43,8 +43,11 @@ export default function AnnouncementsPage() {
     if (!user) return;
 
     try {
-      // Load visible announcements
-      const visibleData = await announcementService.getAll();
+      // Load visible announcements via API
+      const response = await fetch('/api/announcements');
+      if (!response.ok) throw new Error('Failed to fetch announcements');
+      
+      const visibleData = await response.json();
       setAnnouncements(visibleData);
 
       // Hidden announcements feature not supported in Prisma model; keep empty list
@@ -73,7 +76,11 @@ export default function AnnouncementsPage() {
     if (!announcementToDelete) return;
 
     try {
-      await announcementService.delete(announcementToDelete.id);
+      const response = await fetch(`/api/announcements/${announcementToDelete.id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete announcement');
+      
       toast({
         title: 'Deleted',
         description: 'Announcement deleted permanently',

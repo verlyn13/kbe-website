@@ -19,7 +19,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAdmin } from '@/hooks/use-admin';
-import { registrationService } from '@/lib/services';
 
 interface DashboardStats {
   registrations: {
@@ -132,7 +131,10 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function loadDashboard() {
       try {
-        const registrationStats = await registrationService.getStats('mathcounts-2025');
+        // Fetch registration stats via API
+        const response = await fetch('/api/admin/stats?programId=mathcounts-2025');
+        if (!response.ok) throw new Error('Failed to fetch stats');
+        const registrationStats = await response.json();
 
         // Mock upcoming events for now
         const upcomingEvents = [

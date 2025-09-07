@@ -27,13 +27,26 @@ export const studentService = {
    * Create a new student
    */
   async create(data: {
-    name: string;
+    firstName: string;
+    lastName: string;
     userId: string;
+    dateOfBirth: Date | string;
+    grade: string | number;
+    school?: string;
+    medicalNotes?: string;
+    emergencyContact?: string;
+    emergencyPhone?: string;
   }): Promise<Student> {
+    const name = `${data.firstName} ${data.lastName}`.trim();
+    
     return prisma.student.create({
       data: {
-        name: data.name,
+        name,
         userId: data.userId,
+        dateOfBirth: new Date(data.dateOfBirth),
+        grade: data.grade.toString(),
+        school: data.school,
+        medicalNotes: data.medicalNotes,
       },
     });
   },
@@ -45,6 +58,10 @@ export const studentService = {
     id: string,
     data: {
       name?: string;
+      dateOfBirth?: Date;
+      grade?: string;
+      school?: string;
+      medicalNotes?: string | null;
     }
   ): Promise<Student> {
     return prisma.student.update({

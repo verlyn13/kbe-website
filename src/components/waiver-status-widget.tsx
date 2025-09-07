@@ -111,14 +111,17 @@ export function WaiverStatusWidget() {
                   key={student.id}
                   className="flex items-center justify-between rounded-lg border p-3"
                 >
-                  <div className="flex-1">
-                    <p className="font-medium">{student.studentName}</p>
+                  <Link 
+                    href={`/students/${student.id}/edit`}
+                    className="flex-1 hover:opacity-80 transition-opacity"
+                  >
+                    <p className="font-medium text-primary hover:underline">{student.studentName}</p>
                     {student.waiverStatus === 'received' && student.expiresDate && (
                       <p className="text-muted-foreground text-xs">
                         Expires: {student.expiresDate.toLocaleDateString()}
                       </p>
                     )}
-                  </div>
+                  </Link>
                   <div className="flex items-center gap-2">
                     {student.waiverStatus === 'pending' && (
                       <Badge
