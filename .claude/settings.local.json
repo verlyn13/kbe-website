@@ -48,7 +48,15 @@
       "Bash(bunx prisma migrate:*)",
       "Bash(bunx prisma db pull:*)",
       "Bash(bunx prisma:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(curl:*)",
+      "Bash(git show:*)",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "mcp__puppeteer__puppeteer_click",
+      "mcp__puppeteer__puppeteer_evaluate",
+      "mcp__puppeteer__puppeteer_navigate",
+      "mcp__puppeteer__puppeteer_fill",
+      "Bash(xargs ls:*)"
     ],
     "deny": [],
     "ask": []
