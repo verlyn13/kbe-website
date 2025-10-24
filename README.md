@@ -51,6 +51,7 @@ bunx <command>       # Execute package binaries
 
 - Platform: Vercel (Next.js)
 - Config: `vercel.json`
+- Auto-Deploy: Enabled for `main` branch via Vercel GitHub App
 - Guides: `docs/VERCEL-QUICKSTART.md`, `docs/VERCEL-CONFIG-REVIEW.md`
 
 ## Infrastructure
