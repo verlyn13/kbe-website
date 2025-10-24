@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 /**
  * Sentry Test Endpoint
@@ -29,9 +30,20 @@ export async function GET() {
     }, { status: 400 });
   }
 
-  // This error will be captured by Sentry in production
+  // Manually capture the error to ensure it's sent
   const timestamp = new Date().toISOString();
-  throw new Error(`[SENTRY TEST] Production error tracking verification - ${timestamp}`);
+  const error = new Error(`[SENTRY TEST] Server-side error tracking - ${timestamp}`);
+
+  const eventId = Sentry.captureException(error, {
+    level: "error",
+    tags: {
+      test: "server-error",
+      endpoint: "/api/sentry-test"
+    }
+  });
+
+  // Also throw to test automatic error handling
+  throw error;
 
   // This line is never reached, but TypeScript needs it
   return NextResponse.json({ message: "unreachable" });
