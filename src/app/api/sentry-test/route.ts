@@ -42,6 +42,9 @@ export async function GET() {
     }
   });
 
+  // Flush Sentry to ensure the event is sent before the function terminates
+  await Sentry.flush(2000); // Wait up to 2 seconds for events to be sent
+
   // Also throw to test automatic error handling
   throw error;
 
