@@ -5,10 +5,8 @@ const nextConfig = {
   // Enable source maps in production for Sentry error tracking
   productionBrowserSourceMaps: true,
 
-  // Enable instrumentation for Sentry
-  experimental: {
-    instrumentationHook: true,
-  },
+  // Enable instrumentation for Sentry (not experimental in Next.js 15+)
+  // Note: instrumentationHook is enabled by default in Next.js 15
 
   typescript: {
     ignoreBuildErrors: true,
