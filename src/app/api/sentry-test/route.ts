@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
+import { withSentry, initializeSentryIfNeeded } from "@/lib/sentry-wrapper";
+import { forceInitSentry, captureServerError } from "@/lib/server-sentry";
 
 /**
  * Sentry Test Endpoint
@@ -18,13 +20,19 @@ import * as Sentry from "@sentry/nextjs";
  * - It creates a clearly labeled test error
  * - Can be removed after testing
  */
-export async function GET() {
+export const GET = withSentry(async function GET() {
+  // Try multiple initialization methods
+  const wrapperInit = initializeSentryIfNeeded();
+  const forceInit = forceInitSentry();
+
+  const initialized = wrapperInit || forceInit;
   const isProduction = process.env.NODE_ENV === "production";
 
   // Debug info for troubleshooting
   const debugInfo = {
     environment: process.env.NODE_ENV,
     sentryDsnPresent: !!process.env.NEXT_PUBLIC_SENTRY_DSN,
+    sentryInitialized: initialized,
     sentryRelease: process.env.VERCEL_GIT_COMMIT_SHA || process.env.SENTRY_RELEASE || 'dev',
     vercelEnv: process.env.VERCEL_ENV,
     timestamp: new Date().toISOString(),
@@ -64,6 +72,7 @@ export async function GET() {
     data: debugInfo,
   });
 
+  // Try both capture methods
   const eventId = Sentry.captureException(error, {
     level: "error",
     tags: {
@@ -76,7 +85,18 @@ export async function GET() {
     },
   });
 
-  console.log('[SENTRY-TEST] Error captured with event ID:', eventId);
+  console.log('[SENTRY-TEST] Standard capture with event ID:', eventId);
+
+  // Also try our force capture method
+  const forceEventId = await captureServerError(error, {
+    tags: {
+      test: "server-error-forced",
+      endpoint: "/api/sentry-test",
+    },
+    debugInfo,
+  });
+
+  console.log('[SENTRY-TEST] Force capture with event ID:', forceEventId);
 
   // Flush Sentry to ensure the event is sent before the function terminates
   await Sentry.flush(3000); // Wait up to 3 seconds for events to be sent
@@ -88,4 +108,4 @@ export async function GET() {
 
   // This line is never reached, but TypeScript needs it
   return NextResponse.json({ message: "unreachable" });
-}
+});
