@@ -21,29 +21,67 @@ import * as Sentry from "@sentry/nextjs";
 export async function GET() {
   const isProduction = process.env.NODE_ENV === "production";
 
+  // Debug info for troubleshooting
+  const debugInfo = {
+    environment: process.env.NODE_ENV,
+    sentryDsnPresent: !!process.env.NEXT_PUBLIC_SENTRY_DSN,
+    sentryRelease: process.env.VERCEL_GIT_COMMIT_SHA || process.env.SENTRY_RELEASE || 'dev',
+    vercelEnv: process.env.VERCEL_ENV,
+    timestamp: new Date().toISOString(),
+  };
+
+  console.log('[SENTRY-TEST] Endpoint called with debug info:', debugInfo);
+
   if (!isProduction) {
     return NextResponse.json({
       success: false,
       message: "Sentry test only works in production environment",
-      environment: process.env.NODE_ENV,
+      ...debugInfo,
       note: "Deploy to production first, then visit this endpoint"
     }, { status: 400 });
   }
+
+  // Check if Sentry is actually initialized
+  const currentHub = Sentry.getCurrentHub();
+  const client = currentHub.getClient();
+  const isInitialized = !!client;
+
+  console.log('[SENTRY-TEST] Sentry initialization status:', {
+    isInitialized,
+    hasClient: !!client,
+    dsn: client?.getDsn()?.toString()?.substring(0, 50) + '...',
+  });
 
   // Manually capture the error to ensure it's sent
   const timestamp = new Date().toISOString();
   const error = new Error(`[SENTRY TEST] Server-side error tracking - ${timestamp}`);
 
+  // Add breadcrumb for additional context
+  Sentry.addBreadcrumb({
+    message: 'Test error triggered via API endpoint',
+    level: 'info',
+    category: 'test',
+    data: debugInfo,
+  });
+
   const eventId = Sentry.captureException(error, {
     level: "error",
     tags: {
       test: "server-error",
-      endpoint: "/api/sentry-test"
-    }
+      endpoint: "/api/sentry-test",
+      initialized: isInitialized ? 'yes' : 'no',
+    },
+    contexts: {
+      debug: debugInfo,
+    },
   });
 
+  console.log('[SENTRY-TEST] Error captured with event ID:', eventId);
+
   // Flush Sentry to ensure the event is sent before the function terminates
-  await Sentry.flush(2000); // Wait up to 2 seconds for events to be sent
+  await Sentry.flush(3000); // Wait up to 3 seconds for events to be sent
+
+  console.log('[SENTRY-TEST] Sentry flush completed, about to throw error');
 
   // Also throw to test automatic error handling
   throw error;
