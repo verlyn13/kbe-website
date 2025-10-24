@@ -57,6 +57,9 @@ firestore-debug.log
 # claude
 .claude/
 
+# sentry
+sentry.properties
+
 # Authentication testing artifacts
 test-auth-*.js
 run-auth-tests.js

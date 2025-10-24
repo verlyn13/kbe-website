@@ -67,7 +67,7 @@ These need your actual values from Supabase dashboard:
 ```bash
 # Store token in gopass (one-time)
 gopass insert infisical/tokens/homer-enrichment
-# Paste: st.cb8813cf-7aaf-43c0-91b5-433e76b71206...
+# Paste the token retrieved from your secrets manager
 
 # Export token
 export INFISICAL_TOKEN=$(gopass show -o infisical/tokens/homer-enrichment)

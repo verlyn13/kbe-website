@@ -58,10 +58,9 @@ chezmoi apply  # If using the system-setup-update repo
 
 ### Project Setup
 
-1. **Create a Sentry Account**
-   - Sign up at https://sentry.io
-   - Create a new project (select Next.js)
-   - Note your organization and project slugs
+1. **Sentry Account (Already Set Up)**
+   - Credentials stored in gopass and Infisical
+   - See `docs/INFISICAL_SETUP.md` for secrets management details
 
 2. **Generate an Auth Token**
    - Go to: Settings → Account → API → Auth Tokens
@@ -89,16 +88,16 @@ chezmoi apply  # If using the system-setup-update repo
 Add these to your `.envrc` file:
 
 ```bash
-# Sentry Configuration
-export SENTRY_ORG="your-org-slug"
-export SENTRY_PROJECT="kbe-website"
+# Sentry Configuration (retrieve from secrets management)
+export SENTRY_ORG="$(infisical secrets get SENTRY_ORG --plain)"
+export SENTRY_PROJECT="$(infisical secrets get SENTRY_PROJECT --plain)"
 export SENTRY_AUTH_TOKEN="$(gopass show sentry/auth-token)"
+export NEXT_PUBLIC_SENTRY_DSN="$(infisical secrets get NEXT_PUBLIC_SENTRY_DSN --plain)"
 
 # Optional: Use self-hosted Sentry
 # export SENTRY_URL="https://sentry.yourdomain.com"
 
-# Next.js Sentry Integration (if using @sentry/nextjs)
-export NEXT_PUBLIC_SENTRY_DSN="https://your-dsn@sentry.io/project-id"
+# Sentry release tracking
 export SENTRY_RELEASE="$(git describe --tags --always)"
 ```
 
@@ -113,8 +112,8 @@ Create `sentry.properties` in the project root:
 
 ```properties
 defaults.url=https://sentry.io/
-defaults.org=your-org-slug
-defaults.project=kbe-website
+defaults.org=<your-org-slug>
+defaults.project=<your-project-slug>
 
 # Auth token (will be overridden by env var)
 # auth.token=your-token-here
@@ -273,12 +272,12 @@ Add Sentry CLI integration to your Vercel deployment:
 In your Vercel project settings:
 
 1. Go to **Settings** → **Environment Variables**
-2. Add these variables:
+2. Add these variables (retrieve from Infisical):
    ```
-   SENTRY_ORG=your-org-slug
-   SENTRY_PROJECT=kbe-website
-   SENTRY_AUTH_TOKEN=<your-token>
-   NEXT_PUBLIC_SENTRY_DSN=<your-dsn>
+   SENTRY_ORG=<from-infisical>
+   SENTRY_PROJECT=<from-infisical>
+   SENTRY_AUTH_TOKEN=<from-gopass-or-infisical>
+   NEXT_PUBLIC_SENTRY_DSN=<from-infisical>
    ```
 
 3. In **Settings** → **Build & Development Settings**:

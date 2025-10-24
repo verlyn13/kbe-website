@@ -72,7 +72,7 @@ DIRECT_URL=postgresql://postgres:[password]@[host]:5432/postgres
 1. **Store service token in gopass** (if not already):
    ```bash
    gopass insert infisical/tokens/homer-enrichment
-   # Paste: st.cb8813cf-7aaf-43c0-91b5-433e76b71206.88668eed6846db57c927412847f8d8c6.63b1871a7f8a93547d3ccdf343905d3b
+   # Paste the token retrieved from your secrets manager
    ```
 
 2. **Get Project ID from web UI**:
@@ -142,7 +142,7 @@ infisical run --env=prod --domain=https://secrets.jefahnierocks.com -- bun run d
 ```bash
 # Add Infisical token to Vercel (for build-time access)
 vercel env add INFISICAL_TOKEN production
-# Paste: st.cb8813cf-7aaf-43c0-91b5-433e76b71206...
+# When prompted, paste the token from gopass: $(gopass show infisical/service-token)
 
 # Then all secrets auto-sync from Infisical
 ```
@@ -202,7 +202,7 @@ Ensure these are all in Infisical `prod` environment:
 export INFISICAL_TOKEN=$(gopass show -o infisical/tokens/homer-enrichment)
 
 # Or set directly
-export INFISICAL_TOKEN="st.cb8813cf-7aaf-43c0-91b5-433e76b71206..."
+export INFISICAL_TOKEN="$(gopass show infisical/service-token)"
 ```
 
 ### Can't find project ID

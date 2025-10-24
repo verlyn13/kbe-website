@@ -14,12 +14,9 @@ npm install -g @sentry/cli
 
 ## 2. Get Your Sentry Credentials
 
-1. Create account at https://sentry.io
-2. Create a new Next.js project
-3. Get your auth token:
-   - Settings → Account → API → Auth Tokens
-   - Create token with `project:releases` scope
-4. Note your organization and project slugs
+**Already configured!** Your Sentry project credentials are stored in:
+- **gopass**: `sentry/auth-token`
+- **Infisical**: `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`, `NEXT_PUBLIC_SENTRY_DSN`
 
 ## 3. Store Credentials Securely
 
@@ -34,10 +31,11 @@ gopass insert sentry/auth-token
 Add to `.envrc`:
 
 ```bash
-# Sentry Configuration
-export SENTRY_ORG="your-org-slug"
-export SENTRY_PROJECT="kbe-website"
+# Sentry Configuration (retrieve from secrets management)
+export SENTRY_ORG="$(infisical secrets get SENTRY_ORG --plain)"
+export SENTRY_PROJECT="$(infisical secrets get SENTRY_PROJECT --plain)"
 export SENTRY_AUTH_TOKEN="$(gopass show sentry/auth-token)"
+export NEXT_PUBLIC_SENTRY_DSN="$(infisical secrets get NEXT_PUBLIC_SENTRY_DSN --plain)"
 ```
 
 Reload:

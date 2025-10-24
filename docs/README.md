@@ -22,6 +22,7 @@ Comprehensive, accurate documentation for the Homer Enrichment Hub project.
 - Vercel: `VERCEL-QUICKSTART.md`, `VERCEL-CONFIG-REVIEW.md`
 - Cloudflare: `cloudflare.md`, `cloudflare-sendgrid-dns.md`
 - Production Readiness: `ops/PRODUCTION_READINESS.md`, `ops/PRODUCTION_READINESS_PLAN.md`
+- Error Tracking (Sentry): `SENTRY-READY.md` ⭐ (start here), `SENTRY-CONFIGURATION-SUMMARY.md`, `SENTRY-QUICKSTART.md`, `SENTRY-CLI-GUIDE.md`, `SENTRY-SETUP-CHECKLIST.md`
 
 ### Security & Secrets
 - Secrets: `INFISICAL_SETUP.md` (primary)

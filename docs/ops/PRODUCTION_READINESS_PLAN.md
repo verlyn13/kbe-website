@@ -31,9 +31,10 @@ bun add @sentry/nextjs
 
 1. **Run Sentry Wizard** (automated setup):
    ```bash
-   export SENTRY_AUTH_TOKEN='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'
-   export SENTRY_ORG='happy-patterns-llc'
-   export SENTRY_PROJECT='javascript-nextjs'
+   # Retrieve credentials from secrets management
+   export SENTRY_AUTH_TOKEN="$(gopass show sentry/auth-token)"
+   export SENTRY_ORG="$(infisical secrets get SENTRY_ORG --plain)"
+   export SENTRY_PROJECT="$(infisical secrets get SENTRY_PROJECT --plain)"
    bunx @sentry/wizard@latest -i nextjs
    ```
 

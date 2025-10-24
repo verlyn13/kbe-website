@@ -17,10 +17,10 @@ brew install infisical/get-cli/infisical
 ```bash
 # Option A: In gopass (recommended)
 gopass insert infisical/tokens/homer-enrichment
-# Paste: st.cb8813cf-7aaf-43c0-91b5-433e76b71206.88668eed6846db57c927412847f8d8c6.63b1871a7f8a93547d3ccdf343905d3b
+# Paste the token retrieved from your secrets manager
 
-# Option B: Export directly
-export INFISICAL_TOKEN="st.cb8813cf-7aaf-43c0-91b5-433e76b71206.88668eed6846db57c927412847f8d8c6.63b1871a7f8a93547d3ccdf343905d3b"
+# Option B: Export from gopass
+export INFISICAL_TOKEN="$(gopass show infisical/service-token)"
 ```
 
 ### 3. Initialize Project

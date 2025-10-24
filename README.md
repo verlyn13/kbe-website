@@ -58,6 +58,7 @@ bunx <command>       # Execute package binaries
 - Cloudflare DNS: `docs/cloudflare.md`, `docs/cloudflare-sendgrid-dns.md`
 - Email (SendGrid): `docs/sendgrid-next-steps.md`, `docs/sendgrid-domain-decisions.md`
 - Secrets: `docs/INFISICAL_SETUP.md` (Infisical) and `docs/secrets/`
+- Error Tracking (Sentry): `docs/SENTRY-READY.md` ⭐ (configured & ready)
 
 ## Authentication
 

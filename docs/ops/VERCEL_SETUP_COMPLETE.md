@@ -338,10 +338,11 @@ vercel domains verify homerenrichment.com
 ### Environment Variables Set
 
 ```bash
-NEXT_PUBLIC_SENTRY_DSN=https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584
-SENTRY_ORG=happy-patterns-llc
-SENTRY_PROJECT=javascript-nextjs
-SENTRY_AUTH_TOKEN=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
+# Retrieved from Infisical and gopass
+NEXT_PUBLIC_SENTRY_DSN=<from-infisical>
+SENTRY_ORG=<from-infisical>
+SENTRY_PROJECT=<from-infisical>
+SENTRY_AUTH_TOKEN=<from-gopass-or-infisical>
 ```
 
 ### What Happens on Build

@@ -23,10 +23,10 @@ This project uses **Infisical** for centralized secrets management across all en
 
 **Token Name**: homer-enrichment-infisical
 **Access**: Read/Write to Production environment
-**Token**: `st.cb8813cf-7aaf-43c0-91b5-433e76b71206.88668eed6846db57c927412847f8d8c6.63b1871a7f8a93547d3ccdf343905d3b`
+**Token**: Stored securely in gopass at `infisical/service-token`
 
-⚠️ **Security**: Store this token securely:
-- Local dev: In gopass or Infisical CLI config
+⚠️ **Security**: The service token is stored securely:
+- Local dev: Retrieved from gopass (`infisical/service-token`)
 - Vercel: In environment variables (for Infisical integration)
 - CI/CD: In GitHub Secrets or equivalent
 
@@ -51,8 +51,8 @@ brew install infisical
 # Login to your self-hosted instance
 infisical login --domain=https://secrets.jefahnierocks.com
 
-# Or use service token directly
-export INFISICAL_TOKEN="st.cb8813cf-7aaf-43c0-91b5-433e76b71206.88668eed6846db57c927412847f8d8c6.63b1871a7f8a93547d3ccdf343905d3b"
+# Or use service token from gopass
+export INFISICAL_TOKEN="$(gopass show infisical/service-token)"
 ```
 
 ### 3. Initialize Project
@@ -102,10 +102,10 @@ DATABASE_URL=postgresql://postgres:[password]@[host]:6543/postgres?pgbouncer=tru
 DIRECT_URL=postgresql://postgres:[password]@[host]:5432/postgres
 
 # Sentry Configuration
-NEXT_PUBLIC_SENTRY_DSN=https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584
-SENTRY_ORG=happy-patterns-llc
-SENTRY_PROJECT=javascript-nextjs
-SENTRY_AUTH_TOKEN=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
+NEXT_PUBLIC_SENTRY_DSN=<your-sentry-dsn>
+SENTRY_ORG=<your-sentry-org>
+SENTRY_PROJECT=<your-sentry-project>
+SENTRY_AUTH_TOKEN=<your-sentry-auth-token>
 
 # Application Configuration
 NEXT_PUBLIC_APP_URL=https://homerenrichment.com
@@ -212,10 +212,9 @@ infisical integrations sync vercel --env=prod --vercel-project-id=prj_...
 ### Option 3: Use Service Token in Vercel
 
 ```bash
-# Add Infisical token to Vercel
+# Add Infisical token to Vercel (retrieve from gopass)
 vercel env add INFISICAL_TOKEN production
-
-# Value: st.cb8813cf-7aaf-43c0-91b5-433e76b71206.88668eed6846db57c927412847f8d8c6.63b1871a7f8a93547d3ccdf343905d3b
+# When prompted, paste: $(gopass show infisical/service-token)
 
 # Then use in build command (vercel.json):
 {
@@ -356,8 +355,8 @@ alias dev="infisical run --env=prod -- bun run dev"
 # Re-login
 infisical login --domain=https://secrets.jefahnierocks.com
 
-# Or set token explicitly
-export INFISICAL_TOKEN="st.cb8813cf-7aaf-43c0-91b5-433e76b71206.88668eed6846db57c927412847f8d8c6.63b1871a7f8a93547d3ccdf343905d3b"
+# Or set token from gopass
+export INFISICAL_TOKEN="$(gopass show infisical/service-token)"
 ```
 
 ### "Project not found"

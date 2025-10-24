@@ -1,0 +1,25 @@
+# Sentry CLI Configuration Template
+# Copy this file to sentry.properties and fill in your values
+# DO NOT commit sentry.properties - it contains sensitive auth tokens
+
+# Sentry server URL (use default for sentry.io)
+defaults.url=https://sentry.io/
+
+# Organization slug (Happy Patterns LLC)
+defaults.org=happy-patterns-llc
+
+# Project slug
+defaults.project=javascript-nextjs
+
+# Auth token (RECOMMENDED: Use environment variable instead)
+# The auth token is stored in gopass and Infisical
+# To use: export SENTRY_AUTH_TOKEN="$(gopass show sentry/auth-token)"
+# Or retrieve from Infisical: infisical secrets get SENTRY_AUTH_TOKEN
+# auth.token=your-auth-token-here
+
+# SECURITY NOTE:
+# It's more secure to use the SENTRY_AUTH_TOKEN environment variable
+# instead of storing the token in this file. See docs/SENTRY-QUICKSTART.md
+# The token is already stored in:
+# - gopass: sentry/auth-token
+# - Infisical: SENTRY_AUTH_TOKEN

@@ -1,0 +1,34 @@
+# Environment Configuration Example for Homer Enrichment Hub
+# Copy this file to .envrc and fill in your actual values
+# Then run: direnv allow
+
+# Sentry Error Tracking
+# All values are stored in Infisical and gopass - see docs/INFISICAL_SETUP.md
+export SENTRY_ORG="$(infisical secrets get SENTRY_ORG --plain)"
+export SENTRY_PROJECT="$(infisical secrets get SENTRY_PROJECT --plain)"
+export SENTRY_AUTH_TOKEN="$(gopass show sentry/auth-token)"
+export NEXT_PUBLIC_SENTRY_DSN="$(infisical secrets get NEXT_PUBLIC_SENTRY_DSN --plain)"
+
+# Sentry Release Tracking (optional)
+export SENTRY_RELEASE="$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD 2>/dev/null || echo 'dev')"
+
+# Database (Supabase via Prisma)
+# Get these from Supabase dashboard or Infisical
+export DATABASE_URL="postgresql://postgres:[password]@[host]:6543/postgres?pgbouncer=true"
+export DIRECT_URL="postgresql://postgres:[password]@[host]:5432/postgres"
+
+# Supabase
+export NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+export NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+
+# SendGrid Email
+export SENDGRID_API_KEY="$(gopass show sendgrid/api-key)"
+export SENDGRID_FROM_EMAIL="noreply@homerenrichment.com"
+export SENDGRID_FROM_NAME="Homer Enrichment Hub"
+
+# Application
+export NEXT_PUBLIC_APP_URL="http://localhost:9002"
+export NODE_ENV="development"
+
+# Note: For production values, see docs/INFISICAL_SETUP.md
+# To sync from Infisical: infisical run --env=dev -- bun dev

@@ -60,5 +60,15 @@
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "github",
+    "memory-bank",
+    "filesystem",
+    "puppeteer",
+    "brave-search",
+    "sequential-thinking",
+    "fetch"
+  ],
+  "enableAllProjectMcpServers": true
 }
