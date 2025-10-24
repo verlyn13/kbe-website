@@ -13,8 +13,8 @@ Sentry.init({
   // Only send errors in production
   enabled: process.env.NODE_ENV === "production",
 
-  // Release tracking
-  release: process.env.SENTRY_RELEASE,
+  // Release tracking - use VERCEL_GIT_COMMIT_SHA or fallback to dev
+  release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.SENTRY_RELEASE || "dev",
 
   // SAFE FREE TIER: Very low sample rate for server performance
   tracesSampleRate: 0.05, // 5% of server transactions
