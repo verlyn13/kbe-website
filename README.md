@@ -8,18 +8,31 @@ Simple registration. Clear schedules. One place for everything.
 
 Homer Enrichment Hub connects families with quality enrichment programs in our community. Founded by educators passionate about critical thinking and authentic learning, we provide a simple, professional platform for program registration and information.
 
+## Quick Links
+
+- Docs Index: `docs/README.md`
+- Dev Setup: `docs/dev/QUICKSTART.md`
+- Vercel Quickstart: `docs/VERCEL-QUICKSTART.md`
+  
+
 ## Getting Started
 
-To get started with development, take a look at src/app/page.tsx.
+To get started with development, open `src/app/page.tsx` and run:
+
+```bash
+bun install
+bun run dev          # Dev server on port 9002 (Turbopack)
+```
 
 ## Development
 
 ```bash
-bun run dev          # Start dev server on port 9002
-bun run build        # Build for production
-bun run start        # Start production server
-bun run lint         # Run ESLint
-bun run typecheck    # TypeScript type checking
+bun run build        # Production build
+bun run start        # Run built app
+bun run lint         # Biome lint
+bun run format       # Biome format
+bun run typecheck    # TypeScript diagnostics
+bun run test         # Vitest
 ```
 
 ### Package Management
@@ -34,26 +47,27 @@ bun ci               # Install with frozen lockfile (CI)
 bunx <command>       # Execute package binaries
 ```
 
-### ⚠️ Known Issue: App Check & OAuth
-
-**Important**: Firebase App Check must be set to "Unenforced" mode for OAuth to work.
-
-If Google sign-in fails with `auth/internal-error`:
-
-1. Go to Firebase Console → App Check → Apps
-2. Set Authentication and Firestore APIs to "Unenforced"
-3. Wait 1-2 minutes and test again
-
-See `APP_CHECK_OAUTH_ISSUE.md` for details.
-
 ## Deployment
 
-This project is deployed on Firebase App Hosting. See apphosting.yaml for configuration.
+- Platform: Vercel (Next.js)
+- Config: `vercel.json`
+- Guides: `docs/VERCEL-QUICKSTART.md`, `docs/VERCEL-CONFIG-REVIEW.md`
 
-## Cloudflare Integration
+## Infrastructure
 
-This repo integrates with Cloudflare for DNS and zone diagnostics via the `cf-go` CLI.
+- Cloudflare DNS: `docs/cloudflare.md`, `docs/cloudflare-sendgrid-dns.md`
+- Email (SendGrid): `docs/sendgrid-next-steps.md`, `docs/sendgrid-domain-decisions.md`
+- Secrets: `docs/INFISICAL_SETUP.md` (Infisical) and `docs/secrets/`
 
-- Project config: `.cloudflare` (contains `PROJECT_NAME` and `ZONE`)
-- Helper targets: `make preflight`, `make zone`, `make ns`, `make dns`
-- Full details: see `docs/cloudflare.md`
+## Authentication
+
+- Current: Supabase Auth
+
+## Tech Stack
+
+- Next.js 15 + React 19 + TypeScript 5.8
+- Prisma 6 + Supabase (Postgres)
+- Tailwind CSS 4 + shadcn/ui
+- Bun 1.x
+
+For a full documentation index, see `docs/README.md`.

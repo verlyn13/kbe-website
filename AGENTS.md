@@ -5,7 +5,7 @@ Concise contributor guide for the Homer Enrichment Hub (Next.js 15 + Bun + TypeS
 ## Project Structure & Module Organization
 - `src/app/`: App Router routes (`(auth)`, `(dashboard)`, `admin`, `api`).
 - `src/components/`: UI, forms, and admin components (`ui/`, `forms/`, `admin/`).
-- `src/lib/`: Utilities and config (`firebase/`, `email/`).
+- `src/lib/`: Utilities and config (auth, email, db).
 - `src/hooks/`, `src/providers/`, `src/types/`.
 - `memory-bank/`: Agent context and handoffs.
 - `public/`: Static assets. Place tests near code as `*.test.ts(x)`.
@@ -38,6 +38,7 @@ Concise contributor guide for the Homer Enrichment Hub (Next.js 15 + Bun + TypeS
 - Before push: run `bun test` and `bun lint` and ensure typecheck passes.
 
 ## Security & Configuration Tips
-- Never commit secrets; use `.env.local` for dev and Google Cloud Secret Manager for prod.
-- Firebase App Hosting requires these in `dependencies`: `typescript`, `tailwindcss`, `postcss`, `@tailwindcss/postcss`.
-- Ensure Firebase Auth domains are configured; `actionCodeSettings.url` must match the current origin.
+- Never commit secrets; use `.env.local` for local dev and Vercel Environment Variables for deployed environments.
+- Secrets management: Infisical is supported for local/CI sync (`docs/secrets/`).
+- Authentication: Supabase Auth is canonical; legacy Firebase docs are archived in `docs/legacy-firebase/`.
+- Deployment: Vercel is the deployment target; see `docs/VERCEL-QUICKSTART.md` and `vercel.json`.

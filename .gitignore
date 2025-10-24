@@ -101,3 +101,5 @@ lhci_reports/
 # Keep directory structure and documentation
 !/assets/raw/README.md
 !/assets/raw/**/.gitkeep
+firebase-import/
+SECRETS_TO_MIGRATE.txt
