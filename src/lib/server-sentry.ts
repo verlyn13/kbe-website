@@ -24,11 +24,21 @@ export function forceInitSentry(): boolean {
     return false;
   }
 
-  const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN;
+  // Use the explicit DSN that's confirmed to be in Vercel
+  const envDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+  const fallbackDsn = "https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584";
+
+  const dsn = envDsn || fallbackDsn;
+
+  console.log('[SERVER-SENTRY] DSN configuration:', {
+    fromEnv: !!envDsn,
+    envValue: envDsn ? 'Present' : 'Missing',
+    usingFallback: !envDsn,
+    dsnStart: dsn.substring(0, 50) + '...',
+  });
 
   if (!dsn) {
-    console.error('[SERVER-SENTRY] No DSN found in environment variables!');
-    console.error('[SERVER-SENTRY] Checked: NEXT_PUBLIC_SENTRY_DSN, SENTRY_DSN');
+    console.error('[SERVER-SENTRY] No DSN available!');
     return false;
   }
 
@@ -56,7 +66,12 @@ export function forceInitSentry(): boolean {
       release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.SENTRY_RELEASE || `kbe-${Date.now()}`,
 
       // Sampling
-      tracesSampleRate: 0.1, // 10% sampling
+      tracesSampleRate: 1.0, // 100% sampling for testing
+
+      // Integration options
+      integrations: [
+        new Sentry.Integrations.Http({ tracing: true }),
+      ],
 
       // Error filtering
       beforeSend(event, hint) {
@@ -65,9 +80,15 @@ export function forceInitSentry(): boolean {
           message: event.message,
           exception: event.exception?.values?.[0]?.value,
           level: event.level,
+          timestamp: new Date().toISOString(),
         });
 
         // Always send in production for now (we can filter later)
+        return event;
+      },
+
+      beforeSendTransaction(event) {
+        console.log('[SERVER-SENTRY] beforeSendTransaction called:', event.event_id);
         return event;
       },
 
