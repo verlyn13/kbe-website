@@ -1,5 +1,11 @@
 import * as Sentry from "@sentry/nextjs";
 
+console.log("[SENTRY SERVER] Initializing Sentry server config", {
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN?.substring(0, 50) + "...",
+  env: process.env.NODE_ENV,
+  enabled: process.env.NODE_ENV === "production",
+});
+
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   environment: process.env.NODE_ENV,
