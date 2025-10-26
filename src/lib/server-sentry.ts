@@ -24,21 +24,17 @@ export function forceInitSentry(): boolean {
     return false;
   }
 
-  // Use the explicit DSN that's confirmed to be in Vercel
-  const envDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
-  const fallbackDsn = "https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584";
-
-  const dsn = envDsn || fallbackDsn;
+  // SECURITY: Only use environment variable DSN, never hardcode credentials
+  const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
   console.log('[SERVER-SENTRY] DSN configuration:', {
-    fromEnv: !!envDsn,
-    envValue: envDsn ? 'Present' : 'Missing',
-    usingFallback: !envDsn,
-    dsnStart: dsn.substring(0, 50) + '...',
+    fromEnv: !!dsn,
+    envValue: dsn ? 'Present' : 'Missing',
+    dsnStart: dsn?.substring(0, 50) + '...',
   });
 
   if (!dsn) {
-    console.error('[SERVER-SENTRY] No DSN available!');
+    console.error('[SERVER-SENTRY] NEXT_PUBLIC_SENTRY_DSN environment variable not set!');
     return false;
   }
 
@@ -46,8 +42,7 @@ export function forceInitSentry(): boolean {
     console.log('[SERVER-SENTRY] Force initializing Sentry for server-side tracking');
 
     // Close any existing client first
-    const currentHub = Sentry.getCurrentHub();
-    const existingClient = currentHub.getClient();
+    const existingClient = Sentry.getClient();
     if (existingClient) {
       console.log('[SERVER-SENTRY] Found existing client, closing it first');
       existingClient.close();
@@ -100,8 +95,7 @@ export function forceInitSentry(): boolean {
     });
 
     // Verify initialization
-    const hub = Sentry.getCurrentHub();
-    const client = hub.getClient();
+    const client = Sentry.getClient();
 
     if (client) {
       isInitialized = true;

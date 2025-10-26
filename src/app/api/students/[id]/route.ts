@@ -1,13 +1,17 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { studentService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
+import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | undefined;
+  const studentId = params.id;
+
   try {
     const supabase = await createClient();
     const {
@@ -15,17 +19,28 @@ export async function GET(
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
     }
 
-    const studentId = params.id;
-    
+    userId = user.id;
+
     // Get the student
     const student = await studentService.getById(studentId);
-    
+
     if (!student) {
       return NextResponse.json(
-        { error: 'Student not found' },
+        {
+          error: 'Student not found',
+          code: 'NOT_FOUND',
+          timestamp: new Date().toISOString(),
+        },
         { status: 404 }
       );
     }
@@ -33,18 +48,30 @@ export async function GET(
     // Verify the student belongs to the current user
     if (student.userId !== user.id) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        {
+          error: 'Unauthorized',
+          code: 'FORBIDDEN',
+          timestamp: new Date().toISOString(),
+        },
         { status: 403 }
       );
     }
 
+    console.log(`[STUDENT_GET] Retrieved student ${studentId} for user ${user.id}`);
+
     return NextResponse.json(student, { status: 200 });
   } catch (error) {
-    console.error('Student GET API error:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
-    );
+    logApiError(error, {
+      context: 'STUDENT_GET',
+      userId,
+      requestPath: req.url,
+      requestMethod: 'GET',
+      additionalData: {
+        studentId,
+      },
+    });
+
+    return createErrorResponse(error, { context: 'STUDENT_GET' });
   }
 }
 
@@ -52,6 +79,9 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | undefined;
+  const studentId = params.id;
+
   try {
     const supabase = await createClient();
     const {
@@ -59,27 +89,50 @@ export async function PUT(
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
     }
 
-    const studentId = params.id;
+    userId = user.id;
+
     const body = await req.json();
     const { name, grade, school, dateOfBirth, medicalNotes } = body;
 
     // Validate required fields
-    if (!name || !grade || !school || !dateOfBirth) {
+    const missingFields: string[] = [];
+    if (!name) missingFields.push('name');
+    if (!grade) missingFields.push('grade');
+    if (!school) missingFields.push('school');
+    if (!dateOfBirth) missingFields.push('dateOfBirth');
+
+    if (missingFields.length > 0) {
       return NextResponse.json(
-        { error: 'Required fields: name, grade, school, dateOfBirth' },
+        {
+          error: 'Missing required fields',
+          code: 'VALIDATION_ERROR',
+          details: { missing: missingFields },
+          timestamp: new Date().toISOString(),
+        },
         { status: 400 }
       );
     }
 
     // Get the student to verify ownership
     const existingStudent = await studentService.getById(studentId);
-    
+
     if (!existingStudent) {
       return NextResponse.json(
-        { error: 'Student not found' },
+        {
+          error: 'Student not found',
+          code: 'NOT_FOUND',
+          timestamp: new Date().toISOString(),
+        },
         { status: 404 }
       );
     }
@@ -87,7 +140,11 @@ export async function PUT(
     // Verify the student belongs to the current user
     if (existingStudent.userId !== user.id) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        {
+          error: 'Unauthorized',
+          code: 'FORBIDDEN',
+          timestamp: new Date().toISOString(),
+        },
         { status: 403 }
       );
     }
@@ -101,20 +158,31 @@ export async function PUT(
       medicalNotes,
     });
 
+    console.log(`[STUDENT_UPDATE] Updated student ${studentId} for user ${user.id}`);
+
     return NextResponse.json(updatedStudent, { status: 200 });
   } catch (error) {
-    console.error('Student PUT API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to update student' },
-      { status: 500 }
-    );
+    logApiError(error, {
+      context: 'STUDENT_UPDATE',
+      userId,
+      requestPath: req.url,
+      requestMethod: 'PUT',
+      additionalData: {
+        studentId,
+      },
+    });
+
+    return createErrorResponse(error, { context: 'STUDENT_UPDATE' });
   }
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | undefined;
+  const studentId = params.id;
+
   try {
     const supabase = await createClient();
     const {
@@ -122,17 +190,28 @@ export async function DELETE(
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
     }
 
-    const studentId = params.id;
+    userId = user.id;
 
     // Verify the student belongs to the current user before deleting
     const student = await studentService.getById(studentId);
-    
+
     if (!student || student.userId !== user.id) {
       return NextResponse.json(
-        { error: 'Student not found or unauthorized' },
+        {
+          error: 'Student not found or unauthorized',
+          code: 'NOT_FOUND',
+          timestamp: new Date().toISOString(),
+        },
         { status: 404 }
       );
     }
@@ -140,12 +219,20 @@ export async function DELETE(
     // Delete the student
     await studentService.delete(studentId);
 
+    console.log(`[STUDENT_DELETE] Deleted student ${studentId} for user ${user.id}`);
+
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error('Student DELETE API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete student' },
-      { status: 500 }
-    );
+    logApiError(error, {
+      context: 'STUDENT_DELETE',
+      userId,
+      requestPath: req.url,
+      requestMethod: 'DELETE',
+      additionalData: {
+        studentId,
+      },
+    });
+
+    return createErrorResponse(error, { context: 'STUDENT_DELETE' });
   }
 }

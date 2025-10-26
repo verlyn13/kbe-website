@@ -50,8 +50,7 @@ export const GET = withSentry(async function GET() {
   }
 
   // Check if Sentry is actually initialized
-  const currentHub = Sentry.getCurrentHub();
-  const client = currentHub.getClient();
+  const client = Sentry.getClient();
   const isInitialized = !!client;
 
   console.log('[SENTRY-TEST] Sentry initialization status:', {

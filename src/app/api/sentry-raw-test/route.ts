@@ -1,7 +1,31 @@
 import { NextResponse } from "next/server";
 
 /**
- * Raw Sentry test - bypassing all wrappers and going directly to the core
+ * Sentry Raw HTTP Test Endpoint
+ *
+ * This is the MOST IMPORTANT diagnostic endpoint. It bypasses the Sentry SDK completely
+ * and sends events directly to Sentry's HTTP API using raw fetch() calls.
+ *
+ * Purpose: Determine if the issue is SDK-related or network-related
+ *
+ * What it tests:
+ * - Direct HTTP connectivity to Sentry's ingest API
+ * - Network/firewall configuration
+ * - DSN validity at the API level
+ * - Event payload format correctness
+ *
+ * Usage:
+ * 1. Test this FIRST before other endpoints
+ * 2. curl https://yourdomain.com/api/sentry-raw-test
+ * 3. Check response.success field
+ * 4. If success=true: Network is fine, issue is SDK initialization
+ * 5. If success=false: Network/firewall issue, check Vercel settings
+ *
+ * Security: Production only, uses hardcoded project DSN
+ *
+ * Related:
+ * - See docs/SENTRY-DEBUG-ENDPOINTS.md for full documentation
+ * - See docs/SENTRY-TESTING-GUIDE.md for testing workflow
  */
 export async function GET() {
   if (process.env.NODE_ENV !== 'production') {

@@ -1,9 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { profileService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
+import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
+  let userId: string | undefined;
+  let userRole: string | undefined;
+  let notificationType: string | undefined;
+
   try {
     const supabase = await createClient();
     const {
@@ -11,19 +17,64 @@ export async function POST(req: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
+    }
+
+    userId = user.id;
+
+    // Enforce admin auth
+    const profile = await profileService.getById(user.id);
+
+    if (!profile) {
+      return NextResponse.json(
+        {
+          error: 'Profile not found',
+          code: 'NOT_FOUND',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 404 }
+      );
+    }
+
+    userRole = profile.role;
+
+    if (profile.role !== 'ADMIN' && profile.role !== 'INSTRUCTOR') {
+      console.warn(
+        `[ADMIN_NOTIFY] Access denied for user ${user.id} with role ${profile.role}`
+      );
+
+      return NextResponse.json(
+        {
+          error: 'Forbidden - Admin or Instructor role required',
+          code: 'FORBIDDEN',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 403 }
+      );
     }
 
     const body = await req.json();
-    
+    notificationType = body.type || 'unknown';
+
     // Log the notification for now
     // In production, this would send an email, create a notification record, etc.
-    console.log('Admin notification:', {
-      timestamp: new Date().toISOString(),
-      userId: user.id,
-      userEmail: user.email,
-      ...body,
-    });
+    console.log(
+      `[ADMIN_NOTIFY] Admin ${user.id} triggered notification of type '${notificationType}'`,
+      {
+        timestamp: new Date().toISOString(),
+        userId: user.id,
+        userEmail: user.email,
+        userRole: profile.role,
+        ...body,
+      }
+    );
 
     // TODO: Implement actual notification system
     // Options:
@@ -34,8 +85,17 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error('Admin notification error:', error);
-    // Don't fail the main operation if notification fails
-    return NextResponse.json({ success: false }, { status: 200 });
+    logApiError(error, {
+      context: 'ADMIN_NOTIFY',
+      userId,
+      requestPath: req.url,
+      requestMethod: 'POST',
+      additionalData: {
+        userRole,
+        notificationType,
+      },
+    });
+
+    return createErrorResponse(error, { context: 'ADMIN_NOTIFY' });
   }
 }

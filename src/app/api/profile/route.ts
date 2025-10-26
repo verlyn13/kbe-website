@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { profileService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
+import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
-export async function GET(_req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     const supabase = await createClient();
     const {
@@ -12,24 +13,42 @@ export async function GET(_req: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
     }
 
     const profile = await profileService.getById(user.id);
-    
+
     if (!profile) {
       // User exists in auth but not in database - this is fine for new users
+      console.log(`[PROFILE_GET] No profile found for user ${user.id} (new user)`);
       return NextResponse.json({ profile: null }, { status: 200 });
     }
 
+    console.log(`[PROFILE_GET] Retrieved profile for user ${user.id}`);
+
     return NextResponse.json({ profile }, { status: 200 });
   } catch (error) {
-    console.error('Profile GET API error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    logApiError(error, {
+      context: 'PROFILE_GET',
+      userId: user?.id,
+      requestPath: req.url,
+      requestMethod: 'GET',
+    });
+
+    return createErrorResponse(error, { context: 'PROFILE_GET' });
   }
 }
 
 export async function POST(req: NextRequest) {
+  let userId: string | undefined;
+
   try {
     const supabase = await createClient();
     const {
@@ -37,16 +56,34 @@ export async function POST(req: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
     }
+
+    userId = user.id;
 
     const body = await req.json();
     const { name, phone, email } = body;
 
     // Validate required fields
-    if (!name || !email) {
+    const missingFields: string[] = [];
+    if (!name) missingFields.push('name');
+    if (!email) missingFields.push('email');
+
+    if (missingFields.length > 0) {
       return NextResponse.json(
-        { error: 'Name and email are required' },
+        {
+          error: 'Missing required fields',
+          code: 'VALIDATION_ERROR',
+          details: { missing: missingFields },
+          timestamp: new Date().toISOString(),
+        },
         { status: 400 }
       );
     }
@@ -58,26 +95,33 @@ export async function POST(req: NextRequest) {
       user_metadata: {
         name: name,
         phone: phone ? phone.replace(/\D/g, '') : undefined,
-      }
+      },
     });
-    
+
     // Then update the profile with the form data
     const profile = await profileService.update(user.id, {
       name: name,
       phone: phone ? phone.replace(/\D/g, '') : undefined,
     });
 
+    console.log(`[PROFILE_CREATE] Created/updated profile for user ${user.id}`);
+
     return NextResponse.json({ profile }, { status: 200 });
   } catch (error) {
-    console.error('Profile POST API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to update profile' },
-      { status: 500 }
-    );
+    logApiError(error, {
+      context: 'PROFILE_CREATE',
+      userId,
+      requestPath: req.url,
+      requestMethod: 'POST',
+    });
+
+    return createErrorResponse(error, { context: 'PROFILE_CREATE' });
   }
 }
 
 export async function PUT(req: NextRequest) {
+  let userId: string | undefined;
+
   try {
     const supabase = await createClient();
     const {
@@ -85,8 +129,17 @@ export async function PUT(req: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
     }
+
+    userId = user.id;
 
     const body = await req.json();
     const { name, phone } = body;
@@ -97,12 +150,17 @@ export async function PUT(req: NextRequest) {
       phone: phone ? phone.replace(/\D/g, '') : undefined,
     });
 
+    console.log(`[PROFILE_UPDATE] Updated profile for user ${user.id}`);
+
     return NextResponse.json({ profile }, { status: 200 });
   } catch (error) {
-    console.error('Profile PUT API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to update profile' },
-      { status: 500 }
-    );
+    logApiError(error, {
+      context: 'PROFILE_UPDATE',
+      userId,
+      requestPath: req.url,
+      requestMethod: 'PUT',
+    });
+
+    return createErrorResponse(error, { context: 'PROFILE_UPDATE' });
   }
 }

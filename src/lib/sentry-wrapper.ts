@@ -120,8 +120,7 @@ export function initializeSentryIfNeeded() {
     console.log('[SENTRY-WRAPPER] Sentry initialized successfully');
 
     // Test that it's actually working
-    const hub = Sentry.getCurrentHub();
-    const client = hub.getClient();
+    const client = Sentry.getClient();
     console.log('[SENTRY-WRAPPER] Verification:', {
       hasClient: !!client,
       dsn: client?.getDsn()?.toString()?.substring(0, 50) + '...',

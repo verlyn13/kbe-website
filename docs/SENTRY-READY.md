@@ -121,15 +121,63 @@ To enable automatic releases on Vercel deployments:
 
 See `docs/SENTRY-CLI-GUIDE.md` for detailed CI/CD integration.
 
+## Testing & Debugging
+
+### Debug Endpoints (Production)
+
+A comprehensive suite of 7 debug endpoints is available for testing Sentry integration:
+
+**Quick Test Sequence**:
+```bash
+# 1. Test raw HTTP (most important - tests network)
+curl https://homerenrichment.com/api/sentry-raw-test
+
+# 2. Check comprehensive status
+curl https://homerenrichment.com/api/sentry-status
+
+# 3. Force initialization test
+curl https://homerenrichment.com/api/sentry-force-test
+```
+
+**Available Endpoints**:
+- `/api/sentry-raw-test` - Bypasses SDK, tests network connectivity (TEST THIS FIRST)
+- `/api/sentry-status` - Complete diagnostic information
+- `/api/sentry-debug` - Basic debug check
+- `/api/sentry-force-test` - Force Sentry initialization
+- `/api/sentry-minimal-test` - Isolated SDK test
+- `/api/sentry-test` - Simple error trigger
+- `/api/sentry-dsn-test` - DSN validation
+
+**Documentation**:
+- **SENTRY-DEBUG-ENDPOINTS.md** - Complete endpoint reference
+- **SENTRY-TESTING-GUIDE.md** - Step-by-step testing workflow
+
+### Helper Library
+
+Use `src/lib/server-sentry.ts` for server-side error handling:
+
+```typescript
+import { captureServerError } from '@/lib/server-sentry';
+
+try {
+  // Your code
+} catch (error) {
+  await captureServerError(error, { context: 'data' });
+}
+```
+
 ## Documentation
 
 | Document | Purpose |
 |----------|---------|
 | **SENTRY-READY.md** | This file - quick reference |
+| **SENTRY-DEBUG-ENDPOINTS.md** | Debug endpoint reference (7 endpoints) |
+| **SENTRY-TESTING-GUIDE.md** | Complete testing workflow |
 | `SENTRY-CONFIGURATION-SUMMARY.md` | Complete configuration overview |
 | `SENTRY-QUICKSTART.md` | 5-minute setup guide |
 | `SENTRY-CLI-GUIDE.md` | Comprehensive CLI reference |
 | `SENTRY-SETUP-CHECKLIST.md` | Step-by-step verification |
+| `SENTRY-DEPLOYMENT-READY.md` | Deployment guide |
 | `INFISICAL_SETUP.md` | All secrets including Sentry (lines 104-108) |
 
 ## Links

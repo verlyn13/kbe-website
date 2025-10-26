@@ -22,7 +22,21 @@ Comprehensive, accurate documentation for the Homer Enrichment Hub project.
 - Vercel: `VERCEL-QUICKSTART.md`, `VERCEL-CONFIG-REVIEW.md`
 - Cloudflare: `cloudflare.md`, `cloudflare-sendgrid-dns.md`
 - Production Readiness: `ops/PRODUCTION_READINESS.md`, `ops/PRODUCTION_READINESS_PLAN.md`
-- Error Tracking (Sentry): `SENTRY-READY.md` ⭐ (start here), `SENTRY-CONFIGURATION-SUMMARY.md`, `SENTRY-QUICKSTART.md`, `SENTRY-CLI-GUIDE.md`, `SENTRY-SETUP-CHECKLIST.md`
+
+### Error Tracking & Monitoring
+- **October 2025 Improvements** ✅ COMPLETE:
+  - `ROLLOUT-COMPLETE.md` ⭐ (master summary - start here)
+  - `PHASE-1-COMPLETE.md` (Critical Routes - 11 endpoints)
+  - `PHASE-2-COMPLETE.md` (Admin Routes - 6 endpoints)
+  - `PHASE-3-COMPLETE.md` (Supporting Routes - 5 endpoints)
+  - `OCTOBER-2025-IMPROVEMENTS-SUMMARY.md` (original executive summary)
+  - `ERROR-HANDLING-IMPLEMENTATION-GUIDE.md` (implementation patterns)
+- **Sentry Setup & Configuration**:
+  - `SENTRY-READY.md` ⭐ (start here)
+  - `SENTRY-DEBUG-ENDPOINTS.md` 🔧 (debug & test suite)
+  - `SENTRY-TESTING-GUIDE.md` 🧪 (complete testing workflow)
+  - `SENTRY-CONFIGURATION-SUMMARY.md`, `SENTRY-QUICKSTART.md`, `SENTRY-CLI-GUIDE.md`
+  - `SENTRY-SETUP-CHECKLIST.md`, `SENTRY-DEPLOYMENT-READY.md`
 
 ### Security & Secrets
 - Secrets: `INFISICAL_SETUP.md` (primary)
@@ -72,6 +86,6 @@ Comprehensive, accurate documentation for the Homer Enrichment Hub project.
 
 ---
 
-Last updated: Oct 24, 2025
+Last updated: Oct 25, 2025
 Project: Homer Enrichment Hub
 Status: Active development (post-migration)

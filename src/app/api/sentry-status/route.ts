@@ -13,8 +13,7 @@ export async function GET() {
   const initResult = initializeSentryIfNeeded();
 
   // Get current Sentry status
-  const hub = Sentry.getCurrentHub();
-  const client = hub.getClient();
+  const client = Sentry.getClient();
   const options = client?.getOptions();
 
   // Check various aspects of Sentry configuration

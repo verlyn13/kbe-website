@@ -2,7 +2,36 @@ import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
 /**
- * Test different DSNs to find which one works
+ * Sentry DSN Validation Test Endpoint
+ *
+ * Tests multiple Sentry DSN configurations to identify which one works correctly.
+ * This is useful when you have multiple DSN options (Vercel integration vs manual setup).
+ *
+ * Purpose: Validate DSN configuration and test multiple DSN sources
+ *
+ * What it tests:
+ * - Vercel-provided DSN (from NEXT_PUBLIC_SENTRY_DSN)
+ * - Multiple hardcoded DSN options
+ * - DSN format validation
+ * - Event capture with each DSN
+ *
+ * Usage:
+ * 1. Deploy to production
+ * 2. curl https://yourdomain.com/api/sentry-dsn-test
+ * 3. Review results for each DSN
+ * 4. Check which DSN successfully sends events
+ * 5. Verify events appear in Sentry dashboard
+ *
+ * Response includes:
+ * - Success/failure for each DSN
+ * - Event IDs for successful captures
+ * - Error messages for failed captures
+ *
+ * Security: Production only, tests multiple DSN configurations
+ *
+ * Related:
+ * - See docs/SENTRY-DEBUG-ENDPOINTS.md for full documentation
+ * - See docs/SENTRY-TESTING-GUIDE.md for testing workflow
  */
 export async function GET() {
   const dsns = {

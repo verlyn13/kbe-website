@@ -1,36 +1,72 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { type SendGridEvent, sendGridWebhookSchema } from '@/lib/validations/api';
+import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
+
+export const runtime = 'nodejs';
 
 /**
  * Handle SendGrid webhook events
  * Tracks email delivery, engagement, and issues
  */
 export async function POST(request: NextRequest) {
+  let eventCount: number | undefined;
+  let validationFailed = false;
+
   try {
     // Parse and validate the webhook payload
     const body = await request.json();
     const validationResult = sendGridWebhookSchema.safeParse(body);
 
     if (!validationResult.success) {
-      console.error('Invalid SendGrid webhook payload:', validationResult.error);
+      validationFailed = true;
+
+      logApiError(validationResult.error, {
+        context: 'SENDGRID_WEBHOOK_VALIDATION',
+        requestPath: request.url,
+        requestMethod: 'POST',
+        severity: 'warning',
+        additionalData: {
+          validationErrors: validationResult.error.flatten(),
+        },
+      });
+
       return NextResponse.json(
-        { error: 'Invalid webhook payload', details: validationResult.error.flatten() },
+        {
+          error: 'Invalid webhook payload',
+          code: 'VALIDATION_ERROR',
+          details: validationResult.error.flatten(),
+          timestamp: new Date().toISOString(),
+        },
         { status: 400 }
       );
     }
 
     const events = validationResult.data;
+    eventCount = events.length;
+
+    console.log(`[SENDGRID_WEBHOOK] Processing ${events.length} events`);
 
     // Process each event
     for (const event of events) {
       await processEvent(event);
     }
 
+    console.log(`[SENDGRID_WEBHOOK] Successfully processed ${events.length} events`);
+
     // Return success response
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
-    console.error('SendGrid webhook error:', error);
-    return NextResponse.json({ error: 'Failed to process webhook' }, { status: 500 });
+    logApiError(error, {
+      context: 'SENDGRID_WEBHOOK',
+      requestPath: request.url,
+      requestMethod: 'POST',
+      additionalData: {
+        eventCount,
+        validationFailed,
+      },
+    });
+
+    return createErrorResponse(error, { context: 'SENDGRID_WEBHOOK' });
   }
 }
 

@@ -1,40 +1,91 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { announcementService, profileService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
+import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
 export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
+  let userId: string | undefined;
+  let userRole: string | undefined;
+  let announcementId: string | undefined;
+
   try {
+    const params = await context.params;
+    announcementId = params.id;
+
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Unauthorized',
+          code: 'UNAUTHORIZED',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 401 }
+      );
     }
 
-    // Check if user is admin
+    userId = user.id;
+
+    // Enforce admin auth
     const profile = await profileService.getById(user.id);
-    if (!profile || (profile.role !== 'ADMIN' && profile.role !== 'INSTRUCTOR')) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+    if (!profile) {
+      return NextResponse.json(
+        {
+          error: 'Profile not found',
+          code: 'NOT_FOUND',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 404 }
+      );
     }
 
-    const announcementId = params.id;
-    
+    userRole = profile.role;
+
+    if (profile.role !== 'ADMIN' && profile.role !== 'INSTRUCTOR') {
+      console.warn(
+        `[ANNOUNCEMENT_DELETE] Access denied for user ${user.id} with role ${profile.role}`
+      );
+
+      return NextResponse.json(
+        {
+          error: 'Forbidden - Admin or Instructor role required',
+          code: 'FORBIDDEN',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 403 }
+      );
+    }
+
     // Delete the announcement
     await announcementService.delete(announcementId);
 
+    console.log(
+      `[ANNOUNCEMENT_DELETE] Admin ${user.id} deleted announcement ${announcementId}`
+    );
+
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error('Announcement DELETE API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete announcement' },
-      { status: 500 }
-    );
+    logApiError(error, {
+      context: 'ANNOUNCEMENT_DELETE',
+      userId,
+      requestPath: req.url,
+      requestMethod: 'DELETE',
+      additionalData: {
+        userRole,
+        announcementId,
+      },
+    });
+
+    return createErrorResponse(error, { context: 'ANNOUNCEMENT_DELETE' });
   }
 }
