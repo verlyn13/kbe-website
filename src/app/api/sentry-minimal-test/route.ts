@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 /**
  * Minimal Sentry test - the most direct approach possible
@@ -14,9 +14,10 @@ export async function GET() {
 
   try {
     // Direct import and initialization
-    const Sentry = await import("@sentry/nextjs");
+    const Sentry = await import('@sentry/nextjs');
 
-    const dsn = "https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584";
+    const dsn =
+      'https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584';
 
     console.log('[MINIMAL-TEST] Starting with hardcoded DSN');
 
@@ -26,7 +27,11 @@ export async function GET() {
       debug: true,
       environment: 'production',
       beforeSend(event) {
-        console.log('[MINIMAL-TEST] Sending event:', event.event_id, event.exception?.values?.[0]?.value);
+        console.log(
+          '[MINIMAL-TEST] Sending event:',
+          event.event_id,
+          event.exception?.values?.[0]?.value
+        );
         return event;
       },
     });
@@ -57,7 +62,6 @@ export async function GET() {
 
     // Also throw to test error boundaries
     throw new Error(`[MINIMAL-TEST] Final throw at ${timestamp}`);
-
   } catch (error) {
     console.error('[MINIMAL-TEST] Error during test:', error);
     throw error;

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import * as Sentry from '@sentry/nextjs';
+import { type NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 
 export const runtime = 'nodejs';
 
@@ -21,19 +21,13 @@ export async function POST(request: NextRequest) {
 
     // Validate input
     if (!email || typeof email !== 'string') {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
     // Basic email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
     const normalizedEmail = email.toLowerCase().trim();
@@ -68,12 +62,12 @@ export async function POST(request: NextRequest) {
       // Add artificial delay to prevent timing attacks
       const elapsed = Date.now() - startTime;
       if (elapsed < 200) {
-        await new Promise(resolve => setTimeout(resolve, 200 - elapsed));
+        await new Promise((resolve) => setTimeout(resolve, 200 - elapsed));
       }
 
       return NextResponse.json({
         exists: false,
-        message: 'Unable to verify email'
+        message: 'Unable to verify email',
       });
     }
 
@@ -92,7 +86,7 @@ export async function POST(request: NextRequest) {
     const elapsed = Date.now() - startTime;
     const targetTime = 200; // 200ms baseline
     if (elapsed < targetTime) {
-      await new Promise(resolve => setTimeout(resolve, targetTime - elapsed));
+      await new Promise((resolve) => setTimeout(resolve, targetTime - elapsed));
     }
 
     // Log for monitoring (without exposing result in production logs)
@@ -101,7 +95,6 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ exists });
-
   } catch (error) {
     console.error('[AUTH-CHECK-EMAIL] Unexpected error:', error);
 
@@ -116,13 +109,16 @@ export async function POST(request: NextRequest) {
     // Add artificial delay for error cases too
     const elapsed = Date.now() - startTime;
     if (elapsed < 200) {
-      await new Promise(resolve => setTimeout(resolve, 200 - elapsed));
+      await new Promise((resolve) => setTimeout(resolve, 200 - elapsed));
     }
 
     // Return safe default to prevent enumeration via error timing
-    return NextResponse.json({
-      exists: false,
-      message: 'An error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        exists: false,
+        message: 'An error occurred',
+      },
+      { status: 500 }
+    );
   }
 }

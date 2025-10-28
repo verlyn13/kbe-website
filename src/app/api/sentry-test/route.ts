@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs";
-import { withSentry, initializeSentryIfNeeded } from "@/lib/sentry-wrapper";
-import { forceInitSentry, captureServerError } from "@/lib/server-sentry";
+import * as Sentry from '@sentry/nextjs';
+import { NextResponse } from 'next/server';
+import { initializeSentryIfNeeded, withSentry } from '@/lib/sentry-wrapper';
+import { captureServerError, forceInitSentry } from '@/lib/server-sentry';
 
 /**
  * Sentry Test Endpoint
@@ -26,7 +26,7 @@ export const GET = withSentry(async function GET() {
   const forceInit = forceInitSentry();
 
   const initialized = wrapperInit || forceInit;
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = process.env.NODE_ENV === 'production';
 
   // Debug info for troubleshooting
   const debugInfo = {
@@ -41,12 +41,15 @@ export const GET = withSentry(async function GET() {
   console.log('[SENTRY-TEST] Endpoint called with debug info:', debugInfo);
 
   if (!isProduction) {
-    return NextResponse.json({
-      success: false,
-      message: "Sentry test only works in production environment",
-      ...debugInfo,
-      note: "Deploy to production first, then visit this endpoint"
-    }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Sentry test only works in production environment',
+        ...debugInfo,
+        note: 'Deploy to production first, then visit this endpoint',
+      },
+      { status: 400 }
+    );
   }
 
   // Check if Sentry is actually initialized
@@ -56,7 +59,7 @@ export const GET = withSentry(async function GET() {
   console.log('[SENTRY-TEST] Sentry initialization status:', {
     isInitialized,
     hasClient: !!client,
-    dsn: client?.getDsn()?.toString()?.substring(0, 50) + '...',
+    dsn: `${client?.getDsn()?.toString()?.substring(0, 50)}...`,
   });
 
   // Manually capture the error to ensure it's sent
@@ -73,10 +76,10 @@ export const GET = withSentry(async function GET() {
 
   // Try both capture methods
   const eventId = Sentry.captureException(error, {
-    level: "error",
+    level: 'error',
     tags: {
-      test: "server-error",
-      endpoint: "/api/sentry-test",
+      test: 'server-error',
+      endpoint: '/api/sentry-test',
       initialized: isInitialized ? 'yes' : 'no',
     },
     contexts: {
@@ -89,8 +92,8 @@ export const GET = withSentry(async function GET() {
   // Also try our force capture method
   const forceEventId = await captureServerError(error, {
     tags: {
-      test: "server-error-forced",
-      endpoint: "/api/sentry-test",
+      test: 'server-error-forced',
+      endpoint: '/api/sentry-test',
     },
     debugInfo,
   });
@@ -106,5 +109,5 @@ export const GET = withSentry(async function GET() {
   throw error;
 
   // This line is never reached, but TypeScript needs it
-  return NextResponse.json({ message: "unreachable" });
+  return NextResponse.json({ message: 'unreachable' });
 });

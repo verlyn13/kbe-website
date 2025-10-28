@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Mail, ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2, Mail } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,13 +17,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
 import { getErrorMessage } from '@/lib/error-utils';
 import { logger } from '@/lib/logger';
-import { emailSchema } from '@/lib/validation';
 import { createClient } from '@/lib/supabase/client';
+import { emailSchema } from '@/lib/validation';
 
 // Form schemas for different steps
 const emailFormSchema = z.object({
@@ -121,12 +120,12 @@ export function IntelligentAuthForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.toLowerCase().trim() }),
       });
-      
+
       if (!response.ok) {
         console.error('Email check failed:', response.statusText);
         return false;
       }
-      
+
       const { exists } = await response.json();
       return exists === true;
     } catch (error) {
@@ -140,7 +139,7 @@ export function IntelligentAuthForm() {
     setIsLoading(true);
     try {
       const exists = await checkEmailExists(values.email);
-      
+
       setAuthState({
         step: exists ? 'sign-in' : 'sign-up',
         email: values.email,
@@ -175,7 +174,7 @@ export function IntelligentAuthForm() {
         title: '✅ Account Created!',
         description: 'Taking you to your dashboard...',
       });
-      
+
       // Redirect after successful signup
       setTimeout(() => router.push('/dashboard'), 1500);
     } catch (error) {
@@ -200,7 +199,7 @@ export function IntelligentAuthForm() {
         title: '✅ Signed In!',
         description: 'Taking you to your dashboard...',
       });
-      
+
       setTimeout(() => router.push('/dashboard'), 1500);
     } catch (error) {
       logger.error('Sign in failed', error);
@@ -266,9 +265,7 @@ export function IntelligentAuthForm() {
       <div className="space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-semibold">Let's get you started</h1>
-          <p className="text-muted-foreground">
-            Enter your email to continue
-          </p>
+          <p className="text-muted-foreground">Enter your email to continue</p>
         </div>
 
         <Form {...emailForm}>
@@ -360,7 +357,7 @@ export function IntelligentAuthForm() {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={signUpForm.control}
               name="name"
@@ -401,11 +398,7 @@ export function IntelligentAuthForm() {
             />
 
             <Button type="submit" className="w-full h-12" disabled={isLoading}>
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                'Create My Account'
-              )}
+              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Create My Account'}
             </Button>
           </form>
         </Form>
@@ -466,23 +459,24 @@ export function IntelligentAuthForm() {
             />
 
             <Button type="submit" className="w-full h-12" disabled={isLoading}>
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                'Sign In'
-              )}
+              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Sign In'}
             </Button>
           </form>
         </Form>
 
         <div className="space-y-3">
           <div className="text-center">
-            <Button variant="link" onClick={handleMagicLink} disabled={isLoading} className="text-sm">
+            <Button
+              variant="link"
+              onClick={handleMagicLink}
+              disabled={isLoading}
+              className="text-sm"
+            >
               <Mail className="w-4 h-4 mr-2" />
               Email me a sign-in link instead
             </Button>
           </div>
-          
+
           <div className="text-center">
             <Button variant="link" onClick={resetFlow} className="text-sm">
               Use a different email address

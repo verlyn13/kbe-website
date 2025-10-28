@@ -1,11 +1,13 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { createErrorResponse, logApiError } from '@/lib/api-error-handler';
 import { studentService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
-import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
 export async function GET(req: NextRequest) {
+  let userId: string | undefined;
+
   try {
     const supabase = await createClient();
     const {
@@ -23,6 +25,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    userId = user.id;
+
     // Get students for the current user
     const students = await studentService.getByUserId(user.id);
 
@@ -32,7 +36,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     logApiError(error, {
       context: 'STUDENTS_GET',
-      userId: user?.id,
+      userId,
       requestPath: req.url,
       requestMethod: 'GET',
     });

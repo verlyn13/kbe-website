@@ -1,16 +1,13 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { createErrorResponse, logApiError } from '@/lib/api-error-handler';
 import { studentService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
-import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   let userId: string | undefined;
-  const studentId = params.id;
+  const { id: studentId } = await params;
 
   try {
     const supabase = await createClient();
@@ -75,12 +72,9 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   let userId: string | undefined;
-  const studentId = params.id;
+  const { id: studentId } = await params;
 
   try {
     const supabase = await createClient();
@@ -176,12 +170,9 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   let userId: string | undefined;
-  const studentId = params.id;
+  const { id: studentId } = await params;
 
   try {
     const supabase = await createClient();

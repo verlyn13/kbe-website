@@ -1,13 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { profileService, registrationService } from '@/lib/services';
-import { createClient } from '@/lib/supabase/server';
+import type { Student } from '@prisma/client';
 import {
-  logApiError,
   batchOperation,
+  logApiError,
   validateRequestBody,
   withRetry,
 } from '@/lib/api-error-handler';
+import { prisma } from '@/lib/prisma';
+import { profileService, registrationService } from '@/lib/services';
+import { sendRegistrationConfirmationEmail } from '@/lib/sendgrid-email-service';
+import { createClient } from '@/lib/supabase/server';
 
 export const runtime = 'nodejs';
 
@@ -121,14 +123,17 @@ export async function POST(request: NextRequest) {
       })
     );
 
-    const studentResults = await batchOperation(studentPromises, {
-      context: 'REGISTRATION_CREATE_STUDENTS',
-      userId: user.id,
-      email: parent.email,
-      additionalData: {
-        studentCount: students.length,
-      },
-    });
+    const studentResults = await batchOperation<Student>(
+      studentPromises,
+      {
+        context: 'REGISTRATION_CREATE_STUDENTS',
+        userId: user.id,
+        email: parent.email,
+        additionalData: {
+          studentCount: students.length,
+        },
+      }
+    );
 
     // Check if any students failed to create
     if (studentResults.failed.length > 0) {
@@ -147,7 +152,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Create registrations for successfully created students
-    const registrationPromises = studentResults.succeeded.map(student =>
+    const registrationPromises = studentResults.succeeded.map((student) =>
       registrationService.create({
         userId: user.id,
         studentId: student.id,
@@ -169,6 +174,35 @@ export async function POST(request: NextRequest) {
     console.log(
       `[REGISTRATION] Created ${registrationResults.succeeded.length} registrations for user ${user.id}`
     );
+
+    // Send confirmation email
+    try {
+      // Get the first student for the email (if multiple students, we'll use the first one)
+      const firstStudent = studentResults.succeeded[0];
+      if (firstStudent) {
+        await sendRegistrationConfirmationEmail(parent.email, {
+          guardianName: parent.firstName || parent.email.split('@')[0],
+          studentName: firstStudent.name,
+          studentGrade: firstStudent.grade || 'N/A',
+          studentSchool: firstStudent.school || 'Not specified',
+          programName: program.name,
+          startDate: program.startDate.toLocaleDateString(),
+          schedule: 'See dashboard for details',
+        });
+        console.log(`[REGISTRATION] Confirmation email sent to ${parent.email}`);
+      }
+    } catch (emailError) {
+      // Log email error but don't fail the registration
+      console.error('[REGISTRATION] Failed to send confirmation email:', emailError);
+      logApiError(emailError, {
+        context: 'REGISTRATION_EMAIL',
+        userId: user.id,
+        email: parent.email,
+        additionalData: {
+          programId: program.id,
+        },
+      }, 'warning');
+    }
 
     // Return success with details about partial failures if any
     const response: any = {

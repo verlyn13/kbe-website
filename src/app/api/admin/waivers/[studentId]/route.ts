@@ -1,14 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { waiverService, profileService } from '@/lib/services';
+import { createErrorResponse, logApiError } from '@/lib/api-error-handler';
+import { profileService, waiverService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
-import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
-export async function PATCH(
-  req: NextRequest,
-  context: { params: Promise<{ studentId: string }> }
-) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ studentId: string }> }) {
   let userId: string | undefined;
   let userRole: string | undefined;
   let studentId: string | undefined;

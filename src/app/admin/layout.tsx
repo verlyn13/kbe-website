@@ -10,7 +10,6 @@ import {
   LayoutDashboard,
   Mail,
   Settings,
-  Shield,
   Users,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -224,9 +223,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </Sidebar>
       <SidebarInset>
         <DashboardHeader />
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

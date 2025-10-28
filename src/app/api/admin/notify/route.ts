@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { createErrorResponse, logApiError } from '@/lib/api-error-handler';
 import { profileService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
-import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
@@ -46,9 +46,7 @@ export async function POST(req: NextRequest) {
     userRole = profile.role;
 
     if (profile.role !== 'ADMIN' && profile.role !== 'INSTRUCTOR') {
-      console.warn(
-        `[ADMIN_NOTIFY] Access denied for user ${user.id} with role ${profile.role}`
-      );
+      console.warn(`[ADMIN_NOTIFY] Access denied for user ${user.id} with role ${profile.role}`);
 
       return NextResponse.json(
         {

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { forceInitSentry, captureServerError, testSentry } from "@/lib/server-sentry";
+import { NextResponse } from 'next/server';
+import { captureServerError, testSentry } from '@/lib/server-sentry';
 
 /**
  * Force Test Sentry Endpoint

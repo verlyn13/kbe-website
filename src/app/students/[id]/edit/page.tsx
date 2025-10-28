@@ -20,7 +20,6 @@ import {
 } from '@/components/ui/select';
 import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { formatPhoneNumber } from '@/lib/utils';
 
 interface StudentData {
   id: string;
@@ -89,11 +88,11 @@ export default function EditStudentPage() {
 
         const data = await response.json();
         setStudent(data);
-        
+
         // Parse the date for the input
         const date = new Date(data.dateOfBirth);
         const formattedDate = date.toISOString().split('T')[0];
-        
+
         setFormData({
           name: data.name || '',
           grade: data.grade || '',
@@ -168,10 +167,20 @@ export default function EditStudentPage() {
           studentName: formData.name,
           changes: {
             name: student.name !== formData.name ? { from: student.name, to: formData.name } : null,
-            grade: student.grade !== formData.grade ? { from: student.grade, to: formData.grade } : null,
-            school: student.school !== formData.school ? { from: student.school, to: formData.school } : null,
-            dateOfBirth: student.dateOfBirth !== formData.dateOfBirth ? { from: student.dateOfBirth, to: formData.dateOfBirth } : null,
-            medicalNotes: student.medicalNotes !== formData.medicalNotes ? { from: student.medicalNotes, to: formData.medicalNotes } : null,
+            grade:
+              student.grade !== formData.grade ? { from: student.grade, to: formData.grade } : null,
+            school:
+              student.school !== formData.school
+                ? { from: student.school, to: formData.school }
+                : null,
+            dateOfBirth:
+              student.dateOfBirth !== formData.dateOfBirth
+                ? { from: student.dateOfBirth, to: formData.dateOfBirth }
+                : null,
+            medicalNotes:
+              student.medicalNotes !== formData.medicalNotes
+                ? { from: student.medicalNotes, to: formData.medicalNotes }
+                : null,
           },
           updatedBy: user.email,
         }),
@@ -328,8 +337,8 @@ export default function EditStudentPage() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                <strong>Note:</strong> Any changes you make will be automatically sent to the program
-                administrator for review.
+                <strong>Note:</strong> Any changes you make will be automatically sent to the
+                program administrator for review.
               </AlertDescription>
             </Alert>
 

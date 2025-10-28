@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useSupabaseAuth } from '@/hooks/use-supabase-auth';
 
-
 export default function LandingPage() {
   const { user, loading } = useSupabaseAuth();
   const router = useRouter();
@@ -88,7 +87,7 @@ export default function LandingPage() {
             <p className="text-muted-foreground mx-auto max-w-3xl text-xl md:text-2xl mb-8">
               Sign up for MathCounts and other enrichment activities for your kids.
             </p>
-            
+
             {/* Single Primary CTA */}
             <div className="flex justify-center">
               <Button asChild size="lg" className="h-16 px-12 text-lg font-semibold">
@@ -195,7 +194,6 @@ export default function LandingPage() {
               </div>
             </CardContent>
           </Card>
-
         </div>
       </section>
     </main>

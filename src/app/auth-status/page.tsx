@@ -16,11 +16,7 @@ export default function AuthStatusPage() {
         name: 'Current Domain',
         status: 'success',
         value: window.location.hostname,
-        expected: [
-          'homerenrichment.com',
-          'kbe-website-*.vercel.app',
-          'localhost',
-        ],
+        expected: ['homerenrichment.com', 'kbe-website-*.vercel.app', 'localhost'],
       });
 
       // Check Supabase config

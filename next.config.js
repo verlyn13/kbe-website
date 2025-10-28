@@ -1,4 +1,4 @@
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require('@sentry/nextjs');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -48,14 +48,14 @@ const sentryWebpackPluginOptions = {
   authToken: process.env.SENTRY_AUTH_TOKEN,
 
   // Only upload source maps in production builds
-  disableServerWebpackPlugin: process.env.NODE_ENV !== "production",
-  disableClientWebpackPlugin: process.env.NODE_ENV !== "production",
+  disableServerWebpackPlugin: process.env.NODE_ENV !== 'production',
+  disableClientWebpackPlugin: process.env.NODE_ENV !== 'production',
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   widenClientFileUpload: true,
 
   // Route browser requests through a proxy to avoid ad-blockers
-  tunnelRoute: "/monitoring",
+  tunnelRoute: '/monitoring',
 
   // Hides source maps from generated client bundles
   hideSourceMaps: true,

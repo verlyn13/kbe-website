@@ -17,7 +17,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
-import { type Announcement } from '@/lib/services';
+import type { Announcement } from '@/lib/services';
 import { mapAnnouncementStatusEnumToLC, mapPriorityEnumToLC } from '@/types/enum-mappings';
 import { Button } from './ui/button';
 

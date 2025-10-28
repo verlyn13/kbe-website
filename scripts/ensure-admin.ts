@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 
 async function ensureAdmin() {
   const adminEmail = 'jeffreyverlynjohnson@gmail.com';
-  
+
   try {
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
-      where: { email: adminEmail }
+      where: { email: adminEmail },
     });
 
     if (existingUser) {
@@ -18,7 +18,7 @@ async function ensureAdmin() {
       if (existingUser.role !== 'ADMIN') {
         const updated = await prisma.user.update({
           where: { email: adminEmail },
-          data: { role: 'ADMIN' }
+          data: { role: 'ADMIN' },
         });
         console.log('✅ Updated existing user to ADMIN:', updated.email);
       } else {
@@ -36,21 +36,20 @@ async function ensureAdmin() {
         email: true,
         name: true,
         role: true,
-        createdAt: true
+        createdAt: true,
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
     console.log('\n📊 Current users in database:');
     if (allUsers.length === 0) {
       console.log('   No users found in database');
     } else {
-      allUsers.forEach(user => {
+      allUsers.forEach((user) => {
         console.log(`   ${user.email} - ${user.role} - ${user.name || '(no name)'}`);
       });
       console.log(`   Total: ${allUsers.length} users`);
     }
-
   } catch (error) {
     console.error('❌ Error:', error);
   } finally {

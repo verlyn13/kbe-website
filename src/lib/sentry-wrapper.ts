@@ -29,7 +29,9 @@ export function initializeSentryIfNeeded() {
 
   // Check DSN explicitly
   if (!process.env.NEXT_PUBLIC_SENTRY_DSN) {
-    console.error('[SENTRY-WRAPPER] CRITICAL: NEXT_PUBLIC_SENTRY_DSN environment variable is not set!');
+    console.error(
+      '[SENTRY-WRAPPER] CRITICAL: NEXT_PUBLIC_SENTRY_DSN environment variable is not set!'
+    );
     return false;
   }
 
@@ -123,7 +125,7 @@ export function initializeSentryIfNeeded() {
     const client = Sentry.getClient();
     console.log('[SENTRY-WRAPPER] Verification:', {
       hasClient: !!client,
-      dsn: client?.getDsn()?.toString()?.substring(0, 50) + '...',
+      dsn: `${client?.getDsn()?.toString()?.substring(0, 50)}...`,
     });
 
     return true;

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 /**
  * Sentry Raw HTTP Test Endpoint
@@ -39,8 +39,8 @@ export async function GET() {
 
   try {
     // Test 1: Direct HTTP POST to Sentry
-    const projectId = "4510242089795584";
-    const publicKey = "4f44009c4ef6950362e6cba83db7c7ab";
+    const projectId = '4510242089795584';
+    const publicKey = '4f44009c4ef6950362e6cba83db7c7ab';
     const sentryUrl = `https://o4510172424699904.ingest.us.sentry.io/api/${projectId}/store/`;
 
     const timestamp = Math.floor(Date.now() / 1000);
@@ -141,7 +141,6 @@ export async function GET() {
         eventId: errorPayload.event_id,
       };
     }
-
   } catch (error) {
     console.error('[RAW-TEST] Test failed:', error);
     results.tests.directHttp = {

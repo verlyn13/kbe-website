@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { createErrorResponse, logApiError } from '@/lib/api-error-handler';
 import { type SendGridEvent, sendGridWebhookSchema } from '@/lib/validations/api';
-import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
@@ -20,15 +20,18 @@ export async function POST(request: NextRequest) {
     if (!validationResult.success) {
       validationFailed = true;
 
-      logApiError(validationResult.error, {
-        context: 'SENDGRID_WEBHOOK_VALIDATION',
-        requestPath: request.url,
-        requestMethod: 'POST',
-        severity: 'warning',
-        additionalData: {
-          validationErrors: validationResult.error.flatten(),
+      logApiError(
+        validationResult.error,
+        {
+          context: 'SENDGRID_WEBHOOK_VALIDATION',
+          requestPath: request.url,
+          requestMethod: 'POST',
+          additionalData: {
+            validationErrors: validationResult.error.flatten(),
+          },
         },
-      });
+        'warning'
+      );
 
       return NextResponse.json(
         {

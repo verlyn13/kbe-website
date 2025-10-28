@@ -74,7 +74,7 @@ export async function sendWelcomeEmail(
   userName?: string
 ): Promise<{ success: boolean; error?: any }> {
   const subject = 'Welcome to Homer Enrichment Hub!';
-  
+
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h1 style="color: #008080;">Welcome to Homer Enrichment Hub!</h1>

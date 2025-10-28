@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { createErrorResponse, logApiError } from '@/lib/api-error-handler';
 import { profileService, registrationService } from '@/lib/services';
 import { createClient } from '@/lib/supabase/server';
-import { logApiError, createErrorResponse } from '@/lib/api-error-handler';
 
 export const runtime = 'nodejs';
 
@@ -46,9 +46,7 @@ export async function GET(req: NextRequest) {
     userRole = profile.role;
 
     if (profile.role !== 'ADMIN' && profile.role !== 'INSTRUCTOR') {
-      console.warn(
-        `[ADMIN_STATS_GET] Access denied for user ${user.id} with role ${profile.role}`
-      );
+      console.warn(`[ADMIN_STATS_GET] Access denied for user ${user.id} with role ${profile.role}`);
 
       return NextResponse.json(
         {
@@ -67,9 +65,7 @@ export async function GET(req: NextRequest) {
     // Get registration stats
     const stats = await registrationService.getStats(programId);
 
-    console.log(
-      `[ADMIN_STATS_GET] Admin ${user.id} retrieved stats for program ${programId}`
-    );
+    console.log(`[ADMIN_STATS_GET] Admin ${user.id} retrieved stats for program ${programId}`);
 
     return NextResponse.json(stats, { status: 200 });
   } catch (error) {

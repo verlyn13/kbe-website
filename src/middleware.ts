@@ -1,6 +1,6 @@
+import * as Sentry from '@sentry/nextjs';
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
-import * as Sentry from '@sentry/nextjs';
 
 // Track if Sentry has been initialized to avoid multiple initializations
 let sentryInitialized = false;
@@ -21,7 +21,9 @@ function initializeSentry() {
   }
 
   try {
-    console.log('[MIDDLEWARE] Initializing Sentry in middleware (workaround for instrumentation hook)');
+    console.log(
+      '[MIDDLEWARE] Initializing Sentry in middleware (workaround for instrumentation hook)'
+    );
 
     Sentry.init({
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -113,50 +115,50 @@ export async function middleware(request: NextRequest) {
 
     let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient(url, anon, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
+    const supabase = createServerClient(url, anon, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value);
+          });
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) => {
+            supabaseResponse.cookies.set(name, value, options);
+          });
+        },
       },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) => {
-          request.cookies.set(name, value);
-        });
-        supabaseResponse = NextResponse.next({ request });
-        cookiesToSet.forEach(({ name, value, options }) => {
-          supabaseResponse.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
+    });
 
-  // Check if user is authenticated for protected routes
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    // Check if user is authenticated for protected routes
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  // Define protected routes
-  const protectedRoutes = ['/dashboard', '/admin', '/profile', '/students'];
-  const authRoutes = ['/login', '/signup'];
+    // Define protected routes
+    const protectedRoutes = ['/dashboard', '/admin', '/profile', '/students'];
+    const authRoutes = ['/login', '/signup'];
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
+    const isProtectedRoute = protectedRoutes.some((route) =>
+      request.nextUrl.pathname.startsWith(route)
+    );
 
-  const isAuthRoute = authRoutes.some((route) => request.nextUrl.pathname.startsWith(route));
+    const isAuthRoute = authRoutes.some((route) => request.nextUrl.pathname.startsWith(route));
 
-  // Redirect to login if accessing protected route without auth
-  if (isProtectedRoute && !user) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = '/login';
-    redirectUrl.searchParams.set('redirectedFrom', request.nextUrl.pathname);
-    return NextResponse.redirect(redirectUrl);
-  }
+    // Redirect to login if accessing protected route without auth
+    if (isProtectedRoute && !user) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = '/login';
+      redirectUrl.searchParams.set('redirectedFrom', request.nextUrl.pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
 
-  // Redirect to dashboard if accessing auth routes while logged in
-  if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
+    // Redirect to dashboard if accessing auth routes while logged in
+    if (isAuthRoute && user) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
 
     return supabaseResponse;
   } catch (error) {

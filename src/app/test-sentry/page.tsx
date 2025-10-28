@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import * as Sentry from "@sentry/nextjs";
-import { useState } from "react";
+import * as Sentry from '@sentry/nextjs';
+import { useState } from 'react';
 
 export default function TestSentryPage() {
-  const [result, setResult] = useState<string>("");
+  const [result, setResult] = useState<string>('');
 
   const testClientError = () => {
     try {
       const eventId = Sentry.captureException(
-        new Error("[TEST] Client-side error test from test page")
+        new Error('[TEST] Client-side error test from test page')
       );
       setResult(`Client error sent! Event ID: ${eventId}`);
     } catch (err) {
@@ -19,26 +19,21 @@ export default function TestSentryPage() {
 
   const testServerError = async () => {
     try {
-      const response = await fetch("/api/sentry-test");
-      setResult(
-        `Server error triggered! Status: ${response.status}. Check Sentry dashboard.`
-      );
+      const response = await fetch('/api/sentry-test');
+      setResult(`Server error triggered! Status: ${response.status}. Check Sentry dashboard.`);
     } catch (err) {
       setResult(`Error: ${err}`);
     }
   };
 
   const testMessage = () => {
-    const eventId = Sentry.captureMessage(
-      "[TEST] Test message from client",
-      "info"
-    );
+    const eventId = Sentry.captureMessage('[TEST] Test message from client', 'info');
     setResult(`Message sent! Event ID: ${eventId}`);
   };
 
   const checkInit = () => {
     const client = Sentry.getClient();
-    const dsn = client?.getDsn?.()?.toString() || "No DSN";
+    const dsn = client?.getDsn?.()?.toString() || 'No DSN';
     setResult(`Sentry initialized: ${!!client}\nDSN: ${dsn}`);
   };
 

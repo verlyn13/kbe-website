@@ -96,9 +96,11 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
-          data: fullName ? {
-            full_name: fullName,
-          } : undefined,
+          data: fullName
+            ? {
+                full_name: fullName,
+              }
+            : undefined,
         },
       });
 

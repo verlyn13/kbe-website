@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs";
-import { initializeSentryIfNeeded } from "@/lib/sentry-wrapper";
+import * as Sentry from '@sentry/nextjs';
+import { NextResponse } from 'next/server';
+import { initializeSentryIfNeeded } from '@/lib/sentry-wrapper';
 
 /**
  * Sentry Status Diagnostic Endpoint
@@ -28,10 +28,10 @@ export async function GET() {
     },
     dsn: {
       present: !!process.env.NEXT_PUBLIC_SENTRY_DSN,
-      value: process.env.NEXT_PUBLIC_SENTRY_DSN ?
-        process.env.NEXT_PUBLIC_SENTRY_DSN.substring(0, 50) + '...' :
-        'NOT SET',
-      fromClient: client?.getDsn()?.toString()?.substring(0, 50) + '...',
+      value: process.env.NEXT_PUBLIC_SENTRY_DSN
+        ? `${process.env.NEXT_PUBLIC_SENTRY_DSN.substring(0, 50)}...`
+        : 'NOT SET',
+      fromClient: `${client?.getDsn()?.toString()?.substring(0, 50)}...`,
     },
     client: {
       exists: !!client,
@@ -77,21 +77,26 @@ export async function GET() {
   // Log the status for Vercel function logs
   console.log('[SENTRY-STATUS] Full diagnostic status:', JSON.stringify(status, null, 2));
 
-  return NextResponse.json({
-    message: 'Sentry diagnostic information',
-    status,
-    instructions: {
-      checkDashboard: 'Look for a message: "[DIAGNOSTIC] Sentry status check..." in your Sentry dashboard',
-      dashboardUrl: 'https://sentry.io/organizations/happy-patterns-llc/issues/?project=4510242089795584',
-      vercelLogs: 'Check Vercel function logs for [SENTRY-STATUS] entries',
-      nextSteps: status.initialized
-        ? 'Sentry appears to be initialized. Check dashboard for test events.'
-        : 'Sentry is NOT initialized. Check DSN environment variable in Vercel.',
+  return NextResponse.json(
+    {
+      message: 'Sentry diagnostic information',
+      status,
+      instructions: {
+        checkDashboard:
+          'Look for a message: "[DIAGNOSTIC] Sentry status check..." in your Sentry dashboard',
+        dashboardUrl:
+          'https://sentry.io/organizations/happy-patterns-llc/issues/?project=4510242089795584',
+        vercelLogs: 'Check Vercel function logs for [SENTRY-STATUS] entries',
+        nextSteps: status.initialized
+          ? 'Sentry appears to be initialized. Check dashboard for test events.'
+          : 'Sentry is NOT initialized. Check DSN environment variable in Vercel.',
+      },
     },
-  }, {
-    status: 200,
-    headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate',
-    },
-  });
+    {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
+    }
+  );
 }

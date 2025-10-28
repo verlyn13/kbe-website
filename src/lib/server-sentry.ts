@@ -30,7 +30,7 @@ export function forceInitSentry(): boolean {
   console.log('[SERVER-SENTRY] DSN configuration:', {
     fromEnv: !!dsn,
     envValue: dsn ? 'Present' : 'Missing',
-    dsnStart: dsn?.substring(0, 50) + '...',
+    dsnStart: `${dsn?.substring(0, 50)}...`,
   });
 
   if (!dsn) {
@@ -58,15 +58,14 @@ export function forceInitSentry(): boolean {
       debug: true, // Enable debug mode to see what's happening
 
       // Release tracking
-      release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.SENTRY_RELEASE || `kbe-${Date.now()}`,
+      release:
+        process.env.VERCEL_GIT_COMMIT_SHA || process.env.SENTRY_RELEASE || `kbe-${Date.now()}`,
 
       // Sampling
       tracesSampleRate: 1.0, // 100% sampling for testing
 
       // Integration options
-      integrations: [
-        new Sentry.Integrations.Http({ tracing: true }),
-      ],
+      integrations: [new Sentry.Integrations.Http({ tracing: true })],
 
       // Error filtering
       beforeSend(event, hint) {
@@ -100,7 +99,7 @@ export function forceInitSentry(): boolean {
     if (client) {
       isInitialized = true;
       console.log('[SERVER-SENTRY] Successfully initialized:', {
-        dsn: client.getDsn()?.toString()?.substring(0, 50) + '...',
+        dsn: `${client.getDsn()?.toString()?.substring(0, 50)}...`,
         environment: client.getOptions().environment,
         release: client.getOptions().release,
       });

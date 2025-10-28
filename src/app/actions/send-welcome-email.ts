@@ -1,7 +1,7 @@
 'use server';
 
-import { sendWelcomeEmail } from '@/lib/sendgrid-email-service';
 import { logApiError } from '@/lib/api-error-handler';
+import { sendWelcomeEmail } from '@/lib/sendgrid-email-service';
 
 export async function sendWelcomeEmailAction(email: string, name: string) {
   try {

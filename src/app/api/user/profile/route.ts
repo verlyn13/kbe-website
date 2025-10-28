@@ -17,21 +17,15 @@ export async function GET(_req: NextRequest) {
 
     // Get the user profile with all relations
     const profile = await profileService.getWithRelations(user.id);
-    
+
     if (!profile) {
       // User exists in auth but not in database - should not happen after sync
-      return NextResponse.json(
-        { error: 'Profile not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
     return NextResponse.json(profile, { status: 200 });
   } catch (error) {
     console.error('User profile GET API error:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

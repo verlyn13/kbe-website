@@ -24,7 +24,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
 import { useToast } from '@/hooks/use-toast';
-import { type Announcement, announcementService } from '@/lib/services';
+import type { Announcement } from '@/lib/services';
 import { mapPriorityEnumToLC } from '@/types/enum-mappings';
 
 export default function AnnouncementsPage() {
@@ -46,7 +46,7 @@ export default function AnnouncementsPage() {
       // Load visible announcements via API
       const response = await fetch('/api/announcements');
       if (!response.ok) throw new Error('Failed to fetch announcements');
-      
+
       const visibleData = await response.json();
       setAnnouncements(visibleData);
 
@@ -80,7 +80,7 @@ export default function AnnouncementsPage() {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Failed to delete announcement');
-      
+
       toast({
         title: 'Deleted',
         description: 'Announcement deleted permanently',

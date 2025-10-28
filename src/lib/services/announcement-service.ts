@@ -1,20 +1,94 @@
-import type { Announcement, Priority } from '@prisma/client';
+import type { Announcement, AnnouncementStatus, Priority } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
-export type { Announcement, Priority };
+export type { Announcement, AnnouncementStatus, Priority };
+
+/**
+ * Get user emails by recipient group
+ */
+async function getUserEmailsByRecipients(recipients: string): Promise<string[]> {
+  if (recipients === 'all') {
+    // Get all user emails
+    const users = await prisma.user.findMany({
+      where: { role: 'GUARDIAN' },
+      select: { email: true },
+    });
+    return users.map(u => u.email);
+  }
+
+  if (recipients === 'mathcounts') {
+    // Get users with students in MathCounts programs
+    const users = await prisma.user.findMany({
+      where: {
+        role: 'GUARDIAN',
+        students: {
+          some: {
+            registrations: {
+              some: {
+                program: {
+                  category: { contains: 'mathcounts', mode: 'insensitive' },
+                },
+              },
+            },
+          },
+        },
+      },
+      select: { email: true },
+    });
+    return users.map(u => u.email);
+  }
+
+  if (recipients === 'enrichment') {
+    // Get users with students in Enrichment programs
+    const users = await prisma.user.findMany({
+      where: {
+        role: 'GUARDIAN',
+        students: {
+          some: {
+            registrations: {
+              some: {
+                program: {
+                  category: { contains: 'enrichment', mode: 'insensitive' },
+                },
+              },
+            },
+          },
+        },
+      },
+      select: { email: true },
+    });
+    return users.map(u => u.email);
+  }
+
+  return [];
+}
 
 export const announcementService = {
   /**
    * Get all active announcements
+   * Optionally filter by user's recipient group
    */
-  async getAll(): Promise<Announcement[]> {
+  async getAll(options?: { userId?: string; userGroup?: string }): Promise<Announcement[]> {
     const now = new Date();
+    const where: any = {
+      status: 'PUBLISHED',
+      OR: [{ expiresAt: null }, { expiresAt: { gte: now } }],
+    };
+
+    // If userGroup provided, filter by recipients
+    if (options?.userGroup) {
+      where.AND = {
+        OR: [
+          { recipients: null },
+          { recipients: 'all' },
+          { recipients: options.userGroup },
+        ],
+      };
+    }
+
     return prisma.announcement.findMany({
-      where: {
-        status: 'PUBLISHED',
-        OR: [{ expiresAt: null }, { expiresAt: { gte: now } }],
-      },
-      orderBy: [{ priority: 'desc' }, { publishedAt: 'desc' }],
+      where,
+      orderBy: [{ pinned: 'desc' }, { priority: 'desc' }, { publishedAt: 'desc' }],
     });
   },
 
@@ -35,16 +109,29 @@ export const announcementService = {
     content: string;
     priority?: Priority;
     expiresAt?: Date | null;
+    recipients?: string;
+    status?: AnnouncementStatus;
+    pinned?: boolean;
+    createdByName?: string;
   }): Promise<Announcement> {
-    return prisma.announcement.create({
+    const announcement = await prisma.announcement.create({
       data: {
         title: data.title,
         content: data.content,
         priority: data.priority || 'NORMAL',
         expiresAt: data.expiresAt,
         publishedAt: new Date(),
+        recipients: data.recipients || 'all',
+        status: data.status || 'PUBLISHED',
+        pinned: data.pinned || false,
+        createdByName: data.createdByName,
       },
     });
+
+    // Note: Email sending is handled by the API route to avoid client-side imports
+    // The API will call sendAnnouncementEmails() after creation
+
+    return announcement;
   },
 
   /**

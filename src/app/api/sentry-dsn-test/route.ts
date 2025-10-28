@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
+import { NextResponse } from 'next/server';
 
 /**
  * Sentry DSN Validation Test Endpoint
@@ -36,9 +36,12 @@ import * as Sentry from "@sentry/nextjs";
 export async function GET() {
   const dsns = {
     vercel_integration: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    workable_ram: "https://623aa9db5615d45e548b0c7a5417ef9f@o4510172424699904.ingest.us.sentry.io/4510242089795584",
-    dashing_viper: "https://2fb4d2440fccee07320466e0471c044e@o4510172424699904.ingest.us.sentry.io/4510242089795584",
-    default: "https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584",
+    workable_ram:
+      'https://623aa9db5615d45e548b0c7a5417ef9f@o4510172424699904.ingest.us.sentry.io/4510242089795584',
+    dashing_viper:
+      'https://2fb4d2440fccee07320466e0471c044e@o4510172424699904.ingest.us.sentry.io/4510242089795584',
+    default:
+      'https://4f44009c4ef6950362e6cba83db7c7ab@o4510172424699904.ingest.us.sentry.io/4510242089795584',
   };
 
   console.log('[DSN-TEST] Testing DSNs:', {
@@ -102,11 +105,10 @@ export async function GET() {
         success: true,
         messageId,
         errorId,
-        dsn: dsn.substring(0, 50) + '...',
+        dsn: `${dsn.substring(0, 50)}...`,
       };
 
       console.log(`[DSN-TEST] ${name} test completed:`, results[name]);
-
     } catch (error) {
       console.error(`[DSN-TEST] ${name} failed:`, error);
       results[name] = {
@@ -133,7 +135,8 @@ export async function GET() {
   return NextResponse.json({
     results,
     instructions: 'Check your Sentry dashboard for test messages and errors from each DSN',
-    dashboard: 'https://sentry.io/organizations/happy-patterns-llc/issues/?project=4510242089795584',
+    dashboard:
+      'https://sentry.io/organizations/happy-patterns-llc/issues/?project=4510242089795584',
     timestamp: new Date().toISOString(),
   });
 }

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
+import { NextResponse } from 'next/server';
 
 /**
  * Sentry Debug Endpoint
@@ -15,7 +15,7 @@ export async function GET() {
     environment: process.env.NODE_ENV,
     nextRuntime: process.env.NEXT_RUNTIME,
     sentryDsnConfigured: !!process.env.NEXT_PUBLIC_SENTRY_DSN,
-    sentryDsnValue: process.env.NEXT_PUBLIC_SENTRY_DSN?.substring(0, 50) + "...",
+    sentryDsnValue: `${process.env.NEXT_PUBLIC_SENTRY_DSN?.substring(0, 50)}...`,
     sentryOrgConfigured: !!process.env.SENTRY_ORG,
     sentryProjectConfigured: !!process.env.SENTRY_PROJECT,
     sentryAuthTokenConfigured: !!process.env.SENTRY_AUTH_TOKEN,
@@ -28,10 +28,10 @@ export async function GET() {
   };
 
   // Try to capture a test message
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === 'production') {
     const eventId = Sentry.captureMessage(
       `[SENTRY DEBUG] Server diagnostic - ${diagnostics.timestamp}`,
-      "info"
+      'info'
     );
 
     // Flush to ensure event is sent
@@ -40,12 +40,12 @@ export async function GET() {
     return NextResponse.json({
       ...diagnostics,
       testEventId: eventId,
-      message: "Test event sent to Sentry. Check your dashboard in a few seconds.",
+      message: 'Test event sent to Sentry. Check your dashboard in a few seconds.',
     });
   }
 
   return NextResponse.json({
     ...diagnostics,
-    message: "Sentry only sends events in production",
+    message: 'Sentry only sends events in production',
   });
 }

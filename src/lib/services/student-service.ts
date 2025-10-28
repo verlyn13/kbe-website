@@ -38,7 +38,7 @@ export const studentService = {
     emergencyPhone?: string;
   }): Promise<Student> {
     const name = `${data.firstName} ${data.lastName}`.trim();
-    
+
     return prisma.student.create({
       data: {
         name,
@@ -78,7 +78,7 @@ export const studentService = {
     await prisma.registration.deleteMany({
       where: { studentId: id },
     });
-    
+
     await prisma.waiver.deleteMany({
       where: { studentId: id },
     });

@@ -13,7 +13,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useSupabaseAuth as useAuth } from '@/hooks/use-supabase-auth';
@@ -135,7 +134,7 @@ export function StudentRoster() {
                 key={student.id}
                 className="flex flex-col gap-3 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4"
               >
-                <Link 
+                <Link
                   href={`/students/${student.id}/edit`}
                   className="flex items-center gap-3 hover:opacity-80 transition-opacity"
                 >
@@ -143,7 +142,9 @@ export function StudentRoster() {
                     <User className="text-primary h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate font-medium text-primary hover:underline">{student.name}</p>
+                    <p className="truncate font-medium text-primary hover:underline">
+                      {student.name}
+                    </p>
                     <p className="text-muted-foreground truncate text-sm">
                       Grade {student.grade} • {student.school || 'No school specified'}
                     </p>
@@ -151,26 +152,9 @@ export function StudentRoster() {
                 </Link>
                 <div className="ml-13 flex items-center gap-2 sm:ml-0">
                   <div className="flex flex-col gap-1 sm:items-end">
-                    {false ? (
-                      <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                        {[].map((program: any) => (
-                          <Badge
-                            key={program.id}
-                            variant="secondary"
-                            className="text-xs sm:text-sm"
-                          >
-                            {program.name}
-                          </Badge>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="text-muted-foreground text-xs sm:text-sm">No programs</span>
-                    )}
-                    {student.waiverStatus === 'pending' && (
-                      <Badge variant="outline" className="text-xs">
-                        Waiver Pending
-                      </Badge>
-                    )}
+                    {/* TODO: Program enrollment display would go here */}
+                    <span className="text-muted-foreground text-xs sm:text-sm">No programs</span>
+                    {/* TODO: Add waiverStatus field to Student model if needed */}
                   </div>
                   <Button
                     variant="ghost"
@@ -196,9 +180,9 @@ export function StudentRoster() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Student</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove <strong>{studentToDelete?.name}</strong> from
-              your account? This will also remove them from all enrolled programs. This action
-              cannot be undone.
+              Are you sure you want to remove <strong>{studentToDelete?.name}</strong> from your
+              account? This will also remove them from all enrolled programs. This action cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -19,7 +19,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { type RegistrationWithDetails, registrationService } from '@/lib/services';
+import type { RegistrationWithDetails } from '@/lib/services';
 import {
   mapRegistrationStatusEnumToLC,
   mapRegistrationStatusLCToEnum,
@@ -61,13 +61,13 @@ export default function AdminRegistrationsPage() {
       const response = await fetch('/api/admin/registrations', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          id, 
-          status: mapRegistrationStatusLCToEnum(status) 
+        body: JSON.stringify({
+          id,
+          status: mapRegistrationStatusLCToEnum(status),
         }),
       });
       if (!response.ok) throw new Error('Failed to update registration');
-      
+
       await loadRegistrations();
       toast({
         title: 'Success',

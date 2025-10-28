@@ -9,7 +9,7 @@ async function testConnection() {
 
   try {
     console.log('🔍 Testing database connection...\n');
-    
+
     // Simple query to test connection
     const userCount = await prisma.user.count();
     console.log(`✅ Connection successful! Found ${userCount} users in database.\n`);
@@ -17,7 +17,7 @@ async function testConnection() {
     // Check for specific user
     const adminEmail = 'jeffreyverlynjohnson@gmail.com';
     const admin = await prisma.user.findFirst({
-      where: { email: adminEmail }
+      where: { email: adminEmail },
     });
 
     if (admin) {
@@ -29,7 +29,6 @@ async function testConnection() {
     } else {
       console.log(`❌ User ${adminEmail} not found in database`);
     }
-
   } catch (error) {
     console.error('❌ Database connection failed:', error);
   } finally {

@@ -189,15 +189,93 @@ export const calendarService = {
 
     // If the program has a recurring schedule in the JSON field
     const schedule = program.schedule as any;
-    // TODO(recurring): interpret schedule.pattern (e.g., weekly, byWeekday, until)
-    // Proposed shape:
-    // {
-    //   recurring: true,
-    //   pattern: { type: 'weekly', weekdays: [2], startTime: '16:00', endTime: '17:30', until: '2025-03-11' },
-    //   location: 'Homer Middle School, Room 203'
-    // }
-    // To keep current behavior stable for users, we still surface the base event only.
-    events.push(baseEvent);
+
+    if (!schedule?.recurring || !schedule?.pattern) {
+      // No recurring pattern, just return the base event
+      events.push(baseEvent);
+      return events;
+    }
+
+    const pattern = schedule.pattern;
+    const { type, weekdays, startTime, endTime, until } = pattern;
+
+    if (type === 'weekly' && weekdays && Array.isArray(weekdays)) {
+      const startDate = new Date(program.startDate);
+      const endDate = until ? new Date(until) : new Date(program.endDate);
+
+      // Generate events for each occurrence
+      const currentDate = new Date(startDate);
+
+      while (currentDate <= endDate) {
+        // Check if current day of week matches any in the pattern
+        // weekdays: 0=Sunday, 1=Monday, 2=Tuesday, etc.
+        const dayOfWeek = currentDate.getDay();
+
+        if (weekdays.includes(dayOfWeek)) {
+          // Create event for this day
+          const eventStart = new Date(currentDate);
+          const eventEnd = new Date(currentDate);
+
+          // Set times if provided
+          if (startTime) {
+            const [hours, minutes] = startTime.split(':');
+            eventStart.setHours(Number.parseInt(hours), Number.parseInt(minutes), 0, 0);
+          }
+
+          if (endTime) {
+            const [hours, minutes] = endTime.split(':');
+            eventEnd.setHours(Number.parseInt(hours), Number.parseInt(minutes), 0, 0);
+          } else {
+            // Default to 1.5 hours if no end time
+            eventEnd.setTime(eventStart.getTime() + 90 * 60 * 1000);
+          }
+
+          events.push({
+            ...baseEvent,
+            id: `${program.id}-${currentDate.toISOString().split('T')[0]}`,
+            start: eventStart,
+            end: eventEnd,
+          });
+        }
+
+        // Move to next day
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    } else if (type === 'daily') {
+      // Daily recurrence
+      const startDate = new Date(program.startDate);
+      const endDate = until ? new Date(until) : new Date(program.endDate);
+      const currentDate = new Date(startDate);
+
+      while (currentDate <= endDate) {
+        const eventStart = new Date(currentDate);
+        const eventEnd = new Date(currentDate);
+
+        if (startTime) {
+          const [hours, minutes] = startTime.split(':');
+          eventStart.setHours(Number.parseInt(hours), Number.parseInt(minutes), 0, 0);
+        }
+
+        if (endTime) {
+          const [hours, minutes] = endTime.split(':');
+          eventEnd.setHours(Number.parseInt(hours), Number.parseInt(minutes), 0, 0);
+        } else {
+          eventEnd.setTime(eventStart.getTime() + 90 * 60 * 1000);
+        }
+
+        events.push({
+          ...baseEvent,
+          id: `${program.id}-${currentDate.toISOString().split('T')[0]}`,
+          start: eventStart,
+          end: eventEnd,
+        });
+
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    } else {
+      // Unknown pattern type, return base event
+      events.push(baseEvent);
+    }
 
     return events;
   },

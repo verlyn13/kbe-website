@@ -5,9 +5,9 @@
  * October 2025 best practices.
  */
 
-import { NextResponse } from 'next/server';
-import * as Sentry from '@sentry/nextjs';
 import { Prisma } from '@prisma/client';
+import * as Sentry from '@sentry/nextjs';
+import { NextResponse } from 'next/server';
 
 /**
  * Standardized API error response format
@@ -283,13 +283,17 @@ export async function batchOperation<T>(
       });
 
       // Log each failure
-      logApiError(result.reason, {
-        ...context,
-        additionalData: {
-          operationIndex: index,
-          totalOperations: operations.length,
+      logApiError(
+        result.reason,
+        {
+          ...context,
+          additionalData: {
+            operationIndex: index,
+            totalOperations: operations.length,
+          },
         },
-      }, 'warning');
+        'warning'
+      );
     }
   });
 
@@ -344,11 +348,7 @@ export async function withRetry<T>(
 
       // Check if error is retriable
       const { code } = getErrorResponse(error);
-      const isRetriable = [
-        'SERVICE_UNAVAILABLE',
-        'TIMEOUT',
-        'DATABASE_UNAVAILABLE',
-      ].includes(code);
+      const isRetriable = ['SERVICE_UNAVAILABLE', 'TIMEOUT', 'DATABASE_UNAVAILABLE'].includes(code);
 
       if (!isRetriable || attempt === maxRetries) {
         // Not retriable or final attempt - throw
@@ -362,7 +362,7 @@ export async function withRetry<T>(
       });
 
       // Wait before retry with exponential backoff
-      await new Promise(resolve => setTimeout(resolve, delayMs * attempt));
+      await new Promise((resolve) => setTimeout(resolve, delayMs * attempt));
     }
   }
 
@@ -384,7 +384,7 @@ export function validateRequestBody(
     return { valid: false };
   }
 
-  const missing = requiredFields.filter(field => !(field in body));
+  const missing = requiredFields.filter((field) => !(field in body));
 
   if (missing.length > 0) {
     return { valid: false, missing };
