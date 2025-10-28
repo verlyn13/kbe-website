@@ -23,6 +23,11 @@ Comprehensive, accurate documentation for the Homer Enrichment Hub project.
 - Cloudflare: `cloudflare.md`, `cloudflare-sendgrid-dns.md`
 - Production Readiness: `ops/PRODUCTION_READINESS.md`, `ops/PRODUCTION_READINESS_PLAN.md`
 
+### System Audits & Status
+- **Essential Systems Audit** (October 2025):
+  - `ESSENTIAL-SYSTEMS-SUMMARY.md` ⭐ (quick reference - start here)
+  - `CALENDAR-ANNOUNCEMENT-EMAIL-AUDIT.md` 📋 (detailed audit & action plan)
+
 ### Error Tracking & Monitoring
 - **October 2025 Improvements** ✅ COMPLETE:
   - `ROLLOUT-COMPLETE.md` ⭐ (master summary - start here)
